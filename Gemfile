@@ -28,9 +28,8 @@ end
 
 group :development do
   gem 'bullet'
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'dotenv-rails'
   gem 'bundler-audit', require: false
+  gem 'dotenv-rails'
   gem 'factory_bot_rails'
   gem 'listen', '~> 3.3'
   gem 'rack-mini-profiler', '~> 2.0'
