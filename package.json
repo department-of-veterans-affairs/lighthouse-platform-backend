@@ -2,6 +2,7 @@
   "name": "lighthouse-platform-backend",
   "private": true,
   "dependencies": {
+    "css-what": "^5.0.1",
     "postcss": "^8.2.10",
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
