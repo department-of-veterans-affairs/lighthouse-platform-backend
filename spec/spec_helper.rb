@@ -3,6 +3,8 @@ require 'simplecov'
 
 SimpleCov.start 'rails' do
   track_files '**/{app,lib}/**/*.rb'
+  add_filter 'app/channels/application_cable/channel.rb'
+  add_filter 'app/channels/application_cable/connection.rb'
   SimpleCov.minimum_coverage_by_file 90
   SimpleCov.refuse_coverage_drop
 end

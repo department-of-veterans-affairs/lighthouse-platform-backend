@@ -6,6 +6,7 @@ ruby '3.0.0'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'devise'
 gem 'figaro'
+gem 'health_check'
 gem 'jbuilder', '~> 2.7'
 # TODO: Update omniauth to major version 2 once devise supports it
 gem 'omniauth', '~> 2.0.0'
@@ -22,6 +23,7 @@ gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 5.0'
 
 group :development, :test do
+  gem 'brakeman'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'rspec-rails', '~> 5.0.0'
 end
