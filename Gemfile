@@ -24,8 +24,11 @@ gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 5.0'
 
 group :development, :test do
+  gem 'brakeman'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'rspec-rails', '~> 5.0.0'
+  gem 'rubocop-rspec'
+  gem 'rubocop-thread_safety'
 end
 
 group :development do
@@ -37,7 +40,6 @@ group :development do
   gem 'rack-mini-profiler', '~> 2.0'
   gem 'rubocop', require: false
   gem 'rubocop-rails'
-  gem 'rubocop-rspec'
   gem 'spring'
   gem 'web-console', '>= 4.1.0'
 end
