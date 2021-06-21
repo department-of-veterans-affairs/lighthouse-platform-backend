@@ -4,6 +4,14 @@ require 'simplecov'
 
 SimpleCov.start 'rails' do
   track_files '**/{app,lib}/**/*.rb'
+
+  # These need to be removed when they get real logic
+  add_filter 'app/channels/application_cable/channel.rb'
+  add_filter 'app/channels/application_cable/connection.rb'
+  add_filter 'app/jobs/application_job.rb'
+  add_filter 'app/mailers/application_mailer.rb'
+  add_filter 'app/models/application_record.rb'
+
   SimpleCov.minimum_coverage_by_file 90
   SimpleCov.refuse_coverage_drop
 end
