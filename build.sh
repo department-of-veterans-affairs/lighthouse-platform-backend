@@ -17,13 +17,15 @@ docker build --pull --target base -f $BASEDIR/Dockerfile -t $REPOSITORY-base:$VE
 docker run $REPOSITORY-base:$VERSION bundle exec rails ci
 
 docker run -d --rm --name test-database -e POSTGRES_DB=$POSTGRES_DB -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 127.0.0.1:5678:5432 postgres:12.4-alpine
-if docker run --network="host" $REPOSITORY-base:$VERSION npm run test:integration
-then
-  docker stop test-database
-else
-  docker stop test-database
-  exit 1
-fi
+
+# integration tests are currently handled in the rails ci job
+# if docker run --network="host" $REPOSITORY-base:$VERSION npm run test:integration
+# then
+#   docker stop test-database
+# else
+#   docker stop test-database
+#   exit 1
+# fi
 
 
 docker build --pull -f $BASEDIR/Dockerfile -t $REPOSITORY:$VERSION $BASEDIR
