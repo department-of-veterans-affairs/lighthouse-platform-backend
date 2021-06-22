@@ -8,6 +8,7 @@ ruby '3.0.0'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'devise'
 gem 'figaro'
+gem 'health_check'
 gem 'jbuilder', '~> 2.7'
 # TODO: Update omniauth to major version 2 once devise supports it
 gem 'omniauth', '~> 2.0.0'

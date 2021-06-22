@@ -4,7 +4,6 @@ require 'simplecov'
 
 SimpleCov.start 'rails' do
   track_files '**/{app,lib}/**/*.rb'
-
   # These need to be removed when they get real logic
   add_filter 'app/channels/application_cable/channel.rb'
   add_filter 'app/channels/application_cable/connection.rb'
