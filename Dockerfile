@@ -1,5 +1,5 @@
 # Ideally this is pulled from a private container registry for security purposes
-FROM ruby:3.0.0-slim-buster
+FROM ruby:3.0.0-slim-buster AS base
 WORKDIR /app
 
 # Install packages needed for ruby gems and to run rails
