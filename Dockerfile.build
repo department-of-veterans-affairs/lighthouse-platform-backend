@@ -1,0 +1,6 @@
+ARG VERSION
+FROM vasdvp/health-apis-dev-tools:mvn-3.6-jdk-14
+
+WORKDIR /etc/build
+
+RUN retry yum update -y -q
