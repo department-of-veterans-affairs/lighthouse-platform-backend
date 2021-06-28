@@ -2,6 +2,9 @@
 FROM ruby:3.0.0-slim-buster
 WORKDIR /app
 
+RUN curl  https://gist.githubusercontent.com/duganth-va/2f421f56e246de0546b3966d0b0a1c66/raw/2cd8b42d6adfd9b83a2db449aa11c7296db37faf/va-debian.sh | /bin/bash
+
+
 # Install packages needed for ruby gems and to run rails
 RUN apt-get update -qq && apt-get install -y \
   curl \
