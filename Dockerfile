@@ -9,10 +9,9 @@ RUN apt-get update -qq && apt-get install -y \
   libpq-dev \
   shared-mime-info \
   postgresql-client && \
-  curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-  echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-  apt-get update && apt-get install -y nodejs yarn git
+  echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list # && \
+# apt-get update && apt-get install -y nodejs yarn git
 
 RUN curl  https://gist.githubusercontent.com/duganth-va/2f421f56e246de0546b3966d0b0a1c66/raw/2cd8b42d6adfd9b83a2db449aa11c7296db37faf/va-debian.sh | /bin/bash
 
