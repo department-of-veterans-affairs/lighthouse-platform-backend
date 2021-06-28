@@ -2,12 +2,12 @@
 http_interactions:
 - request:
     method: post
-    uri: https://hooks.slack.com/services/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
+    uri: https://hooks.slack.com/services/asdf/asdf/asdf
     body:
       encoding: UTF-8
       string: '{"blocks":[{"type":"header","text":{"type":"plain_text","text":"A Secret
-        has been found on Github","emoji":true}},{"type":"divider"},{"type":"section","fields":[{"type":"plain_text","text":"Secret:","emoji":true},{"type":"plain_text","text":"","emoji":true}]},{"type":"section","fields":[{"type":"plain_text","text":"Repo:","emoji":true},{"type":"plain_text","text":"","emoji":true}]},{"type":"section","fields":[{"type":"plain_text","text":"Url:","emoji":true},{"type":"plain_text","text":"","emoji":true}]},{"type":"section","fields":[{"type":"plain_text","text":"Organization:","emoji":true},{"type":"plain_text","text":"","emoji":true}]},{"type":"actions","elements":[{"type":"button","text":{"type":"plain_text","text":"Open
-        in Browser","emoji":true},"value":"click_me_123","url":"","action_id":"button-action"}]}]}'
+        has been found on Github","emoji":true}},{"type":"divider"},{"type":"section","fields":[{"type":"plain_text","text":"Secret:","emoji":true},{"type":"plain_text","text":"adafruit_io_key","emoji":true}]},{"type":"section","fields":[{"type":"plain_text","text":"Repo:","emoji":true},{"type":"plain_text","text":"Codertocat/Hello-World","emoji":true}]},{"type":"section","fields":[{"type":"plain_text","text":"Url:","emoji":true},{"type":"plain_text","text":"https://github.com/Codertocat/Hello-World","emoji":true}]},{"type":"section","fields":[{"type":"plain_text","text":"Organization:","emoji":true},{"type":"plain_text","text":"Codertocat","emoji":true}]},{"type":"actions","elements":[{"type":"button","text":{"type":"plain_text","text":"Open
+        in Browser","emoji":true},"value":"click_me_123","url":"https://github.com/Codertocat/Hello-World","action_id":"button-action"}]}]}'
     headers:
       Content-Type:
       - application/json
@@ -21,11 +21,11 @@ http_interactions:
       - hooks.slack.com
   response:
     status:
-      code: 400
-      message: Bad Request
+      code: 200
+      message: OK
     headers:
       Date:
-      - Mon, 28 Jun 2021 19:10:52 GMT
+      - Mon, 28 Jun 2021 21:30:02 GMT
       Server:
       - Apache
       Strict-Transport-Security:
@@ -40,24 +40,24 @@ http_interactions:
       - no-referrer
       Vary:
       - Accept-Encoding
+      Content-Length:
+      - '22'
       Content-Type:
       - text/html
       X-Envoy-Upstream-Service-Time:
-      - '59'
+      - '286'
       X-Backend:
       - main_normal main_canary_with_overflow main_control_with_overflow
       X-Server:
-      - slack-www-hhvm-main-iad-f3f9
+      - slack-www-hhvm-main-iad-hll6
       X-Via:
-      - envoy-www-iad-ngcb, haproxy-edge-iad-sv72
+      - envoy-www-iad-n03h, haproxy-edge-iad-shor
       X-Slack-Shared-Secret-Outcome:
       - shared-secret
       Via:
-      - envoy-www-iad-ngcb
-      Transfer-Encoding:
-      - chunked
+      - envoy-www-iad-n03h
     body:
-      encoding: UTF-8
-      string: invalid_blocks
-  recorded_at: Mon, 28 Jun 2021 19:10:52 GMT
+      encoding: ASCII-8BIT
+      string: ok
+  recorded_at: Mon, 28 Jun 2021 21:30:05 GMT
 recorded_with: VCR 6.0.0

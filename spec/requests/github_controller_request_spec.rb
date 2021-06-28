@@ -3,16 +3,29 @@
 require 'rails_helper'
 
 describe GithubController, type: :request do
-  let(:github_alert_creator) { double(GithubAlertCreator) }
-
-  before do
-    allow(github_alert_creator).to receive(:call).and_return(:ok)
+  let(:valid_params) do
+    {
+      alert: {
+        secret_type: 'adafruit_io_key',
+      },
+      repository: {
+        full_name: 'Codertocat/Hello-World',
+        html_url: 'https://github.com/Codertocat/Hello-World',
+      },
+      organization: {
+        login: 'Codertocat'
+      }
+    }
   end
-
-  it 'responds with a 204' do
-    VCR.use_cassette('github_alert') do
-      post '/github'
-      p response
+  it 'responds with a 204 when passed a valid body' do
+    VCR.use_cassette('github_alert', match_requests_on: [:method]) do
+      post('/github', params: valid_params )
+      expect(response.code).to eq('204')
     end
+  end
+  it 'responds with an exception when passed an invalid body' do
+    expect{
+      post('/github', params: { boop: 'bap' } )
+    }.to raise_error(ActionController::ParameterMissing)
   end
 end

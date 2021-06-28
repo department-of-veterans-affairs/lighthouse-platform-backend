@@ -111,7 +111,7 @@ class GithubAlertCreator < ApplicationService
     }
     # Send Slack Message
     Net::HTTP.post(
-      URI(ENV['GITHUB_WEBHOOK_URL']),
+      URI(ENV['SLACK_WEBHOOK_URL']),
       payload.to_json,
       'Content-Type' => 'application/json'
     )
