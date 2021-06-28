@@ -41,7 +41,7 @@ class GithubAlertCreator < ApplicationService
             },
             {
               type: 'plain_text',
-              text: (@body[:alert][:secret_type]).to_s,
+              text: @body.dig(:alert, :secret_type).to_s,
               emoji: true
             }
           ]
@@ -56,7 +56,7 @@ class GithubAlertCreator < ApplicationService
             },
             {
               type: 'plain_text',
-              text: (@body[:repository][:full_name]).to_s,
+              text: @body.dig(:repository, :full_name).to_s,
               emoji: true
             }
           ]
@@ -71,7 +71,7 @@ class GithubAlertCreator < ApplicationService
             },
             {
               type: 'plain_text',
-              text: (@body[:repository][:html_url]).to_s,
+              text: @body.dig(:repository, :html_url).to_s,
               emoji: true
             }
           ]
@@ -86,7 +86,7 @@ class GithubAlertCreator < ApplicationService
             },
             {
               type: 'plain_text',
-              text: (@body[:organization][:login]).to_s,
+              text: @body.dig(:organization, :login).to_s,
               emoji: true
             }
           ]
@@ -102,7 +102,7 @@ class GithubAlertCreator < ApplicationService
                 emoji: true
               },
               value: 'click_me_123',
-              url: (@body[:repository][:html_url]).to_s,
+              url: @body.dig(:repository, :html_url).to_s,
               action_id: 'button-action'
             }
           ]

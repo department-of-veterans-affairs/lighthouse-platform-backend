@@ -2,13 +2,13 @@
 
 class GithubMailer < ApplicationMailer
   default from: 'noreply@vasecretscanner.gov'
-  default to: ENV['GITHUB_EMAIL_DEFAULT_EMAIL_ADDRESS']
+  default to: (ENV['GITHUB_EMAIL_DEFAULT_EMAIL_ADDRESS'] || 'testing@example.com')
 
   def security_email(body)
-    @secret_type = body[:alert][:secret_type]
-    @repo_name = body[:repository][:full_name]
-    @repo_url = body[:repository][:html_url]
-    @org_name = body[:organization][:login]
+    @secret_type = body.dig(:alert, :secret_type)
+    @repo_name = body.dig(:repository, :full_name)
+    @repo_url = body.dig(:repositor, :html_url)
+    @org_name = body.dig(:organization, :login)
 
     mail(
       subject: 'Github Secret Scanner Alert',
