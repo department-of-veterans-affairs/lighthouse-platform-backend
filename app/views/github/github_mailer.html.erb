@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Github Security Scanner</h1>
+    <p> The following secret was found by Github's Secret Scanner.</p>
+    <ul>
+      <li>
+        <div>
+          <p>Secret Name: </p>
+          <p><%= @secret_type %></p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <p>Repo Name: </p>
+          <p><%= @repo_name %></p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <p>Repo URL: </p>
+          <p><%= @repo_url %></p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <p>Org Name: </p>
+          <p><%= @org_name %></p>
+        </div>
+      </li>
+    </ul>
+  </body>
+</html>
