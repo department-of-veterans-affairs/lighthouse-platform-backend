@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require_relative '../../app/controllers/github_controller'
+require 'rails_helper'
 
 describe GithubController, type: :request do
   let(:github_alert_creator) { double(GithubAlertCreator) }
@@ -11,7 +10,9 @@ describe GithubController, type: :request do
   end
 
   it 'responds with a 204' do
-    post '/github'
-    p response
+    VCR.use_cassette('github_alert') do
+      post '/github'
+      p response
+    end
   end
 end

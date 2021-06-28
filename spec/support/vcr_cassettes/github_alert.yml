@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://hooks.slack.com/services/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
+    body:
+      encoding: UTF-8
+      string: '{"blocks":[{"type":"header","text":{"type":"plain_text","text":"A Secret
+        has been found on Github","emoji":true}},{"type":"divider"},{"type":"section","fields":[{"type":"plain_text","text":"Secret:","emoji":true},{"type":"plain_text","text":"","emoji":true}]},{"type":"section","fields":[{"type":"plain_text","text":"Repo:","emoji":true},{"type":"plain_text","text":"","emoji":true}]},{"type":"section","fields":[{"type":"plain_text","text":"Url:","emoji":true},{"type":"plain_text","text":"","emoji":true}]},{"type":"section","fields":[{"type":"plain_text","text":"Organization:","emoji":true},{"type":"plain_text","text":"","emoji":true}]},{"type":"actions","elements":[{"type":"button","text":{"type":"plain_text","text":"Open
+        in Browser","emoji":true},"value":"click_me_123","url":"","action_id":"button-action"}]}]}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - hooks.slack.com
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Mon, 28 Jun 2021 19:10:52 GMT
+      Server:
+      - Apache
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Slack-Backend:
+      - r
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Frame-Options:
+      - SAMEORIGIN
+      Referrer-Policy:
+      - no-referrer
+      Vary:
+      - Accept-Encoding
+      Content-Type:
+      - text/html
+      X-Envoy-Upstream-Service-Time:
+      - '59'
+      X-Backend:
+      - main_normal main_canary_with_overflow main_control_with_overflow
+      X-Server:
+      - slack-www-hhvm-main-iad-f3f9
+      X-Via:
+      - envoy-www-iad-ngcb, haproxy-edge-iad-sv72
+      X-Slack-Shared-Secret-Outcome:
+      - shared-secret
+      Via:
+      - envoy-www-iad-ngcb
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: invalid_blocks
+  recorded_at: Mon, 28 Jun 2021 19:10:52 GMT
+recorded_with: VCR 6.0.0
