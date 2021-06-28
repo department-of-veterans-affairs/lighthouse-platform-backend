@@ -2,9 +2,6 @@
 FROM ruby:3.0.0-slim-buster AS base
 WORKDIR /app
 
-RUN curl  https://gist.githubusercontent.com/duganth-va/2f421f56e246de0546b3966d0b0a1c66/raw/2cd8b42d6adfd9b83a2db449aa11c7296db37faf/va-debian.sh | /bin/bash
-
-
 # Install packages needed for ruby gems and to run rails
 RUN apt-get update -qq && apt-get install -y \
   curl \
@@ -16,6 +13,9 @@ RUN apt-get update -qq && apt-get install -y \
   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
   apt-get update && apt-get install -y nodejs yarn git
+
+RUN curl  https://gist.githubusercontent.com/duganth-va/2f421f56e246de0546b3966d0b0a1c66/raw/2cd8b42d6adfd9b83a2db449aa11c7296db37faf/va-debian.sh | /bin/bash
+
 # Install ruby dependencies
 # TODO: Bundle into vendor/cache and map as volume: https://stackoverflow.com/a/61208108/705131
 COPY Gemfile /app/Gemfile
