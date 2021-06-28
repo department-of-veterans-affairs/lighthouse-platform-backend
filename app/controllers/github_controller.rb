@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Handles POST /github route to trigger email/slack notification
 class GithubController < ApplicationController
   skip_before_action :verify_authenticity_token
 
