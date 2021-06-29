@@ -20,9 +20,7 @@ RUN apt-get update -qq && apt-get install -y \
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
   apt-get update && apt-get install -y nodejs yarn git
 
-
 # Install ruby dependencies
-# TODO: Bundle into vendor/cache and map as volume: https://stackoverflow.com/a/61208108/705131
 COPY Gemfile Gemfile.lock ./
 RUN gem update bundler
 RUN bundle install --jobs 5
@@ -34,7 +32,6 @@ COPY . .
 
 ARG rails_env=development
 ENV RAILS_ENV=$rails_env
-# ENV NOTIFY_SEND_URL="http://172.17.0.1:12345"
 # Add a script to be executed every time the container starts.
 COPY bin/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
