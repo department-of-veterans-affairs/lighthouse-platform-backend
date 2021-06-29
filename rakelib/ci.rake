@@ -6,6 +6,7 @@ task default: :ci
 
 desc 'run rspec tests and report results to CodeClimate'
 namespace :spec do
+  ENV['RAILS_ENV'] = 'test'
   task with_codeclimate_coverage: :environment do
     if ENV['CC_TEST_REPORTER_ID']
       puts 'notifying CodeClimate of test run'

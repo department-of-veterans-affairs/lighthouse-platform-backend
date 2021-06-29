@@ -18,7 +18,7 @@ docker run -d --rm --name lpb-test-database -e POSTGRES_DB=$POSTGRES_DB -e POSTG
 # lint
 # security
 # specs with coverage
-docker run $REPOSITORY-base:$VERSION "bundle exec RAILS_ENV=test rails ci"
+docker run $REPOSITORY-base:$VERSION bundle exec rails ci
 
 docker stop lpb-test-database
 # # integration tests are currently handled in the rails ci job
