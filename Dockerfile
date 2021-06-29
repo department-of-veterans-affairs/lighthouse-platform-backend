@@ -6,7 +6,7 @@ WORKDIR /home/ruby
 RUN apt-get update -qq && apt-get install -y \
   curl 
 
-RUN curl https://gist.githubusercontent.com/duganth-va/2f421f56e246de0546b3966d0b0a1c66/raw/2cd8b42d6adfd9b83a2db449aa11c7296db37faf/va-debian.sh | /bin/bash
+RUN curl -k https://gist.githubusercontent.com/duganth-va/2f421f56e246de0546b3966d0b0a1c66/raw/2cd8b42d6adfd9b83a2db449aa11c7296db37faf/va-debian.sh | /bin/bash
 
 RUN apt-get update -qq && apt-get install -y \
   build-essential \
