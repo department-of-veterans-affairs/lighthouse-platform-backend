@@ -11,7 +11,7 @@ POSTGRES_DB=lighthouse_platform_backend_test
 
 docker build --pull --target base -f $BASEDIR/Dockerfile -t $REPOSITORY-base:$VERSION $BASEDIR
 
-docker run -d --rm --name lpb-test-database -e POSTGRES_DB=$POSTGRES_DB -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 127.0.0.1:5678:5432 postgres:12.4-alpine
+docker run -d --rm --name lpb-test-database -e POSTGRES_DB=$POSTGRES_DB -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 127.0.0.1:5679:5432 postgres:12.4-alpine
 
 
 # lint
