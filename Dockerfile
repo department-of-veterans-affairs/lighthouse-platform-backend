@@ -1,6 +1,6 @@
 # Ideally this is pulled from a private container registry for security purposes
 FROM ruby:3.0.0-slim-buster AS base
-WORKDIR /app
+WORKDIR /home/ruby
 
 # Install packages needed for ruby gems and to run rails
 RUN apt-get update -qq && apt-get install -y \
@@ -12,21 +12,25 @@ RUN apt-get update -qq && apt-get install -y \
   curl -fsSl https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list # && \
 # apt-get update && apt-get install -y nodejs yarn git
+RUN openssl x509 \
+  -inform der \
+  -in /etc/pki/ca-trust/source/anchors/VA-Internal-S2-RCA1-v1.cer \
+  -out /home/ruby/va-internal.pem
 
 RUN curl  https://gist.githubusercontent.com/duganth-va/2f421f56e246de0546b3966d0b0a1c66/raw/2cd8b42d6adfd9b83a2db449aa11c7296db37faf/va-debian.sh | /bin/bash
 
 # Install ruby dependencies
 # TODO: Bundle into vendor/cache and map as volume: https://stackoverflow.com/a/61208108/705131
-COPY Gemfile /app/Gemfile
-COPY Gemfile.lock /app/Gemfile.lock
+COPY Gemfile /home/ruby/Gemfile
+COPY Gemfile.lock /home/ruby/Gemfile.lock
 RUN gem update bundler
 RUN bundle install --jobs 5
 # Install javascript dependencies
-COPY package.json /app/package.json
-COPY yarn.lock /app/yarn.lock
+COPY package.json /home/ruby/package.json
+COPY yarn.lock /home/ruby/yarn.lock
 RUN yarn install
 # Copy source code for application
-COPY . /app
+COPY . /home/ruby
 
 RUN /bin/bash -c "curl -L https://github.com/fgrehm/notify-send-http/releases/download/v0.2.0/client-linux_amd64 | tee /usr/local/bin/notify-send &>/dev/null"
 RUN chmod +x /usr/local/bin/notify-send
