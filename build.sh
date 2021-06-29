@@ -8,6 +8,7 @@ VERSION=${VERSION:-$(cat $BASEDIR/VERSION)}
 POSTGRES_USER=lighthouse
 POSTGRES_PASSWORD=L1ghth0us3
 POSTGRES_DB=lighthouse_platform_backend_test
+docker stop lpb-test-database
 
 docker build --pull --target base -f $BASEDIR/Dockerfile -t $REPOSITORY-base:$VERSION $BASEDIR
 
