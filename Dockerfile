@@ -23,13 +23,11 @@ RUN apt-get update -qq && apt-get install -y \
 
 # Install ruby dependencies
 # TODO: Bundle into vendor/cache and map as volume: https://stackoverflow.com/a/61208108/705131
-COPY Gemfile /home/ruby/Gemfile
-COPY Gemfile.lock /home/ruby/Gemfile.lock
+COPY Gemfile Gemfile.lock ./
 RUN gem update bundler
 RUN bundle install --jobs 5
 # Install javascript dependencies
-COPY package.json /home/ruby/package.json
-COPY yarn.lock /home/ruby/yarn.lock
+COPY package.json yarn.lock ./
 RUN yarn install
 # Copy source code for application
 COPY . /home/ruby
