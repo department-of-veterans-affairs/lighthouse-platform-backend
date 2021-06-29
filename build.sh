@@ -17,7 +17,7 @@ docker run -d --rm --name test-database -e POSTGRES_DB=$POSTGRES_DB -e POSTGRES_
 # lint
 # security
 # specs with coverage
-docker run $REPOSITORY-base:$VERSION bundle exec RAILS_ENV=test rails ci 
+docker run $REPOSITORY-base:$VERSION bundle exec rails ci -e RAILS_ENV=test
 
 # integration tests are currently handled in the rails ci job
 # if docker run --network="host" $REPOSITORY-base:$VERSION npm run test:integration
