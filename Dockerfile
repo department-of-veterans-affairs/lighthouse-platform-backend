@@ -30,10 +30,8 @@ RUN bundle install --jobs 5
 COPY package.json yarn.lock ./
 RUN yarn install
 # Copy source code for application
-COPY . /home/ruby
+COPY . .
 
-RUN /bin/bash -c "curl -L https://github.com/fgrehm/notify-send-http/releases/download/v0.2.0/client-linux_amd64 | tee /usr/local/bin/notify-send &>/dev/null" && \
-    chmod +x /usr/local/bin/notify-send
 ARG rails_env=development
 ENV RAILS_ENV=$rails_env
 # ENV NOTIFY_SEND_URL="http://172.17.0.1:12345"
