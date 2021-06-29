@@ -12,30 +12,26 @@ RUN apt-get update -qq && apt-get install -y \
   build-essential \
   libpq-dev \
   shared-mime-info \
-  postgresql-client && \
+  postgresql-client \
+  git \
+  nodejs \
+  yarn && \
   curl -fsSl https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
   apt-get update && apt-get install -y nodejs yarn git
 
-
 # Install ruby dependencies
-# TODO: Bundle into vendor/cache and map as volume: https://stackoverflow.com/a/61208108/705131
-COPY Gemfile /home/ruby/Gemfile
-COPY Gemfile.lock /home/ruby/Gemfile.lock
+COPY Gemfile Gemfile.lock ./
 RUN gem update bundler
 RUN bundle install --jobs 5
 # Install javascript dependencies
-COPY package.json /home/ruby/package.json
-COPY yarn.lock /home/ruby/yarn.lock
+COPY package.json yarn.lock ./
 RUN yarn install
 # Copy source code for application
-COPY . /home/ruby
+COPY . .
 
-# RUN /bin/bash -c "curl -L https://github.com/fgrehm/notify-send-http/releases/download/v0.2.0/client-linux_amd64 | tee /usr/local/bin/notify-send &>/dev/null"
-RUN chmod +x /usr/local/bin/notify-send
 ARG rails_env=development
 ENV RAILS_ENV=$rails_env
-# ENV NOTIFY_SEND_URL="http://172.17.0.1:12345"
 # Add a script to be executed every time the container starts.
 COPY bin/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
