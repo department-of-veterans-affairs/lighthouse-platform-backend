@@ -32,6 +32,7 @@ group :development, :test do
   gem 'rubocop-rspec'
   gem 'rubocop-thread_safety'
   gem 'timecop'
+  gem 'vcr'
   gem 'webmock'
 end
 
@@ -51,7 +52,6 @@ group :test do
   gem 'capybara', '>= 3.26'
   gem 'selenium-webdriver'
   gem 'simplecov', '< 0.18', require: false
-  gem 'vcr'
   gem 'webdrivers'
 end
 
