@@ -5,12 +5,12 @@ BASEDIR=$(readlink -f $(dirname $0))
 RELEASE=${RELEASE:-false}
 REPOSITORY=${ECR_REGISTRY}/lighthouse-platform-backend
 VERSION=${VERSION:-$(cat $BASEDIR/VERSION)}
-POSTGRES_USER=lighthouse
-POSTGRES_PASSWORD=L1ghth0us3
-POSTGRES_DB=lighthouse_platform_backend_test
 
-
-
+function cleanup()
+{
+  docker-compose down
+}
+trap cleanup EXIT
 
 # docker network create lpb-cicd-net
 # 
@@ -45,8 +45,6 @@ docker-compose run app bundle exec rails db:create  ci
 
 
 # docker network rm lpb-cicd-net
-
-docker-compose down
 
 # docker build --pull -f $BASEDIR/Dockerfile -t $REPOSITORY:$VERSION $BASEDIR
 
