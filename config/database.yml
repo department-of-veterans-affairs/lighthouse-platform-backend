@@ -54,5 +54,3 @@ test:
 production:
   <<: *default
   database: lighthouse_platform_backend_production
-  username: lighthouse_platform_backend
-  password: <%= ENV['LIGHTHOUSE_PLATFORM_BACKEND_DATABASE_PASSWORD'] %>

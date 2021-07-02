@@ -27,11 +27,21 @@ RUN bundle install --jobs 5
 # Install javascript dependencies
 COPY package.json yarn.lock ./
 RUN yarn install
+
+ARG rails_env=production
+RUN echo $rails_env
+ENV RAILS_ENV=$rails_env
+ENV RAILS_SERVE_STATIC_FILES=true
+
+RUN rails db:create && rails db:setup
+
+# Precompile assets
+RUN rails assets:precompile
+RUN rails webpacker:compile
+
 # Copy source code for application
 COPY . .
 
-ARG rails_env=development
-ENV RAILS_ENV=$rails_env
 # Add a script to be executed every time the container starts.
 COPY bin/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
