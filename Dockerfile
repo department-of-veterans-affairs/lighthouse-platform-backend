@@ -28,12 +28,14 @@ RUN bundle install --jobs 5
 COPY package.json yarn.lock ./
 RUN yarn install
 
+
+# this is only needed if running locally
+# RUN rails db:create && rails db:setup
+
 ARG rails_env=production
 RUN echo $rails_env
 ENV RAILS_ENV=$rails_env
 ENV RAILS_SERVE_STATIC_FILES=true
-
-RUN rails db:create && rails db:setup
 
 # Precompile assets
 RUN rails assets:precompile
