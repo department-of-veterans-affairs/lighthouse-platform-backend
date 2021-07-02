@@ -32,7 +32,7 @@ RUN yarn install
 # this is only needed if running locally
 # RUN rails db:create && rails db:setup
 
-ARG rails_env=production
+ARG rails_env=test
 RUN echo $rails_env
 ENV RAILS_ENV=$rails_env
 ENV RAILS_SERVE_STATIC_FILES=true
