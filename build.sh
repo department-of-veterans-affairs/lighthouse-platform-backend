@@ -33,7 +33,6 @@ trap cleanup EXIT
 
 docker-compose run app bundle exec rails db:create  ci
 
-# docker stop lpb-test-database
 # # integration tests are currently handled in the rails ci job
 # if docker run --network="host" $REPOSITORY-base:$VERSION npm run test:integration
 # then
@@ -44,12 +43,8 @@ docker-compose run app bundle exec rails db:create  ci
 # fi
 
 
-# docker network rm lpb-cicd-net
-
-# docker build --pull -f $BASEDIR/Dockerfile -t $REPOSITORY:$VERSION $BASEDIR
-
-
 if [ $RELEASE == true ]; then
+  docker build --pull -f $BASEDIR/Dockerfile -t $REPOSITORY:$VERSION $BASEDIR
   aws ecr get-login-password --region us-gov-west-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
   docker push $REPOSITORY:$VERSION
   docker tag $REPOSITORY:$VERSION $REPOSITORY:latest

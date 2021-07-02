@@ -28,12 +28,16 @@ RUN bundle install --jobs 5
 COPY package.json yarn.lock ./
 RUN yarn install
 
-
-# this is only needed if running locally
-# RUN rails db:create && rails db:setup
-
 ARG rails_env=test
-RUN echo $rails_env
+ENV RAILS_ENV=$rails_env
+# Copy source code for application
+COPY . .
+
+
+# Production Stage
+FROM ruby:3.0.0-slim-buster AS prod
+
+ARG rails_env=production
 ENV RAILS_ENV=$rails_env
 ENV RAILS_SERVE_STATIC_FILES=true
 
