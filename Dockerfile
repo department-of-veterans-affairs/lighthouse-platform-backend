@@ -40,6 +40,7 @@ FROM ruby:3.0.0-slim-buster AS prod
 ARG rails_env=production
 ENV RAILS_ENV=$rails_env
 ENV RAILS_SERVE_STATIC_FILES=true
+ENV SECRET_KEY_BASE=CHANGE_ME_LATER
 
 # Precompile assets
 RUN rails assets:precompile
