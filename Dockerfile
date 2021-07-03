@@ -26,7 +26,7 @@ RUN gem update bundler
 RUN bundle install --jobs 5 --binstubs="./bin"
 # Install javascript dependencies
 COPY package.json yarn.lock ./
-RUN ./bin/yarn install
+RUN yarn install
 
 ARG rails_env=test
 ENV RAILS_ENV=$rails_env
