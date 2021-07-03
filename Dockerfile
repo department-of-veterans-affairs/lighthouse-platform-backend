@@ -43,8 +43,8 @@ ENV RAILS_SERVE_STATIC_FILES=true
 ENV SECRET_KEY_BASE=CHANGE_ME_LATER
 
 # Precompile assets
-RUN rails assets:precompile
-RUN rails webpacker:compile
+RUN bundle exec rails assets:precompile
+RUN bundle exec rails webpacker:compile
 
 # Copy source code for application
 COPY . .
