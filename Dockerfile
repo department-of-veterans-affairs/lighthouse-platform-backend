@@ -23,7 +23,7 @@ RUN apt-get update -qq && apt-get install -y \
 # Install ruby dependencies
 COPY Gemfile Gemfile.lock ./
 RUN gem update bundler
-RUN bundle install --jobs 5
+RUN bundle install --jobs 5 --binstubs="./bin"
 # Install javascript dependencies
 COPY package.json yarn.lock ./
 RUN yarn install
