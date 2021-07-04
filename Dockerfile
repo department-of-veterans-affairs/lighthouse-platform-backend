@@ -42,9 +42,10 @@ ENV RAILS_ENV=$rails_env
 ENV RAILS_SERVE_STATIC_FILES=true
 ENV SECRET_KEY_BASE=CHANGE_ME_LATER
 
+
 # Precompile assets
-RUN bin/rails rails assets:precompile
-RUN bin/rails rails webpacker:compile
+RUN bin/rails assets:precompile
+RUN bin/rails webpacker:compile
 
 # Copy source code for application
 COPY . .
