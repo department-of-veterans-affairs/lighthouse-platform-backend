@@ -13,7 +13,7 @@ function cleanup()
 trap cleanup EXIT
 
 # lint, security, specs with coverage tasks run on the ci task
-docker-compose run app bundle exec rails db:create ci
+docker-compose run app bundle exec rails ci
 
 # keeping this as reference for when we have integration tests
 # # integration tests are currently handled in the rails ci job
