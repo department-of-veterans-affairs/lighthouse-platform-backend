@@ -59,5 +59,5 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
-  ENV['GITHUB_WEBHOOK_URL'] = 'https://hooks.slack.com/services/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'
+  ENV['SLACK_WEBHOOK_URL'] = 'www.slack.com/1234'
 end
