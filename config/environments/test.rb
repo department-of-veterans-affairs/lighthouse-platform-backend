@@ -60,4 +60,5 @@ Rails.application.configure do
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
   ENV['SLACK_WEBHOOK_URL'] = 'www.slack.com/1234'
+  ENV['GITHUB_EMAIL_DEFAULT_EMAIL_ADDRESS'] = "fake@example.com"
 end
