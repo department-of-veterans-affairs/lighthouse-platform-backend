@@ -10,7 +10,6 @@ gem 'devise'
 gem 'figaro'
 gem 'health_check'
 gem 'jbuilder', '~> 2.7'
-# TODO: Update omniauth to major version 2 once devise supports it
 gem 'omniauth', '~> 2.0.0'
 gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
 gem 'pg', '~> 1.1'
