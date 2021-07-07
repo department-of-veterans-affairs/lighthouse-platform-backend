@@ -25,6 +25,7 @@ docker run -d --rm --name $DB_CONTAINER --network=$TEST_NETWORK -e POSTGRES_DB=$
 
 # lint, security, specs with coverage tasks run on the ci task
 if docker run --rm --network=$TEST_NETWORK -e DB_HOST=$DB_CONTAINER -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD $REPOSITORY-base:$VERSION bundle exec rails ci
+then
   echo 'CI ran successfully...'
   docker stop $DB_CONTAINER
   docker network rm $TEST_NETWORK
