@@ -21,7 +21,7 @@ docker network create -d bridge $TEST_NETWORK
 # starts and runs PG container
 echo 'Running db container...'
 DB_CONTAINER=c$(cat /proc/sys/kernel/random/uuid | tr '-' 'd')
-docker run -d --rm --name $DB_CONTAINER --network=$TEST_NETWORK -e POSTGRES_DB=$POSTGRES_DB -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 5433:5432 postgres:13.1
+docker run -d --rm --name $DB_CONTAINER --network=$TEST_NETWORK -e POSTGRES_DB=$POSTGRES_DB -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 5432 postgres:13.1
 
 # lint, security, specs with coverage tasks run on the ci task
 if docker run --rm --network=$TEST_NETWORK -e DB_HOST=$DB_CONTAINER -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD $REPOSITORY-base:$VERSION bundle exec rails ci
