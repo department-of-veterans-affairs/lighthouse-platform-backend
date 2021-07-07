@@ -6,14 +6,10 @@ RELEASE=${RELEASE:-false}
 REPOSITORY=${ECR_REGISTRY}/lighthouse-platform-backend
 VERSION=${VERSION:-$(cat $BASEDIR/VERSION)}
 
-function cleanup()
-{
-  docker-compose down
-}
-trap cleanup EXIT
+docker build --pull -f $BASEDIR/Dockerfile -t $REPOSITORY-base:$VERSION $BASEDIR
 
 # lint, security, specs with coverage tasks run on the ci task
-docker-compose run app bundle exec rails ci
+docker run --rm $REPOSITORY-base:$VERSION bundle exec rails ci
 
 # keeping this as reference for when we have integration tests
 # # integration tests are currently handled in the rails ci job
@@ -25,9 +21,7 @@ docker-compose run app bundle exec rails ci
 #   exit 1
 # fi
 
-
 if [ $RELEASE == true ]; then
-  docker build --pull -f $BASEDIR/Dockerfile -t $REPOSITORY:$VERSION $BASEDIR
   aws ecr get-login-password --region us-gov-west-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
   docker push $REPOSITORY:$VERSION
   docker tag $REPOSITORY:$VERSION $REPOSITORY:latest
