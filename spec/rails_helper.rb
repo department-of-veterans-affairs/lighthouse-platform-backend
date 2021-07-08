@@ -8,10 +8,7 @@ require File.expand_path('../config/environment', __dir__)
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
 require 'webmock/rspec'
-require 'sidekiq/semantic_logging'
-require 'sidekiq/error_tag'
 require 'support/factory_bot'
-require 'support/vcr'
 
 WebMock.disable_net_connect!(allow_localhost: true)
 
@@ -29,16 +26,14 @@ VCR.configure do |c|
   c.before_record(:force_utf8) do |interaction|
     interaction.response.body.force_encoding('UTF-8')
   end
+  c.cassette_library_dir = 'spec/support/vcr_cassettes'
+  c.hook_into :webmock
 end
 
 ActiveRecord::Migration.maintain_test_schema!
 
 require 'sidekiq/testing'
 Sidekiq::Testing.fake!
-Sidekiq::Testing.server_middleware do |chain|
-  chain.add Sidekiq::SemanticLogging
-  chain.add Sidekiq::ErrorTag
-end
 
 FactoryBot::SyntaxRunner.class_eval do
   include RSpec::Mocks::ExampleMethods
