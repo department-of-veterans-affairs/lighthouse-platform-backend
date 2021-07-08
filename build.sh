@@ -11,7 +11,6 @@ POSTGRES_DB=lighthouse_platform_backend_test
 
 trap "docker-compose down -v" EXIT
 
-# builds base & ci targets and runs CI
 echo 'Building container and running CI'
 docker-compose run app bundle exec rails ci
 
