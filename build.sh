@@ -11,7 +11,7 @@ POSTGRES_DB=lighthouse_platform_backend_test
 
 # builds RAILS_ENV=test for CI
 echo 'Building base image...'
-docker build --pull --target base -f $BASEDIR/Dockerfile -t $REPOSITORY-base:$VERSION $BASEDIR
+docker build --pull --target ci -f $BASEDIR/Dockerfile -t $REPOSITORY-base:$VERSION $BASEDIR
 
 # creates network to connect DB and CI
 echo 'Creating network'
