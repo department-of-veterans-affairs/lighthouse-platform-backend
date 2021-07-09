@@ -5,9 +5,6 @@ BASEDIR=$(readlink -f $(dirname $0))
 RELEASE=${RELEASE:-false}
 REPOSITORY=${ECR_REGISTRY}/lighthouse-platform-backend
 VERSION=${VERSION:-$(cat $BASEDIR/VERSION)}
-POSTGRES_USER=lighthouse_platform_backend_user
-POSTGRES_PASSWORD=okapi
-POSTGRES_DB=lighthouse_platform_backend_test
 
 trap "docker-compose down -v" EXIT
 
