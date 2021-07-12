@@ -12,9 +12,9 @@ services:
     networks:
       - backend
     environment:
-      - DATABASE_HOST=db
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=postgres
+      - DATABASE_HOST=${DB_HOST:-db}
+      - DATABASE_USER=${DB_PUSER:-postgres}
+      - DATABASE_PASSWORD=${DB_PASSWORD:-postgres}
   db:
     image: postgres:13.1
     expose:
@@ -22,9 +22,8 @@ services:
     ports:
       - "5432"
     environment:
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=postgres
-      - DATABASE_HOST=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
