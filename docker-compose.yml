@@ -13,7 +13,7 @@ services:
       - backend
     environment:
       - DATABASE_HOST=${DB_HOST:-db}
-      - DATABASE_USER=${DB_PUSER:-postgres}
+      - DATABASE_USER=${DB_USER:-postgres}
       - DATABASE_PASSWORD=${DB_PASSWORD:-postgres}
   db:
     image: postgres:13.1
