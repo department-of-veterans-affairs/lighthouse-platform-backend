@@ -12,9 +12,9 @@ services:
     networks:
       - backend
     environment:
-      - DATABASE_HOST=${DB_HOST:-db}
-      - DATABASE_USER=${DB_USER:-postgres}
-      - DATABASE_PASSWORD=${DB_PASSWORD:-postgres}
+      - DATABASE_HOST=${DATABASE_HOST:-db}
+      - DATABASE_USER=${DATABASE_USER:-postgres}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD:-postgres}
   db:
     image: postgres:13.1
     expose:
