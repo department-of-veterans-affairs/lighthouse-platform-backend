@@ -12,9 +12,9 @@ services:
     networks:
       - backend
     environment:
-      - DB_HOST=db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - DATABASE_HOST=db
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
   db:
     image: postgres:13.1
     expose:
@@ -22,9 +22,9 @@ services:
     ports:
       - "5433:5432"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - DB_HOST=db
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_HOST=db
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
