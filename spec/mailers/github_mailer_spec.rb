@@ -2,21 +2,22 @@
 
 require 'rails_helper'
 
-RSpec.describe GithubMailer, :type => :mailer do
+RSpec.describe GithubMailer, type: :mailer do
   let(:body) do
     {
       alert: {
-        secret_type: "adafruit_io_key",
+        secret_type: 'adafruit_io_key'
       },
       repository: {
-        full_name: "Codertocat/Hello-World",
-        html_url: "https://github.com/Codertocat/Hello-World",
+        full_name: 'Codertocat/Hello-World',
+        html_url: 'https://github.com/Codertocat/Hello-World'
       },
       organization: {
-        login: "Codertocat",
+        login: 'Codertocat'
       }
     }
   end
+
   describe '#security_email' do
     it 'triggers correctly' do
       response = subject.security_email(body)

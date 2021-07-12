@@ -4,16 +4,15 @@ require 'net/http'
 require 'uri'
 
 # This class delivers creates and sends an email and slack notification
-# rubocop:disable Metrics/ClassLength
 class GithubAlertCreator < ApplicationService
   attr_reader :body
 
   def initialize(body)
+    super
     @body = body
   end
 
   # rubocop:disable Metrics/MethodLength
-  # rubocop:disable Metrics/AbcSize
   def call
     # Send Email
     GithubMailer.security_email(@body).deliver_now
@@ -117,7 +116,4 @@ class GithubAlertCreator < ApplicationService
     )
   end
   # rubocop:enable Metrics/MethodLength
-  # rubocop:enable Metrics/AbcSize
 end
-# rubocop:enable Metrics/ClassLength
-
