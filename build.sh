@@ -9,7 +9,7 @@ VERSION=${VERSION:-$(cat $BASEDIR/VERSION)}
 trap "docker-compose down -v" EXIT
 
 echo 'Building container and running CI'
-docker-compose run app bundle exec rails ci
+docker-compose run app bundle exec rails db:create ci
 
 echo 'Building production container...'
 docker build --pull -f $BASEDIR/Dockerfile -t $REPOSITORY:$VERSION $BASEDIR

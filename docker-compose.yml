@@ -22,7 +22,6 @@ services:
     ports:
       - "5432"
     environment:
-      - POSTGRES_DB=lighthouse_platform_backend_test
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - DB_HOST=db
