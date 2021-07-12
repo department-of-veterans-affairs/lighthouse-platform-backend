@@ -5,33 +5,45 @@ BASEDIR=$(readlink -f $(dirname $0))
 RELEASE=${RELEASE:-false}
 REPOSITORY=${ECR_REGISTRY}/lighthouse-platform-backend
 VERSION=${VERSION:-$(cat $BASEDIR/VERSION)}
-POSTGRES_USER=lighthouse
-POSTGRES_PASSWORD=L1ghth0us3
+POSTGRES_USER=lighthouse_platform_backend_user
+POSTGRES_PASSWORD=okapi
 POSTGRES_DB=lighthouse_platform_backend_test
 
-docker build --pull --target base -f $BASEDIR/Dockerfile -t $REPOSITORY-base:$VERSION $BASEDIR
+# builds RAILS_ENV=test for CI
+echo 'Building base image...'
+docker build --pull --target ci -f $BASEDIR/Dockerfile -t $REPOSITORY-base:$VERSION $BASEDIR
 
-# lint
-# security
-# specs with coverage
-docker run $REPOSITORY-base:$VERSION bundle exec rails ci
+# creates network to connect DB and CI
+echo 'Creating network'
+TEST_NETWORK=n$(cat /proc/sys/kernel/random/uuid | tr '-' 'd')
+docker network create -d bridge $TEST_NETWORK
 
-docker run -d --rm --name test-database -e POSTGRES_DB=$POSTGRES_DB -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 127.0.0.1:5678:5432 postgres:12.4-alpine
+# starts and runs PG container
+echo 'Running db container...'
+DB_CONTAINER=c$(cat /proc/sys/kernel/random/uuid | tr '-' 'd')
+docker run -d --rm --name $DB_CONTAINER --network=$TEST_NETWORK -e POSTGRES_DB=$POSTGRES_DB -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 5432 postgres:13.1
 
-# integration tests are currently handled in the rails ci job
-# if docker run --network="host" $REPOSITORY-base:$VERSION npm run test:integration
-# then
-#   docker stop test-database
-# else
-#   docker stop test-database
-#   exit 1
-# fi
+# lint, security, specs with coverage tasks run on the ci task
+if docker run --rm --network=$TEST_NETWORK -e DB_HOST=$DB_CONTAINER -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD $REPOSITORY-base:$VERSION bundle exec rails ci
+then
+  echo 'CI ran successfully...'
+  docker stop $DB_CONTAINER
+  docker network rm $TEST_NETWORK
+else
+  echo 'CI failed miserably...'
+  docker logs $DB_CONTAINER
+  docker stop $DB_CONTAINER
+  docker network rm $TEST_NETWORK
+  exit 1
+fi
 
-
+echo 'Building production container...'
 docker build --pull -f $BASEDIR/Dockerfile -t $REPOSITORY:$VERSION $BASEDIR
 
 if [ $RELEASE == true ]; then
+  echo 'Logging in to ECR...'
   aws ecr get-login-password --region us-gov-west-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
+  echo 'Pushing '$REPOSITORY:$VERSION
   docker push $REPOSITORY:$VERSION
   docker tag $REPOSITORY:$VERSION $REPOSITORY:latest
   docker push $REPOSITORY:latest

@@ -3,4 +3,5 @@ FROM vasdvp/health-apis-dev-tools:mvn-3.6-jdk-14
 
 WORKDIR /etc/build
 
-RUN retry yum update -y -q
+RUN retry curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose

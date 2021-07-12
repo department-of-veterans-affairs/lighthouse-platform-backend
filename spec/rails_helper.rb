@@ -9,7 +9,6 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'rspec/rails'
 require 'webmock/rspec'
 require 'support/factory_bot'
-require 'support/vcr'
 
 WebMock.disable_net_connect!(allow_localhost: true)
 
@@ -27,6 +26,8 @@ VCR.configure do |c|
   c.before_record(:force_utf8) do |interaction|
     interaction.response.body.force_encoding('UTF-8')
   end
+  c.cassette_library_dir = 'spec/support/vcr_cassettes'
+  c.hook_into :webmock
 end
 
 ActiveRecord::Migration.maintain_test_schema!
