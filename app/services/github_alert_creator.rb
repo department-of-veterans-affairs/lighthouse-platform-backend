@@ -8,7 +8,6 @@ class GithubAlertCreator < ApplicationService
   attr_reader :body
 
   def initialize(body)
-    super
     @body = body
   end
 
