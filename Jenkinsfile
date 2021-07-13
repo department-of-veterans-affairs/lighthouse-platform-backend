@@ -5,5 +5,5 @@ standardShellPipeline {
   slackChannels = [ 
     'vaapi-cicd@${env.SLACK_WEBHOOK_LIGHTHOUSE}'
   ]
-  timeout = 20
+  timeout = 35
 }
