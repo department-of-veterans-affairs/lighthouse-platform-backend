@@ -118,6 +118,13 @@ Lint/AmbiguousBlockAssociation:
   Exclude:
     - "spec/**/*"
 
+
+# Don't enforce super for service objects
+# because it breaks when using the `self.call(*args, &block)` pattern
+Lint/MissingSuper:
+  Exclude:
+    - "app/services/**/*"
+
 # This file does not need to be snake case
 Naming/FileName:
   Exclude:
