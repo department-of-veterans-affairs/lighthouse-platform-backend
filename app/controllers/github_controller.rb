@@ -19,6 +19,6 @@ class GithubController < ApplicationController
   private
 
   def alert_params
-    params.require([:alert, :repository, :organization])
+    params.require(%i[alert repository organization])
   end
 end

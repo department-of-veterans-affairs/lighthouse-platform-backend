@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get 'admin/dashboard', to: 'admin/dashboard#index'
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  post '/github', to: 'github#alert'
+  # everything must scoped under platform-backend
+  scope '/platform-backend' do
+    get 'admin/dashboard', to: 'admin/dashboard#index'
+    post '/github', to: 'github#alert'
+  end
 end
