@@ -52,12 +52,9 @@ ActiveRecord::Schema.define(version: 2021_07_15_152923) do
     t.string "last_name"
     t.string "organization"
     t.string "role", default: "user"
-    t.bigint "consumer_id", null: false
-    t.index ["consumer_id"], name: "index_users_on_consumer_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "consumers", "users"
-  add_foreign_key "users", "consumers"
 end
