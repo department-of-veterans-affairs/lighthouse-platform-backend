@@ -6,7 +6,7 @@ class ConsumersController < ApplicationController
     if @user.save
       render json: { user_created: @user }, status: :ok
     else
-      render json: { error: @user.errors.full_messages }, status: :ok
+      render json: { error: @user.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
