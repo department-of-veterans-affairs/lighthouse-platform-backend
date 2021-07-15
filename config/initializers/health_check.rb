@@ -12,7 +12,7 @@ HealthCheck.setup do |config|
 
   # Disable the error message to prevent /health_check from leaking
   # sensitive information
-  config.include_error_in_response_body = false
+  config.include_error_in_response_body = true
 
   # Log level (success or failure message with error details is sent to rails log unless this is set to nil)
   config.log_level = 'info'
