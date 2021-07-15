@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_15_152131) do
+ActiveRecord::Schema.define(version: 2021_07_15_152923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "apis", force: :cascade do |t|
+    t.string "name"
+    t.string "auth_method"
+    t.string "environment"
+    t.string "open_api_url"
+    t.string "base_path"
+    t.string "service_ref"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "consumers", force: :cascade do |t|
     t.string "description"
@@ -41,9 +52,12 @@ ActiveRecord::Schema.define(version: 2021_07_15_152131) do
     t.string "last_name"
     t.string "organization"
     t.string "role", default: "user"
+    t.bigint "consumer_id", null: false
+    t.index ["consumer_id"], name: "index_users_on_consumer_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "consumers", "users"
+  add_foreign_key "users", "consumers"
 end
