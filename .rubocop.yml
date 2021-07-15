@@ -80,6 +80,8 @@ Layout/LineLength:
 Metrics/MethodLength:
   Exclude:
     - 'rakelib/support/shell_command.rb'
+  IgnoredMethods:
+    - 'user_params'
 
 Rails:
   Enabled: true
