@@ -36,6 +36,11 @@ ENV RAILS_ENV=$rails_env
 # Copy source code for application
 COPY . .
 
+# Precompile assets
+RUN bundle exec rails assets:precompile
+RUN bin/webpack
+# RUN bundle exec rails webpacker:compile
+
 # Production Stage
 FROM base AS prod
 
@@ -44,6 +49,7 @@ ENV RAILS_ENV=$rails_env
 ENV RAILS_SERVE_STATIC_FILES=true
 ENV SECRET_KEY_BASE=DEFAULT_VALUE_OVERRIDE_AT_RUNTIME
 ENV RAILS_ENV=production
+RUN bin/webpack
 # COPY --from=builder $BUNDLE_APP_CONFIG $BUNDLE_APP_CONFIG
 # Install ruby dependencies
 
@@ -53,13 +59,14 @@ RUN bundle install --jobs 5 --without development test
 COPY . .
 
 # Precompile assets
-RUN bundle exec rails assets:precompile
-RUN bundle exec rails webpacker:compile
+# RUN bundle exec rails assets:precompile
+# RUN bin/webpack
+# RUN bundle exec rails webpacker:compile
 
 # Add a script to be executed every time the container starts.
 COPY bin/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
-EXPOSE 8080
+EXPOSE 3000
 # Start the main process.
 CMD ["rails", "server", "-b", "0.0.0.0"]
