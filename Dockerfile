@@ -49,7 +49,6 @@ ENV RAILS_ENV=$rails_env
 ENV RAILS_SERVE_STATIC_FILES=true
 ENV SECRET_KEY_BASE=DEFAULT_VALUE_OVERRIDE_AT_RUNTIME
 ENV RAILS_ENV=production
-RUN bin/webpack
 # COPY --from=builder $BUNDLE_APP_CONFIG $BUNDLE_APP_CONFIG
 # Install ruby dependencies
 
@@ -58,6 +57,7 @@ RUN bundle install --jobs 5 --without development test
 # Copy source code for application
 COPY . .
 
+RUN bin/webpack
 # Precompile assets
 # RUN bundle exec rails assets:precompile
 # RUN bin/webpack
