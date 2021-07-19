@@ -33,6 +33,7 @@ RUN yarn install
 
 ARG rails_env=test
 ENV RAILS_ENV=$rails_env
+
 # Copy source code for application
 COPY . .
 
