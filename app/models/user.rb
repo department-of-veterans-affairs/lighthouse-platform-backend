@@ -4,7 +4,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  validates_presence_of :first_name, :last_name, :organization
+
   has_one :consumer
+  has_many :consumer_api_assignment, through: :consumer
   accepts_nested_attributes_for :consumer
 
   protected
