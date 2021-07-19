@@ -19,12 +19,13 @@ class ConsumersController < ApplicationController
       :last_name,
       :organization,
       :role,
-      consumer_attributes: %i[
-        description
-        sandbox_gateway_ref
-        sandbox_oauth_ref
-        prod_gateway_ref
-        prod_oauth_ref
+      consumer_attributes: [
+        :description,
+        :sandbox_gateway_ref,
+        :sandbox_oauth_ref,
+        :prod_gateway_ref,
+        :prod_oauth_ref,
+        :apis_list
       ]
     )
   end
