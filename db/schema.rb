@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_15_152923) do
+ActiveRecord::Schema.define(version: 2021_07_15_191116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,17 @@ ActiveRecord::Schema.define(version: 2021_07_15_152923) do
     t.string "service_ref"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "api_ref"
+  end
+
+  create_table "consumer_api_assignments", force: :cascade do |t|
+    t.bigint "consumer_id", null: false
+    t.bigint "api_id", null: false
+    t.datetime "first_successful_call_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["api_id"], name: "index_consumer_api_assignments_on_api_id"
+    t.index ["consumer_id"], name: "index_consumer_api_assignments_on_consumer_id"
   end
 
   create_table "consumers", force: :cascade do |t|
@@ -56,5 +67,7 @@ ActiveRecord::Schema.define(version: 2021_07_15_152923) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "consumer_api_assignments", "apis"
+  add_foreign_key "consumer_api_assignments", "consumers"
   add_foreign_key "consumers", "users"
 end
