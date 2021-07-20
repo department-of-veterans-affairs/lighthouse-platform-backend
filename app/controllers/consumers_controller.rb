@@ -2,7 +2,7 @@
 
 class ConsumersController < ApplicationController
   def create
-    @user = User.create(user_params)
+    @user = User.new(user_params)
     if @user.save
       render json: { user_created: @user }, status: :ok
     else
@@ -18,7 +18,6 @@ class ConsumersController < ApplicationController
       :first_name,
       :last_name,
       :organization,
-      :role,
       consumer_attributes: [
         :description,
         :sandbox_gateway_ref,

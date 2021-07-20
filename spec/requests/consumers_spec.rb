@@ -36,11 +36,10 @@ describe ConsumersController, type: :request do
       end.to change(Consumer, :count).by(1)
     end
 
-    # add test to test api
     it 'builds a consumer_api_assigment to the consumer' do
       expect do
         post '/consumers', params: valid_params
-      end.to change(ConsumerApiAssignment, :count).by(1)
+      end.to change(ConsumerApiAssignment, :count).by(2)
     end
   end
 end
