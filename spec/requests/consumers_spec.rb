@@ -4,8 +4,9 @@ require 'rails_helper'
 
 describe ConsumersController, type: :request do
   describe 'creating a consumer' do
-    FactoryBot.create(:api, name: 'Claims API', api_ref: 'claims')
-    FactoryBot.create(:api, name: 'Forms API', api_ref: 'vaForms')
+    claims_api = FactoryBot.create(:api, name: 'Claims API', api_ref: 'claims')
+    forms_api = FactoryBot.create(:api, name: 'Forms API', api_ref: 'vaForms')
+    appeals_api = FactoryBot.create(:api, name: 'Appeals API', api_ref: 'decision_reviews')
 
     let :valid_params do
       {
@@ -24,6 +25,12 @@ describe ConsumersController, type: :request do
       }
     end
 
+    before do
+      forms_api
+      claims_api
+      appeals_api
+    end
+
     it 'creates the user' do
       expect do
         post '/consumers', params: valid_params
@@ -40,6 +47,25 @@ describe ConsumersController, type: :request do
       expect do
         post '/consumers', params: valid_params
       end.to change(ConsumerApiAssignment, :count).by(2)
+    end
+
+    it 'updates a users APIs' do
+      user = FactoryBot.create(:user, email: 'test@email.com')
+      consumer = FactoryBot.create(:consumer, user: user)
+      consumer.apis << claims_api
+      consumer.apis << forms_api
+      consumer.save
+      valid_params[:user][:consumer_attributes][:apis_list] = 'decision_reviews'
+      post '/consumers', params: valid_params
+      expect(Consumer.last.apis.map(&:name)).to eq(['Claims API', 'Forms API', 'Appeals API'])
+    end
+
+    it 'updates consumer_api_assignments if new values are added' do
+      pending
+    end
+
+    it 'does not delete a consumer_api_assignment' do
+      pending
     end
   end
 end

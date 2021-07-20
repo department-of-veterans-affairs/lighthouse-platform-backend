@@ -23,6 +23,7 @@ class Consumer < ApplicationRecord
   end
 
   def manage_apis
+    return if apis_list.blank?
     self.apis ||= []
     apis_list.split(',').map do |api|
       api_model = Api.find_by(api_ref: api.strip)
