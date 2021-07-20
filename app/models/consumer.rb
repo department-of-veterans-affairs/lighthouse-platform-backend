@@ -1,6 +1,8 @@
 class Consumer < ApplicationRecord
   attr_accessor :tos_accepted, :apis_list, :apis
 
+  validates :description, presence: true
+
   belongs_to :user
   has_many :consumer_api_assignment
 
