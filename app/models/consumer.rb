@@ -22,12 +22,13 @@ class Consumer < ApplicationRecord
     end
   end
 
+  #TODO this needs to factor the api env also
   def manage_apis
     return if apis_list.blank?
-    self.apis ||= []
+
     apis_list.split(',').map do |api|
       api_model = Api.find_by(api_ref: api.strip)
-      apis << api_model if api_model.present?
+      apis << api_model if api_model.present? && api_ids.exclude?(api_model.id)
     end
   end
 end

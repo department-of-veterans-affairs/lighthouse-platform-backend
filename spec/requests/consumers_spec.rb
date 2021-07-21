@@ -4,9 +4,8 @@ require 'rails_helper'
 
 describe ConsumersController, type: :request do
   describe 'creating a consumer' do
-    claims_api = FactoryBot.create(:api, name: 'Claims API', api_ref: 'claims')
-    forms_api = FactoryBot.create(:api, name: 'Forms API', api_ref: 'vaForms')
-    appeals_api = FactoryBot.create(:api, name: 'Appeals API', api_ref: 'decision_reviews')
+    let(:claims_api) { FactoryBot.create(:api, name: 'Claims API', api_ref: 'claims') }
+    let(:forms_api) { FactoryBot.create(:api, name: 'Forms API', api_ref: 'vaForms') }
 
     let :valid_params do
       {
@@ -25,10 +24,10 @@ describe ConsumersController, type: :request do
       }
     end
 
+
     before do
       forms_api
       claims_api
-      appeals_api
     end
 
     it 'creates the user' do
@@ -49,23 +48,41 @@ describe ConsumersController, type: :request do
       end.to change(ConsumerApiAssignment, :count).by(2)
     end
 
+    it 'responds properly when user fails to save'
+
+  end
+
+  describe 'Updating a consumer' do
+    let(:appeals_api) { FactoryBot.create(:api, name: 'Appeals API', api_ref: 'decision_reviews') }
+
+    before do
+      appeals_api
+    end
+
+    let :update_params do
+      {
+        user: {
+          email: 'origami@oregano.com',
+          consumer_attributes: {
+            apis_list: 'decision_reviews'
+          }
+        }
+      }
+    end
+
     it 'updates a users APIs' do
-      user = FactoryBot.create(:user, email: 'test@email.com')
-      consumer = FactoryBot.create(:consumer, user: user)
-      consumer.apis << claims_api
-      consumer.apis << forms_api
-      consumer.save
-      valid_params[:user][:consumer_attributes][:apis_list] = 'decision_reviews'
-      post '/consumers', params: valid_params
-      expect(Consumer.last.apis.map(&:name)).to eq(['Claims API', 'Forms API', 'Appeals API'])
+      user = FactoryBot.create(:user, email: 'origami@oregano.com')
+      consumer = FactoryBot.create(:consumer, :with_apis, user_id: user.id)
+      post '/consumers', params: update_params
+      expect(consumer.apis.map(&:name).sort).to eq(['Appeals API', 'Claims API', 'Forms API'])
     end
 
-    it 'updates consumer_api_assignments if new values are added' do
-      pending
-    end
+    it 'updates consumer_api_assignments if new values are added'
 
-    it 'does not delete a consumer_api_assignment' do
-      pending
-    end
+    it 'updates consumer_api_assignments if new values are added'
+
+    it 'does not duplicate assignments passed in again'
+
+    it 'responds properly when consumer fails to update'
   end
 end

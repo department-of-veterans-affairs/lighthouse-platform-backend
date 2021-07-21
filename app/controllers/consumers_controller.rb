@@ -1,13 +1,22 @@
 # frozen_string_literal: true
 
 class ConsumersController < ApplicationController
+
   def create
     @user = User.find_or_initialize_by(email: params[:user][:email])
-    @user.assign_attributes(user_params)
-    if @user.save
-      render json: { user_created: @user }, status: :ok
+    if @user.persisted? && @user.consumer.present?
+      if @user.consumer.update(user_params[:consumer_attributes])
+        render json: { user_created: @user }, status: :ok
+      else
+        render json: { error: @user.errors.full_messages }, status: :unprocessable_entity
+      end
     else
-      render json: { error: @user.errors.full_messages }, status: :unprocessable_entity
+      @user.assign_attributes(user_params)
+      if @user.save
+        render json: { user_created: @user }, status: :ok
+      else
+        render json: { error: @user.errors.full_messages }, status: :unprocessable_entity
+      end
     end
   end
 
