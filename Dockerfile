@@ -33,14 +33,20 @@ RUN yarn install
 
 ARG rails_env=test
 ENV RAILS_ENV=$rails_env
+
 # Copy source code for application
 COPY . .
+
+# Precompile assets
+RUN bundle exec rails assets:precompile
+RUN ./bin/webpack
 
 # Production Stage
 FROM base AS prod
 
 ARG rails_env=production
 ENV RAILS_ENV=$rails_env
+ENV NODE_ENV=$rails_env
 ENV RAILS_SERVE_STATIC_FILES=true
 ENV SECRET_KEY_BASE=DEFAULT_VALUE_OVERRIDE_AT_RUNTIME
 ENV RAILS_ENV=production
@@ -54,12 +60,12 @@ COPY . .
 
 # Precompile assets
 RUN bundle exec rails assets:precompile
-RUN bundle exec rails webpacker:compile
+RUN ./bin/webpack
 
 # Add a script to be executed every time the container starts.
 COPY bin/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
-EXPOSE 3000
+EXPOSE 8080
 # Start the main process.
-CMD ["rails", "server", "-b", "0.0.0.0"]
+CMD ["rails", "server", "-b", "0.0.0.0", "-p", "8080"]
