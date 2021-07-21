@@ -65,8 +65,8 @@ RSpec.describe Consumer, type: :model do
       expect(subject[:prod_gateway_ref]).to eq(auth_info[:prod][:gateway])
     end
 
-    it 'receives a prod_gateway_ref' do
-      expect(subject[:prod_gateway_ref]).to eq(auth_info[:prod][:gateway])
+    it 'receives a prod_oauth_ref' do
+      expect(subject[:prod_oauth_ref]).to eq(auth_info[:prod][:oauth])
     end
   end
 

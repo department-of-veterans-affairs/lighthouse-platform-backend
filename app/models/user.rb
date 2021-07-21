@@ -8,7 +8,7 @@ class User < ApplicationRecord
 
   validates :first_name, :last_name, :organization, presence: true
 
-  has_one :consumer
+  has_one :consumer, dependent: :destroy
   has_many :consumer_api_assignment, through: :consumer
   accepts_nested_attributes_for :consumer
 

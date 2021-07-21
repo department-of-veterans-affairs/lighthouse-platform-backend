@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api < ApplicationRecord
-  has_many :consumer_api_assignment
+  has_many :consumer_api_assignment, dependent: :nullify
 
   validates :api_ref, presence: true, uniqueness: { scope: :environment }
 end
