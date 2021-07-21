@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ConsumersController < ApplicationController
-
   def create
     options = {}
     options[:include] = [:consumer]
