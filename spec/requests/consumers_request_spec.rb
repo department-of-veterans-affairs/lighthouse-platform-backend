@@ -3,26 +3,26 @@
 require 'rails_helper'
 
 describe ConsumersController, type: :request do
+  let :valid_params do
+    {
+      user: {
+        email: 'origami@oregano.com',
+        first_name: 'taco',
+        last_name: 'burrito',
+        organization: 'taco-burrito supply',
+        consumer_attributes: {
+          description: 'i like tacos',
+          sandbox_gateway_ref: '123990a9df9012i10',
+          sandbox_oauth_ref: '02h89fe8h8daf',
+          apis_list: 'claims,vaForms'
+        }
+      }
+    }
+  end
+
   describe 'creating a consumer' do
     let(:claims_api) { FactoryBot.create(:api, name: 'Claims API', api_ref: 'claims') }
     let(:forms_api) { FactoryBot.create(:api, name: 'Forms API', api_ref: 'vaForms') }
-
-    let :valid_params do
-      {
-        user: {
-          email: 'origami@oregano.com',
-          first_name: 'taco',
-          last_name: 'burrito',
-          organization: 'taco-burrito supply',
-          consumer_attributes: {
-            description: 'i like tacos',
-            sandbox_gateway_ref: '123990a9df9012i10',
-            sandbox_oauth_ref: '02h89fe8h8daf',
-            apis_list: 'claims,vaForms'
-          }
-        }
-      }
-    end
 
     before do
       forms_api
@@ -78,7 +78,13 @@ describe ConsumersController, type: :request do
 
     it 'updates consumer_api_assignments if new values are added'
 
-    it 'does not duplicate assignments passed in again'
+    it 'does not duplicate assignments passed in again' do
+      user = FactoryBot.create(:user, email: 'origami@oregano.com')
+      consumer = FactoryBot.create(:consumer, :with_apis, user_id: user.id)
+      valid_params[:user][:consumer_attributes][:apis_list] = 'va_forms'
+      post '/consumers', params: valid_params
+      expect(consumer.apis.map(&:name).sort).to eq(['Claims API', 'Forms API'])
+    end
 
     it 'responds properly when consumer fails to update'
   end
