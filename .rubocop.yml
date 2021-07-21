@@ -366,7 +366,3 @@ Layout/LineEndStringConcatenationIndentation: # (new in 1.18)
   Enabled: true
 Naming/InclusiveLanguage: # (new in 1.18)
   Enabled: true
-RSpec/IdenticalEqualityAssertion: # (new in 2.4)
-  Enabled: true
-RSpec/Rails/AvoidSetupHook: # (new in 2.4)
-  Enabled: true
