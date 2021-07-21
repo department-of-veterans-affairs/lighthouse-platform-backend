@@ -47,7 +47,13 @@ describe ConsumersController, type: :request do
       end.to change(ConsumerApiAssignment, :count).by(2)
     end
 
-    it 'responds properly when user fails to save'
+    it 'responds properly when user fails to save' do
+      valid_params[:user][:first_name] = nil
+      post '/consumers', params: valid_params
+      rubyize_response = JSON.parse response.body
+      expect(rubyize_response).to have_key('error')
+      expect(rubyize_response['error'].first).to start_with('First name')
+    end
   end
 
   describe 'Updating a consumer' do
@@ -74,10 +80,6 @@ describe ConsumersController, type: :request do
       expect(consumer.apis.map(&:name).sort).to eq(['Appeals API', 'Claims API', 'Forms API'])
     end
 
-    it 'updates consumer_api_assignments if new values are added'
-
-    it 'updates consumer_api_assignments if new values are added'
-
     it 'does not duplicate assignments passed in again' do
       user = FactoryBot.create(:user, email: 'origami@oregano.com')
       consumer = FactoryBot.create(:consumer, :with_apis, user_id: user.id)
@@ -86,6 +88,12 @@ describe ConsumersController, type: :request do
       expect(consumer.apis.map(&:name).sort).to eq(['Claims API', 'Forms API'])
     end
 
-    it 'responds properly when consumer fails to update'
+    it 'responds properly when consumer fails to update' do
+      valid_params[:user][:consumer_attributes][:description] = nil
+      post '/consumers', params: valid_params
+      rubyize_response = JSON.parse response.body
+      expect(rubyize_response).to have_key('error')
+      expect(rubyize_response['error'].first).to start_with('Consumer description')
+    end
   end
 end
