@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Api < ApplicationRecord
   has_many :consumer_api_assignment
 
-  validates :api_ref, presence: true, uniqueness: {scope: :environment}
+  validates :api_ref, presence: true, uniqueness: { scope: :environment }
 end

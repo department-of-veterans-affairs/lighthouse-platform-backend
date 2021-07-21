@@ -24,7 +24,6 @@ describe ConsumersController, type: :request do
       }
     end
 
-
     before do
       forms_api
       claims_api
@@ -49,16 +48,10 @@ describe ConsumersController, type: :request do
     end
 
     it 'responds properly when user fails to save'
-
   end
 
   describe 'Updating a consumer' do
     let(:appeals_api) { FactoryBot.create(:api, name: 'Appeals API', api_ref: 'decision_reviews') }
-
-    before do
-      appeals_api
-    end
-
     let :update_params do
       {
         user: {
@@ -68,6 +61,10 @@ describe ConsumersController, type: :request do
           }
         }
       }
+    end
+
+    before do
+      appeals_api
     end
 
     it 'updates a users APIs' do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Consumer < ApplicationRecord
   attr_accessor :tos_accepted, :apis_list
 
@@ -22,7 +24,7 @@ class Consumer < ApplicationRecord
     end
   end
 
-  #TODO this needs to factor the api env also
+  # TODO: this needs to factor the api env also
   def manage_apis
     return if apis_list.blank?
 

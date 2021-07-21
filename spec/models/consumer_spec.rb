@@ -1,12 +1,26 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Consumer, type: :model do
-  let(:parent) { create(:user,
-                        email: 'test_user@test_user_website.com',
-                        first_name: 'Test',
-                        last_name: 'User',
-                        organization: 'Test User Organization') 
-  }
+  subject do
+    Consumer.new(description: test_description,
+                 tos_accepted_at: tos_test_time,
+                 tos_version: 1,
+                 sandbox_gateway_ref: auth_info[:sandbox][:gateway],
+                 sandbox_oauth_ref: auth_info[:sandbox][:oauth],
+                 prod_gateway_ref: auth_info[:prod][:gateway],
+                 prod_oauth_ref: auth_info[:prod][:oauth],
+                 user_id: parent[:id])
+  end
+
+  let(:parent) do
+    create(:user,
+           email: 'test_user@test_user_website.com',
+           first_name: 'Test',
+           last_name: 'User',
+           organization: 'Test User Organization')
+  end
   let(:test_description) { 'This is an in depth description.' }
   let(:tos_test_time) { DateTime.now }
   let(:auth_info) do
@@ -22,19 +36,7 @@ RSpec.describe Consumer, type: :model do
     }
   end
 
-  subject {
-    Consumer.new(description: test_description,
-                 tos_accepted_at: tos_test_time,
-                 tos_version: 1,
-                 sandbox_gateway_ref: auth_info[:sandbox][:gateway],
-                 sandbox_oauth_ref: auth_info[:sandbox][:oauth],
-                 prod_gateway_ref: auth_info[:prod][:gateway],
-                 prod_oauth_ref: auth_info[:prod][:oauth],
-                 user_id: parent[:id])
-  }
-
   describe 'tests a valid consumer model' do
-
     it 'is valid' do
       expect(subject).to be_valid
     end
@@ -54,7 +56,7 @@ RSpec.describe Consumer, type: :model do
     it 'receives a sandbox_gateway_ref' do
       expect(subject[:sandbox_gateway_ref]).to eq(auth_info[:sandbox][:gateway])
     end
-    
+
     it 'receives a sandbox_oauth_ref' do
       expect(subject[:sandbox_oauth_ref]).to eq(auth_info[:sandbox][:oauth])
     end
@@ -67,13 +69,11 @@ RSpec.describe Consumer, type: :model do
       expect(subject[:prod_gateway_ref]).to eq(auth_info[:prod][:gateway])
     end
   end
-  
+
   describe 'fails on an invalid input' do
-    
     it 'fails without a description' do
       subject[:description] = nil
-      expect(subject).to_not be_valid
+      expect(subject).not_to be_valid
     end
-
   end
 end

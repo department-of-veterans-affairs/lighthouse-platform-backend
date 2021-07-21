@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  validates_presence_of :first_name, :last_name, :organization
+  validates :first_name, :last_name, :organization, presence: true
 
   has_one :consumer
   has_many :consumer_api_assignment, through: :consumer
@@ -13,6 +15,6 @@ class User < ApplicationRecord
   protected
 
   def password_required?
-    return false
+    false
   end
 end
