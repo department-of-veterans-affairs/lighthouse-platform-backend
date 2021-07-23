@@ -20,6 +20,6 @@ module LighthousePlatformBackend
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-    config.relative_url_root = '/platform-backend'
+    config.assets.prefix = '/platform-backend'
   end
 end
