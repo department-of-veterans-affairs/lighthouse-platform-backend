@@ -35,7 +35,8 @@ Rails.application.configure do
   # config.assets.digest = false
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  config.asset_host = 'https://blue.qa.lighthouse.va.gov/platform-backend'
+  # config.asset_host = 'https://blue.qa.lighthouse.va.gov/platform-backend'
+  # config.asset_host = 'https://https://charleystran.ngrok.io/platform-backend'
   # config.asset_host = 'http://assets.example.com'
 
   # Specifies the header that your server uses for sending files.
