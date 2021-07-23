@@ -15,7 +15,8 @@ describe ConsumersController, type: :request do
           description: 'i like tacos',
           sandbox_gateway_ref: '123990a9df9012i10',
           sandbox_oauth_ref: '02h89fe8h8daf',
-          apis_list: 'claims,vaForms'
+          apis_list: 'claims,vaForms',
+          tos_accepted: true
         }
       }
     }
@@ -88,13 +89,42 @@ describe ConsumersController, type: :request do
       post base, params: valid_params
       expect(consumer.apis.map(&:name).sort).to eq(['Claims API', 'Forms API'])
     end
-
+    
     it 'responds properly when consumer fails to update' do
       valid_params[:user][:consumer_attributes][:description] = nil
       post base, params: valid_params
       rubyize_response = JSON.parse response.body
       expect(rubyize_response).to have_key('error')
       expect(rubyize_response['error'].first).to start_with('Consumer description')
+    end
+    
+    let(:prod_api) { FactoryBot.create(:api, name: 'Production API', api_ref: 'catch_prod', environment: 'prod') }
+    
+    before do
+      prod_api
+    end
+    
+    it 'does not locate production environment apis from the apply page' do
+      user = FactoryBot.create(:user, email: 'origami@oregano.com')
+      consumer = FactoryBot.create(:consumer, :with_apis, user_id: user.id)
+      valid_params[:user][:consumer_attributes][:apis_list] = 'catch_prod'
+      post base, params: valid_params
+      expect(consumer.apis.map(&:name).sort).to eq(['Claims API', 'Forms API'])
+    end
+  end
+  
+  describe 'validates TOS has been accepted' do
+    
+    it 'creates a valid tos_accepted_at' do
+      post base, params: valid_params
+      expect(User.last.consumer.tos_accepted_at).to be < DateTime.now
+      expect(User.last.consumer.tos_accepted_at).to be_a(ActiveSupport::TimeWithZone)
+    end
+
+    it 'raise an exception if TOS is not accepted' do
+      valid_params[:user][:email] = 'new_user@user_of_the_new.com'
+      valid_params[:user][:consumer_attributes][:tos_accepted] = false
+      expect { post base, params: valid_params }.to raise_error(RuntimeError)
     end
   end
 end

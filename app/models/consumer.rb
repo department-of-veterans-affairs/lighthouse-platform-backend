@@ -17,19 +17,18 @@ class Consumer < ApplicationRecord
   private
 
   def manage_tos
-    if new_record? && tos_accepted == false
-      # raise an error
+    if new_record? && tos_accepted == 'false'
+      raise 'TOS not accepted'
     elsif !persisted?
       self.tos_accepted_at = Time.zone.now
     end
   end
 
-  # TODO: this needs to factor the api env also
   def manage_apis
     return if apis_list.blank?
 
     apis_list.split(',').map do |api|
-      api_model = Api.find_by(api_ref: api.strip)
+      api_model = Api.find_by(api_ref: api.strip, environment: 'sandbox')
       apis << api_model if api_model.present? && api_ids.exclude?(api_model.id)
     end
   end
