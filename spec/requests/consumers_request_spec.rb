@@ -60,6 +60,7 @@ describe ConsumersController, type: :request do
 
   describe 'Updating a consumer' do
     let(:appeals_api) { FactoryBot.create(:api, name: 'Appeals API', api_ref: 'decision_reviews') }
+    let(:prod_api) { FactoryBot.create(:api, name: 'Production API', api_ref: 'catch_prod', environment: 'prod') }
     let :update_params do
       {
         user: {
@@ -73,6 +74,7 @@ describe ConsumersController, type: :request do
 
     before do
       appeals_api
+      prod_api
     end
 
     it 'updates a users APIs' do
@@ -89,7 +91,7 @@ describe ConsumersController, type: :request do
       post base, params: valid_params
       expect(consumer.apis.map(&:name).sort).to eq(['Claims API', 'Forms API'])
     end
-    
+
     it 'responds properly when consumer fails to update' do
       valid_params[:user][:consumer_attributes][:description] = nil
       post base, params: valid_params
@@ -97,13 +99,7 @@ describe ConsumersController, type: :request do
       expect(rubyize_response).to have_key('error')
       expect(rubyize_response['error'].first).to start_with('Consumer description')
     end
-    
-    let(:prod_api) { FactoryBot.create(:api, name: 'Production API', api_ref: 'catch_prod', environment: 'prod') }
-    
-    before do
-      prod_api
-    end
-    
+
     it 'does not locate production environment apis from the apply page' do
       user = FactoryBot.create(:user, email: 'origami@oregano.com')
       consumer = FactoryBot.create(:consumer, :with_apis, user_id: user.id)
@@ -112,9 +108,8 @@ describe ConsumersController, type: :request do
       expect(consumer.apis.map(&:name).sort).to eq(['Claims API', 'Forms API'])
     end
   end
-  
+
   describe 'validates TOS has been accepted' do
-    
     it 'creates a valid tos_accepted_at' do
       post base, params: valid_params
       expect(User.last.consumer.tos_accepted_at).to be < DateTime.now
