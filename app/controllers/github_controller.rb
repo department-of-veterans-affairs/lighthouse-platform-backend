@@ -6,19 +6,23 @@ class GithubController < ApplicationController
   before_action :alert_params
 
   def alert
-    # cutting out unnecessary keys
-    req_body = {
-      alert: params['alert'],
-      repository: params['repository'],
-      organization: params['organization']
-    }
-
-    GithubAlertCreator.call(req_body)
+    creator = GithubAlertCreator.new(alert_params)
+    if creator.valid?
+      creator.call
+      render json: creator.to_json, status: :no_content
+    else
+      # raise to sentry after its integrated
+      render json: creator.errors.to_json
+    end
   end
 
   private
 
   def alert_params
-    params.require(%i[alert repository organization])
+    params.permit(
+      alert: [:secret_type],
+      repository: %i[full_name html_url],
+      organization: [:login]
+    )
   end
 end

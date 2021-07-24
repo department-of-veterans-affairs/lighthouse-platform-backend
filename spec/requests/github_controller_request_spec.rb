@@ -26,8 +26,8 @@ describe GithubController, type: :request do
   end
 
   it 'responds with an exception when passed an invalid body' do
-    expect  do
-      post('/platform-backend/github', params: { boop: 'bap' })
-    end.to raise_error(ActionController::ParameterMissing)
+    post('/platform-backend/github', params: { boop: 'bap' })
+    parsed = JSON.parse(response.body)
+    expect(parsed.count).to eq(4)
   end
 end
