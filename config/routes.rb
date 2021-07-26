@@ -6,5 +6,6 @@ Rails.application.routes.draw do
   scope '/platform-backend' do
     get 'admin/dashboard', to: 'admin/dashboard#index'
     post '/github', to: 'github#alert'
+    resources :consumers
   end
 end

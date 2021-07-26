@@ -16,6 +16,7 @@ services:
       - DATABASE_USER=${DATABASE_USER:-postgres}
       - DATABASE_PASSWORD=${DATABASE_PASSWORD:-postgres}
       - RAILS_SERVE_STATIC_FILES=true
+    volumes: [.:/home/ruby]
   db:
     image: postgres:13.1
     expose:
