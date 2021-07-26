@@ -52,9 +52,9 @@ describe ConsumersController, type: :request do
     it 'responds properly when user fails to save' do
       valid_params[:user][:first_name] = nil
       post base, params: valid_params
-      rubyize_response = JSON.parse response.body
-      expect(rubyize_response).to have_key('error')
-      expect(rubyize_response['error'].first).to start_with('First name')
+      parsed = JSON.parse response.body
+      expect(parsed).to have_key('error')
+      expect(parsed['error'].first).to start_with('First name')
     end
   end
 
@@ -95,9 +95,9 @@ describe ConsumersController, type: :request do
     it 'responds properly when consumer fails to update' do
       valid_params[:user][:consumer_attributes][:description] = nil
       post base, params: valid_params
-      rubyize_response = JSON.parse response.body
-      expect(rubyize_response).to have_key('error')
-      expect(rubyize_response['error'].first).to start_with('Consumer description')
+      parsed = JSON.parse response.body
+      expect(parsed).to have_key('error')
+      expect(parsed['error'].first).to start_with('Consumer description')
     end
 
     it 'does not locate production environment apis from the apply page' do
