@@ -11,7 +11,8 @@ namespace :apis do
     #   open_api_url: '',
     #   base_path: '',
     #   service_ref: '',
-    #   api_ref: ''
+    #   api_ref: '',
+    #   version:
     # })
 
     ###########
@@ -26,7 +27,8 @@ namespace :apis do
                  open_api_url: '/services/appeals/docs/v0/api',
                  base_path: '/services/appeals/v0/appeals',
                  service_ref: '49edf38e-bbfc-4256-9162-9adaa2e0798f',
-                 api_ref: 'appeals'
+                 api_ref: 'appeals',
+                 version: '0'
                })
 
     # Appeals v1
@@ -37,7 +39,8 @@ namespace :apis do
                  open_api_url: '/services/appeals/docs/v1/decision_reviews',
                  base_path: '/services/appeals/v1/decision_reviews',
                  service_ref: '72e0f044-ddc2-4303-990b-c858fa2b5cab',
-                 api_ref: 'decision_reviews'
+                 api_ref: 'decision_reviews',
+                 version: '1'
                })
 
     # Forms v0
@@ -48,7 +51,8 @@ namespace :apis do
                  open_api_url: '/internal/docs/forms/v0/openapi.json',
                  base_path: '/services/va_forms/v0',
                  service_ref: '48b34d5a-f822-4446-830c-fb212077f17c',
-                 api_ref: 'vaForms'
+                 api_ref: 'vaForms',
+                 version: '0'
                })
 
     # Vet Verification v0
@@ -59,7 +63,8 @@ namespace :apis do
                  open_api_url: '/internal/docs/address-validation/v1/openapi.json',
                  base_path: '/services/veteran_confirmation/v0',
                  service_ref: '3ed65563-a63d-4e25-8c3d-353f910c07e6',
-                 api_ref: 'confirmation'
+                 api_ref: 'confirmation',
+                 version: '0'
                })
   end
 end

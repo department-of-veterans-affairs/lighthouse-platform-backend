@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ConsumersController < ApplicationController
-
   def create
     options = {}
     options[:include] = [:consumer]
@@ -37,6 +36,7 @@ class ConsumersController < ApplicationController
         prod_gateway_ref
         prod_oauth_ref
         apis_list
+        tos_accepted
       ]
     )
   end
