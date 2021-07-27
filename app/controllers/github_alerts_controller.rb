@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 # Handles POST /github route to trigger email/slack notification
-class GithubController < ApplicationController
+class GithubAlertsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :alert_params
 
-  def alert
+  def create
     creator = GithubAlertCreator.new(alert_params)
     if creator.valid?
       creator.call
