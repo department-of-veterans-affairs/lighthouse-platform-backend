@@ -4,15 +4,26 @@ require 'net/http'
 require 'uri'
 
 # This class delivers creates and sends an email and slack notification
-class GithubAlertCreator < ApplicationService
-  attr_reader :body
+class GithubAlertCreator
+  include ActiveModel::Model
+  attr_accessor :body, :secret_type, :full_name, :html_url, :login
+
+  validates :secret_type, presence: true
+  validates :full_name, presence: true
+  validates :html_url, presence: true
+  validates :login, presence: true
 
   def initialize(body)
     @body = body
+    @secret_type = body.dig(:alert, :secret_type)
+    @full_name = body.dig(:repository, :full_name)
+    @html_url = body.dig(:repository, :html_url)
+    @login = body.dig(:organization, :login)
   end
 
   # rubocop:disable Metrics/MethodLength
   def call
+    validate!
     # Send Email
     GithubMailer.security_email(@body).deliver_now
 
@@ -39,7 +50,7 @@ class GithubAlertCreator < ApplicationService
             },
             {
               type: 'plain_text',
-              text: @body.dig(:alert, :secret_type),
+              text: @secret_type,
               emoji: true
             }
           ]
@@ -54,7 +65,7 @@ class GithubAlertCreator < ApplicationService
             },
             {
               type: 'plain_text',
-              text: @body.dig(:repository, :full_name),
+              text: @full_name,
               emoji: true
             }
           ]
@@ -69,7 +80,7 @@ class GithubAlertCreator < ApplicationService
             },
             {
               type: 'plain_text',
-              text: @body.dig(:repository, :html_url),
+              text: @html_url,
               emoji: true
             }
           ]
@@ -84,7 +95,7 @@ class GithubAlertCreator < ApplicationService
             },
             {
               type: 'plain_text',
-              text: @body.dig(:organization, :login),
+              text: @login,
               emoji: true
             }
           ]
@@ -100,7 +111,7 @@ class GithubAlertCreator < ApplicationService
                 emoji: true
               },
               value: 'click_me_123',
-              url: @body.dig(:repository, :html_url),
+              url: @html_url,
               action_id: 'button-action'
             }
           ]
