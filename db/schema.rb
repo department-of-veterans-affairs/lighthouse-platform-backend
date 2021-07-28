@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_22_170148) do
+ActiveRecord::Schema.define(version: 2021_07_28_170159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 2021_07_22_170148) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "api_ref"
     t.string "version"
+    t.index ["api_ref", "environment"], name: "index_apis_on_api_ref_and_environment", unique: true
   end
 
   create_table "consumer_api_assignments", force: :cascade do |t|
