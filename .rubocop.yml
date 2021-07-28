@@ -211,10 +211,6 @@ RSpec/EmptyExampleGroup:
 RSpec/LetSetup:
   Enabled: false
 
-# Bypass rspec filepath checks
-RSpec/FilePath:
-  Enabled: false
-
 # the default style recently changed, but it's not worth changing
 Rails/FilePath:
   EnforcedStyle: arguments
@@ -365,6 +361,10 @@ Rails/WhereEquals: # (new in 2.9)
 Rails/WhereExists: # (new in 2.7)
   Enabled: true
 Rails/WhereNot: # (new in 2.8)
+  Enabled: true
+Layout/LineEndStringConcatenationIndentation: # (new in 1.18)
+  Enabled: true
+Naming/InclusiveLanguage: # (new in 1.18)
   Enabled: true
 RSpec/FilePath:
   Enabled: false
