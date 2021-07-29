@@ -4,6 +4,7 @@ class Consumer < ApplicationRecord
   attr_accessor :tos_accepted, :apis_list
 
   validates :description, presence: true
+  validate :confirm_tos
 
   belongs_to :user
   has_many :consumer_api_assignments, dependent: :destroy
@@ -11,17 +12,17 @@ class Consumer < ApplicationRecord
 
   accepts_nested_attributes_for :consumer_api_assignments
 
-  before_save :manage_tos
+  before_save :set_tos
   before_save :manage_apis
 
   private
 
-  def manage_tos
-    if new_record? && tos_accepted == 'false'
-      raise 'TOS not accepted'
-    elsif !persisted?
-      self.tos_accepted_at = Time.zone.now
-    end
+  def confirm_tos
+    errors.add(:tos_accepted, 'is invalid.') if new_record? && tos_accepted == 'false'
+  end
+
+  def set_tos
+    self.tos_accepted_at = Time.zone.now unless persisted?
   end
 
   def manage_apis

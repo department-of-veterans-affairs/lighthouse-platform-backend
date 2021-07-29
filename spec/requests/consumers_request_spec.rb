@@ -119,7 +119,10 @@ describe ConsumersController, type: :request do
     it 'raise an exception if TOS is not accepted' do
       valid_params[:user][:email] = 'new_user@user_of_the_new.com'
       valid_params[:user][:consumer_attributes][:tos_accepted] = false
-      expect { post base, params: valid_params }.to raise_error(RuntimeError)
+      post base, params: valid_params
+      parsed = JSON.parse response.body
+      expect(parsed).to have_key('error')
+      expect(parsed['error'].first).to eq('Consumer tos accepted is invalid.')
     end
   end
 end
