@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_28_170159) do
+ActiveRecord::Schema.define(version: 2021_07_30_173134) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 2021_07_28_170159) do
     t.string "prod_gateway_ref"
     t.string "prod_oauth_ref"
     t.bigint "user_id", null: false
+    t.string "organization"
     t.index ["user_id"], name: "index_consumers_on_user_id"
   end
 
@@ -63,7 +64,6 @@ ActiveRecord::Schema.define(version: 2021_07_28_170159) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "first_name"
     t.string "last_name"
-    t.string "organization"
     t.string "role", default: "user"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
