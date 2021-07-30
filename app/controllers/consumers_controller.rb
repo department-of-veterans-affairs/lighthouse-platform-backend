@@ -22,9 +22,9 @@ class ConsumersController < ApplicationController
       :email,
       :first_name,
       :last_name,
-      :organization,
       consumer_attributes: %i[
         description
+        organization
         sandbox_gateway_ref
         sandbox_oauth_ref
         prod_gateway_ref

@@ -4,6 +4,7 @@ class ConsumerSerializer
   include JSONAPI::Serializer
   attributes  :id,
               :description,
+              :organization,
               :tos_accepted_at,
               :tos_version,
               :sandbox_oauth_ref,

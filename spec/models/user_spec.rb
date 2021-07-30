@@ -9,8 +9,7 @@ RSpec.describe User, type: :model do
     subject do
       User.new(email: test_email,
                first_name: 'Chuck',
-               last_name: 'Norris',
-               organization: 'Texas Ranger')
+               last_name: 'Norris')
     end
 
     it 'is valid' do
@@ -28,18 +27,13 @@ RSpec.describe User, type: :model do
     it 'requires a last_name to be valid' do
       expect(subject.last_name).to eq('Norris')
     end
-
-    it 'requires an organization to be valid' do
-      expect(subject.organization).to eq('Texas Ranger')
-    end
   end
 
   describe 'tests an incorrect input' do
     subject do
       User.new(email: test_email,
                first_name: 'Chuck',
-               last_name: 'Norris',
-               organization: 'Texas Ranger')
+               last_name: 'Norris')
     end
 
     it 'will not save without an email' do
@@ -54,11 +48,6 @@ RSpec.describe User, type: :model do
 
     it 'will not save without an last_name' do
       subject.last_name = nil
-      expect(subject).not_to be_valid
-    end
-
-    it 'will not save without an organization' do
-      subject.organization = nil
       expect(subject).not_to be_valid
     end
   end

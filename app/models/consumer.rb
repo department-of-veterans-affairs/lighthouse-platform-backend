@@ -3,7 +3,7 @@
 class Consumer < ApplicationRecord
   attr_accessor :tos_accepted, :apis_list
 
-  validates :description, presence: true
+  validates :description, :organization, presence: true
   validate :confirm_tos
 
   belongs_to :user

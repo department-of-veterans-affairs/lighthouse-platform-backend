@@ -5,6 +5,7 @@ FactoryBot.define do
     description { 'MyString' }
     tos_accepted_at { '2021-07-14 12:16:18' }
     tos_version { 1 }
+    organization { 'MyString' }
 
     trait :with_apis do
       after(:create) do |consumer, _|

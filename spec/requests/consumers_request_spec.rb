@@ -10,9 +10,9 @@ describe ConsumersController, type: :request do
         email: 'origami@oregano.com',
         first_name: 'taco',
         last_name: 'burrito',
-        organization: 'taco-burrito supply',
         consumer_attributes: {
           description: 'i like tacos',
+          organization: 'taco-burrito supply',
           sandbox_gateway_ref: '123990a9df9012i10',
           sandbox_oauth_ref: '02h89fe8h8daf',
           apis_list: 'claims,vaForms',
