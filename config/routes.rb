@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   # everything must scoped under platform-backend
   scope '/platform-backend' do
     get 'admin/dashboard', to: 'admin/dashboard#index'
-    resources :consumers
+    resources :consumers, only: [:create]
     resources :github_alerts, only: [:create]
   end
 end
