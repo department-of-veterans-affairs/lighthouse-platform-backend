@@ -63,11 +63,6 @@ RSpec.describe Api, type: :model do
       expect(subject).not_to be_valid
     end
 
-    it 'will be invalid without an open_api_url' do
-      subject.open_api_url = nil
-      expect(subject).not_to be_valid
-    end
-
     it 'will be invalid without a base_path' do
       subject.base_path = nil
       expect(subject).not_to be_valid
