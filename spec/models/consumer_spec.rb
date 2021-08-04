@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Consumer, type: :model do
   subject do
     Consumer.new(description: test_description,
+                 organization: 'Test User Organization',
                  tos_accepted_at: tos_test_time,
                  tos_version: 1,
                  sandbox_gateway_ref: auth_info[:sandbox][:gateway],
@@ -18,8 +19,7 @@ RSpec.describe Consumer, type: :model do
     create(:user,
            email: 'test_user@test_user_website.com',
            first_name: 'Test',
-           last_name: 'User',
-           organization: 'Test User Organization')
+           last_name: 'User')
   end
   let(:test_description) { 'This is an in depth description.' }
   let(:tos_test_time) { DateTime.now }
