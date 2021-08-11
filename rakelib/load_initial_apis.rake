@@ -5,12 +5,10 @@ task load_apis: :environment do |_, args|
   require 'csv'
   file_path = args.extras.first
   host = args.extras.last
-  url = "#{host}/platform-backend/admin/api/v0/apis"
+  url = "#{host}/platform-backend/admin/api/v0/apis/bulk_upload"
   apis_list = CSV.parse(File.read(file_path), headers: true)
-  puts apis_list.inspect
-  apis_list.each do |api|
-    Rails.logger.warn "------- #{api['api_name']} -------"
-    params = {
+  apis_list = apis_list.map do |api|
+    {
       api: {
         name:	api.first.last,
         version: api['version'].to_i,
@@ -18,9 +16,10 @@ task load_apis: :environment do |_, args|
         environment: api['environment'],
         open_api_url: api['open_api_url'],
         base_path: api['base_path'],
-        service_ref: api['service_ref']
+        service_ref: api['service_ref'],
+        api_ref: api['api_ref']
       }
     }
-    JSON.parse(RestClient.post(url, params).body)
   end
+  JSON.parse(RestClient.post(url, { apis: apis_list }).body)
 end

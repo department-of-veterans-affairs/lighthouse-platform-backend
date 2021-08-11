@@ -10,7 +10,11 @@ Rails.application.routes.draw do
     namespace :admin do
       namespace :api do
         namespace :v0 do
-          resources :apis
+          resources :apis do
+            collection do
+              post :bulk_upload
+            end
+          end
         end
       end
     end

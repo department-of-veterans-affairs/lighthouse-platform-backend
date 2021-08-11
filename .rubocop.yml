@@ -80,15 +80,20 @@ Layout/LineLength:
 Metrics/MethodLength:
   Exclude:
     - 'rakelib/support/shell_command.rb'
+    - 'app/controllers/admin/api/v0/apis_controller.rb'
   IgnoredMethods:
     - 'user_params'
-
+    - 'bulk_upload'
 Rails:
   Enabled: true
 
 Rails/Output:
   Exclude:
     - 'lib/tasks/**/*'
+
+Rails/SkipsModelValidations:
+  Exclude: 
+    - 'app/controllers/admin/api/v0/apis_controller.rb'
 
 Metrics/ClassLength:
   Max: 400

@@ -3,6 +3,7 @@
 class Api < ApplicationRecord
   has_many :consumer_api_assignment, dependent: :nullify
 
-  validates :name, :auth_method, :environment, :base_path, :service_ref, presence: true
+  validates :name, :auth_method, :environment, :base_path, presence: true
   validates :api_ref, uniqueness: { scope: :environment }, allow_nil: true
+  validates :service_ref, presence: true, uniqueness: true
 end
