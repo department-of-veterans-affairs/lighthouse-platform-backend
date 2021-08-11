@@ -18,6 +18,20 @@ RSpec.describe 'Admin::Api::V0::Apis', type: :request do
         }
       }
     end
+
+    def valid_bulk_params
+      [{
+        api: {
+          name: 'claims',
+          auth_method: 'key_auth',
+          environment: 'sandbox',
+          open_api_url: 'https://sandbox-api.va.gov/services/claims/docs/v0/api',
+          base_path: '/services/claims/v0',
+          service_ref: 'somerandom-guid',
+          api_ref: 'claims'
+        }
+      }]
+    end
     # rubocop:enable Metrics/MethodLength
 
     def invalid_params
@@ -39,6 +53,12 @@ RSpec.describe 'Admin::Api::V0::Apis', type: :request do
         post '/platform-backend/admin/api/v0/apis', params: invalid_params
       end.to change(Api, :count).by(0)
       expect(response.code).to eq('422')
+    end
+
+    it 'creates a new api record for bulk update endpoint' do
+      expect do
+        post '/platform-backend/admin/api/v0/apis/bulk_upload', params: { apis: valid_bulk_params }
+      end.to change(Api, :count).by(1)
     end
   end
 end
