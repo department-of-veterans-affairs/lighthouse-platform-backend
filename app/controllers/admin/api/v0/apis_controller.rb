@@ -14,7 +14,6 @@ class Admin::Api::V0::ApisController < ApplicationController
 
   # rubocop:disableMetrics/MethodLength
   def bulk_upload
-    # rubocop:disableRails/SkipsModelValidations
     Api.upsert_all(params[:apis].map do |api|
       {
         name:	api.dig('api', 'name'),
@@ -23,15 +22,14 @@ class Admin::Api::V0::ApisController < ApplicationController
         environment: api.dig('api', 'environment'),
         open_api_url: api.dig('api', 'open_api_url'),
         base_path: api.dig('api', 'base_path'),
+        api_ref: api.dig('api', 'api_ref'),
         service_ref: api.dig('api', 'service_ref'),
         created_at: Time.zone.now,
         updated_at: Time.zone.now
       }
     end, unique_by: [:service_ref])
     render json: { data: 'apis_uploaded' }
-    # rubocop:enableRails/SkipsModelValidations
   end
-  # rubocop:enableMetrics/MethodLength
 
   def api_params
     params.require(:api).permit(
