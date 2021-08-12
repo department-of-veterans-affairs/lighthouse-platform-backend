@@ -12,7 +12,6 @@ class Admin::Api::V0::ApisController < ApplicationController
     end
   end
 
-  # rubocop:disableMetrics/MethodLength
   def bulk_upload
     Api.upsert_all(params[:apis].map do |api|
       {
