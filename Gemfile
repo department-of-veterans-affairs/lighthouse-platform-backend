@@ -5,12 +5,14 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.0.0'
 
+gem 'aws-sdk-dynamodb', '~> 1.62'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'devise'
 gem 'figaro'
 # gem 'health_check'
 gem 'jbuilder', '~> 2.7'
 gem 'jsonapi-serializer'
+gem 'oktakit', git: 'https://github.com/charleystran/oktakit', branch: 'add_authorization_servers'
 gem 'omniauth', '~> 2.0.0'
 gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
 gem 'pg', '~> 1.1'
@@ -22,6 +24,7 @@ gem 'sass-rails', '>= 6'
 gem 'serviceworker-rails'
 gem 'sidekiq'
 gem 'simple_form'
+gem 'socksify', '~> 1.7'
 gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 5.0'
 
