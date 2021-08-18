@@ -4,6 +4,8 @@ require 'net/http'
 require 'socksify/http'
 
 class KongService
+  attr_reader :client
+
   def initialize
     # Use SOCKS Proxy client for any connections except local, which uses standard Net::HTTP
     socks_host = ENV['SOCKS_HOST'] || 'localhost'
