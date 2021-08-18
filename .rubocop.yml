@@ -84,6 +84,8 @@ Metrics/MethodLength:
   IgnoredMethods:
     - 'user_params'
     - 'bulk_upload'
+    - 'construct_import'
+    - 'fetch_dynamo_db'
 Rails:
   Enabled: true
 
