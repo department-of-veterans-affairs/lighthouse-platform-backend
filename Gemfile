@@ -45,6 +45,7 @@ group :development do
   gem 'bundler-audit', require: false
   gem 'dotenv-rails'
   gem 'listen', '~> 3.3'
+  gem 'pry-byebug'
   gem 'rack-mini-profiler', '~> 2.0'
   gem 'rubocop', require: false
   gem 'rubocop-rails'
