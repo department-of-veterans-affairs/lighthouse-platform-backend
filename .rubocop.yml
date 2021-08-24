@@ -375,3 +375,7 @@ Naming/InclusiveLanguage: # (new in 1.18)
   Enabled: true
 RSpec/FilePath:
   Enabled: false
+RSpec/MultipleMemoizedHelpers:
+  Exclude:
+    - 'spec/services/user_service_spec.rb'
+

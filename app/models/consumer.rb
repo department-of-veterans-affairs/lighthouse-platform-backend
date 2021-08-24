@@ -23,7 +23,12 @@ class Consumer < ApplicationRecord
     consumer.tos_accepted_at = Time.zone.now
     consumer.tos_version = Figaro.env.current_tos_version
     consumer.save
-    params[:apis].split(',').each do |api_name|
+
+    manage_apis(consumer, params[:apis])
+  end
+
+  def self.manage_apis(consumer, apis_list)
+    apis_list.split(',').each do |api_name|
       api = Api.find_by api_ref: api_name
       consumer.apis << api if api.present?
     end
