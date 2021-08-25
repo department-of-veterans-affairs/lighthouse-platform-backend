@@ -7,7 +7,6 @@ class ConsumerImportService
     @kong_consumers = KongService.new.list_all_consumers
     @dynamo_consumers = DynamoService.new.fetch_dynamo_db.items
     @okta_applications = OktaService.new.list_applications
-    @users_list = []
   end
 
   def import
@@ -19,23 +18,12 @@ class ConsumerImportService
     @kong_consumers.map do |k_consumer|
       consumer = @dynamo_consumers.find { |d_consumer| k_consumer['id'] == d_consumer['kongConsumerId'] }
       if consumer && consumer['tosAccepted']
-        params = {
-          'email' => consumer['email'],
-          'firstName' => consumer['firstName'],
-          'lastName' => consumer['lastName'],
-          'description' => consumer['description'],
-          'organization' => consumer['organization'],
-          'consumer_attributes' => {
-            'apis_list' => consumer['apis']
-          }
-        }
-
         okta_id = consumer['okta_application_id'] unless @okta_applications.find do |okta_app|
           okta_app['id'] == consumer['okta_application_id']
         end.nil?
 
         # if Dynamo record
-        UserService.new.construct_import(params, k_consumer['id'], okta_id) if params['email'].present?
+        UserService.new.construct_import(consumer, k_consumer['id'], okta_id) if consumer['email'].present?
         @dynamo_consumers.delete(consumer)
       end
     end
