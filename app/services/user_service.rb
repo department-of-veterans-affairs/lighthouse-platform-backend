@@ -3,7 +3,7 @@
 class UserService
   def construct_import(params, gateway_id, oauth_id)
     attributes = fetch_attributes(params, gateway_id, oauth_id)
-    user = User.find_or_initialize_by(email: attributes[:user][:email])
+    user = User.find_or_initialize_by(email: attributes[:user][:email].downcase)
     @api_list = if user.consumer.present?
                   user.consumer.apis.map(&:api_ref)
                 else
@@ -12,18 +12,21 @@ class UserService
     apis = (@api_list << attributes[:user][:consumer_attributes][:apis_list]).uniq
     attributes[:user][:consumer_attributes][:sandbox_gateway_ref] ||= user.consumer.try(&:sandbox_gateway_ref)
     attributes[:user][:consumer_attributes][:sandbox_oauth_ref] ||= user.consumer.try(&:sandbox_oauth_ref)
-    # we will re-assign these later
-    attributes[:user][:consumer_attributes][:apis_list] = nil
+    attributes[:user][:consumer_attributes][:apis_list] = nil # we will re-assign these later
     user.assign_attributes(attributes[:user])
     user.save
 
     create_or_update_consumer(user, attributes, params)
 
-    update_api_list(user.consumer, apis)
+    update_api_list(user.consumer, apis) if apis.present?
   end
 
   def update_api_list(consumer, apis)
     apis.each do |api_name|
+      # FIX MY NIL ISSUE BEFORE PR :)
+
+      next if api_name.blank?
+
       api = Api.find_by api_ref: api_name.strip
       consumer.apis << api if api.present?
       consumer.save
@@ -40,7 +43,7 @@ class UserService
     consumer.sandbox_oauth_ref = params['okta_id'] if params['okta_id'].present?
     consumer.tos_accepted_at = Time.zone.now
     consumer.tos_version = Figaro.env.current_tos_version
-    consumer.save
+    consumer.save if consumer.valid?
   end
 
   # rubocop:disable Metrics/MethodLength
@@ -55,7 +58,7 @@ class UserService
           organization: params['organization'],
           sandbox_gateway_ref: gateway_id,
           sandbox_oauth_ref: oauth_id,
-          apis_list: params['consumer_attributes']['apis_list'],
+          apis_list: params.dig('consumer_attributes', 'apis_list'),
           tos_accepted: params['tosAccepted']
         }
       }
