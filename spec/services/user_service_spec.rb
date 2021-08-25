@@ -17,9 +17,7 @@ RSpec.describe UserService do
       'lastName' => 'Stark',
       'description' => 'Design all the things.',
       'organization' => 'Stark Enterprises',
-      'consumer_attributes' => {
-        'apis_list' => 'claims'
-      }
+      'apis' => 'claims'
     }
   end
 
@@ -30,9 +28,7 @@ RSpec.describe UserService do
       'lastName' => 'Strange',
       'description' => 'do all the magic',
       'organization' => 'magic people',
-      'consumer_attributes' => {
-        'apis_list' => 'claims'
-      }
+      'apis' => 'claims'
     }
   end
 
@@ -41,25 +37,19 @@ RSpec.describe UserService do
     consumer
     gateway_ref
     okta_ref
-    @claims_api = FactoryBot.create(:api, name: 'claims', api_ref: 'claims')
+    FactoryBot.create(:api, name: 'claims', api_ref: 'claims')
     FactoryBot.create(:api, name: 'va_forms', api_ref: 'va_forms')
+    FactoryBot.create(:api, name: 'facilities', api_ref: 'facilities')
   end
 
   describe 'constructs a user' do
-    # it 'and builds the necessary user object for creation' do
-    #   result = subject.construct_import(consumer, gateway_ref, okta_ref)
-    #   expect(result[:user][:first_name]).to eq('Bruce')
-    #   expect(result[:user][:consumer_attributes][:organization]).to eq('Wayne Enterprises')
-    #   expect(result[:user][:consumer_attributes][:sandbox_oauth_ref]).to eq(okta_ref)
-    # end
-
     it 'creates user for new signup' do
       expect do
         UserService.new.construct_import(new_consumer_params, gateway_ref, okta_ref)
       end.to change(User, :count).by(1)
     end
 
-    it 'adds consumer aapi assignments fot a new signup' do
+    it 'adds consumer api assignments for a new signup' do
       expect do
         UserService.new.construct_import(new_consumer_params, gateway_ref, okta_ref)
       end.to change(Consumer, :count).by(1)
@@ -71,7 +61,7 @@ RSpec.describe UserService do
       end.to change(ConsumerApiAssignment, :count).by(1)
     end
 
-    it 'updates fist last name when email is the same' do
+    it 'updates first and last name when email is the same' do
       consumer_params['firstName'] = 'Sorcerer'
       consumer_params['lastName'] = 'Supreme'
       UserService.new.construct_import(consumer_params, gateway_ref, okta_ref)
@@ -80,15 +70,15 @@ RSpec.describe UserService do
       expect(reloaded.last_name).to eq('Supreme')
     end
 
-    it 'appends new apis when addition signup with new apis' do
-      consumer_params['consumer_attributes']['apis_list'] = 'claims, va_forms'
+    it 'appends new apis when given an additional signup with new api(s)' do
+      consumer_params['apis'] = 'va_forms,facilities'
       UserService.new.construct_import(consumer_params, gateway_ref, okta_ref)
       reloaded = User.find_by(email: consumer_params['email'])
-      expect(reloaded.consumer.apis.map(&:api_ref)).to eq(%w[claims va_forms])
+      expect(reloaded.consumer.apis.map(&:api_ref)).to eq(%w[claims va_forms facilities])
     end
 
     it 'apis are not removed on a new signup with same email' do
-      consumer_params['consumer_attributes']['apis_list'] = 'va_forms'
+      consumer_params['apis'] = 'va_forms'
       UserService.new.construct_import(consumer_params, gateway_ref, okta_ref)
       reloaded = User.find_by(email: consumer_params['email'])
       expect(reloaded.consumer.apis.map(&:api_ref)).to eq(%w[claims va_forms])
