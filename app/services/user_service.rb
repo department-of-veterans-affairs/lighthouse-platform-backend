@@ -9,10 +9,9 @@ class UserService
                 else
                   []
                 end
-    apis = (@api_list << attributes[:user][:consumer_attributes][:apis_list]).uniq
+    apis = (@api_list << params['apis'].split(',')).flatten.uniq
     attributes[:user][:consumer_attributes][:sandbox_gateway_ref] ||= user.consumer.try(&:sandbox_gateway_ref)
     attributes[:user][:consumer_attributes][:sandbox_oauth_ref] ||= user.consumer.try(&:sandbox_oauth_ref)
-    attributes[:user][:consumer_attributes][:apis_list] = nil # we will re-assign these later
     user.assign_attributes(attributes[:user])
     user.save
 
@@ -58,7 +57,7 @@ class UserService
           organization: params['organization'],
           sandbox_gateway_ref: gateway_id,
           sandbox_oauth_ref: oauth_id,
-          apis_list: params.dig('consumer_attributes', 'apis_list'),
+          apis_list: nil,
           tos_accepted: params['tosAccepted']
         }
       }
