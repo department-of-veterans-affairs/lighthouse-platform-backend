@@ -86,6 +86,8 @@ Metrics/MethodLength:
     - 'bulk_upload'
     - 'construct_import'
     - 'fetch_dynamo_db'
+    - 'update_kong_consumers'
+    - 'build_user_from_dynamo'
 Rails:
   Enabled: true
 
