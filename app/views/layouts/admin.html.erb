@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <%= render 'layouts/head' %>
+  <body>
+    <%= render 'layouts/header' %>
+    <%= render 'layouts/flash_messages' %>
+    <div class="vads-u-display--flex vads-u-flex-direction--column vads-u-min-height--viewport vads-u-width--full">
+      <main>
+        <div class="large-screen:vads-u-padding-x--0">
+          <div class='vads-u-padding-y--5'>
+            <section class='vads-l-grid'>
+              <div class='vads-l-row'>
+                <%= render 'admin/sidenav' %>
+                <div class='vads-l-col--12 medium-screen:vads-l-col--8 vads-u-padding-right--5'>
+                  <%= yield %>
+                </div>
+            </section>
+          </div>
+        </div>
+      </main>
+      <%= render 'layouts/footer' %>
+    </div>
+  </body>
+</html>
