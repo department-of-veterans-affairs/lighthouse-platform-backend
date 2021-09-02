@@ -2,7 +2,7 @@
 
 class UserService
   def construct_import(params)
-    user_params = params[:user]
+    user_params = params[:user].with_indifferent_access
     user = User.find_or_initialize_by(email: user_params[:email].downcase)
     @api_list = if user.consumer.present?
                   user.consumer.apis.map(&:api_ref)
@@ -15,7 +15,6 @@ class UserService
     user_params[:consumer_attributes][:sandbox_oauth_ref] ||= user.consumer.try(&:sandbox_oauth_ref)
     user.assign_attributes(user_params)
     user.save
-
     create_or_update_consumer(user, params)
 
     update_api_list(user.consumer, apis) if apis.present?
@@ -23,8 +22,6 @@ class UserService
 
   def update_api_list(consumer, apis)
     apis.each do |api_name|
-      # FIX MY NIL ISSUE BEFORE PR :)
-
       next if api_name.blank?
 
       api = Api.find_by(api_ref: api_name.strip, environment: 'sandbox')

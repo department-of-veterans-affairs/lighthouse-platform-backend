@@ -32,6 +32,7 @@ class ConsumersController < ApplicationController
         prod_gateway_ref
         prod_oauth_ref
         apis_list
+        apis
         tos_accepted
       ]
     )

@@ -23,6 +23,4 @@ RSpec.describe KongService do
       end
     end
   end
-
-  # TODO: Finish kong service tests
 end
