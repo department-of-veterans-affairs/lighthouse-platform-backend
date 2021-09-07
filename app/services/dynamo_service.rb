@@ -2,10 +2,10 @@
 
 class DynamoService
   def fetch_dynamo_db
-    credentials = Aws::Credentials.new(ENV['dynamo_access_key_id'], ENV['dynamo_secret_access_key'])
+    credentials = Aws::Credentials.new(Figaro.env.dynamo_access_key_id, Figaro.env.dynamo_secret_access_key)
 
     client = Aws::DynamoDB::Client.new(
-      region: ENV['aws_region'],
+      region: AWS_REGION,
       credentials: credentials
     )
 
@@ -13,7 +13,7 @@ class DynamoService
       {
         scan_filter: {
         },
-        table_name: ENV['dynamo_table_name']
+        table_name: Figaro.env.dynamo_table_name
       }
     )
   end
