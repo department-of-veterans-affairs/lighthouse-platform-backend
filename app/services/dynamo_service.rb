@@ -5,7 +5,7 @@ class DynamoService
     credentials = Aws::Credentials.new(Figaro.env.dynamo_access_key_id, Figaro.env.dynamo_secret_access_key)
 
     client = Aws::DynamoDB::Client.new(
-      region: AWS_REGION,
+      region: 'us-gov-west-1',
       credentials: credentials
     )
 
