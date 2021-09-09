@@ -61,4 +61,9 @@ Rails.application.configure do
   # config.action_view.annotate_rendered_view_with_filenames = true
   ENV['SLACK_WEBHOOK_URL'] = 'https://www.slack.com'
   ENV['GITHUB_EMAIL_DEFAULT_EMAIL_ADDRESS'] = 'testing@example.com'
+  ENV['DYNAMO_ACCESS_KEY_ID'] = 'iammocked'
+  ENV['DYNAMO_SECRET_ACCESS_KEY'] = 'iammocked'
+  ENV['DYNAMO_TABLE_NAME'] = 'mocktable'
+  ENV['okta_token'] = 'mocktoken'
+  ENV['okta_api_endpoint'] = 'https://deptva-eval.okta.com/api/v1'
 end
