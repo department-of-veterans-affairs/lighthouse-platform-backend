@@ -1,0 +1,40 @@
+/*
+  Polyfills mixins from USWDS to reduce the size of the compiled bundle by not re-importing 
+  base.scss when these variables are required.
+  
+  - copied from source file: https://github.com/uswds/uswds/blob/v1.6.10/src/stylesheets/core/_utilities.scss
+  - provided mixins: @media, @display-icon
+*/
+
+@mixin media($min-width) {
+  @media screen and (min-width: #{$min-width}) {
+    @content;
+  }
+}
+
+@mixin display-icon($icon, $direction, $size, $margin, $hover) {
+  &::#{$direction} {
+    background-image: url('#{$image-path}/#{$icon}.png');
+    background-image: url('#{$image-path}/#{$icon}.svg');
+    background-size: 100%;
+    content: '';
+    display: inline-block;
+    height: $size;
+    width: $size;
+
+    /* stylelint-disable block-closing-brace-newline-after, at-rule-empty-line-before */
+    @if $direction == 'after' {
+      margin-left: $margin;
+    } @else {
+      margin-right: $margin;
+    }
+    /* stylelint-enable */
+  }
+
+  @if $hover == 'hover' {
+    &:hover::#{$direction} {
+      background-image: url('#{$image-path}/#{$icon}-hover.png');
+      background-image: url('#{$image-path}/#{$icon}-hover.svg');
+    }
+  }
+}

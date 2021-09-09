@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>LighthousePlatformBackend</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
-
+<html lang="en">
+  <%= render 'layouts/head' %>
   <body>
-    <%= yield %>
+    <%= render 'layouts/header' %>
+    <%= render 'layouts/flash_messages' %>
+    <div class="vads-u-display--flex vads-u-flex-direction--column vads-u-min-height--viewport vads-u-width--full">
+      <main id="main" tabindex="-1">
+        <%= yield %>
+      </main>
+      <%= render 'layouts/footer' %>
+    </div>
   </body>
 </html>
+

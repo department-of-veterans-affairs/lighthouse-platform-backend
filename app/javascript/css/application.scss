@@ -1,0 +1,22 @@
+$font-path: '~uswds/src/fonts';
+$image-path: '~uswds/src/img';
+$formation-font-path: '~@department-of-veterans-affairs/formation/assets/fonts';
+$formation-image-path: '~@department-of-veterans-affairs/formation/assets/img';
+@import '~@department-of-veterans-affairs/formation/sass/full';
+
+@import './devportal.scss';
+
+@import './swagger_ui.scss';
+
+@import './font-awesome.scss';
+
+.rounded-full {
+  border-radius: 9999px;
+}
+.pill {
+  border-radius: 16px;
+}
+
+.horizontal-submit {
+  margin-top: 0 !important;
+}
