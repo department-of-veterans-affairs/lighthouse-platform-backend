@@ -82,6 +82,7 @@ Metrics/MethodLength:
     - 'rakelib/support/shell_command.rb'
     - 'app/controllers/admin/api/v0/apis_controller.rb'
     - 'spec/services/consumer_import_service_spec.rb'
+    - 'spec/services/dynamo_service_spec.rb'
   IgnoredMethods:
     - 'user_params'
     - 'bulk_upload'
