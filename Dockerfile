@@ -61,6 +61,7 @@ RUN bundle install --jobs 5 --without development test
 COPY . .
 
 # Precompile assets
+RUN yarn config set "strict-ssl" false
 RUN bundle exec rails assets:precompile
 RUN ./bin/webpack
 
