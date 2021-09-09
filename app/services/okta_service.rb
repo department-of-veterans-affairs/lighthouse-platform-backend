@@ -4,7 +4,7 @@ require 'oktakit'
 
 class OktaService
   def initialize
-    @client = Oktakit::Client.new(token: Figaro.env.okta_token, api_endpoint: ENV['okta_api_endpoint'])
+    @client = Oktakit::Client.new(token: Figaro.env.okta_token, api_endpoint: Figaro.env.okta_api_endpoint)
   end
 
   def list_applications
