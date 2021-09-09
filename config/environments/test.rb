@@ -67,4 +67,5 @@ Rails.application.configure do
   ENV['okta_token'] = 'mocktoken'
   ENV['okta_api_endpoint'] = 'https://deptva-eval.okta.com/api/v1'
   ENV['SOCKS_HOST'] = 'http://localhost'
+  ENV['KONG_ELB'] = 'http://api-gateway-dev.vfs.va.gov'
 end
