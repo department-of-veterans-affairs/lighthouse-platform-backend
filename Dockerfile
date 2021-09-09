@@ -19,7 +19,6 @@ RUN apt-get update -qq && apt-get install -y \
   postgresql-client && \
   curl -fsSl https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-  curl -sL https://deb.nodesource.com/setup_14.x && \
   apt-get update && apt-get install -y yarn git
 
 COPY Gemfile Gemfile.lock ./
