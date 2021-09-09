@@ -66,4 +66,5 @@ Rails.application.configure do
   ENV['DYNAMO_TABLE_NAME'] = 'mocktable'
   ENV['okta_token'] = 'mocktoken'
   ENV['okta_api_endpoint'] = 'https://deptva-eval.okta.com/api/v1'
+  ENV['SOCKS_HOST'] = 'http://localhost'
 end
