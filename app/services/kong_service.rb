@@ -8,12 +8,12 @@ class KongService
 
   def initialize
     # Use SOCKS Proxy client for any connections except local, which uses standard Net::HTTP
-    socks_host = ENV['SOCKS_HOST'] || 'localhost'
+    socks_host = Figaro.env.socks_host || 'localhost'
     @client = Net::HTTP.SOCKSProxy(socks_host, 2001)
   end
 
   def list_consumers(query = nil)
-    uri = URI.parse("#{ENV['kong_elb']}/consumers#{query}")
+    uri = URI.parse("#{Figaro.env.kong_elb}/consumers#{query}")
     req = Net::HTTP::Get.new(uri)
     request(req, uri)
   end
