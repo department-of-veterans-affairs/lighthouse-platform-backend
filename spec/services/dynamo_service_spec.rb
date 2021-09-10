@@ -38,7 +38,7 @@ RSpec.describe DynamoService do
       }
     end
 
-    it 'imports the the users' do
+    it 'imports the users' do
       service = DynamoService.new
       allow_any_instance_of(Aws::DynamoDB::Client).to receive(:scan).and_return(mock_response)
       results = service.fetch_dynamo_db
