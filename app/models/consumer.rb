@@ -15,25 +15,6 @@ class Consumer < ApplicationRecord
   before_save :set_tos
   before_save :manage_apis
 
-  def self.create_from_import(consumer, params)
-    consumer.description = params['description']
-    consumer.organization = params['organization']
-    consumer.sandbox_gateway_ref = params['sandbox_gateway_ref'] if params['sandbox_gateway_ref'].present?
-    consumer.sandbox_oauth_ref = params['sandbox_oauth_ref'] if params['sandbox_oauth_ref'].present?
-    consumer.tos_accepted_at = Time.zone.now
-    consumer.tos_version = Figaro.env.current_tos_version
-    consumer.save
-
-    manage_apis(consumer, params[:apis_list])
-  end
-
-  def self.manage_apis(consumer, apis_list)
-    apis_list.split(',').each do |api_name|
-      api = Api.find_by api_ref: api_name
-      consumer.apis << api if api.present? && consumer.api_ids.exclude?(api.id)
-    end
-  end
-
   private
 
   def confirm_tos

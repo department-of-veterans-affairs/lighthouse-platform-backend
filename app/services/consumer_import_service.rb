@@ -36,8 +36,10 @@ class ConsumerImportService
   def update_kong_consumers
     @kong_consumers.map do |kong_consumer|
       consumer = @dynamo_consumers.find { |d_consumer| kong_consumer['id'] == d_consumer['kongConsumerId'] }
-      consumer = consumer.with_indifferent_access
-      update_kong_consumer(consumer, kong_consumer) if consumer && consumer['tosAccepted']
+      if consumer && consumer['tosAccepted']
+        consumer = consumer.with_indifferent_access
+        update_kong_consumer(consumer, kong_consumer)
+      end
     end
   end
 
