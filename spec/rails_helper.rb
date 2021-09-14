@@ -28,6 +28,7 @@ VCR.configure do |c|
   end
   c.cassette_library_dir = 'spec/support/vcr_cassettes'
   c.hook_into :webmock
+  c.default_cassette_options = { decode_compressed_response: true }
 end
 
 ActiveRecord::Migration.maintain_test_schema!

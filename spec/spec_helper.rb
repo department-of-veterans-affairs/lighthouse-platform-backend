@@ -10,6 +10,8 @@ SimpleCov.start 'rails' do
   add_filter 'app/jobs/application_job.rb'
   add_filter 'app/mailers/application_mailer.rb'
   add_filter 'app/models/application_record.rb'
+  # this is filtered to keep pii out of VCRs
+  add_filter 'app/services/kong_service.rb'
 
   SimpleCov.minimum_coverage_by_file 90
   SimpleCov.refuse_coverage_drop

@@ -1,0 +1,76 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: okta.gov
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Oktakit v0.2.0
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Authorization:
+      - You are authorized
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 18 Aug 2021 21:20:43 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Server:
+      - server
+      Public-Key-Pins-Report-Only:
+      - report_time
+      Vary:
+      - Accept-Encoding
+      X-Okta-Request-Id:
+      - request_id
+      X-Xss-Protection:
+      - '0'
+      P3p:
+      - CP="Howdy"
+      X-Rate-Limit-Limit:
+      - '100'
+      X-Rate-Limit-Remaining:
+      - '99'
+      X-Rate-Limit-Reset:
+      - 'now'
+      Cache-Control:
+      - no-cache, no-store
+      Pragma:
+      - no-cache
+      Expires:
+      - '0'
+      Content-Security-Policy:
+      - 'secure'
+      Expect-Ct:
+      - report-uri="https://report.com/reportOnly", max-age=0
+      Link:
+      - <https://okta/apps?after=t4c0M4n14&limit=20>;
+        rel="next"
+      - <https://okta/apps?limit=20>; rel="self"
+      X-Content-Type-Options:
+      - nosniff
+      Strict-Transport-Security:
+      - max-age=315360000; includeSubDomains
+      Set-Cookie:
+      - cookies!
+      - sid=""; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/
+    body:
+      encoding: ASCII-8BIT
+      string: '[{"id":"4n-0kt4-1d-f0r-us","name":"oidc_client","label":"OktaApplication","status":"ACTIVE","lastUpdated":"2020-05-01T18:52:35.000Z","created":"2018-10-24T00:06:35.000Z","accessibility":{"selfService":false,"errorRedirectUrl":null,"loginRedirectUrl":null},"visibility":{"autoLaunch":false,"autoSubmitToolbar":false,"hide":{"iOS":true,"web":true},"appLinks":{"oidc_client_link":true}},"features":[],"signOnMode":"OPENID_CONNECT","credentials":{"userNameTemplate":{"template":"${source.login}","type":"BUILT_IN"},"signing":{"kid":"8j6e7-5n3n0y9"},"oauthClient":{"autoKeyRotation":true,"client_id":"4n-0kt4-1d-f0r-us","token_endpoint_auth_method":"secret"}},"settings":{"app":{},"notifications":{"vpn":{"network":{"connection":"DISABLED"},"message":null,"helpUrl":null}},"notes":{"admin":null,"enduser":null},"oauthClient":{"client_uri":null,"logo_uri":null,"redirect_uris":["localhost:8080/callback","localhost:3001/callback","http://localhost:8080/implicit/callback","https://app/after-auth","http://localhost:7100/oauth2/redirect","http://localhost:8080/auth","https://api/oauth2/redirect/"],"response_types":["code"],"grant_types":["codes_and_things"],"initiate_login_uri":"localhost:8080/callback","application_type":"web","consent_method":"REQUIRED","issuer_mode":"ORG_URL","idp_initiated_login":{"mode":"DISABLED","default_scope":[]}}},"_links":{"uploadLogo":{"href":"https://okta/apps/4n-0kt4-1d-f0r-us/logo","hints":{"allow":["POST"]}},"appLinks":[{"name":"oidc_client_link","href":"https://okta/oidc_client/4n-0kt4-1d-f0r-us/3279","type":"text/html"}],"groups":{"href":"https://okta/apps/4n-0kt4-1d-f0r-us/groups"},"logo":[{"name":"medium","href":"","type":"image/png"}],"users":{"href":"https://okta/apps/4n-0kt4-1d-f0r-us/users"},"deactivate":{"href":"https://okta/apps/4n-0kt4-1d-f0r-us/lifecycle/deactivate"}}}]'
+  recorded_at: Wed, 18 Aug 2021 21:20:43 GMT
+recorded_with: VCR 6.0.0

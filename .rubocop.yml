@@ -81,9 +81,15 @@ Metrics/MethodLength:
   Exclude:
     - 'rakelib/support/shell_command.rb'
     - 'app/controllers/admin/api/v0/apis_controller.rb'
+    - 'spec/services/consumer_import_service_spec.rb'
+    - 'spec/services/dynamo_service_spec.rb'
   IgnoredMethods:
     - 'user_params'
     - 'bulk_upload'
+    - 'construct_import'
+    - 'fetch_dynamo_db'
+    - 'update_kong_consumers'
+    - 'build_user_from_dynamo'
 Rails:
   Enabled: true
 
@@ -373,3 +379,6 @@ Naming/InclusiveLanguage: # (new in 1.18)
   Enabled: true
 RSpec/FilePath:
   Enabled: false
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
