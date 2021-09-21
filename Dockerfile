@@ -29,15 +29,13 @@ FROM base AS ci
 # Install ruby dependencies
 RUN bundle install --jobs 5 --binstubs="./bin"
 # Install javascript dependencies
-COPY package.json yarn.lock ./
-RUN yarn config set "strict-ssl" false
-RUN yarn install
+COPY . .
+
+RUN chmod +x ./docker-bin/retry
+RUN ./docker-bin/retry yarn install
 
 ARG rails_env=test
 ENV RAILS_ENV=$rails_env
-
-# Copy source code for application
-COPY . .
 
 # Precompile assets
 RUN bundle exec rails assets:precompile
@@ -61,7 +59,6 @@ RUN bundle install --jobs 5 --without development test
 COPY . .
 
 # Precompile assets
-RUN yarn config set "strict-ssl" false
 RUN bundle exec rails assets:precompile
 RUN ./bin/webpack
 
