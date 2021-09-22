@@ -37,9 +37,6 @@ RUN openssl x509 \
   -out /home/ruby/va-internal.pem
 ENV NODE_EXTRA_CA_CERTS=/home/ruby/va-internal.pem
 
-RUN chmod +x ./docker-bin/retry
-RUN ./docker-bin/retry yarn install
-
 ARG rails_env=test
 ENV RAILS_ENV=$rails_env
 
@@ -55,12 +52,6 @@ ENV RAILS_ENV=$rails_env
 ENV NODE_ENV=$rails_env
 ENV RAILS_SERVE_STATIC_FILES=true
 ENV SECRET_KEY_BASE=DEFAULT_VALUE_OVERRIDE_AT_RUNTIME
-ENV RAILS_ENV=production
-RUN openssl x509 \
-  -inform der \
-  -in /usr/local/share/ca-certificates/VA-Internal-S2-RCA1-v1.cer \
-  -out /home/ruby/va-internal.pem
-ENV NODE_EXTRA_CA_CERTS=/home/ruby/va-internal.pem
 # COPY --from=builder $BUNDLE_APP_CONFIG $BUNDLE_APP_CONFIG
 # Install ruby dependencies
 
