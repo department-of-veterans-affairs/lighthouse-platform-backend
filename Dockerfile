@@ -31,6 +31,12 @@ RUN bundle install --jobs 5 --binstubs="./bin"
 # Install javascript dependencies
 COPY . .
 
+RUN openssl x509 \
+  -inform der \
+  -in /usr/local/share/ca-certificates/VA-Internal-S2-RCA1-v1.cer \
+  -out /home/ruby/va-internal.pem
+ENV NODE_EXTRA_CA_CERTS=/home/ruby/va-internal.pem
+
 RUN chmod +x ./docker-bin/retry
 RUN ./docker-bin/retry yarn install
 
