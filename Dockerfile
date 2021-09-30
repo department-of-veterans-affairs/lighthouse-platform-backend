@@ -1,28 +1,36 @@
-# Ideally this is pulled from a private container registry for security purposes
-FROM ruby:3.0.0-slim-buster AS base
+FROM vasdvp/health-apis-centos:8 AS base
+
+ENV RUBY_MAJOR_VERSION 3.0
+ENV RUBY_VERSION 3.0.0
+ENV BUNDLER_VERSION 2.2.23
+ENV NODE_VERSION 14
+
+RUN yum groupinstall -y -q "Development Tools"
+RUN yum install -y -q git \
+  openssl-devel \
+  gcc \
+  gcc-c++ \
+  make \
+  postgresql-libs \
+  postgresql-devel \
+  shared-mime-info
+
+RUN curl -sL https://cache.ruby-lang.org/pub/ruby/${RUBY_MAJOR_VERSION}/ruby-${RUBY_VERSION}.tar.gz | tar -zxvf - -C /tmp/ && \
+  cd /tmp/ruby-${RUBY_VERSION} && \
+  ./configure && \
+  make && \
+  make install
+
+RUN curl -sL https://rpm.nodesource.com/setup_${NODE_VERSION}.x | bash -
+RUN curl -sL https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo && \
+  rpm --import https://dl.yarnpkg.com/rpm/pubkey.gpg
+
+RUN yum install -y -q nodejs yarn
+
 WORKDIR /home/ruby
 
-# Install packages needed for ruby gems and to run rails
-RUN apt-get update -qq && apt-get install -y \
-  curl
-
-RUN curl -k https://gist.githubusercontent.com/duganth-va/2f421f56e246de0546b3966d0b0a1c66/raw/2cd8b42d6adfd9b83a2db449aa11c7296db37faf/va-debian.sh | /bin/bash
-
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -\
-  && apt-get update -qq && apt-get install -qq --no-install-recommends \
-    nodejs
-
-RUN apt-get update -qq && apt-get install -y \
-  build-essential \
-  libpq-dev \
-  shared-mime-info \
-  postgresql-client && \
-  curl -fsSl https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-  echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-  apt-get update && apt-get install -y yarn git
-
 COPY Gemfile Gemfile.lock ./
-RUN gem update bundler
+RUN gem install bundler:${BUNDLER_VERSION}
 
 FROM base AS ci
 
@@ -33,7 +41,7 @@ COPY . .
 
 RUN openssl x509 \
   -inform der \
-  -in /usr/local/share/ca-certificates/VA-Internal-S2-RCA1-v1.cer \
+  -in /etc/pki/ca-trust/source/anchors/VA-Internal-S2-RCA1-v1.cer \
   -out /home/ruby/va-internal.pem
 ENV NODE_EXTRA_CA_CERTS=/home/ruby/va-internal.pem
 
