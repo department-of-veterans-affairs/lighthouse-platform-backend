@@ -43,33 +43,33 @@ RUN openssl x509 \
   -inform der \
   -in /etc/pki/ca-trust/source/anchors/VA-Internal-S2-RCA1-v1.cer \
   -out /home/ruby/va-internal.pem
-ENV NODE_EXTRA_CA_CERTS=/home/ruby/va-internal.pem
+ENV NODE_EXTRA_CA_CERTS /home/ruby/va-internal.pem
 
-ARG rails_env=test
-ENV RAILS_ENV=$rails_env
+ARG rails_env test
+ENV RAILS_ENV $rails_env
 
 # Precompile assets
-RUN bundle exec rails assets:precompile
+RUN bundle exec rails assets:precompile --silent
 RUN ./bin/webpack
 
 # Production Stage
 FROM base AS prod
 
-ARG rails_env=production
-ENV RAILS_ENV=$rails_env
-ENV NODE_ENV=$rails_env
-ENV RAILS_SERVE_STATIC_FILES=true
-ENV SECRET_KEY_BASE=DEFAULT_VALUE_OVERRIDE_AT_RUNTIME
-# COPY --from=builder $BUNDLE_APP_CONFIG $BUNDLE_APP_CONFIG
-# Install ruby dependencies
+ARG rails_env production
+ENV RAILS_ENV $rails_env
+ENV NODE_ENV $rails_env
+ENV RAILS_SERVE_STATIC_FILES true
+ENV SECRET_KEY_BASE DEFAULT_VALUE_OVERRIDE_AT_RUNTIME
 
+# Install ruby dependencies
 RUN bundle install --jobs 5 --without development test
 
 # Copy source code for application
 COPY . .
+COPY --from=ci /home/ruby/va-internal.pem /home/ruby/va-internal.pem
 
 # Precompile assets
-RUN bundle exec rails assets:precompile
+RUN bundle exec rails assets:precompile --silent
 RUN ./bin/webpack
 
 # Add a script to be executed every time the container starts.
