@@ -43,10 +43,10 @@ RUN openssl x509 \
   -inform der \
   -in /etc/pki/ca-trust/source/anchors/VA-Internal-S2-RCA1-v1.cer \
   -out /home/ruby/va-internal.pem
-ENV NODE_EXTRA_CA_CERTS /home/ruby/va-internal.pem
+ENV NODE_EXTRA_CA_CERTS=/home/ruby/va-internal.pem
 
-ARG rails_env test
-ENV RAILS_ENV $rails_env
+ARG rails_env=test
+ENV RAILS_ENV=$rails_env
 
 # Precompile assets
 RUN bundle exec rails assets:precompile --silent
