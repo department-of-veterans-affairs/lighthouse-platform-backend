@@ -1,9 +1,9 @@
 FROM vasdvp/health-apis-centos:8 AS base
 
-ENV RUBY_MAJOR_VERSION 3.0
-ENV RUBY_VERSION 3.0.0
-ENV BUNDLER_VERSION 2.2.23
-ENV NODE_VERSION 14
+ENV RUBY_MAJOR_VERSION=3.0
+ENV RUBY_VERSION=3.0.0
+ENV BUNDLER_VERSION=2.2.23
+ENV NODE_VERSION=14
 
 RUN yum groupinstall -y -q "Development Tools"
 RUN yum install -y -q git \
@@ -55,11 +55,11 @@ RUN ./bin/webpack
 # Production Stage
 FROM base AS prod
 
-ARG rails_env production
-ENV RAILS_ENV $rails_env
-ENV NODE_ENV $rails_env
-ENV RAILS_SERVE_STATIC_FILES true
-ENV SECRET_KEY_BASE DEFAULT_VALUE_OVERRIDE_AT_RUNTIME
+ARG rails_env=production
+ENV RAILS_ENV=$rails_env
+ENV NODE_ENV=$rails_env
+ENV RAILS_SERVE_STATIC_FILES=true
+ENV SECRET_KEY_BASE=DEFAULT_VALUE_OVERRIDE_AT_RUNTIME
 
 # Install ruby dependencies
 RUN bundle install --jobs 5 --without development test
