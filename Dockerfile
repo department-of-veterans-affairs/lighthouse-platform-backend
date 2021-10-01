@@ -31,23 +31,12 @@ WORKDIR /home/ruby
 COPY Gemfile Gemfile.lock ./
 RUN gem install bundler:${BUNDLER_VERSION}
 
-# FROM base AS ci
+FROM base AS ci
 
 # Install ruby dependencies
-# RUN bundle install --jobs 5 --binstubs="./bin"
+RUN bundle install --jobs 5 --binstubs="./bin"
 # Install javascript dependencies
-# COPY . .
-
-
-# ARG rails_env=test
-# ENV RAILS_ENV=$rails_env
-
-# # Precompile assets
-# RUN bundle exec rails assets:precompile --silent
-# RUN ./bin/webpack
-
-# Production Stage
-FROM base AS prod
+COPY . .
 
 RUN openssl x509 \
   -inform der \
@@ -55,11 +44,27 @@ RUN openssl x509 \
   -out /home/ruby/va-internal.pem
 ENV NODE_EXTRA_CA_CERTS=/home/ruby/va-internal.pem
 
+ARG rails_env=test
+ENV RAILS_ENV=$rails_env
+
+# Precompile assets
+RUN bundle exec rails assets:precompile --silent
+RUN ./bin/webpack
+
+# Production Stage
+FROM base AS prod
+
 ARG rails_env=production
 ENV RAILS_ENV=$rails_env
 ENV NODE_ENV=$rails_env
 ENV RAILS_SERVE_STATIC_FILES=true
 ENV SECRET_KEY_BASE=DEFAULT_VALUE_OVERRIDE_AT_RUNTIME
+
+RUN openssl x509 \
+  -inform der \
+  -in /etc/pki/ca-trust/source/anchors/VA-Internal-S2-RCA1-v1.cer \
+  -out /home/ruby/va-internal.pem
+ENV NODE_EXTRA_CA_CERTS=/home/ruby/va-internal.pem
 
 RUN bundle install --jobs 5 --without development test
 
