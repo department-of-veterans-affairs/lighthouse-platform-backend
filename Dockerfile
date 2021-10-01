@@ -5,7 +5,6 @@ ENV RUBY_VERSION=3.0.0
 ENV BUNDLER_VERSION=2.2.23
 ENV NODE_VERSION=14
 
-RUN yum groupinstall -y -q "Development Tools"
 RUN yum install -y -q git \
   openssl-devel \
   gcc \
