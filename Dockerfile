@@ -60,12 +60,10 @@ ENV NODE_ENV=$rails_env
 ENV RAILS_SERVE_STATIC_FILES=true
 ENV SECRET_KEY_BASE=DEFAULT_VALUE_OVERRIDE_AT_RUNTIME
 
-# Install ruby dependencies
 RUN bundle install --jobs 5 --without development test
 
 # Copy source code for application
 COPY . .
-COPY --from=ci /home/ruby/va-internal.pem /home/ruby/va-internal.pem
 
 # Precompile assets
 RUN bundle exec rails assets:precompile --silent
