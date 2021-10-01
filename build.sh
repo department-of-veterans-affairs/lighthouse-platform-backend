@@ -9,7 +9,7 @@ VERSION=${VERSION:-$(cat $BASEDIR/VERSION)}
 trap "docker-compose down -v --rmi" EXIT
 
 echo 'Building container and running CI'
-docker-compose --project-name lighthouse-platform-backend-${BUILD_ID} run app bundle exec rails db:create ci
+# docker-compose --project-name lighthouse-platform-backend-${BUILD_ID} run app bundle exec rails db:create ci
 
 echo 'Building production container...'
 docker build --pull -f $BASEDIR/Dockerfile -t $REPOSITORY:$VERSION $BASEDIR
