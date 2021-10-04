@@ -16,7 +16,8 @@ RUN yum install -y -q git \
 
 RUN curl -sL https://cache.ruby-lang.org/pub/ruby/${RUBY_MAJOR_VERSION}/ruby-${RUBY_VERSION}.tar.gz | tar -zxvf - -C /tmp/ && \
   cd /tmp/ruby-${RUBY_VERSION} && \
-  ./configure --silent && \
+  ./configure --silent \
+    --disable-install-doc && \
   make && \
   make install
 
