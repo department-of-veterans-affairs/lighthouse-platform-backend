@@ -14,12 +14,15 @@ RUN yum install -y -q git \
   postgresql-devel \
   shared-mime-info
 
-RUN curl -sL https://cache.ruby-lang.org/pub/ruby/${RUBY_MAJOR_VERSION}/ruby-${RUBY_VERSION}.tar.gz | tar -zxvf - -C /tmp/ && \
+RUN curl -sL "https://cache.ruby-lang.org/pub/ruby/${RUBY_MAJOR_VERSION}/ruby-${RUBY_VERSION}.tar.xz" -o ruby.tar.xz && \
+  tar -xJf ruby.tar.xz -C /tmp/ && \
+  rm ruby.tar.xz && \
   cd /tmp/ruby-${RUBY_VERSION} && \
   ./configure --silent \
     --disable-install-doc && \
   make && \
-  make install
+  make install && \
+  rm -r /tmp/ruby-${RUBY_VERSION}
 
 RUN curl -sL https://rpm.nodesource.com/setup_${NODE_VERSION}.x | bash -
 RUN curl -sL https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo && \
