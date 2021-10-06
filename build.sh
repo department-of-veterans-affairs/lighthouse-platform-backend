@@ -13,7 +13,7 @@ docker-compose build --no-cache
 docker-compose run app bundle exec rails db:create ci
 
 echo 'Building production container...'
-docker build --pull -f $BASEDIR/Dockerfile -t $REPOSITORY:$VERSION --target prod $BASEDIR
+docker build --pull -f $BASEDIR/Dockerfile -t $REPOSITORY:$VERSION $BASEDIR
 
 if [ $RELEASE == true ]; then
   echo 'Logging in to ECR...'
