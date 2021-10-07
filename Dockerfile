@@ -1,4 +1,4 @@
-FROM vasdvp/health-apis-centos:8 AS base
+FROM vasdvp/health-apis-centos:8
 
 ENV RUBY_MAJOR_VERSION=3.0
 ENV RUBY_VERSION=3.0.0
@@ -34,8 +34,6 @@ WORKDIR /home/ruby
 
 COPY Gemfile Gemfile.lock ./
 RUN gem install bundler:${BUNDLER_VERSION}
-
-FROM base AS ci
 
 # Install ruby dependencies
 RUN bundle install --jobs 5 --binstubs="./bin"
