@@ -16,7 +16,7 @@ gem 'oktakit', git: 'https://github.com/charleystran/oktakit', branch: 'add_auth
 gem 'omniauth', '~> 2.0.0'
 gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
 gem 'pg', '~> 1.1'
-gem 'puma', '~> 5.0'
+gem 'puma', '~> 5.5'
 gem 'rails', '~> 6.1.3', '>= 6.1.3.1'
 gem 'rails-healthcheck'
 gem 'rest-client'
