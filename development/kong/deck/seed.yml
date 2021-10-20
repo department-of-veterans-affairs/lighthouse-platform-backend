@@ -47,8 +47,11 @@ services:
         paths: [/jokes]
 
 consumers:
-  - username: &consumer-username kong-consumer
+  - id: b11ae7d9-2949-4e80-aa55-ccd30d4c7287
+    username: &consumer-username kong-consumer
     keyauth_credentials:
       - consumer:
           username: *consumer-username
         key: k0n9_c0nsum3r
+  - id: 6b6f692b-0ec1-4224-9016-f7c65de680f9
+    username: lighthouse-consumer
