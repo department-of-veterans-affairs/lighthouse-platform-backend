@@ -82,6 +82,24 @@ services:
     command: ["kong", "docker-start"]
     restart: *kong-restart
 
+  deck:
+    command:
+      - sync
+      - --state
+      - "/usr/local/kong/deck/${DECK_FILE:-seed.yml}"
+    depends_on: [kong]
+    environment:
+      DECK_KONG_ADDR: http://kong:8001
+    image: kong/deck
+    restart: *kong-restart
+    volumes: [./development/kong/deck:/usr/local/kong/deck]
+
+  dynamodb:
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "5000:8000"
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
+
 networks:
   backend:
     driver: bridge

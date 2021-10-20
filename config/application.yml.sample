@@ -1,8 +1,9 @@
-dynamo_access_key_id:
-dynamo_secret_access_key:
-dynamo_table_name:
-aws_region:
-kong_elb:
+dynamo_endpoint: "http://localhost:5000"
+dynamo_access_key_id: "dummy"
+dynamo_secret_access_key: "dummy"
+dynamo_table_name: "dvp-dev-developer-portal-users"
+aws_region: "us-gov-west-1"
+kong_elb: "http://localhost:4001"
 kong_password:
 okta_token:
 okta_api_endpoint:
