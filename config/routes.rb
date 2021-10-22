@@ -4,18 +4,17 @@ Rails.application.routes.draw do
   Healthcheck.routes(self)
   
   scope '/platform-backend' do # everything must be scoped under platform-backend for DVP load balancer reqs
-    get 'admin/dashboard', to: 'admin/dashboard#index'
-    
     resources :consumers, only: [:create]
-    post 'consumers:migrate', to: 'consumers#load_initial', constraints: { migrate: /:migrate/ }
-    get 'consumers/migrations/:id/status', to: 'consumers#migration_status'
-    
     resources :github_alerts, only: [:create]
     
     namespace :admin do
+      get 'dashboard', to: 'dashboard#index'
+      
       namespace :api do
         namespace :v0 do
-          resources :apis do
+          post 'consumers:migrate', to: 'consumers#load_initial', constraints: { migrate: /:migrate/ }
+
+          resources :apis, only: [:create] do
             collection do
               post :bulk_upload
             end

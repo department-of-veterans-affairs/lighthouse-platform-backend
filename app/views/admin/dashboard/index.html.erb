@@ -1,4 +1,27 @@
 <div class="vads-u-padding-y--5 documentation">
-  <h1>Admin::Dashboard#index</h1>
-  <p>Find me in app/views/admin/dashboard/index.html.erb</p>
+  <h2>
+    <%= "#{@apis.count} APIs" %>
+  </h2>
+  <% @apis.each do |api| %>
+    <p>
+      <%= api.to_json %>
+    </p>
+  <% end %>
+  <h2>
+    <%= "#{@users.count} users / consumers" %>
+  </h2>
+  <% @users.each do |user| %>
+    <p>
+      <%= user.to_json %>
+      <br />
+      <%= user.consumer.to_json %>
+      <br />
+      <%= "#{user.consumer.apis.count} apis" %>
+      <br />
+      <% user.consumer.apis.each do |api| %>
+        <%= api.to_json %>
+        <br />
+      <% end %>
+    </p>
+  <% end %>
 </div>

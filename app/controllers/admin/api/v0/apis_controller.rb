@@ -30,6 +30,8 @@ class Admin::Api::V0::ApisController < ApplicationController
     render json: { data: 'apis_uploaded' }
   end
 
+  private
+
   def api_params
     params.require(:api).permit(
       :name,

@@ -17,17 +17,6 @@ class ConsumersController < ApplicationController
     render json: serialize_user
   end
 
-  def load_initial
-    # TODO: return current running job if already running
-    
-    job = ConsumerMigrationJob.perform_later
-    render json: { jid: job.job_id }
-  end
-
-  def migration_status
-    # TODO: get status of running background job
-  end
-
   private
 
   def user_params
