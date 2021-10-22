@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   Healthcheck.routes(self)
   
@@ -9,6 +11,7 @@ Rails.application.routes.draw do
     
     namespace :admin do
       get 'dashboard', to: 'dashboard#index'
+      mount Sidekiq::Web => '/sidekiq'
       
       namespace :api do
         namespace :v0 do
