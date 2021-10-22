@@ -2,7 +2,7 @@
 
 ### Environment
 1. Copy `config/application.yml.sample` to `config/application.yml`
-2. Create a developer okta instance
+2. Create a developer okta account: https://developer.okta.com/
 3. Populate application.yml file with your okta information
 4. Run `docker-compose up -d` to bring up dependencies
 5. Run
