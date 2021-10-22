@@ -37,6 +37,31 @@ class DynamoService
     )
   end
 
+  def seed_dynamo_db
+    raise 'just development environment things' if Figaro.env.dynamo_endpoint.blank?
+
+    100.times do
+      first_name = Faker::Name.first_name
+      last_name = Faker::Name.last_name
+      @client.put_item(
+        {
+          item:{
+            'apis': ['benefits', 'facilities', 'benefits,facilities'].sample,
+            'organization': 'none',
+            'firstName': first_name,
+            'lastName': last_name,
+            'createdAt': Time.now.to_s,
+            'description': ['no description', Faker::Lorem.paragraph].sample,
+            'email': "#{first_name}.#{last_name}@va.gov",
+            'tosAccepted': [true, false].sample,
+            'kongConsumerId': ['b11ae7d9-2949-4e80-aa55-ccd30d4c7287', '6b6f692b-0ec1-4224-9016-f7c65de680f9'].sample
+          },
+          table_name: Figaro.env.dynamo_table_name
+        }
+      )
+    end
+  end
+
   private
 
   # 
