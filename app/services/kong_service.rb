@@ -7,13 +7,11 @@ class KongService
   attr_reader :client
 
   def initialize
-    # Use SOCKS Proxy client for any connections except local, which uses standard Net::HTTP
-    socks_host = Figaro.env.socks_host || 'localhost'
-    @client = Net::HTTP.SOCKSProxy(socks_host, 2001)
+    @kong_elb = ENV['kong_elb'] || 'http://localhost:4001'
   end
 
   def list_consumers(query = nil)
-    uri = URI.parse("#{Figaro.env.kong_elb}/consumers#{query}")
+    uri = URI.parse("#{@kong_elb}/consumers#{query}")
     req = Net::HTTP::Get.new(uri)
     request(req, uri)
   end
@@ -31,11 +29,29 @@ class KongService
     kong_consumers
   end
 
+  def get_consumer(id)
+    uri = URI.parse("#{@kong_elb}/consumers/#{id}")
+    req = Net::HTTP::Get.new(uri)
+    request(req, uri)
+  end
+
+  def get_plugins(id)
+    uri = URI.parse("#{@kong_elb}/consumers/#{id}/plugins")
+    req = Net::HTTP::Get.new(uri)
+    request(req, uri)
+  end
+
+  def get_keys(id)
+    uri = URI.parse("#{@kong_elb}/consumers/#{id}/key-auth")
+    req = Net::HTTP::Get.new(uri)
+    request(req, uri)
+  end
+
   private
 
   def request(req, uri)
     req.basic_auth 'kong_admin', ENV['kong_password']
-    response = @client.start(uri.host, uri.port) do |http|
+    response = Net::HTTP.start(uri.host, uri.port) do |http|
       http.request(req)
     end
 
