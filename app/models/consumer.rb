@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Consumer < ApplicationRecord
+  acts_as_paranoid
+
   attr_accessor :tos_accepted, :apis_list
 
   validates :description, :organization, presence: true

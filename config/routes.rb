@@ -15,11 +15,19 @@ Rails.application.routes.draw do
 
       namespace :api do
         namespace :v0 do
-          post 'consumers:migrate', to: 'consumers#load_initial', constraints: { migrate: /:migrate/ }
+          post 'consumers:migrate', to: 'consumers#load_initial', 
+                                    as: 'migrate_consumers',
+                                    constraints: { migrate: /:migrate/ }
+          resources :consumers, only: [] do
+            collection do
+              post :destroy_all
+            end
+          end
 
           resources :apis, only: [:create] do
             collection do
               post :bulk_upload
+              post :destroy_all
             end
           end
         end

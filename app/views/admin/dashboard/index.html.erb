@@ -2,14 +2,25 @@
   <h2>
     <%= "#{@apis.count} APIs" %>
   </h2>
+  <%= form_tag bulk_upload_admin_api_v0_apis_path, multipart: true do %>
+    <%= file_field_tag 'file', required: true %>
+    <%= submit_tag 'Upload API List' %>
+  <% end %>
   <% @apis.each do |api| %>
     <p>
       <%= api.to_json %>
     </p>
   <% end %>
+  <%= form_tag destroy_all_admin_api_v0_apis_path do %>
+    <%= submit_tag 'Delete APIs', class: 'usa-button-red' %>
+  <% end %>
+
   <h2>
     <%= "#{@users.count} users / consumers" %>
   </h2>
+  <%= form_tag admin_api_v0_migrate_consumers_path(migrate: ':migrate') do %>
+    <%= submit_tag 'Migrate Consumers' %>
+  <% end %>
   <% @users.each do |user| %>
     <p>
       <%= user.to_json %>
@@ -23,5 +34,8 @@
         <br />
       <% end %>
     </p>
+  <% end %>
+  <%= form_tag destroy_all_admin_api_v0_consumers_path do %>
+    <%= submit_tag 'Delete Consumers', class: 'usa-button-red' %>
   <% end %>
 </div>
