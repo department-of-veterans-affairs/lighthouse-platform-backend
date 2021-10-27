@@ -64,8 +64,6 @@ Rails.application.configure do
   ENV['DYNAMO_ACCESS_KEY_ID'] = 'iammocked'
   ENV['DYNAMO_SECRET_ACCESS_KEY'] = 'iammocked'
   ENV['DYNAMO_TABLE_NAME'] = 'mocktable'
-  ENV['OKTA_TOKEN'] = 'mocktoken'
-  ENV['OKTA_API_ENDPOINT'] = 'https://deptva-eval.okta.com/api/v1'
-  ENV['SOCKS_HOST'] = 'http://localhost'
-  ENV['KONG_ELB'] = 'http://api-gateway-dev.vfs.va.gov'
+  ENV['okta_token'] = 'mocktoken'
+  ENV['okta_api_endpoint'] = 'https://deptva-eval.okta.com/api/v1'
 end
