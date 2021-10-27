@@ -1,4 +1,7 @@
 <div class="vads-u-padding-y--5 documentation">
   <h1>Admin::Dashboard#index</h1>
   <p>Find me in app/views/admin/dashboard/index.html.erb</p>
+  <hr>
+  <p>You're signed in</p>
+  <%= link_to "Sign out here", destroy_user_session_path, class: "my-2 text-white px-3 py-2 text-xl rounded-md bg-va-primary-dark hover:bg-va-primary-darkest inline-block", method: :delete %>
 </div>

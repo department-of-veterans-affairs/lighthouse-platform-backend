@@ -4,7 +4,8 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable,
+         :omniauthable, omniauth_providers: [:github]
 
   validates :first_name, :last_name, presence: true
 
@@ -16,5 +17,19 @@ class User < ApplicationRecord
 
   def password_required?
     false
+  end
+
+  def self.from_omniauth(provider_data, github_teams)
+    user = first_or_create_user(provider_data, github_teams)
+
+    user
+  end
+
+  private_class_method def self.first_or_create_user(auth, teams)
+  where(provider: auth.provider, uid: auth.uid).first_or_create do |u|
+      u.email = auth.info.email
+      u.first_name = auth.info.name.split().first
+      u.last_name = auth.info.name.split().last
+    end
   end
 end
