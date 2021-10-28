@@ -39,10 +39,9 @@ class DynamoService
     Rails.logger.info "#{Figaro.env.dynamo_table_name} table created."
   end
 
-  def seed_dynamo_db # rubocop:disable Metrics/MethodLength
+  def seed_dynamo_db(num_dynamo_users = 100) # rubocop:disable Metrics/MethodLength
     raise 'just development environment things' if Figaro.env.dynamo_endpoint.blank?
 
-    num_dynamo_users = 100
     num_dynamo_users.times do
       first_name = Faker::Name.first_name
       last_name = Faker::Name.last_name
