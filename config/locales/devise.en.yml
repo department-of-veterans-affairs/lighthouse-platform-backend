@@ -16,7 +16,7 @@ en:
       timeout: "Your session expired. Please sign in again to continue."
       unauthenticated: "You need to sign in or sign up before continuing."
       unconfirmed: "You have to confirm your email address before continuing."
-      must_belong_to_team: 'You must belong to a department-of-veteran-affairs team to use this app!'
+      must_belong_to_team: 'You must belong to an approved team on GitHub to team to use this app.'
     mailer:
       confirmation_instructions:
         subject: "Confirmation instructions"
