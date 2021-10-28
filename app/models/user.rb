@@ -13,12 +13,6 @@ class User < ApplicationRecord
   has_many :consumer_api_assignment, through: :consumer
   accepts_nested_attributes_for :consumer
 
-  protected
-
-  def password_required?
-    false
-  end
-
   def self.from_omniauth(auth, is_admin)
     user = first_or_create_user auth, is_admin
 
@@ -42,5 +36,11 @@ class User < ApplicationRecord
       last_name: auth.info.name.split.last,
       role: is_admin ? 'admin' : 'user'
     )
+  end
+
+  protected
+
+  def password_required?
+    false
   end
 end
