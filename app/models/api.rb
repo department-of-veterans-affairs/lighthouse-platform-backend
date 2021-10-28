@@ -2,7 +2,7 @@
 
 class Api < ApplicationRecord
   acts_as_paranoid
-  
+
   has_many :consumer_api_assignment, dependent: :nullify
 
   validates :name, :auth_method, :environment, :base_path, :api_ref, presence: true

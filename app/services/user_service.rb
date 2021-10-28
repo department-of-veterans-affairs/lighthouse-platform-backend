@@ -35,13 +35,17 @@ class UserService
     consumer = user.consumer
     consumer.description = params[:description]
     consumer.organization = params[:organization]
-    if params[:user][:consumer_attributes][:sandbox_gateway_ref].present?
-      consumer.sandbox_gateway_ref = params[:user][:consumer_attributes][:sandbox_gateway_ref]
-    end
+    consumer.sandbox_gateway_ref = sandbox_gateway_ref(params) if sandbox_gateway_ref(params).present?
     consumer.sandbox_oauth_ref = params[:okta_id] if params[:okta_id].present?
     consumer.tos_accepted_at = Time.zone.now
     consumer.tos_version = Figaro.env.current_tos_version
     consumer.deleted_at = nil
     consumer.save if consumer.valid?
+  end
+
+  private
+
+  def sandbox_gateway_ref(params)
+    params.dig(:user, :consumer_attributes, :sandbox_gateway_ref)
   end
 end

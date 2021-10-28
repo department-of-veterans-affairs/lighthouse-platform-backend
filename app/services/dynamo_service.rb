@@ -36,7 +36,7 @@ class DynamoService
       }
     )
 
-    puts "#{Figaro.env.dynamo_table_name} table created."
+    Rails.logger.info "#{Figaro.env.dynamo_table_name} table created."
   end
 
   def seed_dynamo_db # rubocop:disable Metrics/MethodLength
@@ -64,7 +64,7 @@ class DynamoService
       )
     end
 
-    puts "#{num_dynamo_users} users created in dynamo #{Figaro.env.dynamo_table_name} table."
+    Rails.logger.info "#{num_dynamo_users} users created in dynamo #{Figaro.env.dynamo_table_name} table."
   end
 
   private

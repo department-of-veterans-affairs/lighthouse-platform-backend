@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 
       namespace :api do
         namespace :v0 do
-          post 'consumers:migrate', to: 'consumers#load_initial', 
+          post 'consumers:migrate', to: 'consumers#load_initial',
                                     as: 'migrate_consumers',
                                     constraints: { migrate: /:migrate/ }
           resources :consumers, only: [] do
