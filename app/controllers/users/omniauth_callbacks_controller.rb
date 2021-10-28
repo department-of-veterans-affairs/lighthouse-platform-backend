@@ -6,15 +6,17 @@ module Users
     skip_before_action :verify_authenticity_token, only: :github
 
     def github
-      github_teams = retrieve_github_teams(
-        request.env['omniauth.auth'].credentials.token
-      )
+      auth = request.env['omniauth.auth']
+      token = auth.credentials.token
+      users_approved_teams = GithubService.user_teams token
+      is_admin = !users_approved_teams.empty?
 
-      if github_teams.empty?
-        redirect_to root_path, alert: t('devise.failure.must_belong_to_team')
-      else
-        @user = User.from_omniauth(request.env['omniauth.auth'], github_teams)
+      @user = User.from_omniauth(auth, is_admin)
+
+      if is_admin
         sign_in_user_and_redirect @user
+      else
+        redirect_to root_path, alert: t('devise.failure.must_belong_to_team')
       end
     end
 
@@ -23,15 +25,6 @@ module Users
     end
 
     private
-
-    def retrieve_github_teams(token)
-      raw_team_info = GithubService.user_teams token
-      # raw_team_info.map do |github_team|
-      #   Team.where(id: github_team[:id]).first_or_create do |team|
-      #     team.name = github_team[:name]
-      #   end
-      # end
-    end
 
     def sign_in_user_and_redirect(user)
       if user.persisted?

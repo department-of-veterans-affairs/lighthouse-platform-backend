@@ -19,17 +19,28 @@ class User < ApplicationRecord
     false
   end
 
-  def self.from_omniauth(provider_data, github_teams)
-    user = first_or_create_user(provider_data, github_teams)
+  def self.from_omniauth(auth, is_admin)
+    user = first_or_create_user auth, is_admin
 
+    update_user user, auth, is_admin
     user
   end
 
-  private_class_method def self.first_or_create_user(auth, teams)
+  private_class_method def self.first_or_create_user(auth, is_admin)
   where(provider: auth.provider, uid: auth.uid).first_or_create do |u|
       u.email = auth.info.email
       u.first_name = auth.info.name.split().first
       u.last_name = auth.info.name.split().last
+      u.role = is_admin ? 'admin' : 'user'
     end
+  end
+
+  private_class_method def self.update_user(user, auth, is_admin)
+    user.update(
+      email: auth.info.email,
+      first_name: auth.info.name.split().first,
+      last_name: auth.info.name.split().last,
+      role: is_admin ? 'admin' : 'user'
+    )
   end
 end
