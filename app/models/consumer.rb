@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Consumer < ApplicationRecord
-  acts_as_paranoid
+  include Discard::Model
 
   attr_accessor :tos_accepted, :apis_list
 
@@ -16,6 +16,14 @@ class Consumer < ApplicationRecord
 
   before_save :set_tos
   before_save :manage_apis
+
+  after_discard do
+    consumer_api_assignments.discard_all
+  end
+
+  after_undiscard do
+    consumer_api_assignments.undiscard_all
+  end
 
   private
 

@@ -14,7 +14,7 @@ class Admin::Api::V0::ConsumersController < ApplicationController
   end
 
   def destroy_all
-    User.destroy_all
+    User.discard_all
 
     redirect_to admin_dashboard_path
   end

@@ -3,8 +3,8 @@
 class UserService
   def construct_import(params)
     user_params = params[:user].with_indifferent_access
-    user = User.with_deleted.find_or_initialize_by(email: user_params[:email].downcase)
-    user.restore(recursive: true) if user.deleted?
+    user = User.find_or_initialize_by(email: user_params[:email].downcase)
+    user.undiscard if user.discarded?
     @api_list = if user.consumer.present?
                   user.consumer.apis.map(&:api_ref)
                 else
@@ -33,7 +33,7 @@ class UserService
 
   def create_or_update_consumer(user, params)
     consumer = user.consumer
-    consumer.restore(recursive: true) if consumer.deleted?
+    consumer.undiscard if consumer.discarded?
     consumer.description = params[:description]
     consumer.organization = params[:organization]
     consumer.sandbox_gateway_ref = sandbox_gateway_ref(params) if sandbox_gateway_ref(params).present?

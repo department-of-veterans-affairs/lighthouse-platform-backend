@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api < ApplicationRecord
-  acts_as_paranoid
+  include Discard::Model
 
   has_many :consumer_api_assignment, dependent: :nullify
 

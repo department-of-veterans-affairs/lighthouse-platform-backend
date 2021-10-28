@@ -127,6 +127,8 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.4.4)
+    discard (1.2.0)
+      activerecord (>= 4.2, < 7)
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
@@ -214,8 +216,6 @@ GEM
       omniauth (>= 1.9, < 3)
     orm_adapter (0.5.0)
     parallel (1.20.1)
-    paranoia (2.4.3)
-      activerecord (>= 4.0, < 6.2)
     parser (3.0.2.0)
       ast (~> 2.4.1)
     pg (1.2.3)
@@ -418,6 +418,7 @@ DEPENDENCIES
   byebug
   capybara (>= 3.26)
   devise
+  discard
   dotenv-rails
   factory_bot_rails (> 5)
   faker
@@ -428,7 +429,6 @@ DEPENDENCIES
   oktakit!
   omniauth (~> 2.0.0)
   omniauth-github!
-  paranoia
   pg (~> 1.1)
   pry-byebug
   puma (~> 5.5.1)

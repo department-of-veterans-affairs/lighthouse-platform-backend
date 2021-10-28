@@ -26,8 +26,8 @@ ActiveRecord::Schema.define(version: 2021_10_26_214520) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "api_ref"
     t.string "version"
-    t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_apis_on_deleted_at"
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_apis_on_discarded_at"
     t.index ["service_ref"], name: "index_apis_on_service_ref", unique: true
   end
 
@@ -37,10 +37,10 @@ ActiveRecord::Schema.define(version: 2021_10_26_214520) do
     t.datetime "first_successful_call_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
+    t.datetime "discarded_at"
     t.index ["api_id"], name: "index_consumer_api_assignments_on_api_id"
     t.index ["consumer_id"], name: "index_consumer_api_assignments_on_consumer_id"
-    t.index ["deleted_at"], name: "index_consumer_api_assignments_on_deleted_at"
+    t.index ["discarded_at"], name: "index_consumer_api_assignments_on_discarded_at"
   end
 
   create_table "consumers", force: :cascade do |t|
@@ -55,8 +55,8 @@ ActiveRecord::Schema.define(version: 2021_10_26_214520) do
     t.string "prod_oauth_ref"
     t.bigint "user_id", null: false
     t.string "organization"
-    t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_consumers_on_deleted_at"
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_consumers_on_discarded_at"
     t.index ["user_id"], name: "index_consumers_on_user_id"
   end
 
@@ -71,8 +71,8 @@ ActiveRecord::Schema.define(version: 2021_10_26_214520) do
     t.string "first_name"
     t.string "last_name"
     t.string "role", default: "user"
-    t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_users_on_deleted_at"
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_users_on_discarded_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

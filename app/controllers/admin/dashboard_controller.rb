@@ -2,7 +2,7 @@
 
 class Admin::DashboardController < ApplicationController
   def index
-    @apis = Api.all
-    @users = User.all
+    @apis = Api.kept
+    @users = User.kept
   end
 end

@@ -26,7 +26,8 @@ class Admin::Api::V0::ApisController < ApplicationController
         api_ref: api.dig('api', 'api_ref'),
         service_ref: api.dig('api', 'service_ref'),
         created_at: Time.zone.now,
-        updated_at: Time.zone.now
+        updated_at: Time.zone.now,
+        discarded_at: nil
       }
     end, unique_by: [:service_ref])
 
@@ -38,7 +39,7 @@ class Admin::Api::V0::ApisController < ApplicationController
   end
 
   def destroy_all
-    Api.destroy_all
+    Api.discard_all
 
     redirect_to admin_dashboard_path
   end

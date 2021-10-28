@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  acts_as_paranoid
+  include Discard::Model
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -13,6 +13,14 @@ class User < ApplicationRecord
   has_one :consumer, dependent: :destroy
   has_many :consumer_api_assignment, through: :consumer
   accepts_nested_attributes_for :consumer
+
+  after_discard do
+    consumer.discard
+  end
+
+  after_undiscard do
+    consumer.undiscard
+  end
 
   protected
 
