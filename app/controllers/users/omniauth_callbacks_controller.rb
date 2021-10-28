@@ -16,7 +16,7 @@ module Users
       if is_admin
         sign_in_user_and_redirect @user
       else
-        redirect_to root_path, alert: t('devise.failure.must_belong_to_team')
+        redirect_to root_path, alert: t('devise.failure.must_belong_to_admin_team')
       end
     end
 
