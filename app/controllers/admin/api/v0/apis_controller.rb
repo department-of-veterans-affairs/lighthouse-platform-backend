@@ -48,8 +48,9 @@ class Admin::Api::V0::ApisController < ApplicationController
   def apis_list
     return params[:apis] if params[:apis].present?
     return [] if params[:apis].blank? && params[:file].blank?
+    raise 'File not of type "text/csv"' unless params[:file].content_type == 'text/csv'
 
-    file_content = CSV.parse(File.read(params[:file]), headers: true)
+    file_content = CSV.parse(File.read(params[:file].tempfile), headers: true)
     file_content.map do |api|
       {
         'api' => {
