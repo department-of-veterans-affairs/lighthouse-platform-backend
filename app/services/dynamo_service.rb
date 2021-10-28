@@ -35,12 +35,15 @@ class DynamoService
         table_name: Figaro.env.dynamo_table_name
       }
     )
+
+    puts "#{Figaro.env.dynamo_table_name} table created."
   end
 
   def seed_dynamo_db # rubocop:disable Metrics/MethodLength
     raise 'just development environment things' if Figaro.env.dynamo_endpoint.blank?
 
-    100.times do
+    num_dynamo_users = 100
+    num_dynamo_users.times do
       first_name = Faker::Name.first_name
       last_name = Faker::Name.last_name
       @client.put_item(
@@ -60,6 +63,8 @@ class DynamoService
         }
       )
     end
+
+    puts "#{num_dynamo_users} users created in dynamo #{Figaro.env.dynamo_table_name} table."
   end
 
   private

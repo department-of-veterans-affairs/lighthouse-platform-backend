@@ -14,8 +14,8 @@ rake db:seed
 
 ### Migrating existing structure
 ```
-rake initialize_dynamo
-rake seed_dynamo
+rake dynamo:migrate
+rake dynamo:seed
 rake "load_apis[rakelib/support/initial_apis.csv, http://localhost:8080]"
 rake load_consumers
 
