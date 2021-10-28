@@ -4,7 +4,7 @@ class UserService
   def construct_import(params)
     user_params = params[:user].with_indifferent_access
     user = User.with_deleted.find_or_initialize_by(email: user_params[:email].downcase)
-    user.deleted_at = nil
+    user.restore(recursive: true) if user.deleted?
     @api_list = if user.consumer.present?
                   user.consumer.apis.map(&:api_ref)
                 else
@@ -33,13 +33,13 @@ class UserService
 
   def create_or_update_consumer(user, params)
     consumer = user.consumer
+    consumer.restore(recursive: true) if consumer.deleted?
     consumer.description = params[:description]
     consumer.organization = params[:organization]
     consumer.sandbox_gateway_ref = sandbox_gateway_ref(params) if sandbox_gateway_ref(params).present?
     consumer.sandbox_oauth_ref = params[:okta_id] if params[:okta_id].present?
     consumer.tos_accepted_at = Time.zone.now
     consumer.tos_version = Figaro.env.current_tos_version
-    consumer.deleted_at = nil
     consumer.save if consumer.valid?
   end
 
