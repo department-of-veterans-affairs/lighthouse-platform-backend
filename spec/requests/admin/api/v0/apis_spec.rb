@@ -71,6 +71,8 @@ RSpec.describe 'Admin::Api::V0::Apis', type: :request do
 
   describe 'Deleting APIs' do
     it 'discards all apis' do
+      FactoryBot.create(:api, name: 'Claims API', api_ref: 'claims')
+
       post '/platform-backend/admin/api/v0/apis/destroy_all'
       expect(response.status).to eq(302)
     end
