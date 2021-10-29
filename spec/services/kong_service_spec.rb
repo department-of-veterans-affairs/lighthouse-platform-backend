@@ -30,11 +30,4 @@ RSpec.describe KongService do
       expect(result['data'].length).to eq(0)
     end
   end
-
-  describe '#get_keys' do
-    it 'retrieves a list of consumers keys' do
-      result = subject.get_keys(consumer_id)
-      expect(result['data'].first['key']).to eq('k0n9_c0nsum3r')
-    end
-  end
 end

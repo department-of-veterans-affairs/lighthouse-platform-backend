@@ -7,7 +7,7 @@ class KongService
   attr_reader :client
 
   def initialize
-    @kong_elb = ENV['kong_elb'] || 'http://localhost:4001'
+    @kong_elb = ENV['KONG_ELB'] || 'http://localhost:4001'
   end
 
   def list_consumers(query = nil)
@@ -37,12 +37,6 @@ class KongService
 
   def get_plugins(id)
     uri = URI.parse("#{@kong_elb}/consumers/#{id}/plugins")
-    req = Net::HTTP::Get.new(uri)
-    request(req, uri)
-  end
-
-  def get_keys(id)
-    uri = URI.parse("#{@kong_elb}/consumers/#{id}/key-auth")
     req = Net::HTTP::Get.new(uri)
     request(req, uri)
   end
