@@ -10,7 +10,6 @@ services:
       - kong
       - kong-migrations
       - kong-database
-      - deck
     networks:
       - backend
     environment:
@@ -82,19 +81,6 @@ services:
     networks: *network
     command: ["kong", "docker-start"]
     restart: *kong-restart
-
-  deck:
-    command:
-      - sync
-      - --state
-      - "/usr/local/kong/deck/${DECK_FILE:-seed.yml}"
-    depends_on: [kong]
-    environment:
-      - DECK_KONG_ADDR=http://kong:8001
-    image: kong/deck
-    restart: *kong-restart
-    networks: *network
-    volumes: [./development/kong/deck:/usr/local/kong/deck]
 
 networks:
   backend:
