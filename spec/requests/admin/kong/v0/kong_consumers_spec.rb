@@ -18,10 +18,10 @@ RSpec.describe 'Admin::Kong::V0::KongConsumersController', type: :request do
   end
 
   describe 'GET show' do
-    let(:kong_consumer_id) { '6b6f692b-0ec1-4224-9016-f7c65de680f9' }
+    let(:kong_consumer) { 'lighthouse-consumer' }
 
     before do
-      get "/platform-backend/admin/kong/v0/kong_consumers/#{kong_consumer_id}"
+      get "/platform-backend/admin/kong/v0/kong_consumers/#{kong_consumer}"
     end
 
     it 'returns a 200 status' do
@@ -29,7 +29,7 @@ RSpec.describe 'Admin::Kong::V0::KongConsumersController', type: :request do
     end
 
     it 'displays the respective consumer' do
-      expect((JSON.parse(response.body))['username']).to eq('lighthouse-consumer')
+      expect((JSON.parse(response.body))['username']).to eq(kong_consumer)
     end
   end
 end

@@ -3,7 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe KongService do
-  let(:consumer_id) { 'b11ae7d9-2949-4e80-aa55-ccd30d4c7287' }
+  before :all do
+    KongService.new.seed_kong
+  end
+
+  let(:consumer_name) { 'kong-consumer' }
 
   describe '.intialize' do
     let(:subject) { KongService.new }
@@ -13,20 +17,22 @@ RSpec.describe KongService do
     it 'retrieves a list of consumers' do
       result = subject.list_consumers
       expect(result['data'].length).to eq(2)
-      expect(result['data'].last['username']).to eq('kong-consumer')
+      expect(result['data'].collect do |consumer|
+               consumer['username']
+             end.sort).to eq(%w[kong-consumer lighthouse-consumer])
     end
   end
 
   describe '#get_consumer' do
     it 'retrieves a consumer via an ID' do
-      result = subject.get_consumer(consumer_id)
+      result = subject.get_consumer(consumer_name)
       expect(result['username']).to eq('kong-consumer')
     end
   end
 
   describe '#get_plugins' do
     it 'retrieves a list of plugins applied to the consumer' do
-      result = subject.get_plugins(consumer_id)
+      result = subject.get_plugins(consumer_name)
       expect(result['data'].length).to eq(0)
     end
   end
