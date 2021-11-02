@@ -7,7 +7,29 @@ class KongService
   attr_reader :client
 
   def initialize
-    @kong_elb = ENV['KONG_ELB'] || 'http://localhost:4001'
+    @client = if Figaro.env.socks_host.present?
+                Net::HTTP.SOCKSProxy(Figaro.env.socks_host, 2001)
+              else
+                Net::HTTP
+              end
+    @kong_elb = Figaro.env.kong_elb || 'http://localhost:4001'
+  end
+
+  def seed_kong
+    seed_kong_consumers
+  end
+
+  def construct_consumer_list
+    %w[lighthouse-consumer kong-consumer]
+  end
+
+  def seed_kong_consumers
+    construct_consumer_list.map do |consumer|
+      uri = URI.parse("#{@kong_elb}/consumers")
+      req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
+      req.body = { username: consumer }.to_json
+      request(req, uri)
+    end
   end
 
   def list_consumers(query = nil)
@@ -45,7 +67,7 @@ class KongService
 
   def request(req, uri)
     req.basic_auth 'kong_admin', ENV['kong_password']
-    response = Net::HTTP.start(uri.host, uri.port) do |http|
+    response = @client.start(uri.host, uri.port) do |http|
       http.request(req)
     end
 
