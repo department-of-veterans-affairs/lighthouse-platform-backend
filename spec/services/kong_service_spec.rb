@@ -26,7 +26,7 @@ RSpec.describe KongService do
   describe '#get_consumer' do
     it 'retrieves a consumer via an ID' do
       result = subject.get_consumer(consumer_name)
-      expect(result['username']).to eq('kong-consumer')
+      expect(result['username']).to eq(consumer_name)
     end
   end
 
