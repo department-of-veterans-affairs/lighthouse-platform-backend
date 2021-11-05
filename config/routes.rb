@@ -19,6 +19,11 @@ Rails.application.routes.draw do
           end
         end
       end
+      namespace :kong do
+        namespace :v0 do
+          resources :kong_consumers
+        end
+      end
     end
   end
 end

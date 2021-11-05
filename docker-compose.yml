@@ -7,6 +7,9 @@ services:
       - "8080:8080"
     depends_on:
       - db
+      - kong
+      - kong-migrations
+      - kong-database
     networks:
       - backend
     environment:
@@ -39,6 +42,7 @@ services:
       - &kong_pg_pw KONG_PG_PASSWORD=kong
       - KONG_PG_USER=kong
     restart: &kong-restart on-failure
+    networks: &network [backend]
 
   kong-database:
     image: postgres:9.6
@@ -51,6 +55,7 @@ services:
       interval: 60s
       timeout: 5s
       retries: 5
+    networks: *network
 
   kong:
     image: kong:2.3.2
@@ -73,20 +78,9 @@ services:
       test: ["CMD-SHELL", "curl -I -s -L http://127.0.0.1:8000 || exit 1"]
       interval: 5s
       retries: 10
+    networks: *network
     command: ["kong", "docker-start"]
     restart: *kong-restart
-
-  deck:
-    command:
-      - sync
-      - --state
-      - "/usr/local/kong/deck/${DECK_FILE:-seed.yml}"
-    depends_on: [kong]
-    environment:
-      DECK_KONG_ADDR: http://kong:8001
-    image: kong/deck
-    restart: *kong-restart
-    volumes: [./development/kong/deck:/usr/local/kong/deck]
 
 networks:
   backend:

@@ -3,24 +3,33 @@
 require 'rails_helper'
 
 RSpec.describe KongService do
+  let(:consumer_name) { 'kong-consumer' }
+
   describe '.intialize' do
     let(:subject) { KongService.new }
-
-    describe 'hitting remote Kong' do
-      it 'uses a socks client to make a connection' do
-        socks_host = ENV['SOCKS_HOST'] || 'localhost'
-        expect(subject.client.socks_server).to eq(socks_host)
-      end
-    end
   end
 
   describe '#list_consumers' do
-    it 'retrieves up to the first 100 consumers' do
-      VCR.use_cassette('kong/kong_consumers_200', match_requests_on: [:method]) do
-        result = subject.list_consumers
-        expect(result['data'].length).to eq(3)
-        expect(result['data'].last['username']).to eq('RedbullPastrana')
-      end
+    it 'retrieves a list of consumers' do
+      result = subject.list_consumers
+      expect(result['data'].length).to eq(2)
+      expect(result['data'].collect do |consumer|
+               consumer['username']
+             end.sort).to eq(%w[kong-consumer lighthouse-consumer])
+    end
+  end
+
+  describe '#get_consumer' do
+    it 'retrieves a consumer via an ID' do
+      result = subject.get_consumer(consumer_name)
+      expect(result['username']).to eq(consumer_name)
+    end
+  end
+
+  describe '#get_plugins' do
+    it 'retrieves a list of plugins applied to the consumer' do
+      result = subject.get_plugins(consumer_name)
+      expect(result['data'].length).to eq(0)
     end
   end
 end
