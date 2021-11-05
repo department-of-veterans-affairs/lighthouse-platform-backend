@@ -3,10 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe KongService do
-  before :all do
-    KongService.new.seed_kong
-  end
-
   let(:consumer_name) { 'kong-consumer' }
 
   describe '.intialize' do
