@@ -29,6 +29,10 @@ VCR.configure do |c|
   c.cassette_library_dir = 'spec/support/vcr_cassettes'
   c.hook_into :webmock
   c.default_cassette_options = { decode_compressed_response: true }
+  c.ignore_request do |request|
+    URI(request.uri).port == 8001
+  end
+  c.ignore_hosts '127.0.0.1', 'localhost'
 end
 
 ActiveRecord::Migration.maintain_test_schema!
@@ -80,5 +84,9 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
   config.before do
     Sidekiq::Worker.clear_all
+  end
+
+  config.before(:suite) do
+    KongService.new.seed_kong
   end
 end
