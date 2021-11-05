@@ -66,5 +66,5 @@ Rails.application.configure do
   ENV['DYNAMO_TABLE_NAME'] = 'mocktable'
   ENV['OKTA_TOKEN'] = 'mocktoken'
   ENV['OKTA_API_ENDPOINT'] = 'https://deptva-eval.okta.com/api/v1'
-  ENV['kong_elb'] = 'http://kong:8001'
+  ENV['KONG_ELB'] = 'http://kong:8001'
 end
