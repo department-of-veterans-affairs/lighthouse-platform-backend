@@ -127,6 +127,8 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.4.4)
+    discard (1.2.0)
+      activerecord (>= 4.2, < 7)
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
@@ -416,6 +418,7 @@ DEPENDENCIES
   byebug
   capybara (>= 3.26)
   devise
+  discard
   dotenv-rails
   factory_bot_rails (> 5)
   faker

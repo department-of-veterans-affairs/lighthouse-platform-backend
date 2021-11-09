@@ -8,6 +8,7 @@ ruby '3.0.0'
 gem 'aws-sdk-dynamodb', '~> 1.62'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'devise'
+gem 'discard'
 gem 'figaro'
 # gem 'health_check'
 gem 'jbuilder', '~> 2.7'

@@ -1,0 +1,2 @@
+api_name,version,auth_method,environment,open_api_url,base_path,service_ref,api_ref
+fancy-service,0,key_auth,sandbox,https://sandbox-api.va.gov/services/fancy-service/docs/v0/api,/services/fancy-service/v0,########-####-####-####-############,fancy-service

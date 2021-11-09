@@ -30,7 +30,7 @@ VCR.configure do |c|
   c.hook_into :webmock
   c.default_cassette_options = { decode_compressed_response: true }
   c.ignore_request do |request|
-    URI(request.uri).port == 8001
+    URI(request.uri).port.in?([8000, 8001])
   end
   c.ignore_hosts '127.0.0.1', 'localhost'
 end

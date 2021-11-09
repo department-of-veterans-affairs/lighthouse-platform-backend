@@ -88,14 +88,14 @@ RSpec.describe UserService do
       consumer_params[:user][:consumer_attributes][:apis_list] = 'va_forms,facilities'
       UserService.new.construct_import(consumer_params)
       reloaded = User.find_by(email: consumer_params[:user][:email])
-      expect(reloaded.consumer.apis.map(&:api_ref)).to eq(%w[claims va_forms facilities])
+      expect(reloaded.consumer.apis.map(&:api_ref).sort).to eq(%w[claims facilities va_forms])
     end
 
     it 'apis are not removed on a new signup with same email' do
       consumer_params[:user][:consumer_attributes][:apis_list] = 'va_forms'
       UserService.new.construct_import(consumer_params)
       reloaded = User.find_by(email: consumer_params[:user][:email])
-      expect(reloaded.consumer.apis.map(&:api_ref)).to eq(%w[claims va_forms])
+      expect(reloaded.consumer.apis.map(&:api_ref).sort).to eq(%w[claims va_forms])
     end
 
     it 'does not reset the kong id if new oauth only signup' do
