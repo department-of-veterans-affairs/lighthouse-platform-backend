@@ -3,9 +3,9 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  Healthcheck.routes(self)
-
   scope '/platform-backend' do # everything must be scoped under platform-backend for DVP load balancer reqs
+    mount OkComputer::Engine, at: '/health_check'
+
     resources :consumers, only: [:create]
     resources :github_alerts, only: [:create]
 
