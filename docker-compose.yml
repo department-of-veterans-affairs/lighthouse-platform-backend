@@ -3,8 +3,6 @@ services:
   app:
     build: .
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 8080 -b '0.0.0.0'"
-    ports:
-      - "8080:8080"
     depends_on:
       - db
       - kong
@@ -21,8 +19,6 @@ services:
   db:
     image: postgres:13.1
     expose:
-      - "5432"
-    ports:
       - "5432"
     environment:
       - POSTGRES_USER=postgres
@@ -60,9 +56,6 @@ services:
 
   kong:
     image: kong:2.3.2
-    ports:
-      - 4001:8001
-      - 4000:8000
     depends_on: *kong-db
     environment:
       - *kong_db
@@ -85,8 +78,6 @@ services:
 
   dynamodb:
     image: amazon/dynamodb-local:latest
-    ports:
-      - "5000:8000"
     command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
     networks:
       - backend
