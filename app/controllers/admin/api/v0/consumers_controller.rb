@@ -4,12 +4,13 @@ class Admin::Api::V0::ConsumersController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def load_initial
-    job = ConsumerMigrationJob.perform_later
+    # job = ConsumerMigrationJob.perform_later
+    ConsumerImportService.new.import
 
     if params[:authenticity_token].present?
       redirect_to admin_dashboard_path
     else
-      render json: { jid: job.job_id }
+      render json: { jid: 'job.job_id' }
     end
   end
 
