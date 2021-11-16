@@ -2,5 +2,9 @@
 
 class Admin::DashboardController < ApplicationController
   before_action :authenticate_user!
-  def index; end
+
+  def index
+    @apis = Api.kept
+    @users = User.select { |user| user.consumer.present?}
+  end
 end

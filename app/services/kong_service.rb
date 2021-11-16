@@ -66,15 +66,14 @@ class KongService
   private
 
   def request(req, uri)
-    req.basic_auth 'kong_admin', ENV['kong_password']
+    req.basic_auth 'kong_admin', Figaro.env.kong_password if Figaro.env.kong_password.present?
     response = @client.start(uri.host, uri.port) do |http|
       http.request(req)
     end
 
-    return JSON.parse(response.body) unless response.body.nil?
-
-    # If there's no response.body we should check if the response object returned is
-    # successful or not. (all 2xx statuses are subclasses of Net::HTTPSuccess)
     response.tap { |res| res['ok'] = res.is_a? Net::HTTPSuccess }
+    raise 'Failed to retrieve kong consumers list' unless response['ok']
+
+    JSON.parse(response.body) unless response.body.nil?
   end
 end

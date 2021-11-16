@@ -1,17 +1,27 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  include Discard::Model
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [:github]
-
+  :recoverable, :rememberable, :validatable,
+  :omniauthable, omniauth_providers: [:github]
+  
   validates :first_name, :last_name, presence: true
-
+  
   has_one :consumer, dependent: :destroy
   has_many :consumer_api_assignment, through: :consumer
   accepts_nested_attributes_for :consumer
+
+  after_discard do
+    consumer.discard
+  end
+  
+  after_undiscard do
+    consumer.undiscard
+  end
 
   def self.from_omniauth(auth, is_admin)
     user = first_or_create_user auth, is_admin
@@ -26,6 +36,7 @@ class User < ApplicationRecord
       u.first_name = auth.info.name.split.first
       u.last_name = auth.info.name.split.last
       u.role = is_admin ? 'admin' : 'user'
+      u.consumer = nil
     end
   end
 
@@ -34,7 +45,8 @@ class User < ApplicationRecord
       email: auth.info.email,
       first_name: auth.info.name.split.first,
       last_name: auth.info.name.split.last,
-      role: is_admin ? 'admin' : 'user'
+      role: is_admin ? 'admin' : 'user',
+      consumer: nil
     )
   end
 

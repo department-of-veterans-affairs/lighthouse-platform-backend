@@ -4,6 +4,7 @@ class UserService
   def construct_import(params)
     user_params = params[:user].with_indifferent_access
     user = User.find_or_initialize_by(email: user_params[:email].downcase)
+    user.undiscard if user.discarded?
     @api_list = if user.consumer.present?
                   user.consumer.apis.map(&:api_ref)
                 else
@@ -32,14 +33,19 @@ class UserService
 
   def create_or_update_consumer(user, params)
     consumer = user.consumer
+    consumer.undiscard if consumer.discarded?
     consumer.description = params[:description]
     consumer.organization = params[:organization]
-    if params[:user][:consumer_attributes][:sandbox_gateway_ref].present?
-      consumer.sandbox_gateway_ref = params[:user][:consumer_attributes][:sandbox_gateway_ref]
-    end
+    consumer.sandbox_gateway_ref = sandbox_gateway_ref(params) if sandbox_gateway_ref(params).present?
     consumer.sandbox_oauth_ref = params[:okta_id] if params[:okta_id].present?
     consumer.tos_accepted_at = Time.zone.now
     consumer.tos_version = Figaro.env.current_tos_version
     consumer.save if consumer.valid?
+  end
+
+  private
+
+  def sandbox_gateway_ref(params)
+    params.dig(:user, :consumer_attributes, :sandbox_gateway_ref)
   end
 end

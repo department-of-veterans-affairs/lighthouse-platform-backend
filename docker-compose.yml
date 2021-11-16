@@ -10,6 +10,7 @@ services:
       - kong
       - kong-migrations
       - kong-database
+      - dynamodb
     networks:
       - backend
     environment:
@@ -81,6 +82,14 @@ services:
     networks: *network
     command: ["kong", "docker-start"]
     restart: *kong-restart
+
+  dynamodb:
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "5000:8000"
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
+    networks:
+      - backend
 
 networks:
   backend:
