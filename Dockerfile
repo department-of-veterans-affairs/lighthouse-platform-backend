@@ -1,4 +1,4 @@
-FROM vasdvp/health-apis-centos:8
+FROM vasdvp/health-apis-centos:8 AS rails_base
 
 ENV RUBY_MAJOR_VERSION=3.0
 ENV RUBY_VERSION=3.0.0
@@ -30,13 +30,18 @@ RUN curl -sL https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.re
 
 RUN yum install -y -q nodejs yarn
 
+FROM rails_base as base
+
 WORKDIR /home/ruby
 
-COPY Gemfile Gemfile.lock ./
-RUN gem install bundler:${BUNDLER_VERSION}
+ARG rails_env=development
+ENV RAILS_ENV=$rails_env
 
 # Install ruby dependencies
+COPY Gemfile Gemfile.lock ./
+RUN gem install bundler:${BUNDLER_VERSION}
 RUN bundle install --jobs 5 --binstubs="./bin"
+
 # Install javascript dependencies
 COPY . .
 
@@ -45,9 +50,6 @@ RUN openssl x509 \
   -in /etc/pki/ca-trust/source/anchors/VA-Internal-S2-RCA1-v1.cer \
   -out /home/ruby/va-internal.pem
 ENV NODE_EXTRA_CA_CERTS=/home/ruby/va-internal.pem
-
-ARG rails_env=test
-ENV RAILS_ENV=$rails_env
 
 # Precompile assets
 RUN bundle exec rails assets:precompile --silent
