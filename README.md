@@ -11,7 +11,6 @@ To get the app running for the first time follow these steps:
 1. Create the database by running `bin/rake db:create`
 1. Run the migrations with `bin/rake db:migrate`
 1. Seed the database with `bin/rake db:seed`
-1. Migrate existing structure by following the [instructions below](#migrating-existing-structure)
 1. Start the app by running `bin/rails server`
 
 ### Setting Up GitHub Auth
