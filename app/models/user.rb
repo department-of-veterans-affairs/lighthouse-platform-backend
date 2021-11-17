@@ -36,7 +36,6 @@ class User < ApplicationRecord
       u.first_name = auth.info.name.split.first
       u.last_name = auth.info.name.split.last
       u.role = is_admin ? 'admin' : 'user'
-      u.consumer = nil
     end
   end
 
@@ -45,8 +44,7 @@ class User < ApplicationRecord
       email: auth.info.email,
       first_name: auth.info.name.split.first,
       last_name: auth.info.name.split.last,
-      role: is_admin ? 'admin' : 'user',
-      consumer: nil
+      role: is_admin ? 'admin' : 'user'
     )
   end
 
