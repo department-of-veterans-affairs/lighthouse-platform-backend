@@ -5,6 +5,6 @@ class Admin::DashboardController < ApplicationController
 
   def index
     @apis = Api.kept
-    @users = User.select { |user| user.consumer.present?}
+    @users = User.select { |user| user.consumer.present? }
   end
 end
