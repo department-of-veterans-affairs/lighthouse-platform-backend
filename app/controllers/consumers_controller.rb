@@ -15,19 +15,30 @@ class ConsumersController < ApplicationController
     render json: UserSerializer.render(@user)
   end
 
+  #
+  # Submission from developer-portal form to sign up for sandbox api access.
+  #
   def apply
-    @user = User.find_or_initialize_by(email: signup_params[:email])
+    user = user_from_signup_params
 
-    key_auth, _oauth = fetch_auth_lists
-    kong_consumer = generate_consumer_in_kong(key_auth) unless key_auth.empty?
-    build_user_from_signup
-    add_user_attributes(kong_consumer)
+    key_auth, oauth = ApiService.new.fetch_auth_types user.consumer.apis_list
+    raise missing_oauth_params_exception if oauth.any? && missing_oauth_params?
 
-    @user.persisted? ? update_consumer(@prebuilt_user) : create_consumer(@prebuilt_user)
+    kong_consumer = KongService.new.consumer_signup(user, key_auth) unless key_auth.empty?
+    user.consumer.sandbox_gateway_ref = kong_consumer[:kong_id]
 
-    return render json: { error: @user.errors.full_messages }, status: :unprocessable_entity unless @user.errors.empty?
+    unless oauth.empty?
+      okta_consumer = OktaService.new.consumer_signup(user,
+                                                      oauth,
+                                                      application_type: signup_params[:oAuthApplicationType],
+                                                      redirect_uri: signup_params[:oAuthRedirectURI])
+    end
+    user.consumer.sandbox_oauth_ref = okta_consumer.id
 
-    render json: ConsumerApplySerializer.render(@user_for_serializer)
+    user.save!
+    user.undiscard if user.discarded?
+
+    render json: ConsumerApplySerializer.render(user, kong: kong_consumer, okta: okta_consumer)
   end
 
   private
@@ -50,7 +61,36 @@ class ConsumersController < ApplicationController
     )
   end
 
+  def user_from_signup_params
+    user = User.find_or_initialize_by(email: signup_params[:email])
+
+    user.first_name = signup_params[:firstName]
+    user.last_name = signup_params[:lastName]
+    user.consumer = Consumer.new if user.consumer.blank?
+    user.consumer.description = signup_params[:description]
+    user.consumer.organization = signup_params[:organization]
+    user.consumer.apis_list = signup_params[:apis]
+    user.consumer.tos_accepted = signup_params[:termsOfService]
+
+    user
+  end
+
+  def missing_oauth_params_exception
+    return ActionController::ParameterMissing.new('oAuthApplicationType') if params[:oAuthApplicationType].blank?
+
+    ActionController::ParameterMissing.new('oAuthRedirectURI')
+  end
+
+  def missing_oauth_params?
+    params[:oAuthApplicationType].blank? || params[:oAuthRedirectURI].blank?
+  end
+
   def signup_params
+    unless oauth_application_type_valid?
+      message = "Invalid value for oAuthApplicationType: #{params[:oAuthApplicationType]}"
+      raise ActionController::ParameterMissing, message
+    end
+
     params.permit(
       :apis,
       :description,
@@ -64,39 +104,10 @@ class ConsumersController < ApplicationController
     )
   end
 
-  def build_user_from_signup
-    p = signup_params
-    @prebuilt_user = {
-      email: p[:email],
-      first_name: p[:firstName],
-      last_name: p[:lastName],
-      consumer_attributes: build_consumer_from_signup
-    }
-  end
+  def oauth_application_type_valid?
+    return true if params[:oAuthApplicationType].blank?
 
-  def build_consumer_from_signup
-    p = signup_params
-    {
-      description: p[:description],
-      organization: p[:organization],
-      apis_list: p[:apis],
-      tos_accepted: p[:termsOfService]
-    }
-  end
-
-  def add_user_attributes(kong_consumer = nil)
-    if kong_consumer.present?
-      @prebuilt_user[:consumer_attributes][:sandbox_gateway_ref] = kong_consumer[:kong_id]
-      @user_for_serializer = signup_params.to_h.merge(kong_consumer)
-    end
-  end
-
-  def generate_consumer_in_kong(key_auth)
-    KongService.new.consumer_signup(signup_params, key_auth)
-  end
-
-  def fetch_auth_lists
-    ApiService.new.fetch_auth_types signup_params[:apis]
+    %w[web native].include?(params[:oAuthApplicationType])
   end
 
   def update_consumer(params = user_params)

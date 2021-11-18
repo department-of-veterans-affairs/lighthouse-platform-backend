@@ -51,6 +51,7 @@ class Admin::Api::V0::ApisController < ApplicationController
     api = Api.find_or_create_by(name: manage_params[:name])
     if api.persisted?
       api.update manage_params
+      api.undiscard
     else
       api.assign_attributes manage_params
     end

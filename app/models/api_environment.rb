@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApiEnvironment < ApplicationRecord
+  include Discard::Model
+
   belongs_to :api
   belongs_to :environment
 

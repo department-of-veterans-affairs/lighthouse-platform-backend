@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_18_234650) do
+ActiveRecord::Schema.define(version: 2021_12_08_222001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,7 +21,9 @@ ActiveRecord::Schema.define(version: 2021_11_18_234650) do
     t.string "metadata_url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "discarded_at"
     t.index ["api_id"], name: "index_api_environments_on_api_id"
+    t.index ["discarded_at"], name: "index_api_environments_on_discarded_at"
     t.index ["environment_id"], name: "index_api_environments_on_environment_id"
   end
 
@@ -30,7 +32,9 @@ ActiveRecord::Schema.define(version: 2021_11_18_234650) do
     t.bigint "api_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "discarded_at"
     t.index ["api_id"], name: "index_api_refs_on_api_id"
+    t.index ["discarded_at"], name: "index_api_refs_on_discarded_at"
   end
 
   create_table "apis", force: :cascade do |t|
@@ -39,6 +43,7 @@ ActiveRecord::Schema.define(version: 2021_11_18_234650) do
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "discarded_at"
     t.string "acl"
+    t.string "auth_server_access_key"
     t.index ["discarded_at"], name: "index_apis_on_discarded_at"
   end
 
@@ -75,6 +80,8 @@ ActiveRecord::Schema.define(version: 2021_11_18_234650) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_environments_on_discarded_at"
   end
 
   create_table "users", force: :cascade do |t|

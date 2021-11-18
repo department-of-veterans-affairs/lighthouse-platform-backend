@@ -15,11 +15,11 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :consumer
 
   after_discard do
-    consumer.discard
+    consumer.discard if consumer.present?
   end
 
   after_undiscard do
-    consumer.undiscard
+    consumer.undiscard if consumer.present?
   end
 
   def self.from_omniauth(auth, is_admin)

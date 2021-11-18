@@ -107,12 +107,12 @@ class KongService
     request(req, uri)
   end
 
-  def consumer_signup(signup_params, key_auth)
+  def consumer_signup(user, key_auth)
     raise 'Missing key auth APIs' if key_auth.empty?
 
-    organization, last_name = signup_params.values_at(:organization, :lastName)
-
-    kong_id, kong_consumer_name, kong_api_key = handle_key_auth_flow(organization, last_name, key_auth)
+    kong_id, kong_consumer_name, kong_api_key = handle_key_auth_flow(user.consumer.organization,
+                                                                     user.last_name,
+                                                                     key_auth)
 
     { kong_id: kong_id, kongUsername: kong_consumer_name, token: kong_api_key }
   end

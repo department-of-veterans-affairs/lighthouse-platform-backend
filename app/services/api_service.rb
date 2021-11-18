@@ -15,7 +15,7 @@ class ApiService
       if api.acl.present?
         key_auth << api.acl
       else
-        oauth << api
+        oauth << api.auth_server_access_key
       end
     end
     [key_auth, oauth]
