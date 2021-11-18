@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'rails_helper'
+
 def stub_github_team_req(page_num, body, next_page = nil) # rubocop:disable Metrics/MethodLength
   headers = { 'Content-Type': 'application/json' }
   headers[:Link] = "https://api.github.com/user/teams?page=#{next_page}; rel=\"next\"" if next_page
