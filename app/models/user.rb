@@ -31,7 +31,7 @@ class User < ApplicationRecord
   end
 
   private_class_method def self.first_or_create_user(auth, is_admin)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |u|
+    where(email: auth.info.email, uid: auth.uid).first_or_create do |u|
       u.email = auth.info.email
       u.first_name = auth.info.name.split.first
       u.last_name = auth.info.name.split.last
