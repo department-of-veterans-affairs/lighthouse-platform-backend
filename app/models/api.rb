@@ -9,11 +9,18 @@ class Api < ApplicationRecord
   has_many :consumer_api_assignment, dependent: :nullify
   has_many :api_environments, dependent: :destroy
 
-  accepts_nested_attributes_for :api_ref, :api_environments
-
   def api_environments_attributes=(api_environments_attributes)
     environment = Environment.find_or_create_by(name: api_environments_attributes.dig(:environments_attributes, :name))
     api_environments << ApiEnvironment.create(metadata_url: api_environments_attributes[:metadata_url],
                                               environment: environment)
+  end
+
+  def api_ref_attributes=(api_ref_attributes)
+    ref = ApiRef.find_or_create_by(name: api_ref_attributes[:name])
+    if ref.persisted?
+      self.api_ref = ref
+    else
+      ref.update_attributes(name: api_ref_attributes[:name], api: self)
+    end
   end
 end

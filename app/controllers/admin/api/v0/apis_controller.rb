@@ -6,7 +6,7 @@ class Admin::Api::V0::ApisController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def create
-    api = Api.create new_api_params
+    api = manage_api api_params
     if api.save
       render json: ApiSerializer.render(api)
     else
@@ -15,21 +15,22 @@ class Admin::Api::V0::ApisController < ApplicationController
   end
 
   def bulk_upload
-    Api.upsert_all(apis_list.map do |api|
-      {
+    apis_list.map do |api|
+      api_built = {
         name:	api.dig('api', 'name'),
-        version: api.dig('api', 'version'),
-        auth_method: api.dig('api', 'auth_method'),
-        environment: api.dig('api', 'environment'),
-        open_api_url: api.dig('api', 'open_api_url'),
-        base_path: api.dig('api', 'base_path'),
-        api_ref: api.dig('api', 'api_ref'),
-        service_ref: api.dig('api', 'service_ref'),
-        created_at: Time.zone.now,
-        updated_at: Time.zone.now,
-        discarded_at: nil
+        acl: api.dig('api', 'acl'),
+        api_environments_attributes: {
+          metadata_url: api.dig('api', 'metadata_url'),
+          environments_attributes: {
+            name: api.dig('api', 'env_name')
+          }
+        },
+        api_ref_attributes: {
+          name: api.dig('api', 'api_ref')
+        }
       }
-    end, unique_by: [:service_ref])
+      manage_api api_built
+    end
 
     if params[:authenticity_token].present?
       redirect_to admin_dashboard_path
@@ -46,6 +47,17 @@ class Admin::Api::V0::ApisController < ApplicationController
 
   private
 
+  def manage_api(manage_params)
+    api = Api.find_or_create_by(name: manage_params[:name])
+    if api.persisted?
+      api.update manage_params
+    else
+      api.assign_attributes manage_params
+    end
+    
+    api
+  end
+
   def apis_list
     return params[:apis] if params[:apis].present?
     return [] if params[:apis].blank? && params[:file].blank?
@@ -55,12 +67,9 @@ class Admin::Api::V0::ApisController < ApplicationController
       {
         'api' => {
           'name' => api['api_name'],
-          'version' => api['version'].to_i,
-          'auth_method' => api['auth_method'],
-          'environment' => api['environment'],
-          'open_api_url' => api['open_api_url'],
-          'base_path' => api['base_path'],
-          'service_ref' => api['service_ref'],
+          'acl' => api['acl_ref'],
+          'metadata_url' => api['metadata_url'],
+          'env_name' => api['environment'],
           'api_ref' => api['api_ref']
         }
       }
@@ -68,18 +77,6 @@ class Admin::Api::V0::ApisController < ApplicationController
   end
 
   def api_params
-    params.require(:api).permit(
-      :name,
-      :auth_method,
-      :environment,
-      :open_api_url,
-      :base_path,
-      :service_ref,
-      :api_ref
-    )
-  end
-
-  def new_api_params
     params.require(:api).permit(
       :name,
       :acl,
