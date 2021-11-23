@@ -6,7 +6,7 @@ class Admin::Api::V0::ApisController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def create
-    api = Api.new api_params
+    api = Api.create new_api_params
     if api.save
       render json: api, serializer: ApiSerializer
     else
@@ -76,7 +76,16 @@ class Admin::Api::V0::ApisController < ApplicationController
       :base_path,
       :service_ref,
       :api_ref,
-      :version
+    )
+  end
+
+  def new_api_params
+    params.require(:api).permit(
+      :name,
+      :acl,
+      environments_attributes: [:name],
+      api_environments_attributes: [:metadata_url],
+      api_ref_attributes: [:name]
     )
   end
 end

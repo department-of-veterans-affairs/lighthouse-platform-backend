@@ -1,4 +1,4 @@
-dynamo_endpoint: "http://localhost:5000"
+dynamo_endpoint: "http://localhost:4500"
 dynamo_access_key_id: "dummy"
 dynamo_secret_access_key: "dummy"
 dynamo_table_name: "dvp-dev-developer-portal-users"
