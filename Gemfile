@@ -6,12 +6,12 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.0.0'
 
 gem 'aws-sdk-dynamodb', '~> 1.62'
+gem 'blueprinter'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'devise'
 gem 'discard'
 gem 'figaro'
 gem 'jbuilder', '~> 2.7'
-gem 'jsonapi-serializer'
 gem 'okcomputer'
 gem 'oktakit', git: 'https://github.com/charleystran/oktakit', branch: 'add_authorization_servers'
 gem 'omniauth', '~> 2.0.0'

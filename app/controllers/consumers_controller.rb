@@ -4,8 +4,6 @@ class ConsumersController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def create
-    @options = {}
-    @options[:include] = [:consumer]
     @user = User.find_or_initialize_by(email: params[:user][:email])
     if @user.persisted? && @user.consumer.present?
       update_consumer
@@ -14,7 +12,7 @@ class ConsumersController < ApplicationController
     end
     return render json: { error: @user.errors.full_messages }, status: :unprocessable_entity unless @user.errors.empty?
 
-    render json: serialize_user
+    render json: UserSerializer.render(@user)
   end
 
   private
@@ -44,9 +42,5 @@ class ConsumersController < ApplicationController
   def create_consumer
     @user.assign_attributes(user_params)
     @user.save
-  end
-
-  def serialize_user
-    UserSerializer.new(@user, @options).serializable_hash.to_json
   end
 end

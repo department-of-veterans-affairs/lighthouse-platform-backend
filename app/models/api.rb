@@ -13,7 +13,7 @@ class Api < ApplicationRecord
 
   def api_environments_attributes=(api_environments_attributes)
     environment = Environment.find_or_create_by(name: api_environments_attributes.dig(:environments_attributes, :name))
-    api_environments << ApiEnvironment.create(metadata_url: api_environments_attributes[:metadata_url], 
+    api_environments << ApiEnvironment.create(metadata_url: api_environments_attributes[:metadata_url],
                                               environment: environment)
   end
 end

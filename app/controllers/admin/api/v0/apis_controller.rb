@@ -8,7 +8,7 @@ class Admin::Api::V0::ApisController < ApplicationController
   def create
     api = Api.create new_api_params
     if api.save
-      render json: api, serializer: ApiSerializer
+      render json: ApiSerializer.render(api)
     else
       render json: { error: api.errors.full_messages }, status: :unprocessable_entity
     end
@@ -75,7 +75,7 @@ class Admin::Api::V0::ApisController < ApplicationController
       :open_api_url,
       :base_path,
       :service_ref,
-      :api_ref,
+      :api_ref
     )
   end
 
@@ -85,7 +85,7 @@ class Admin::Api::V0::ApisController < ApplicationController
       :acl,
       api_environments_attributes: [
         :metadata_url,
-        environments_attributes: [:name]
+        { environments_attributes: [:name] }
       ],
       api_ref_attributes: [:name]
     )
