@@ -89,6 +89,8 @@ ActiveRecord::Schema.define(version: 2021_11_18_234650) do
     t.string "last_name"
     t.string "role", default: "user"
     t.datetime "discarded_at"
+    t.string "provider", limit: 50, default: "", null: false
+    t.string "uid", limit: 50, default: "", null: false
     t.index ["discarded_at"], name: "index_users_on_discarded_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

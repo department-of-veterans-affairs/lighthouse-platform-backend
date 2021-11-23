@@ -83,8 +83,10 @@ class Admin::Api::V0::ApisController < ApplicationController
     params.require(:api).permit(
       :name,
       :acl,
-      environments_attributes: [:name],
-      api_environments_attributes: [:metadata_url],
+      api_environments_attributes: [
+        :metadata_url,
+        environments_attributes: [:name]
+      ],
       api_ref_attributes: [:name]
     )
   end
