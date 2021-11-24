@@ -4,6 +4,10 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   scope '/platform-backend' do # everything must be scoped under platform-backend for DVP load balancer reqs
+    devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
+
+    root to: 'home#index'
+
     mount OkComputer::Engine, at: '/health_check'
 
     resources :consumers, only: [:create]

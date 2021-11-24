@@ -1,0 +1,25 @@
+# This file defines configuration for authorizing that users are allowed to use
+# the app by specifying allowed orgs and teams
+default: &default
+  team_ids:
+    - 'default team'
+
+development:
+  <<: *default
+  teams:
+    # encapsulate id in quotes so it doesn't get read as an integer
+    - id: '<%= Figaro.env.github_team_id %>'
+      name: <%= Figaro.env.github_team_name %>
+
+test:
+  <<: *default
+  teams:
+    - id: '0'
+      name: 'test team'
+
+production:
+  <<: *default
+  teams:
+    # encapsulate id in quotes so it doesn't get read as an integer
+    - id: '<%= Figaro.env.github_team_id %>'
+      name: <%= Figaro.env.github_team_name %>

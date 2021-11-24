@@ -1,0 +1,10 @@
+<div class="vads-l-grid-container">
+	<% if user_signed_in? %>
+		<p>Hello <%= current_user.first_name %>! Welcome to the Lighthouse Platform Backend.</p>
+		<%= link_to "Sign out here", destroy_user_session_path, class: 'usa-button', method: :delete %>
+	<% else %>
+		<p>Welcome to the Lighthouse Platform Backend. Please sign in to get started!</p>
+		<p>You must belong to an approved team on GitHub to use this app.</p>
+		<%= link_to "Sign in with GitHub", user_github_omniauth_authorize_path, class: 'usa-button', method: :post%>
+	<% end %>
+</div>
