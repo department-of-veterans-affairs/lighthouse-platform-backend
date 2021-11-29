@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     resources :consumers, only: [:create]
     resources :github_alerts, only: [:create]
 
+    post '/apply', to: 'consumers#apply'
+
     namespace :admin do
       get 'dashboard', to: 'dashboard#index'
       mount Sidekiq::Web => '/sidekiq'
