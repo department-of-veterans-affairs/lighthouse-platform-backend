@@ -54,7 +54,7 @@ class Admin::Api::V0::ApisController < ApplicationController
     else
       api.assign_attributes manage_params
     end
-    
+
     api
   end
 
