@@ -16,11 +16,6 @@ class Api < ApplicationRecord
   end
 
   def api_ref_attributes=(api_ref_attributes)
-    ref = ApiRef.find_or_create_by(name: api_ref_attributes[:name])
-    if ref.persisted?
-      self.api_ref = ref
-    else
-      ref.update_attributes(name: api_ref_attributes[:name], api: self)
-    end
+    api_ref = ApiRef.find_or_create_by(name: api_ref_attributes[:name])
   end
 end

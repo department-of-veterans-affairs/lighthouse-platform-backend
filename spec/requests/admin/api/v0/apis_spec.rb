@@ -4,18 +4,9 @@ require 'rails_helper'
 
 RSpec.describe 'Admin::Api::V0::Apis', type: :request do
   describe 'Creating an API' do
-    # rubocop:disable Metrics/MethodLength
     def valid_params
       {
-        api: {
-          name: 'claims',
-          auth_method: 'key_auth',
-          environment: 'sandbox',
-          open_api_url: 'https://sandbox-api.va.gov/services/claims/docs/v0/api',
-          base_path: '/services/claims/v0',
-          service_ref: 'somerandom-guid',
-          api_ref: 'claims'
-        }
+        api: { name: 'claims' }
       }
     end
 
@@ -23,21 +14,15 @@ RSpec.describe 'Admin::Api::V0::Apis', type: :request do
       [{
         api: {
           name: 'claims',
-          auth_method: 'key_auth',
-          environment: 'sandbox',
-          open_api_url: 'https://sandbox-api.va.gov/services/claims/docs/v0/api',
-          base_path: '/services/claims/v0',
-          service_ref: 'somerandom-guid',
-          api_ref: 'claims'
+          acl: 'claimville'
         }
       }]
     end
-    # rubocop:enable Metrics/MethodLength
 
     def invalid_params
       {
         api: {
-          name: 'claims'
+          not_a_name: 'claims'
         }
       }
     end
@@ -71,7 +56,7 @@ RSpec.describe 'Admin::Api::V0::Apis', type: :request do
 
   describe 'Deleting APIs' do
     it 'discards all apis' do
-      FactoryBot.create(:api, name: 'Claims API', api_ref: 'claims')
+      FactoryBot.create(:api, name: 'Claims API')
 
       post '/platform-backend/admin/api/v0/apis/destroy_all'
       expect(response.status).to eq(302)
