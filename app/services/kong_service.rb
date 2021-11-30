@@ -16,11 +16,42 @@ class KongService
   end
 
   def seed_kong
-    seed_kong_consumers
+    # rework this to match dynamo
+    unless plugins_exist?
+      plugin_add_key_auth
+      plugin_add_acl
+    end
+    seed_kong_consumers unless consumers_exist?
   end
 
   def construct_consumer_list
     %w[lighthouse-consumer kong-consumer]
+  end
+
+  def plugins_exist?
+    uri = URI.parse("#{@kong_elb}/plugins")
+    req = Net::HTTP::Get.new(uri)
+    request(req, uri)['data'].count.positive?
+  end
+
+  def consumers_exist?
+    uri = URI.parse("#{@kong_elb}/consumers")
+    req = Net::HTTP::Get.new(uri)
+    request(req, uri)['data'].count.positive?
+  end
+
+  def plugin_add_key_auth
+    uri = URI.parse("#{@kong_elb}/plugins")
+    req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
+    req.body = { name: 'key-auth', config: { key_names: ['apikey'] } }.to_json
+    request(req, uri)
+  end
+
+  def plugin_add_acl
+    uri = URI.parse("#{@kong_elb}/plugins")
+    req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
+    req.body = { name: 'acl', config: { allow: ['local_access'] } }.to_json
+    request(req, uri)
   end
 
   def seed_kong_consumers
@@ -30,6 +61,13 @@ class KongService
       req.body = { username: consumer }.to_json
       request(req, uri)
     end
+  end
+
+  def create_consumer(consumer_name)
+    uri = URI.parse("#{@kong_elb}/consumers")
+    req = Net::HTTP::Post.new(uri)
+    req.set_form_data({ username: consumer_name })
+    request(req, uri)
   end
 
   def list_consumers(query = nil)
@@ -63,7 +101,54 @@ class KongService
     request(req, uri)
   end
 
+  def add_acl(consumer, group)
+    uri = URI.parse("#{@kong_elb}/consumers/#{consumer}/acls")
+    req = Net::HTTP::Post.new(uri)
+    req.set_form_data({ group: group })
+    request(req, uri)
+  end
+
+  def get_acls(consumer)
+    uri = URI.parse("#{@kong_elb}/consumers/#{consumer}/acls")
+    req = Net::HTTP::Get.new(uri)
+    request(req, uri)
+  end
+
+  def create_key(consumer)
+    uri = URI.parse("#{@kong_elb}/consumers/#{consumer}/key-auth")
+    req = Net::HTTP::Post.new(uri)
+    request(req, uri)
+  end
+
+  def consumer_signup(signup_params)
+    organization, last_name, apis_list = signup_params.values_at(:organization, :lastName, :apis)
+    key_auth, _oauth = ApiService.new.fetch_auth_types apis_list
+
+    if key_auth.length.positive?
+      kong_id, kong_consumer_name, kong_api_key = handle_key_auth_flow(organization, last_name, key_auth)
+    end
+
+    { kong_id: kong_id, kongUsername: kong_consumer_name, token: kong_api_key }
+  end
+
   private
+
+  def generate_consumer_name(organization, last_name)
+    # Appending LPB- during test phase to define consumers from LPB
+    "LPB-#{"#{organization}#{last_name}".gsub(/\W/, '')}"
+  end
+
+  def handle_key_auth_flow(org, last_name, key_auth)
+    kong_consumer_name = generate_consumer_name(org, last_name)
+    kong_id = get_consumer(kong_consumer_name)['id']
+    kong_id = create_consumer(kong_consumer_name)['id'] if kong_id.nil?
+    current_acls = get_acls(kong_id)['data'].collect { |acl| acl['group'] }
+    key_auth.map do |acl|
+      add_acl(kong_id, acl) if current_acls.exclude? acl
+    end
+    kong_api_key = create_key(kong_id)['key']
+    [kong_id, kong_consumer_name, kong_api_key]
+  end
 
   def request(req, uri)
     req.basic_auth 'kong_admin', Figaro.env.kong_password if Figaro.env.kong_password.present?
@@ -71,8 +156,8 @@ class KongService
       http.request(req)
     end
 
-    response.tap { |res| res['ok'] = res.is_a? Net::HTTPSuccess }
-    raise 'Failed to retrieve kong consumers list' unless response['ok']
+    # response.tap { |res| res['ok'] = res.is_a? Net::HTTPSuccess }
+    # raise 'Failed to retrieve kong consumers list' unless response['ok']
 
     JSON.parse(response.body) unless response.body.nil?
   end

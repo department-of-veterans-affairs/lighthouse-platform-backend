@@ -15,6 +15,21 @@ class ConsumersController < ApplicationController
     render json: UserSerializer.render(@user)
   end
 
+  def apply
+    @user = User.find_or_initialize_by(email: signup_params[:email])
+
+    kong_consumer = generate_consumer_in_kong
+
+    prebuild_user = build_user_from_signup
+    prebuild_user[:consumer_attributes][:sandbox_gateway_ref] = kong_consumer[:kong_id] if kong_consumer.present?
+    @user.persisted? ? update_consumer(prebuild_user) : create_consumer(prebuild_user)
+
+    return render json: { error: @user.errors.full_messages }, status: :unprocessable_entity unless @user.errors.empty?
+
+    user_for_serializer = signup_params.to_h.merge(kong_consumer)
+    render json: ConsumerApplySerializer.render(user_for_serializer)
+  end
+
   private
 
   def user_params
@@ -35,12 +50,50 @@ class ConsumersController < ApplicationController
     )
   end
 
-  def update_consumer
-    @user.consumer.update(user_params[:consumer_attributes])
+  def signup_params
+    params.permit(
+      :apis,
+      :description,
+      :email,
+      :firstName,
+      :lastName,
+      :oAuthApplicationType,
+      :oAuthRedirectURI,
+      :organization,
+      :termsOfService
+    )
   end
 
-  def create_consumer
-    @user.assign_attributes(user_params)
+  def build_user_from_signup
+    p = signup_params
+    {
+      email: p[:email],
+      first_name: p[:firstName],
+      last_name: p[:lastName],
+      consumer_attributes: build_consumer_from_signup
+    }
+  end
+
+  def build_consumer_from_signup
+    p = signup_params
+    {
+      description: p[:description],
+      organization: p[:organization],
+      apis_list: p[:apis],
+      tos_accepted: p[:termsOfService]
+    }
+  end
+
+  def generate_consumer_in_kong
+    KongService.new.consumer_signup(signup_params)
+  end
+
+  def update_consumer(params = user_params)
+    @user.consumer.update(params[:consumer_attributes])
+  end
+
+  def create_consumer(params = user_params)
+    @user.assign_attributes(params)
     @user.save
   end
 end
