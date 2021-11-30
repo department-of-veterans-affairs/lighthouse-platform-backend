@@ -18,15 +18,17 @@ class ConsumersController < ApplicationController
   def apply
     @user = User.find_or_initialize_by(email: signup_params[:email])
 
-    kong_consumer = generate_consumer_in_kong
-
+    key_auth, _oauth = ApiService.new.fetch_auth_types signup_params[:apis]
+    kong_consumer = generate_consumer_in_kong(key_auth) if key_auth.length.positive?
     prebuild_user = build_user_from_signup
     prebuild_user[:consumer_attributes][:sandbox_gateway_ref] = kong_consumer[:kong_id] if kong_consumer.present?
     @user.persisted? ? update_consumer(prebuild_user) : create_consumer(prebuild_user)
 
     return render json: { error: @user.errors.full_messages }, status: :unprocessable_entity unless @user.errors.empty?
 
-    user_for_serializer = signup_params.to_h.merge(kong_consumer)
+    to_serialize = kong_consumer.presence ? kong_consumer : nil
+    user_for_serializer = generate_serializable_user(to_serialize)
+
     render json: ConsumerApplySerializer.render(user_for_serializer)
   end
 
@@ -84,8 +86,12 @@ class ConsumersController < ApplicationController
     }
   end
 
-  def generate_consumer_in_kong
-    KongService.new.consumer_signup(signup_params)
+  def generate_serializable_user(to_merge)
+    signup_params.to_h.merge(to_merge)
+  end
+
+  def generate_consumer_in_kong(key_auth)
+    KongService.new.consumer_signup(signup_params, key_auth)
   end
 
   def update_consumer(params = user_params)

@@ -120,9 +120,8 @@ class KongService
     request(req, uri)
   end
 
-  def consumer_signup(signup_params)
-    organization, last_name, apis_list = signup_params.values_at(:organization, :lastName, :apis)
-    key_auth, _oauth = ApiService.new.fetch_auth_types apis_list
+  def consumer_signup(signup_params, key_auth)
+    organization, last_name = signup_params.values_at(:organization, :lastName)
 
     if key_auth.length.positive?
       kong_id, kong_consumer_name, kong_api_key = handle_key_auth_flow(organization, last_name, key_auth)
