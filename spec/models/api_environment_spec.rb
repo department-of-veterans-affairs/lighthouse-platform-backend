@@ -3,5 +3,32 @@
 require 'rails_helper'
 
 RSpec.describe ApiEnvironment, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject do
+    ApiEnvironment.new(api_id: api.id,
+                       environment_id: environment.id,
+                       metadata_url: 'http://outofthisworldsuits.com')
+  end
+
+  let :api do
+    create(:api,
+           name: 'Space Suit Vendors')
+  end
+
+  let :environment do
+    create(:environment,
+           name: 'TheMoon')
+  end
+
+  describe 'tests a valid ApiEnvironment model' do
+    it 'is valid' do
+      expect(subject).to be_valid
+    end
+  end
+
+  describe 'tests an incorrect input' do
+    it 'will be invalid without an api_id' do
+      subject.api_id = nil
+      expect(subject).not_to be_valid
+    end
+  end
 end
