@@ -16,6 +16,6 @@ class Api < ApplicationRecord
   end
 
   def api_ref_attributes=(api_ref_attributes)
-    ApiRef.find_or_create_by(name: api_ref_attributes[:name])
+    ApiRef.find_or_create_by(name: api_ref_attributes[:name], api_id: self.id)
   end
 end
