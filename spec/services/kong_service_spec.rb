@@ -5,6 +5,12 @@ require 'rails_helper'
 RSpec.describe KongService do
   let(:consumer_name) { 'kong-consumer' }
 
+  before do
+    KongService.new.seed_kong
+  rescue RuntimeError
+    # assume valid state
+  end
+
   describe '.intialize' do
     let(:subject) { KongService.new }
   end

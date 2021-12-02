@@ -16,28 +16,13 @@ class KongService
   end
 
   def seed_kong
-    # rework this to match dynamo
-    unless plugins_exist?
-      plugin_add_key_auth
-      plugin_add_acl
-    end
-    seed_kong_consumers unless consumers_exist?
+    plugin_add_key_auth
+    plugin_add_acl
+    seed_kong_consumers
   end
 
   def construct_consumer_list
     %w[lighthouse-consumer kong-consumer]
-  end
-
-  def plugins_exist?
-    uri = URI.parse("#{@kong_elb}/plugins")
-    req = Net::HTTP::Get.new(uri)
-    request(req, uri)['data'].count.positive?
-  end
-
-  def consumers_exist?
-    uri = URI.parse("#{@kong_elb}/consumers")
-    req = Net::HTTP::Get.new(uri)
-    request(req, uri)['data'].count.positive?
   end
 
   def plugin_add_key_auth
@@ -155,8 +140,8 @@ class KongService
       http.request(req)
     end
 
-    # response.tap { |res| res['ok'] = res.is_a? Net::HTTPSuccess }
-    # raise 'Failed to retrieve kong consumers list' unless response['ok']
+    response.tap { |res| res['ok'] = res.is_a? Net::HTTPSuccess }
+    raise 'Failed to retrieve kong consumers list' unless response['ok']
 
     JSON.parse(response.body) unless response.body.nil?
   end
