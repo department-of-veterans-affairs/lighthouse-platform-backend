@@ -88,6 +88,8 @@ ActiveRecord::Schema.define(version: 2021_11_18_234650) do
     t.string "first_name"
     t.string "last_name"
     t.string "role", default: "user"
+    t.string "provider", limit: 50, default: "", null: false
+    t.string "uid", limit: 50, default: "", null: false
     t.datetime "discarded_at"
     t.string "provider", limit: 50, default: "", null: false
     t.string "uid", limit: 50, default: "", null: false
