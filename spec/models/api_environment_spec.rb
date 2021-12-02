@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ApiEnvironment, type: :model do
   subject do
     ApiEnvironment.new(api_id: api.id,
-                       environment_id: environment.id,
+                       environments_attributes: { name: 'TheMoon' },
                        metadata_url: 'http://outofthisworldsuits.com')
   end
 
@@ -14,14 +14,10 @@ RSpec.describe ApiEnvironment, type: :model do
            name: 'Space Suit Vendors')
   end
 
-  let :environment do
-    create(:environment,
-           name: 'TheMoon')
-  end
-
   describe 'tests a valid ApiEnvironment model' do
     it 'is valid' do
       expect(subject).to be_valid
+      expect(subject.environment).to be_valid
     end
   end
 

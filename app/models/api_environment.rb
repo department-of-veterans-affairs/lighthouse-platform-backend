@@ -5,6 +5,6 @@ class ApiEnvironment < ApplicationRecord
   belongs_to :environment
 
   def environments_attributes=(environments_attributes)
-    environment << ApiEnvironment.find_or_create_by(name: environments_attributes[:name])
+    self.environment = Environment.find_or_create_by(name: environments_attributes[:name])
   end
 end
