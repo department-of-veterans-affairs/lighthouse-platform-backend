@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe KongService do
   let(:consumer_name) { 'kong-consumer' }
 
-  before do
+  before(:all) do
     KongService.new.seed_kong
   rescue RuntimeError
     # assume valid state
