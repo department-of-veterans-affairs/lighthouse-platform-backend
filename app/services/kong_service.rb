@@ -118,7 +118,7 @@ class KongService
   private
 
   def generate_consumer_name(organization, last_name)
-    # Appending LPB- during test phase to define consumers from LPB
+    # Prepend LPB- during test phase to define consumers from LPB
     "LPB-#{"#{organization}#{last_name}".gsub(/\W/, '')}"
   end
 

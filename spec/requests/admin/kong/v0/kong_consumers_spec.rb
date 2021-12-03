@@ -17,10 +17,13 @@ RSpec.describe 'Admin::Kong::V0::KongConsumersController', type: :request do
     let(:kong_consumer) { 'lighthouse-consumer' }
 
     before do
-      get "/platform-backend/admin/kong/v0/kong_consumers/#{kong_consumer}"
+      KongService.new.seed_kong
+    rescue RuntimeError
+      # assume valid state
     end
 
     it 'returns a 200 status' do
+      get "/platform-backend/admin/kong/v0/kong_consumers/#{kong_consumer}"
       expect(response).to have_http_status(:success)
     end
   end
