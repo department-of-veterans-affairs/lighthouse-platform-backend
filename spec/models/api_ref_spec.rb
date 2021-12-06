@@ -9,8 +9,8 @@ RSpec.describe ApiRef, type: :model do
   end
 
   let :api do
-    create(:api,
-           name: 'Stapler Appeals')
+    FactoryBot.create(:api,
+                      name: 'Stapler Appeals')
   end
 
   describe 'tests a valid ApiRef model' do

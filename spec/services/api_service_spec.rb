@@ -12,12 +12,12 @@ RSpec.describe ApiService do
     oauth_ref
   end
 
-  let(:benefits_api) { create(:api, name: 'Benefits', acl: 'benefits') }
-  let(:benefits_ref) { create(:api_ref, name: 'benefits', api_id: benefits_api.id) }
-  let(:claims_api) { create(:api, name: 'Claims', acl: 'claims') }
-  let(:claims_ref) { create(:api_ref, name: 'claims', api_id: claims_api.id) }
-  let(:oauth_api) { create(:api, name: 'Oauth', acl: '') }
-  let(:oauth_ref) { create(:api_ref, name: 'oauth', api_id: oauth_api.id) }
+  let(:benefits_api) { FactoryBot.create(:api, name: 'Benefits', acl: 'benefits') }
+  let(:benefits_ref) { FactoryBot.create(:api_ref, name: 'benefits', api_id: benefits_api.id) }
+  let(:claims_api) { FactoryBot.create(:api, name: 'Claims', acl: 'claims') }
+  let(:claims_ref) { FactoryBot.create(:api_ref, name: 'claims', api_id: claims_api.id) }
+  let(:oauth_api) { FactoryBot.create(:api, name: 'Oauth', acl: '') }
+  let(:oauth_ref) { FactoryBot.create(:api_ref, name: 'oauth', api_id: oauth_api.id) }
 
   describe '.intialize' do
     let(:subject) { ApiService.new }

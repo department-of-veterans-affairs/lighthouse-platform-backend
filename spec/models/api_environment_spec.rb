@@ -10,8 +10,8 @@ RSpec.describe ApiEnvironment, type: :model do
   end
 
   let :api do
-    create(:api,
-           name: 'Space Suit Vendors')
+    FactoryBot.create(:api,
+                      name: 'Space Suit Vendors')
   end
 
   describe 'tests a valid ApiEnvironment model' do

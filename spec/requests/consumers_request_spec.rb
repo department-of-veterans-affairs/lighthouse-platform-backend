@@ -22,10 +22,10 @@ describe ConsumersController, type: :request do
     }
   end
 
-  let(:claims_api) { create(:api, name: 'Claims API', acl: 'claims_acl') }
-  let(:forms_api) { create(:api, name: 'Forms API', acl: 'vaForms_acl') }
-  let(:claims_api_ref) { create(:api_ref, name: 'claims', api_id: claims_api.id) }
-  let(:forms_api_ref) { create(:api_ref, name: 'vaForms', api_id: forms_api.id) }
+  let(:claims_api) { FactoryBot.create(:api, name: 'Claims API', acl: 'claims_acl') }
+  let(:forms_api) { FactoryBot.create(:api, name: 'Forms API', acl: 'vaForms_acl') }
+  let(:claims_api_ref) { FactoryBot.create(:api_ref, name: 'claims', api_id: claims_api.id) }
+  let(:forms_api_ref) { FactoryBot.create(:api_ref, name: 'vaForms', api_id: forms_api.id) }
 
   describe 'creating a consumer' do
     before do
@@ -78,8 +78,8 @@ describe ConsumersController, type: :request do
   end
 
   describe 'Updating a consumer' do
-    let(:appeals_api) { create(:api, name: 'Appeals API', acl: 'decision_reviews') }
-    let(:appeals_api_ref) { create(:api_ref, name: 'decision_reviews', api_id: appeals_api.id) }
+    let(:appeals_api) { FactoryBot.create(:api, name: 'Appeals API', acl: 'decision_reviews') }
+    let(:appeals_api_ref) { FactoryBot.create(:api_ref, name: 'decision_reviews', api_id: appeals_api.id) }
     let :update_params do
       {
         user: {
@@ -97,15 +97,15 @@ describe ConsumersController, type: :request do
     end
 
     it 'updates a users APIs' do
-      user = create(:user, email: 'origami@oregano.com')
-      consumer = create(:consumer, :with_apis, user_id: user.id)
+      user = FactoryBot.create(:user, email: 'origami@oregano.com')
+      consumer = FactoryBot.create(:consumer, :with_apis, user_id: user.id)
       post base, params: update_params
       expect(consumer.apis.map(&:name).sort).to eq(['Appeals API', 'Claims API', 'Forms API'])
     end
 
     it 'does not duplicate assignments passed in again' do
-      user = create(:user, email: 'origami@oregano.com')
-      consumer = create(:consumer, :with_apis, user_id: user.id)
+      user = FactoryBot.create(:user, email: 'origami@oregano.com')
+      consumer = FactoryBot.create(:consumer, :with_apis, user_id: user.id)
       valid_params[:user][:consumer_attributes][:apis_list] = 'va_forms'
       post base, params: valid_params
       expect(consumer.apis.map(&:name).sort).to eq(['Claims API', 'Forms API'])
