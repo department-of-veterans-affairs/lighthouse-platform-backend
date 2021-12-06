@@ -7,13 +7,13 @@ FactoryBot.define do
 
     trait :with_claims_api_ref do
       after(:create) do |api, _|
-        api.api_ref = FactoryBot.create(:api_ref, name: 'claims')
+        FactoryBot.create(:api_ref, name: 'claims', api_id: api.id)
       end
     end
 
     trait :with_forms_api_ref do
       after(:create) do |api, _|
-        api.api_ref = FactoryBot.create(:api_ref, name: 'va_forms')
+        FactoryBot.create(:api_ref, name: 'va_forms', api_id: api.id)
       end
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApiRef < ApplicationRecord
-  has_one :api, dependent: :destroy
+  belongs_to :api
 
   validates :name, presence: true
 end
