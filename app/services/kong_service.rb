@@ -15,6 +15,7 @@ class KongService
     @kong_elb = Figaro.env.kong_elb || 'http://localhost:4001'
   end
 
+  # seeds local gateway for testing purposes
   def seed_kong
     plugin_add_key_auth
     plugin_add_acl
@@ -47,6 +48,7 @@ class KongService
       request(req, uri)
     end
   end
+  # end seeds
 
   def create_consumer(consumer_name)
     uri = URI.parse("#{@kong_elb}/consumers")
@@ -106,11 +108,11 @@ class KongService
   end
 
   def consumer_signup(signup_params, key_auth)
+    raise 'Missing key auth APIs' if key_auth.empty?
+
     organization, last_name = signup_params.values_at(:organization, :lastName)
 
-    if key_auth.length.positive?
-      kong_id, kong_consumer_name, kong_api_key = handle_key_auth_flow(organization, last_name, key_auth)
-    end
+    kong_id, kong_consumer_name, kong_api_key = handle_key_auth_flow(organization, last_name, key_auth)
 
     { kong_id: kong_id, kongUsername: kong_consumer_name, token: kong_api_key }
   end
@@ -122,10 +124,18 @@ class KongService
     "LPB-#{"#{organization}#{last_name}".gsub(/\W/, '')}"
   end
 
+  def get_or_create_consumer(consumer_name)
+    begin
+      return get_consumer(consumer_name)['id']
+    rescue RuntimeError
+      # continue if consumer not found
+    end
+    create_consumer(consumer_name)['id']
+  end
+
   def handle_key_auth_flow(org, last_name, key_auth)
     kong_consumer_name = generate_consumer_name(org, last_name)
-    kong_id = get_consumer(kong_consumer_name)['id']
-    kong_id = create_consumer(kong_consumer_name)['id'] if kong_id.nil?
+    kong_id = get_or_create_consumer(kong_consumer_name)
     current_acls = get_acls(kong_id)['data'].collect { |acl| acl['group'] }
     key_auth.map do |acl|
       add_acl(kong_id, acl) if current_acls.exclude? acl
