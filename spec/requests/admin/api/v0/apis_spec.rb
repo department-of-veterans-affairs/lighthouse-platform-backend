@@ -50,7 +50,7 @@ RSpec.describe 'Admin::Api::V0::Apis', type: :request do
       expect do
         file = fixture_file_upload('spec/support/apis_list.csv', 'text/csv')
         post '/platform-backend/admin/api/v0/apis/bulk_upload', params: { file: file }
-      end.to change(Api, :count).by(1)
+      end.to change(Api, :count).by(2)
     end
   end
 

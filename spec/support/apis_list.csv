@@ -1,2 +1,3 @@
 api_name,environment,metadata_url,api_ref,acl_ref
 fancy-service,dev,https://dev-api.va.gov/services/fancy-service/docs/v0/api,fancy,phan-sea
+ohauth-service,dev,https://dev-api.va.gov/services/ohauth-possibly/docs/v0/api,ohAuth
