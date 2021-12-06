@@ -18,18 +18,16 @@ class ConsumersController < ApplicationController
   def apply
     @user = User.find_or_initialize_by(email: signup_params[:email])
 
-    key_auth, _oauth = ApiService.new.fetch_auth_types signup_params[:apis]
-    kong_consumer = generate_consumer_in_kong(key_auth) if key_auth.length.positive?
-    prebuild_user = build_user_from_signup
-    prebuild_user[:consumer_attributes][:sandbox_gateway_ref] = kong_consumer[:kong_id] if kong_consumer.present?
-    @user.persisted? ? update_consumer(prebuild_user) : create_consumer(prebuild_user)
+    key_auth, _oauth = fetch_auth_lists
+    kong_consumer = generate_consumer_in_kong(key_auth) unless key_auth.empty?
+    build_user_from_signup
+    add_user_attributes(kong_consumer)
+
+    @user.persisted? ? update_consumer(@prebuilt_user) : create_consumer(@prebuilt_user)
 
     return render json: { error: @user.errors.full_messages }, status: :unprocessable_entity unless @user.errors.empty?
 
-    to_serialize = kong_consumer.presence ? kong_consumer : nil
-    user_for_serializer = generate_serializable_user(to_serialize)
-
-    render json: ConsumerApplySerializer.render(user_for_serializer)
+    render json: ConsumerApplySerializer.render(@user_for_serializer)
   end
 
   private
@@ -68,7 +66,7 @@ class ConsumersController < ApplicationController
 
   def build_user_from_signup
     p = signup_params
-    {
+    @prebuilt_user = {
       email: p[:email],
       first_name: p[:firstName],
       last_name: p[:lastName],
@@ -86,12 +84,19 @@ class ConsumersController < ApplicationController
     }
   end
 
-  def generate_serializable_user(to_merge)
-    signup_params.to_h.merge(to_merge)
+  def add_user_attributes(kong_consumer = nil)
+    if kong_consumer.present?
+      @prebuilt_user[:consumer_attributes][:sandbox_gateway_ref] = kong_consumer[:kong_id]
+      @user_for_serializer = signup_params.to_h.merge(kong_consumer)
+    end
   end
 
   def generate_consumer_in_kong(key_auth)
     KongService.new.consumer_signup(signup_params, key_auth)
+  end
+
+  def fetch_auth_lists
+    ApiService.new.fetch_auth_types signup_params[:apis]
   end
 
   def update_consumer(params = user_params)
