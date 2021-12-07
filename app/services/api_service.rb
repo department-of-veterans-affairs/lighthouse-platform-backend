@@ -3,7 +3,7 @@
 class ApiService
   def gather_apis(api_list)
     applied_for_apis = api_list.split(',')
-    Api.all.filter do |api|
+    Api.kept.filter do |api|
       api.api_ref.present? && applied_for_apis.include?(api.api_ref.name)
     end
   end
