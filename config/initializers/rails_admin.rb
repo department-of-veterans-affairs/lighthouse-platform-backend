@@ -10,7 +10,7 @@ RailsAdmin.config do |config|
   # config.current_user_method(&:current_user)
 
   config.authorize_with do
-    redirect_to main_app.root_path unless current_user.role == 'admin'
+    redirect_to main_app.root_path unless current_user.present? && current_user.role == 'admin'
   end
 
   ## == CancanCan ==
