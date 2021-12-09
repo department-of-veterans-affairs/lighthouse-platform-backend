@@ -1,5 +1,6 @@
 <div class="vads-u-padding-y--5 documentation">
   <%= link_to "Sign out here", destroy_user_session_path, class: "usa-button", method: :delete %>
+  <%= link_to "Rails Admin", rails_admin_path, class: "usa-button" %>
 
   <h2>
     <%= "#{@apis.count} APIs" %>
