@@ -4,6 +4,12 @@ require 'rails_helper'
 
 RSpec.describe KongService do
   describe 'importing consumers from dynamo and Kong' do
+    let(:facilities_api) { FactoryBot.create(:api, name: 'Facilities', acl: 'va_facilities') }
+
+    before do
+      FactoryBot.create(:api_ref, name: 'facilities', api_id: facilities_api.id)
+    end
+
     it 'imports the the users' do
       allow_any_instance_of(KongService).to receive(:list_all_consumers).and_return(kong_mock_response)
       allow_any_instance_of(DynamoService).to receive(:fetch_dynamo_db).and_return(dynamo_mock_response)

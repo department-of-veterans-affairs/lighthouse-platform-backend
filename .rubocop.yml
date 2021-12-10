@@ -85,6 +85,7 @@ Metrics/MethodLength:
     - 'spec/services/dynamo_service_spec.rb'
   IgnoredMethods:
     - 'user_params'
+    - 'signup_params'
     - 'bulk_upload'
     - 'construct_import'
     - 'fetch_dynamo_db'

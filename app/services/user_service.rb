@@ -6,7 +6,7 @@ class UserService
     user = User.find_or_initialize_by(email: user_params[:email].downcase)
     user.undiscard if user.discarded?
     @api_list = if user.consumer.present?
-                  user.consumer.apis.map(&:api_ref)
+                  user.consumer.apis.collect { |api| api.api_ref.name }
                 else
                   []
                 end
@@ -25,7 +25,8 @@ class UserService
     apis.each do |api_name|
       next if api_name.blank?
 
-      api = Api.find_by(api_ref: api_name.strip, environment: 'sandbox')
+      api_id = ApiRef.find_by(name: api_name.strip)[:api_id]
+      api = Api.find(api_id)
       consumer.apis << api if api.present?
       consumer.save
     end

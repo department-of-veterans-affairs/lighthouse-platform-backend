@@ -45,15 +45,16 @@ RSpec.describe UserService do
       }
     }
   end
+  let(:facilities_api) { FactoryBot.create(:api, name: 'facilities', acl: 'facilities') }
+  let(:facilities_ref) { FactoryBot.create(:api_ref, name: 'facilities', api_id: facilities_api.id) }
 
   before do
     user
     consumer
     gateway_ref
     okta_ref
-    FactoryBot.create(:api, name: 'claims', api_ref: 'claims')
-    FactoryBot.create(:api, name: 'va_forms', api_ref: 'va_forms')
-    FactoryBot.create(:api, name: 'facilities', api_ref: 'facilities')
+    facilities_api
+    facilities_ref
   end
 
   describe 'constructs a user' do
@@ -88,14 +89,14 @@ RSpec.describe UserService do
       consumer_params[:user][:consumer_attributes][:apis_list] = 'va_forms,facilities'
       UserService.new.construct_import(consumer_params)
       reloaded = User.find_by(email: consumer_params[:user][:email])
-      expect(reloaded.consumer.apis.map(&:api_ref).sort).to eq(%w[claims facilities va_forms])
+      expect(reloaded.consumer.apis.collect { |api| api.api_ref.name }.sort).to eq(%w[claims facilities va_forms])
     end
 
     it 'apis are not removed on a new signup with same email' do
       consumer_params[:user][:consumer_attributes][:apis_list] = 'va_forms'
       UserService.new.construct_import(consumer_params)
       reloaded = User.find_by(email: consumer_params[:user][:email])
-      expect(reloaded.consumer.apis.map(&:api_ref).sort).to eq(%w[claims va_forms])
+      expect(reloaded.consumer.apis.collect { |api| api.api_ref.name }.sort).to eq(%w[claims va_forms])
     end
 
     it 'does not reset the kong id if new oauth only signup' do

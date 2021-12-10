@@ -10,13 +10,10 @@ task load_apis: :environment do |_, args|
   apis_list = apis_list.map do |api|
     {
       api: {
-        name:	api.first.last,
-        version: api['version'].to_i,
-        auth_method: api['auth_method'],
-        environment: api['environment'],
-        open_api_url: api['open_api_url'],
-        base_path: api['base_path'],
-        service_ref: api['service_ref'],
+        name:	api['api_name'],
+        acl: api['acl_ref'].to_i,
+        metadata_url: api['metadata_url'],
+        env_name: api['environment'],
         api_ref: api['api_ref']
       }
     }

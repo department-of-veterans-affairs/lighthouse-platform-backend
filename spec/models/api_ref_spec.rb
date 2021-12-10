@@ -2,23 +2,24 @@
 
 require 'rails_helper'
 
-RSpec.describe Api, type: :model do
+RSpec.describe ApiRef, type: :model do
   subject do
-    Api.new(name: 'Appeals Status API',
-            acl: 'lca')
+    ApiRef.new(name: 'swingline_staplers',
+               api_id: api.id)
   end
 
-  describe 'tests a valid Api model' do
+  let :api do
+    FactoryBot.create(:api,
+                      name: 'Stapler Appeals')
+  end
+
+  describe 'tests a valid ApiRef model' do
     it 'is valid' do
       expect(subject).to be_valid
     end
 
     it 'requires a name to be valid' do
-      expect(subject.name).to eq('Appeals Status API')
-    end
-
-    it 'requires an acl to be valid' do
-      expect(subject.acl).to eq('lca')
+      expect(subject.name).to eq('swingline_staplers')
     end
   end
 

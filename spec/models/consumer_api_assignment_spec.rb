@@ -10,17 +10,12 @@ RSpec.describe ConsumerApiAssignment, type: :model do
   end
 
   let(:current_time) { DateTime.now }
-  let(:user) { create(:user) }
-  let(:consumer) { create(:consumer, user: user) }
+  let(:user) { FactoryBot.create(:user) }
+  let(:consumer) { FactoryBot.create(:consumer, user: user) }
   let :api do
-    create(:api,
-           name: 'Appeals Status API',
-           auth_method: 'key_auth',
-           environment: 'sandbox',
-           open_api_url: '/services/appeals/docs/v0/api',
-           base_path: '/services/appeals/v0/appeals',
-           service_ref: 's3Rv1c3-r3f',
-           api_ref: 'appeals')
+    FactoryBot.create(:api,
+                      name: 'Appeals Status API',
+                      acl: 'appeals_status_api')
   end
 
   describe 'creates a valid ConsumerApiAssignment' do

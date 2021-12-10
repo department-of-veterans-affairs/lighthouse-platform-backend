@@ -98,6 +98,7 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.16)
     bindex (0.8.1)
+    blueprinter (0.25.3)
     bootsnap (1.7.5)
       msgpack (~> 1.0)
     brakeman (5.0.4)
@@ -186,8 +187,6 @@ GEM
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
     json (2.5.1)
-    jsonapi-serializer (2.2.0)
-      activesupport (>= 4.2)
     jwt (2.2.3)
     kaminari (1.2.1)
       activesupport (>= 4.1.0)
@@ -458,6 +457,7 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk-dynamodb (~> 1.62)
+  blueprinter
   bootsnap (>= 1.4.4)
   brakeman
   bullet
@@ -471,7 +471,6 @@ DEPENDENCIES
   faker
   figaro
   jbuilder (~> 2.7)
-  jsonapi-serializer
   listen (~> 3.3)
   okcomputer
   oktakit!

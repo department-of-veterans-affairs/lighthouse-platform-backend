@@ -22,13 +22,17 @@ describe ConsumersController, type: :request do
     }
   end
 
-  describe 'creating a consumer' do
-    let(:claims_api) { FactoryBot.create(:api, name: 'Claims API', api_ref: 'claims') }
-    let(:forms_api) { FactoryBot.create(:api, name: 'Forms API', api_ref: 'vaForms') }
+  let(:claims_api) { FactoryBot.create(:api, name: 'Claims API', acl: 'claims_acl') }
+  let(:forms_api) { FactoryBot.create(:api, name: 'Forms API', acl: 'vaForms_acl') }
+  let(:claims_api_ref) { FactoryBot.create(:api_ref, name: 'claims', api_id: claims_api.id) }
+  let(:forms_api_ref) { FactoryBot.create(:api_ref, name: 'vaForms', api_id: forms_api.id) }
 
+  describe 'creating a consumer' do
     before do
-      forms_api
       claims_api
+      forms_api
+      claims_api_ref
+      forms_api_ref
     end
 
     it 'creates the user' do
@@ -56,11 +60,26 @@ describe ConsumersController, type: :request do
       expect(parsed).to have_key('error')
       expect(parsed['error'].first).to start_with('First name')
     end
+
+    it 'creates a valid tos_accepted_at' do
+      post base, params: valid_params
+      expect(User.last.consumer.tos_accepted_at).to be < DateTime.now
+      expect(User.last.consumer.tos_accepted_at).to be_a(ActiveSupport::TimeWithZone)
+    end
+
+    it 'raise an exception if TOS is not accepted' do
+      valid_params[:user][:email] = 'new_user@user_of_the_new.com'
+      valid_params[:user][:consumer_attributes][:tos_accepted] = false
+      post base, params: valid_params
+      parsed = JSON.parse response.body
+      expect(parsed).to have_key('error')
+      expect(parsed['error'].first).to eq('Consumer tos accepted is invalid.')
+    end
   end
 
   describe 'Updating a consumer' do
-    let(:appeals_api) { FactoryBot.create(:api, name: 'Appeals API', api_ref: 'decision_reviews') }
-    let(:prod_api) { FactoryBot.create(:api, name: 'Production API', api_ref: 'catch_prod', environment: 'prod') }
+    let(:appeals_api) { FactoryBot.create(:api, name: 'Appeals API', acl: 'decision_reviews') }
+    let(:appeals_api_ref) { FactoryBot.create(:api_ref, name: 'decision_reviews', api_id: appeals_api.id) }
     let :update_params do
       {
         user: {
@@ -74,7 +93,7 @@ describe ConsumersController, type: :request do
 
     before do
       appeals_api
-      prod_api
+      appeals_api_ref
     end
 
     it 'updates a users APIs' do
@@ -99,30 +118,46 @@ describe ConsumersController, type: :request do
       expect(parsed).to have_key('error')
       expect(parsed['error'].first).to start_with('Consumer description')
     end
-
-    it 'does not locate production environment apis from the apply page' do
-      user = FactoryBot.create(:user, email: 'origami@oregano.com')
-      consumer = FactoryBot.create(:consumer, :with_apis, user_id: user.id)
-      valid_params[:user][:consumer_attributes][:apis_list] = 'catch_prod'
-      post base, params: valid_params
-      expect(consumer.apis.map(&:name).sort).to eq(['Claims API', 'Forms API'])
-    end
   end
 
-  describe 'validates TOS has been accepted' do
-    it 'creates a valid tos_accepted_at' do
-      post base, params: valid_params
-      expect(User.last.consumer.tos_accepted_at).to be < DateTime.now
-      expect(User.last.consumer.tos_accepted_at).to be_a(ActiveSupport::TimeWithZone)
+  describe 'accepts signups from dev portal' do
+    apply_base = '/platform-backend/apply'
+
+    let :signup_params do
+      {
+        apis: 'claims,vaForms',
+        description: 'Signing up for Patti',
+        email: 'doug@douglas.funnie.org',
+        firstName: 'Douglas',
+        lastName: 'Funnie',
+        oAuthApplicationType: '',
+        oAuthRedirectURI: '',
+        organization: 'Doug',
+        termsOfService: true
+      }
     end
 
-    it 'raise an exception if TOS is not accepted' do
-      valid_params[:user][:email] = 'new_user@user_of_the_new.com'
-      valid_params[:user][:consumer_attributes][:tos_accepted] = false
-      post base, params: valid_params
-      parsed = JSON.parse response.body
-      expect(parsed).to have_key('error')
-      expect(parsed['error'].first).to eq('Consumer tos accepted is invalid.')
+    let :kong_response do
+      {
+        kong_id: 'k0ng-1d-0f-th3-futur3',
+        kongUsername: 'the_king_of_the_kong',
+        token: 'n0t-v4l1d'
+      }
+    end
+
+    before do
+      claims_api
+      claims_api_ref
+      forms_api
+      forms_api_ref
+    end
+
+    it 'creates the respective user, consumer and apis via the apply page' do
+      allow_any_instance_of(KongService).to receive(:consumer_signup).and_return(kong_response)
+      post apply_base, params: signup_params
+      expect(User.count).to eq(1)
+      expect(Consumer.count).to eq(1)
+      expect(User.last.consumer.apis.count).to eq(2)
     end
   end
 end

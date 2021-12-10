@@ -1,2 +1,3 @@
-api_name,version,auth_method,environment,open_api_url,base_path,service_ref,api_ref
-fancy-service,0,key_auth,sandbox,https://sandbox-api.va.gov/services/fancy-service/docs/v0/api,/services/fancy-service/v0,########-####-####-####-############,fancy-service
+api_name,environment,metadata_url,api_ref,acl_ref
+fancy-service,dev,https://dev-api.va.gov/services/fancy-service/docs/v0/api,fancy,phan-sea
+ohauth-service,dev,https://dev-api.va.gov/services/ohauth-possibly/docs/v0/api,ohAuth

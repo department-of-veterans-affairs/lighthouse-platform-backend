@@ -10,25 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_26_214520) do
+ActiveRecord::Schema.define(version: 2021_11_18_234650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "apis", force: :cascade do |t|
-    t.string "name"
-    t.string "auth_method"
-    t.string "environment"
-    t.string "open_api_url"
-    t.string "base_path"
-    t.string "service_ref"
+  create_table "api_environments", force: :cascade do |t|
+    t.bigint "api_id"
+    t.bigint "environment_id"
+    t.string "metadata_url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "api_ref"
-    t.string "version"
+    t.index ["api_id"], name: "index_api_environments_on_api_id"
+    t.index ["environment_id"], name: "index_api_environments_on_environment_id"
+  end
+
+  create_table "api_refs", force: :cascade do |t|
+    t.string "name"
+    t.bigint "api_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["api_id"], name: "index_api_refs_on_api_id"
+  end
+
+  create_table "apis", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.datetime "discarded_at"
+    t.string "acl"
     t.index ["discarded_at"], name: "index_apis_on_discarded_at"
-    t.index ["service_ref"], name: "index_apis_on_service_ref", unique: true
   end
 
   create_table "consumer_api_assignments", force: :cascade do |t|
@@ -60,6 +71,12 @@ ActiveRecord::Schema.define(version: 2021_10_26_214520) do
     t.index ["user_id"], name: "index_consumers_on_user_id"
   end
 
+  create_table "environments", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -71,14 +88,17 @@ ActiveRecord::Schema.define(version: 2021_10_26_214520) do
     t.string "first_name"
     t.string "last_name"
     t.string "role", default: "user"
+    t.datetime "discarded_at"
     t.string "provider", limit: 50, default: "", null: false
     t.string "uid", limit: 50, default: "", null: false
-    t.datetime "discarded_at"
     t.index ["discarded_at"], name: "index_users_on_discarded_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "api_environments", "apis"
+  add_foreign_key "api_environments", "environments"
+  add_foreign_key "api_refs", "apis"
   add_foreign_key "consumer_api_assignments", "apis"
   add_foreign_key "consumer_api_assignments", "consumers"
   add_foreign_key "consumers", "users"

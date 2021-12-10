@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
-class ApiSerializer
-  include JSONAPI::Serializer
-  attributes :id, :name, :auth_method, :environment, :base_path, :service_ref, :api_ref
+class ApiSerializer < Blueprinter::Base
+  identifier :id
+  field :name
+  association :api_ref, blueprint: ApiRefSerializer
+  association :api_environments, blueprint: ApiEnvironmentSerializer
+  field :created_at
 end
