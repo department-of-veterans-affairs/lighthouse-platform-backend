@@ -67,6 +67,10 @@ Rails.application.configure do
   ENV['DYNAMO_ENDPOINT'] = 'http://dynamodb:8000'
   ENV['OKTA_TOKEN'] = 'mocktoken'
   ENV['OKTA_API_ENDPOINT'] = 'https://deptva-eval.okta.com/api/v1'
+  ENV['OKTA_LOGIN_URL'] = 'https://sandbox-api.va.gov/oauth2/redirect/'
+  ENV['OKTA_DEFAULT_POLICY'] = 'Default Policy'
+  ENV['IDME_GROUP_ID'] = '00g31dz5agb5ZzIk05d7'
   ENV['KONG_ELB'] = 'http://kong:8001'
   ENV['AWS_REGION'] = 'us-gov-west-1'
+  ENV['AUTHZ_SERVER_DEFAULT'] = 'default'
 end
