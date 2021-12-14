@@ -12,11 +12,8 @@ class ApiService
     key_auth = []
     oauth = []
     gather_apis(api_list).map do |api|
-      if api.acl.present?
-        key_auth << api.acl
-      else
-        oauth << api.auth_server_access_key
-      end
+      key_auth << api.acl if api.acl.present?
+      oauth << api.auth_server_access_key if api.auth_server_access_key.present?
     end
     [key_auth, oauth]
   end

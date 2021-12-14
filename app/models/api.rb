@@ -10,13 +10,13 @@ class Api < ApplicationRecord
   has_many :api_environments, dependent: :destroy
 
   after_discard do
-    api_ref.discard
-    api_environments.discard_all
+    api_ref.discard if api_ref.present?
+    api_environments.discard_all if api_environments.present?
   end
 
   after_undiscard do
-    api_ref.undiscard
-    api_environments.undiscard_all
+    api_ref.undiscard if api_ref.present?
+    api_environments.undiscard_all if api_environments.present?
   end
 
   def api_environments_attributes=(api_environments_attributes)

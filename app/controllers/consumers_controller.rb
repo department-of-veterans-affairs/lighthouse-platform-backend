@@ -32,8 +32,8 @@ class ConsumersController < ApplicationController
                                                       oauth,
                                                       application_type: signup_params[:oAuthApplicationType],
                                                       redirect_uri: signup_params[:oAuthRedirectURI])
+      user.consumer.sandbox_oauth_ref = okta_consumer.id
     end
-    user.consumer.sandbox_oauth_ref = okta_consumer.id
 
     user.save!
     user.undiscard if user.discarded?

@@ -18,11 +18,11 @@ class Consumer < ApplicationRecord
   before_save :manage_apis
 
   after_discard do
-    consumer_api_assignments.discard_all
+    consumer_api_assignments.discard_all if consumer_api_assignments.present?
   end
 
   after_undiscard do
-    consumer_api_assignments.undiscard_all
+    consumer_api_assignments.undiscard_all if consumer_api_assignments.present?
   end
 
   private
