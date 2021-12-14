@@ -184,5 +184,27 @@ describe ConsumersController, type: :request do
         expect(response.code).to eq('400')
       end
     end
+
+    context 'when signup raises an unexpected exception' do
+      let :signup_params do
+        {
+          apis: 'claims,vaForms,oauth',
+          description: 'Signing up for Patti',
+          email: 'doug@douglas.funnie.org',
+          firstName: 'Douglas',
+          lastName: 'Funnie',
+          oAuthApplicationType: 'web',
+          oAuthRedirectURI: 'http://localhost:3000/callback',
+          organization: 'Doug',
+          termsOfService: true
+        }
+      end
+
+      it 'responds with a 500 status' do
+        allow_any_instance_of(KongService).to receive(:consumer_signup).and_raise(StandardError)
+        post apply_base, params: signup_params
+        expect(response.code).to eq('500')
+      end
+    end
   end
 end

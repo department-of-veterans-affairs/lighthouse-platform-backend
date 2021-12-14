@@ -33,6 +33,14 @@ RSpec.describe 'Admin::Api::V0::Apis', type: :request do
       end.to change(Api, :count).by(1)
     end
 
+    it 're-uses existing record' do
+      expect do
+        post '/platform-backend/admin/api/v0/apis', params: valid_params
+        Api.find(JSON.parse(response.body)['id']).discard
+        post '/platform-backend/admin/api/v0/apis', params: valid_params
+      end.to change(Api, :count).by(1)
+    end
+
     it 'responds properly with a 422 when invalid' do
       expect do
         post '/platform-backend/admin/api/v0/apis', params: invalid_params
