@@ -24,8 +24,10 @@ class ConsumersController < ApplicationController
     key_auth, oauth = ApiService.new.fetch_auth_types user.consumer.apis_list
     raise missing_oauth_params_exception if oauth.any? && missing_oauth_params?
 
-    kong_consumer = KongService.new.consumer_signup(user, key_auth) unless key_auth.empty?
-    user.consumer.sandbox_gateway_ref = kong_consumer[:kong_id]
+    unless key_auth.empty?
+      kong_consumer = KongService.new.consumer_signup(user, key_auth)
+      user.consumer.sandbox_gateway_ref = kong_consumer[:kong_id]
+    end
 
     unless oauth.empty?
       okta_consumer = OktaService.new.consumer_signup(user,
