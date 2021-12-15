@@ -43,7 +43,7 @@ class OktaService
   private
 
   def consumer_name(user)
-    "[LPB]#{user.consumer.organization}#{user.last_name}".gsub(/\W/, '')
+    "LPB-#{"#{user.consumer.organization}#{user.last_name}".gsub(/\W/, '')}"
   end
 
   def build_new_application_payload(user, application_type:, redirect_uri:)
