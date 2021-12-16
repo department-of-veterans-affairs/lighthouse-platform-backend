@@ -1,0 +1,7 @@
+<h6>Response Status: <%= log['_source']['response']['status'] %></h6>
+<h6>Rate Limit Minute: <%= log['_source']['response']['headers']['x-ratelimit-limit-minute'] %></h6>
+<h6>Service Name: <%= log['_source']['service']['name'] %></h6>
+<h6>Service ID: <%= log['_source']['service']['id'] %></h6>
+<h6>Service Path: <%= log['_source']['service']['path'] %></h6>
+<h6>Route Name: <%= log['_source']['route']['name'] %></h6>
+<h6>Route ID: <%= log['_source']['route']['id'] %></h6>

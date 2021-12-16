@@ -91,6 +91,10 @@ Metrics/MethodLength:
     - 'fetch_dynamo_db'
     - 'update_kong_consumers'
     - 'build_user_from_dynamo'
+    - 'four_twenty_nine_error'
+    - 'four_oh_three_error'
+    - 'consumer_by_status_code'
+
 Rails:
   Enabled: true
 
@@ -99,7 +103,7 @@ Rails/Output:
     - 'lib/tasks/**/*'
 
 Rails/SkipsModelValidations:
-  Exclude: 
+  Exclude:
     - 'app/controllers/admin/api/v0/apis_controller.rb'
 
 Metrics/ClassLength:

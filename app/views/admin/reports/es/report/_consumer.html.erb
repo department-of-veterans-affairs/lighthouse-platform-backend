@@ -1,0 +1,7 @@
+<h4>User Details: </h4>
+<h6>First Name: <%= user.first_name %></h6>
+<h6>Last Name: <%= user.last_name %></h6>
+<h5>Consumer Details</h5>
+<h6>Gateway ID: <%= user.consumer.sandbox_gateway_ref %></h6>
+<h6>Okta ID: <%= user.consumer.sandbox_oauth_ref %></h6>
+<div>Errors: <%= link_to '403 Errors', admin_reports_es_oh_three_path(user) %> / <%= link_to '429 Errors', admin_reports_es_twenty_nine_path(user) %></div>

@@ -1,0 +1,20 @@
+<div class="vads-l-grid-container vads-u-padding-y--5">
+  <% if @consumer_twenty_nine['hits']['hits'].present? %>
+    <div id="header-halo">
+      <h1 class="vads-u-margin-top--0 vads-u-margin-bottom--2">Kong Consumer Name:</h1>
+    </div>
+    <h3><%= @consumer_twenty_nine['hits']['hits'].first['_source']['consumer']['username'] %></h3>
+    <% @consumer_twenty_nine['hits']['hits'].each do |error| %>
+      <h6>Response Status: <%= error['_source']['response']['status'] %></h6>
+      <h6>Rate Limit Minute: <%= error['_source']['response']['headers']['x-ratelimit-limit-minute'] %></h6>
+      <h6>Service Name: <%= error['_source']['service']['name'] %></h6>
+      <h6>Service ID: <%= error['_source']['service']['id'] %></h6>
+      <h6>Service Path: <%= error['_source']['service']['path'] %></h6>
+      <h6>Route Name: <%= error['_source']['route']['name'] %></h6>
+      <h6>Route ID: <%= error['_source']['route']['id'] %></h6>
+      <br/>
+    <% end %>
+  <% else %>
+    <h3>No 403's reported within the last 30 days.</h3>
+  <% end %>
+</div>

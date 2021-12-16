@@ -1,0 +1,14 @@
+<div class="vads-l-grid-container vads-u-padding-y--5">
+  <div id="header-halo">
+    <h1 class="vads-u-margin-top--0 vads-u-margin-bottom--2">Rate Limit Exceeded (429)</h1>
+  </div>
+
+  <% @four_twenty_nine['hits']['hits'].each do |error| %>
+    <% if error['_source'] && error['_source']['consumer'] %>
+      <h3><%= error['_source']['consumer']['username'] %></h3>
+      <h6>at: <%= error['_source']['@timestamp'] %></h6>
+    <% else %>
+      <h3> NO USERNAME AVAILABLE </h3>
+    <% end %>
+  <% end %>
+</div>

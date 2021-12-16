@@ -18,6 +18,15 @@ Rails.application.routes.draw do
 
     namespace :admin do
       get 'dashboard', to: 'dashboard#index'
+      namespace :reports do
+        namespace :es do
+          get '/', to: 'report#users'
+          get '/four_oh_three', to: 'report#four_oh_three'
+          get '/four_twenty_nine', to: 'report#four_twenty_nine'
+          get '/consumers/:id/four_twenty_nine', to: 'report#consumer_four_twenty_nine', as: 'twenty_nine'
+          get '/consumers/:id/four_oh_three', to: 'report#consumer_four_oh_three', as: 'oh_three'
+        end
+      end
       mount Sidekiq::Web => '/sidekiq'
 
       namespace :api do

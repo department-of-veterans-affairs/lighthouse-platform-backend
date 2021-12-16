@@ -1,0 +1,19 @@
+<div class="vads-l-grid-container vads-u-padding-y--5">
+  <div id="header-halo">
+    <h1 class="vads-u-margin-top--0 vads-u-margin-bottom--2">403</h1>
+  </div>
+  <% if @four_oh_three['hits']['hits'].present? %>
+
+  <% @four_oh_three['hits']['hits'].each do |error| %>
+    <% if error['_source'] && error['_source']['consumer'] %>
+      <h3><%= error['_source']['consumer']['username'] %></h3>
+    <% elsif error['_source'] && error['_source']['jwt_claims'] %>
+      <h3>Client ID: <%= error['_source']['jwt_claims']['cid']%> </h3>
+      <% else %>
+      <h3>No Displayable Details</h3>
+    <% end %>
+  <% end %>
+  <% else %>
+    <h3>No results found</h3>
+  <% end %>
+</div>

@@ -1,0 +1,16 @@
+<div class="vads-l-grid-container vads-u-padding-y--5">
+  <div id="header-halo">
+    <h1 class="vads-u-margin-top--0 vads-u-margin-bottom--2">Elasticsearch Support:</h1>
+  </div>
+
+  <h2>General Errors</h2>
+  <h6>All results are over the last 30 days</h6>
+  <p><%= link_to '403 Errors', admin_reports_es_four_oh_three_path %>
+  <p><%= link_to '429 Errors', admin_reports_es_four_twenty_nine_path %>
+
+  <h2>Consumers</h2>
+
+  <% @users.each do |user| %>
+    <%= render "consumer", user: user %>
+  <% end %>
+</div>
