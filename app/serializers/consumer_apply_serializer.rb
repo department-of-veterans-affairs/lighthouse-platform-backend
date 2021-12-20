@@ -6,19 +6,11 @@ class ConsumerApplySerializer < Blueprinter::Base
   end
 
   field :clientId do |_user, options|
-    if options[:okta].blank?
-      nil
-    else
-      options[:okta].credentials.oauthClient.client_id
-    end
+    options[:okta].credentials.oauthClient.client_id if options[:okta].present?
   end
 
   field :clientSecret do |_user, options|
-    if options[:okta].blank?
-      nil
-    else
-      options[:okta].credentials.oauthClient.client_secret
-    end
+    options[:okta].credentials.oauthClient.client_secret if options[:okta].present?
   end
 
   field :email
@@ -32,10 +24,6 @@ class ConsumerApplySerializer < Blueprinter::Base
   end
 
   field :redirectURI do |_user, options|
-    if options[:okta].blank?
-      nil
-    else
-      options[:okta].settings.oauthClient.redirect_uris.first
-    end
+    options[:okta].settings.oauthClient.redirect_uris.first if options[:okta].present?
   end
 end
