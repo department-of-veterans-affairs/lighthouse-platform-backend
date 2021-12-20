@@ -39,7 +39,10 @@ class Consumer < ApplicationRecord
     return if apis_list.blank?
 
     apis_list.split(',').map do |api|
-      api_id = ApiRef.find_by(name: api.strip)['api_id']
+      api_ref = ApiRef.find_by(name: api.strip)
+      next if api_ref.blank?
+
+      api_id = api_ref['api_id']
       api_model = Api.find(api_id)
       apis << api_model if api_model.present? && api_ids.exclude?(api_model.id)
     end
