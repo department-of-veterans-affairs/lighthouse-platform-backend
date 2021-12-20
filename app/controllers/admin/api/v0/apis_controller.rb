@@ -19,6 +19,7 @@ class Admin::Api::V0::ApisController < ApplicationController
       api_built = {
         name:	api.dig('api', 'name'),
         acl: api.dig('api', 'acl'),
+        auth_server_access_key: api.dig('api', 'auth_server_access_key'),
         api_environments_attributes: {
           metadata_url: api.dig('api', 'metadata_url'),
           environments_attributes: {
@@ -69,6 +70,7 @@ class Admin::Api::V0::ApisController < ApplicationController
         'api' => {
           'name' => api['api_name'],
           'acl' => api['acl_ref'],
+          'auth_server_access_key' => api['auth_server_access_key'],
           'metadata_url' => api['metadata_url'],
           'env_name' => api['environment'],
           'api_ref' => api['api_ref']
@@ -81,6 +83,7 @@ class Admin::Api::V0::ApisController < ApplicationController
     params.require(:api).permit(
       :name,
       :acl,
+      :auth_server_access_key,
       api_environments_attributes: [
         :metadata_url,
         { environments_attributes: [:name] }
