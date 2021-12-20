@@ -16,7 +16,7 @@ RSpec.describe ApiService do
   let(:benefits_ref) { FactoryBot.create(:api_ref, name: 'benefits', api_id: benefits_api.id) }
   let(:claims_api) { FactoryBot.create(:api, name: 'Claims', acl: 'claims') }
   let(:claims_ref) { FactoryBot.create(:api_ref, name: 'claims', api_id: claims_api.id) }
-  let(:oauth_api) { FactoryBot.create(:api, name: 'Oauth', acl: '') }
+  let(:oauth_api) { FactoryBot.create(:api, name: 'Oauth', auth_server_access_key: 'AUTHZ_SERVER_DEFAULT') }
   let(:oauth_ref) { FactoryBot.create(:api_ref, name: 'oauth', api_id: oauth_api.id) }
 
   describe '.intialize' do
@@ -48,7 +48,7 @@ RSpec.describe ApiService do
     it 'provides a list of respective Oauth types' do
       _key_auth, oauth = subject.fetch_auth_types('oauth')
       expect(oauth.length).to eq(1)
-      expect(oauth.first.name).to eq('Oauth')
+      expect(oauth.first).to eq(oauth_api.auth_server_access_key)
     end
   end
 end

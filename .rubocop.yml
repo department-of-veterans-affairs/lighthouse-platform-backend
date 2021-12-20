@@ -91,6 +91,12 @@ Metrics/MethodLength:
     - 'fetch_dynamo_db'
     - 'update_kong_consumers'
     - 'build_user_from_dynamo'
+    - 'apply'
+    - 'consumer_signup'
+    - 'build_new_application_payload'
+Metrics/CyclomaticComplexity:
+  IgnoredMethods:
+    - 'consumer_signup'
 Rails:
   Enabled: true
 
