@@ -7,6 +7,7 @@ kong_elb: "http://localhost:4001"
 kong_password:
 okta_token:
 okta_api_endpoint:
+es_endpoint:
 
 # Github OAuth App Secrets
 github_app_id: e2583634c192807ccc28
