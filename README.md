@@ -73,6 +73,17 @@ Rake tasks have been created to assist in generating data within Kong. These are
 `rake kong:seed_gateway` is a generalized task that is structured to combine all existing 'seeds'.
 `rake kong:seed_consumers` generates consumers within the gateway.
 
+## Okta Interactions
+These interactions require an api token created in your developer instance:
+Okta Admin UI > Security > API > Tokens > Create Token
+This token should then be added to application.yml as the value for 'okta_token'
+
+Part of the business logic around Okta in this project requires a group to exist within your developer instance.
+Okta Admin UI > Directory > Groups > Add Group
+Then take the id of this group from the url:
+https://dev-########-admin.okta.com/admin/group/{20-character-id}
+and add it to your application.yml file as the value for 'idme_group_id'
+
 ## Elasticsearch
 
 If you would like to generate data within the Elasticsearch container, you can run `rake elasticsearch:seed`. This rake task uses mocked logs from the `spec/support/elasticsearch/mock_logs.json` file to load data within the ES instance.
