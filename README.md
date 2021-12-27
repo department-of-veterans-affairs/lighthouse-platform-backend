@@ -72,3 +72,7 @@ Rake tasks have been created to assist in generating data within Kong. These are
 
 `rake kong:seed_gateway` is a generalized task that is structured to combine all existing 'seeds'.
 `rake kong:seed_consumers` generates consumers within the gateway.
+
+## Elasticsearch
+
+If you would like to generate data within the Elasticsearch container, you can run `rake elasticsearch:seed`. This rake task uses mocked logs from the `spec/support/elasticsearch/mock_logs.json` file to load data within the ES instance.
