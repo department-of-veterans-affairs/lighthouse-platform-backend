@@ -83,3 +83,7 @@ Okta Admin UI > Directory > Groups > Add Group
 Then take the id of this group from the url:
 https://dev-########-admin.okta.com/admin/group/{20-character-id}
 and add it to your application.yml file as the value for 'idme_group_id'
+
+## Elasticsearch
+
+If you would like to generate data within the Elasticsearch container, you can run `rake elasticsearch:seed`. This rake task uses mocked logs from the `spec/support/elasticsearch/mock_logs.json` file to load data within the ES instance.

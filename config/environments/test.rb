@@ -73,4 +73,5 @@ Rails.application.configure do
   ENV['KONG_ELB'] = 'http://kong:8001'
   ENV['AWS_REGION'] = 'us-gov-west-1'
   ENV['AUTHZ_SERVER_DEFAULT'] = 'default'
+  ENV['ES_ENDPOINT'] = 'http://elasticsearch:9200'
 end

@@ -11,8 +11,8 @@ services:
       - kong-migrations
       - kong-database
       - dynamodb
-    networks:
-      - backend
+      - elasticsearch
+    networks: &network [backend]
     environment:
       - DATABASE_HOST=${DATABASE_HOST:-db}
       - DATABASE_USER=${DATABASE_USER:-postgres}
@@ -43,7 +43,7 @@ services:
       - &kong_pg_pw KONG_PG_PASSWORD=kong
       - KONG_PG_USER=kong
     restart: &kong-restart on-failure
-    networks: &network [backend]
+    networks: *network
 
   kong-database:
     image: postgres:9.6
@@ -83,6 +83,27 @@ services:
     command: ["kong", "docker-start"]
     restart: *kong-restart
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
+    container_name: elasticsearch
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    expose:
+      - 9200
+      - 9300
+    networks: *network
+
   dynamodb:
     image: amazon/dynamodb-local:latest
     ports:
@@ -96,3 +117,4 @@ networks:
     driver: bridge
 volumes:
   db-data:
+  elasticsearch-data:

@@ -5,6 +5,7 @@ dynamo_table_name: "dvp-dev-developer-portal-users"
 aws_region: "us-gov-west-1"
 kong_elb: "http://localhost:4001"
 kong_password:
+es_endpoint:
 okta_token:
 okta_api_endpoint: "https://dev-########-admin.okta.com"
 okta_redirect_url: "https://sandbox-api.va.gov/oauth2/redirect/"
