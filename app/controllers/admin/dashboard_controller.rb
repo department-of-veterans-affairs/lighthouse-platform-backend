@@ -8,6 +8,8 @@ class Admin::DashboardController < ApplicationController
     @users = User.kept.select { |user| user.consumer.present? }
   end
 
+  private
+
   def handle_authenticate
     # needed to pass rspec
     # rspec does not seem to recognize ENV changes in before_action
