@@ -3,8 +3,27 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin::DashboardController', type: :request do
-  describe 'GET /platform-backend/admin/dashboard' do
-    it 'return a redirect if the user is not signed in' do
+  describe 'GET /platform-backend/admin/dashboard with auth disabled' do
+    before do
+      ENV['ENABLE_GITHUB_AUTH'] = nil
+    end
+
+    it 'returns success' do
+      get '/platform-backend/admin/dashboard'
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe 'GET /platform-backend/admin/dashboard with auth enabled' do
+    before do
+      ENV['ENABLE_GITHUB_AUTH'] = 'true'
+    end
+
+    after do
+      ENV['ENABLE_GITHUB_AUTH'] = nil
+    end
+
+    it 'returns a redirect if the user is not signed in' do
       get '/platform-backend/admin/dashboard'
       expect(response).to have_http_status(:redirect)
     end
