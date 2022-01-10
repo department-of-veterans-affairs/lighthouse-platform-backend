@@ -11,8 +11,6 @@ class Admin::DashboardController < ApplicationController
   private
 
   def handle_authenticate
-    # needed to pass rspec
-    # rspec does not seem to recognize ENV changes in before_action
     return if Figaro.env.enable_github_auth.blank?
 
     authenticate_user!
