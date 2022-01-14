@@ -2,6 +2,21 @@
   <%= link_to "Sign out here", destroy_user_session_path, class: "usa-button", method: :delete %>
 
   <h2>
+    <%= "#{@environments.count} Environments" %>
+  </h2>
+  <%= form_tag bulk_upload_admin_api_v0_environments_path, multipart: true do %>
+    <%= file_field_tag 'file', required: true %>
+    <%= submit_tag 'Upload Environment List' %>
+  <% end %>
+  <%= form_tag destroy_all_admin_api_v0_environments_path do %>
+    <%= submit_tag 'Delete Environments', class: 'usa-button-red' %>
+  <% end %>
+  <% @environments.each do |environment| %>
+    <p>
+      <%= environment.to_json %>
+    </p>
+  <% end %>
+  <h2>
     <%= "#{@apis.count} APIs" %>
   </h2>
   <%= form_tag bulk_upload_admin_api_v0_apis_path, multipart: true do %>
