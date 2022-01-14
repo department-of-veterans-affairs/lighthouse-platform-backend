@@ -4,7 +4,8 @@ class Admin::DashboardController < ApplicationController
   before_action :handle_authenticate
 
   def index
-    @apis = Api.left_joins(:api_ref, :api_environments).kept
+    @apis = Api.kept
+    @environments = Environment.kept
     @users = User.kept.select { |user| user.consumer.present? }
   end
 
