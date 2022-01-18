@@ -39,6 +39,13 @@ Rails.application.routes.draw do
               post :destroy_all
             end
           end
+
+          resources :environments, only: [:create] do
+            collection do
+              post :bulk_upload
+              post :destroy_all
+            end
+          end
         end
       end
       namespace :kong do
