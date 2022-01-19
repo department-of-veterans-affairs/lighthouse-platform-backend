@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_14_220235) do
+ActiveRecord::Schema.define(version: 2022_01_13_222351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,9 +44,7 @@ ActiveRecord::Schema.define(version: 2022_01_14_220235) do
     t.datetime "discarded_at"
     t.string "acl"
     t.string "auth_server_access_key"
-    t.bigint "environment_id"
     t.index ["discarded_at"], name: "index_apis_on_discarded_at"
-    t.index ["environment_id"], name: "index_apis_on_environment_id"
   end
 
   create_table "consumer_api_assignments", force: :cascade do |t|
