@@ -29,7 +29,6 @@ gem 'sidekiq'
 gem 'simple_form'
 gem 'socksify', '~> 1.7'
 gem 'turbolinks', '~> 5'
-gem 'webpacker', '~> 5.0'
 
 group :development, :test do
   gem 'brakeman'
