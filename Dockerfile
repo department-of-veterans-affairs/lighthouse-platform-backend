@@ -42,7 +42,7 @@ FROM base AS prod
 
 RUN bundle install --jobs 5 --without development test
 COPY . .
-RUN bundle exec rails assets:precompile
+RUN RAILS_ENV=production SECRET_KEY_BASE=DEFAULT_VALUE_OVERRIDE_AT_RUNTIME bundle exec rails assets:precompile
 
 COPY bin/entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
