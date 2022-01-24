@@ -4,5 +4,5 @@ class ConsumerApiAssignment < ApplicationRecord
   include Discard::Model
 
   belongs_to :consumer
-  belongs_to :api
+  belongs_to :api_environment
 end

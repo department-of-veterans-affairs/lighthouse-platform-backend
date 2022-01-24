@@ -10,7 +10,7 @@ class Consumer < ApplicationRecord
 
   belongs_to :user
   has_many :consumer_api_assignments, dependent: :destroy
-  has_many :apis, through: :consumer_api_assignments
+  has_many :api_environments, through: :consumer_api_assignments
 
   accepts_nested_attributes_for :consumer_api_assignments
 
@@ -43,8 +43,14 @@ class Consumer < ApplicationRecord
       next if api_ref.blank?
 
       api_id = api_ref['api_id']
-      api_model = Api.find(api_id)
-      apis << api_model if api_model.present? && api_ids.exclude?(api_model.id)
+      environment = Environment.find_by(name: Figaro.env.lpb_environment)
+      if environment && api_id
+        api_env = ApiEnvironment.find_by(environment: environment, api_id: api_id)
+        if api_env
+          consumer_api_assignment = ConsumerApiAssignment.find_or_initialize_by(consumer: self, api_environment: api_env)
+          self.consumer_api_assignments << consumer_api_assignment unless self.consumer_api_assignments.include?(consumer_api_assignment)
+        end
+      end
     end
   end
 end
