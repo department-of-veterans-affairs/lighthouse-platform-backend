@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_13_222351) do
+ActiveRecord::Schema.define(version: 2022_01_21_183820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,10 +53,10 @@ ActiveRecord::Schema.define(version: 2022_01_13_222351) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "discarded_at"
-    t.bigint "environment_id"
+    t.bigint "api_environment_id"
+    t.index ["api_environment_id"], name: "index_consumer_api_assignments_on_api_environment_id"
     t.index ["consumer_id"], name: "index_consumer_api_assignments_on_consumer_id"
     t.index ["discarded_at"], name: "index_consumer_api_assignments_on_discarded_at"
-    t.index ["environment_id"], name: "index_consumer_api_assignments_on_environment_id"
   end
 
   create_table "consumers", force: :cascade do |t|
