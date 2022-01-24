@@ -40,18 +40,21 @@
     <%= submit_tag 'Migrate Consumers' %>
   <% end %>
   <% @users.each do |user| %>
+    <p>User</p>
     <p>
       <%= user.to_json %>
       <br />
-      <%= user.consumer.to_json %>
+      <p>Consumer</p> <%= user.consumer.to_json %>
       <br />
-      <%= "#{user.consumer.apis.count} apis" %>
       <br />
-      <% user.consumer.apis.each do |api| %>
-        <%= api.to_json %>
+      <%= "#{user.consumer.consumer_api_assignments.count} APIs available" %>
+      <% user.consumer.consumer_api_assignments.map do |consumer_api_assignment| %>
+        <div>ENV: <%= consumer_api_assignment.api_environment.environment.name %></div>
+        <div>API: <%= consumer_api_assignment.api_environment.api.name %></div>
         <br />
       <% end %>
     </p>
+    <hr>
   <% end %>
   <%= form_tag destroy_all_admin_api_v0_consumers_path do %>
     <%= submit_tag 'Delete Consumers', class: 'usa-button-red' %>
