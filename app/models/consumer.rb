@@ -42,18 +42,24 @@ class Consumer < ApplicationRecord
       api_ref = ApiRef.find_by(name: api.strip)
       next if api_ref.blank?
 
-      api_id = api_ref['api_id']
-      environment = Environment.find_by(name: Figaro.env.lpb_environment)
-      if environment && api_id
-        api_env = ApiEnvironment.find_by(environment: environment, api_id: api_id)
-        if api_env
-          consumer_api_assignment = ConsumerApiAssignment.find_or_initialize_by(consumer: self,
-                                                                                api_environment: api_env)
-          unless consumer_api_assignments.include?(consumer_api_assignment)
-            consumer_api_assignments << consumer_api_assignment
-          end
-        end
-      end
+      handle_associations(api_ref)
+    end
+  end
+
+  def handle_associations(api_ref)
+    api_id = api_ref['api_id']
+    environment = Environment.find_by(name: Figaro.env.lpb_environment)
+    if environment && api_id
+      api_env = ApiEnvironment.find_by(environment: environment, api_id: api_id)
+      handle_consumer_api_assignment api_env if api_env
+    end
+  end
+
+  def handle_consumer_api_assignment(api_env)
+    consumer_api_assignment = ConsumerApiAssignment.find_or_initialize_by(consumer: self,
+                                                                          api_environment: api_env)
+    unless consumer_api_assignments.include?(consumer_api_assignment)
+      consumer_api_assignments << consumer_api_assignment
     end
   end
 end
