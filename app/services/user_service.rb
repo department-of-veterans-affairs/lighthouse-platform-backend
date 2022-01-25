@@ -5,11 +5,8 @@ class UserService
     user_params = params[:user].with_indifferent_access
     user = User.find_or_initialize_by(email: user_params[:email].downcase)
     user.undiscard if user.discarded?
-    @api_list = if user.consumer.present?
-                  user.consumer.consumer_api_assignments.map(&:api_environment).map(&:api).map(&:api_ref).map(&:name)
-                else
-                  []
-                end
+    build_api_list user
+
     apis = (@api_list << user_params[:consumer_attributes][:apis_list].split(',')).flatten.uniq
     user_params[:consumer_attributes][:apis_list] = nil
     user_params[:consumer_attributes][:sandbox_gateway_ref] ||= user.consumer.try(&:sandbox_gateway_ref)
@@ -28,15 +25,7 @@ class UserService
       api_id = ApiRef.find_by(name: api_name.strip)[:api_id]
       api = Api.find(api_id)
       environment = Environment.find_by(name: Figaro.env.lpb_environment)
-      if environment && api
-        api_environment = ApiEnvironment.find_by(environment: environment, api: api)
-        consumer_api_assignment = ConsumerApiAssignment.find_or_initialize_by(api_environment: api_environment,
-                                                                              consumer: consumer)
-        unless consumer.consumer_api_assignments.include?(consumer_api_assignment)
-          consumer.consumer_api_assignments << consumer_api_assignment
-        end
-        consumer.save
-      end
+      handle_consumers_api_associations(consumer, environment, api) if environment && api
     end
   end
 
@@ -53,6 +42,24 @@ class UserService
   end
 
   private
+
+  def build_api_list(user)
+    @api_list = if user.consumer.present?
+                  user.consumer.consumer_api_assignments.map(&:api_environment).map(&:api).map(&:api_ref).map(&:name)
+                else
+                  []
+                end
+  end
+
+  def handle_consumers_api_associations(consumer, environment, api)
+    api_environment = ApiEnvironment.find_by(environment: environment, api: api)
+    consumer_api_assignment = ConsumerApiAssignment.find_or_initialize_by(api_environment: api_environment,
+                                                                          consumer: consumer)
+    unless consumer.consumer_api_assignments.include?(consumer_api_assignment)
+      consumer.consumer_api_assignments << consumer_api_assignment
+    end
+    consumer.save
+  end
 
   def sandbox_gateway_ref(params)
     params.dig(:user, :consumer_attributes, :sandbox_gateway_ref)

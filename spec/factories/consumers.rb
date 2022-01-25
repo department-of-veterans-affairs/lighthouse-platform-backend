@@ -22,8 +22,8 @@ FactoryBot.define do
                                                                                          api_environment: api_env_two)
 
         facilities_api = FactoryBot.create(:api, name: 'facilities', acl: 'facilities')
-        facilities_ref = FactoryBot.create(:api_ref, name: 'facilities', api_id: facilities_api.id)
-        api_env = FactoryBot.create(:api_environment, api: facilities_api, environment: environment)
+        FactoryBot.create(:api_ref, name: 'facilities', api_id: facilities_api.id)
+        FactoryBot.create(:api_environment, api: facilities_api, environment: environment)
       end
     end
   end
