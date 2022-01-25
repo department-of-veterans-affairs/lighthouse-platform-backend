@@ -2,22 +2,11 @@
 
 require 'csv'
 
-class Admin::Api::V0::ApisController < ApplicationController
-  skip_before_action :verify_authenticity_token
-
-  def create
-    api = manage_api api_params
-    if api.save
-      render json: ApiSerializer.render(api)
-    else
-      render json: { error: api.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
+class Admin::ApisController < ApplicationController
   def bulk_upload
     apis_list.map do |api|
       api_built = {
-        name:	api.dig('api', 'name'),
+        name: api.dig('api', 'name'),
         acl: api.dig('api', 'acl'),
         auth_server_access_key: api.dig('api', 'auth_server_access_key'),
         api_environments_attributes: {
@@ -34,7 +23,7 @@ class Admin::Api::V0::ApisController < ApplicationController
     end
 
     if params[:authenticity_token].present?
-      redirect_to admin_dashboard_path
+      redirect_to admin_dashboard_index_path
     else
       render json: { data: 'apis_uploaded' }
     end
@@ -43,7 +32,7 @@ class Admin::Api::V0::ApisController < ApplicationController
   def destroy_all
     Api.discard_all
 
-    redirect_to admin_dashboard_path
+    redirect_to admin_dashboard_index_path
   end
 
   private
@@ -77,18 +66,5 @@ class Admin::Api::V0::ApisController < ApplicationController
         }
       }
     end
-  end
-
-  def api_params
-    params.require(:api).permit(
-      :name,
-      :acl,
-      :auth_server_access_key,
-      api_environments_attributes: [
-        :metadata_url,
-        { environments_attributes: [:name] }
-      ],
-      api_ref_attributes: [:name]
-    )
   end
 end
