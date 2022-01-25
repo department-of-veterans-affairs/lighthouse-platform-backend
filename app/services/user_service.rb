@@ -6,7 +6,7 @@ class UserService
     user = User.find_or_initialize_by(email: user_params[:email].downcase)
     user.undiscard if user.discarded?
     @api_list = if user.consumer.present?
-                  user.consumer.apis.collect { |api| api.api_ref.name }
+                  user.consumer.consumer_api_assignments.map(&:api_environment).map(&:api).map(&:api_ref).map(&:name)
                 else
                   []
                 end
@@ -27,8 +27,13 @@ class UserService
 
       api_id = ApiRef.find_by(name: api_name.strip)[:api_id]
       api = Api.find(api_id)
-      consumer.apis << api if api.present?
-      consumer.save
+      environment = Environment.find_by(name: Figaro.env.lpb_environment)
+      if environment && api
+        api_environment = ApiEnvironment.find_by(environment: environment, api: api)
+        consumer_api_assignment = ConsumerApiAssignment.find_or_initialize_by(api_environment: api_environment, consumer: consumer)
+        consumer.consumer_api_assignments << consumer_api_assignment unless consumer.consumer_api_assignments.include?(consumer_api_assignment)
+        consumer.save
+      end
     end
   end
 
