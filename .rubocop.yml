@@ -94,6 +94,7 @@ Metrics/MethodLength:
     - 'apply'
     - 'consumer_signup'
     - 'build_new_application_payload'
+    - 'apis_list'
 Metrics/CyclomaticComplexity:
   IgnoredMethods:
     - 'consumer_signup'
@@ -130,6 +131,8 @@ Metrics/BlockLength:
     - 'rakelib/**/*.rake'
     - 'lib/tasks/**/*.rake'
     - 'config/**/*.rb'
+  IgnoredMethods:
+    - 'helpers'
 
 # Don't worry about ambiguous blocks in RSpec
 # Official recommendation from rubocop team is to disable this rule for specs.

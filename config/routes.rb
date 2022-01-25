@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     namespace :admin do
       root to: 'dashboard#index'
       mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
-      
+
       resources :dashboard, only: [:index] do
         collection do
           resources :apis, only: [] do

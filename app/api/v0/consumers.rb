@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module V0
   class Consumers < V0::Base
     version 'v0'
@@ -20,7 +22,7 @@ module V0
       def kong_signup(user, key_auth)
         kong_consumer = KongService.new.consumer_signup(user, key_auth)
         user.consumer.sandbox_gateway_ref = kong_consumer[:kong_id]
-      
+
         [user, kong_consumer]
       end
 
@@ -35,7 +37,7 @@ module V0
       end
 
       def raise_missing_oauth_params_exception
-        fail Grape::Exceptions::Validation, message: 'missing one or more oAuth values'
+        raise Grape::Exceptions::Validation, message: 'missing one or more oAuth values'
       end
 
       def missing_oauth_params?
@@ -52,10 +54,10 @@ module V0
         requires :firstName, type: String
         requires :lastName, type: String
         optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: false
-        optional :oAuthRedirectURI, type: String, allow_blank: false, regexp: /^https?:\/\/.+/
+        optional :oAuthRedirectURI, type: String, allow_blank: false, regexp: %r{^https?://.+}
         requires :organization, type: String
         requires :termsOfService, type: Boolean, allow_blank: false
-        
+
         all_or_none_of :oAuthApplicationType, :oAuthRedirectURI
       end
       post 'applications' do
