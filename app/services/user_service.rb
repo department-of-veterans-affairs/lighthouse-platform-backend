@@ -30,8 +30,11 @@ class UserService
       environment = Environment.find_by(name: Figaro.env.lpb_environment)
       if environment && api
         api_environment = ApiEnvironment.find_by(environment: environment, api: api)
-        consumer_api_assignment = ConsumerApiAssignment.find_or_initialize_by(api_environment: api_environment, consumer: consumer)
-        consumer.consumer_api_assignments << consumer_api_assignment unless consumer.consumer_api_assignments.include?(consumer_api_assignment)
+        consumer_api_assignment = ConsumerApiAssignment.find_or_initialize_by(api_environment: api_environment,
+                                                                              consumer: consumer)
+        unless consumer.consumer_api_assignments.include?(consumer_api_assignment)
+          consumer.consumer_api_assignments << consumer_api_assignment
+        end
         consumer.save
       end
     end

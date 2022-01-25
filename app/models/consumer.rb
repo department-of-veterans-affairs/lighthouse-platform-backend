@@ -47,8 +47,11 @@ class Consumer < ApplicationRecord
       if environment && api_id
         api_env = ApiEnvironment.find_by(environment: environment, api_id: api_id)
         if api_env
-          consumer_api_assignment = ConsumerApiAssignment.find_or_initialize_by(consumer: self, api_environment: api_env)
-          self.consumer_api_assignments << consumer_api_assignment unless self.consumer_api_assignments.include?(consumer_api_assignment)
+          consumer_api_assignment = ConsumerApiAssignment.find_or_initialize_by(consumer: self,
+                                                                                api_environment: api_env)
+          unless consumer_api_assignments.include?(consumer_api_assignment)
+            consumer_api_assignments << consumer_api_assignment
+          end
         end
       end
     end

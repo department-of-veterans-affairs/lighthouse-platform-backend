@@ -8,7 +8,10 @@ class Admin::Api::V0::EnvironmentsController < ApplicationController
   def create
     environment = Environment.find_or_create_by(name: environment_params[:name])
 
-    render json: { error: environment.errors.full_messages }, status: :unprocessable_entity unless environment.errors.empty?
+    unless environment.errors.empty?
+      render json: { error: environment.errors.full_messages },
+             status: :unprocessable_entity
+    end
 
     render json: EnvironmentSerializer.render(environment)
   end
@@ -64,18 +67,20 @@ class Admin::Api::V0::EnvironmentsController < ApplicationController
     return [] if params[:environments].blank? && params[:file].blank?
 
     file_content = CSV.parse(File.read(params[:file].tempfile), headers: true)
-    file_content.map do |env|
-      {
-        'environment' => {
-          'name' => env['api_name'],
-          'acl' => env['acl_ref'],
-          'auth_server_access_key' => env['auth_server_access_key'],
-          'metadata_url' => env['metadata_url'],
-          'env_name' => env['environment'],
-          'api_ref' => env['api_ref']
-        }
+    file_content.map { |env| handle_env_structure(env) }
+  end
+
+  def handle_env_structure(env)
+    {
+      'environment' => {
+        'name' => env['api_name'],
+        'acl' => env['acl_ref'],
+        'auth_server_access_key' => env['auth_server_access_key'],
+        'metadata_url' => env['metadata_url'],
+        'env_name' => env['environment'],
+        'api_ref' => env['api_ref']
       }
-    end
+    }
   end
 
   def environment_params
