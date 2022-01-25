@@ -27,6 +27,10 @@ RSpec.describe 'Admin::Api::V0::Apis', type: :request do
       }
     end
 
+    before do
+      FactoryBot.create(:environment, name: 'test')
+    end
+
     it 'creates a new api record' do
       expect do
         post '/platform-backend/admin/api/v0/apis', params: valid_params
