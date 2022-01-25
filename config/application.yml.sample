@@ -20,4 +20,4 @@ authz_server_claims: default
 authz_server_communitycare: default
 authz_server_health: default
 authz_server_verification: default
-lpb_environment: dev
+lpb_environment: test
