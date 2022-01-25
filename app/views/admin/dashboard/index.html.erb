@@ -23,14 +23,15 @@
     <%= file_field_tag 'file', required: true %>
     <%= submit_tag 'Upload API List' %>
   <% end %>
-  <%= form_tag destroy_all_admin_api_v0_apis_path do %>
-    <%= submit_tag 'Delete APIs', class: 'usa-button-red' %>
-  <% end %>
   <% @apis.each do |api| %>
     <p>
       <%= api.to_json %>
       <%= api.api_ref.to_json %>
+      <%= api.api_environments.to_json %>
     </p>
+  <% end %>
+  <%= form_tag destroy_all_admin_api_v0_apis_path do %>
+    <%= submit_tag 'Delete APIs', class: 'usa-button-red' %>
   <% end %>
 
   <h2>
