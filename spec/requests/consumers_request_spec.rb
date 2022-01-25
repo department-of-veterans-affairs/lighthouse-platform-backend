@@ -28,8 +28,23 @@ describe ConsumersController, type: :request do
   let!(:forms_api_ref) { FactoryBot.create(:api_ref, name: 'vaForms', api_id: forms_api.id) }
   let!(:oauth_api) { FactoryBot.create(:api, name: 'Oauth', auth_server_access_key: 'AUTHZ_SERVER_DEFAULT') }
   let!(:oauth_ref) { FactoryBot.create(:api_ref, name: 'oauth', api_id: oauth_api.id) }
+  let(:environment) { Environment.find_or_create_by(name: 'test') }
+  let(:appeals_api) { FactoryBot.create(:api, name: 'Appeals API', acl: 'decision_reviews') }
+  let(:appeals_api_ref) { FactoryBot.create(:api_ref, name: 'decision_reviews', api_id: appeals_api.id) }
+  let(:api_environment_appeals) { FactoryBot.create(:api_environment, api: appeals_api, environment: environment) }
+  let(:api_environment_claims_api) { FactoryBot.create(:api_environment, api: claims_api, environment: environment) }
+  let(:api_environment_forms_api) { FactoryBot.create(:api_environment, api: forms_api, environment: environment) }
+  let(:api_environment_oauth_api) { FactoryBot.create(:api_environment, api: oauth_api, environment: environment) }
 
   describe 'creating a consumer' do
+    before do
+      environment
+      api_environment_appeals
+      api_environment_claims_api
+      api_environment_forms_api
+      api_environment_oauth_api
+    end
+
     it 'creates the user' do
       expect do
         post base, params: valid_params
@@ -73,8 +88,6 @@ describe ConsumersController, type: :request do
   end
 
   describe 'Updating a consumer' do
-    let(:appeals_api) { FactoryBot.create(:api, name: 'Appeals API', acl: 'decision_reviews') }
-    let(:appeals_api_ref) { FactoryBot.create(:api_ref, name: 'decision_reviews', api_id: appeals_api.id) }
     let :update_params do
       {
         user: {
@@ -89,13 +102,18 @@ describe ConsumersController, type: :request do
     before do
       appeals_api
       appeals_api_ref
+      environment
+      api_environment_appeals
+      api_environment_claims_api
+      api_environment_forms_api
+      api_environment_oauth_api
     end
 
     it 'updates a users APIs' do
       user = FactoryBot.create(:user, email: 'origami@oregano.com')
       consumer = FactoryBot.create(:consumer, :with_apis, user_id: user.id)
       post base, params: update_params
-      expect(consumer.apis.map(&:name).sort).to eq(['Appeals API', 'Claims API', 'Forms API'])
+      expect(consumer.api_environments.map(&:api).map(&:name).sort).to eq(['Appeals API', 'Claims API', 'Forms API'])
     end
 
     it 'does not duplicate assignments passed in again' do
@@ -103,7 +121,7 @@ describe ConsumersController, type: :request do
       consumer = FactoryBot.create(:consumer, :with_apis, user_id: user.id)
       valid_params[:user][:consumer_attributes][:apis_list] = 'va_forms'
       post base, params: valid_params
-      expect(consumer.apis.map(&:name).sort).to eq(['Claims API', 'Forms API'])
+      expect(consumer.api_environments.map(&:api).map(&:name).sort).to eq(['Claims API', 'Forms API'])
     end
 
     it 'responds properly when consumer fails to update' do
@@ -140,7 +158,7 @@ describe ConsumersController, type: :request do
 
           expect(User.count).to eq(1)
           expect(Consumer.count).to eq(1)
-          expect(User.last.consumer.apis.count).to eq(3)
+          expect(User.last.consumer.api_environments.map(&:api).count).to eq(3)
         end
       end
     end
