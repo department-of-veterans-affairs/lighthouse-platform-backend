@@ -123,22 +123,21 @@ describe ConsumersController, type: :request do
 
   describe 'accepts signups from dev portal' do
     let(:apply_base) { '/platform-backend/apply' }
+    let :signup_params do
+      {
+        apis: 'claims,vaForms,oauth',
+        description: 'Signing up for Patti',
+        email: 'doug@douglas.funnie.org',
+        firstName: 'Douglas',
+        lastName: 'Funnie',
+        oAuthApplicationType: 'web',
+        oAuthRedirectURI: 'http://localhost:3000/callback',
+        organization: 'Doug',
+        termsOfService: true
+      }
+    end
 
     context 'when signup is successful' do
-      let :signup_params do
-        {
-          apis: 'claims,vaForms,oauth',
-          description: 'Signing up for Patti',
-          email: 'doug@douglas.funnie.org',
-          firstName: 'Douglas',
-          lastName: 'Funnie',
-          oAuthApplicationType: 'web',
-          oAuthRedirectURI: 'http://localhost:3000/callback',
-          organization: 'Doug',
-          termsOfService: true
-        }
-      end
-
       it 'creates the respective user, consumer and apis via the apply page' do
         VCR.use_cassette('okta/consumer_signup_200', match_requests_on: [:method]) do
           post apply_base, params: signup_params
@@ -152,60 +151,23 @@ describe ConsumersController, type: :request do
     end
 
     context 'when oauth arguments are missing' do
-      let :signup_params do
-        {
-          apis: 'claims,vaForms,oauth',
-          description: 'Signing up for Patti',
-          email: 'doug@douglas.funnie.org',
-          firstName: 'Douglas',
-          lastName: 'Funnie',
-          organization: 'Doug',
-          termsOfService: true
-        }
-      end
-
       it 'creates the respective user, consumer and apis via the apply page' do
+        signup_params[:oAuthApplicationType] = nil
+        signup_params[:oAuthRedirectURI] = nil
         post apply_base, params: signup_params
         expect(response.code).to eq('400')
       end
     end
 
     context 'when oauth arguments are invalid' do
-      let :signup_params do
-        {
-          apis: 'claims,vaForms,oauth',
-          description: 'Signing up for Patti',
-          email: 'doug@douglas.funnie.org',
-          firstName: 'Douglas',
-          lastName: 'Funnie',
-          oAuthApplicationType: 'invalid-value',
-          oAuthRedirectURI: 'http://localhost:3000/callback',
-          organization: 'Doug',
-          termsOfService: true
-        }
-      end
-
       it 'creates the respective user, consumer and apis via the apply page' do
+        signup_params[:oAuthApplicationType] = 'invalid-value'
         post apply_base, params: signup_params
         expect(response.code).to eq('400')
       end
     end
 
     context 'when signup raises an unexpected exception' do
-      let :signup_params do
-        {
-          apis: 'claims,vaForms,oauth',
-          description: 'Signing up for Patti',
-          email: 'doug@douglas.funnie.org',
-          firstName: 'Douglas',
-          lastName: 'Funnie',
-          oAuthApplicationType: 'web',
-          oAuthRedirectURI: 'http://localhost:3000/callback',
-          organization: 'Doug',
-          termsOfService: true
-        }
-      end
-
       it 'responds with a 500 status' do
         allow_any_instance_of(KongService).to receive(:consumer_signup).and_raise(StandardError)
         post apply_base, params: signup_params
