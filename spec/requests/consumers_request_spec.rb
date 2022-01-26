@@ -22,12 +22,16 @@ describe ConsumersController, type: :request do
     }
   end
 
+  let(:environment) { FactoryBot.create(:environment) }
   let!(:claims_api) { FactoryBot.create(:api, name: 'Claims API', acl: 'claims_acl') }
   let!(:claims_api_ref) { FactoryBot.create(:api_ref, name: 'claims', api_id: claims_api.id) }
+  let!(:claims_api_environment) { FactoryBot.create(:api_environment, api: claims_api, environment: environment) }
   let!(:forms_api) { FactoryBot.create(:api, name: 'Forms API', acl: 'vaForms_acl') }
   let!(:forms_api_ref) { FactoryBot.create(:api_ref, name: 'vaForms', api_id: forms_api.id) }
+  let!(:forms_api_environment) { FactoryBot.create(:api_environment, api: forms_api, environment: environment) }
   let!(:oauth_api) { FactoryBot.create(:api, name: 'Oauth', auth_server_access_key: 'AUTHZ_SERVER_DEFAULT') }
   let!(:oauth_ref) { FactoryBot.create(:api_ref, name: 'oauth', api_id: oauth_api.id) }
+  let!(:oauth_api_environment) { FactoryBot.create(:api_environment, api: oauth_api, environment: environment) }
 
   describe 'creating a consumer' do
     it 'creates the user' do
@@ -75,6 +79,7 @@ describe ConsumersController, type: :request do
   describe 'Updating a consumer' do
     let(:appeals_api) { FactoryBot.create(:api, name: 'Appeals API', acl: 'decision_reviews') }
     let(:appeals_api_ref) { FactoryBot.create(:api_ref, name: 'decision_reviews', api_id: appeals_api.id) }
+    let(:appeals_api_environment) { FactoryBot.create(:api_environment, api: appeals_api, environment: environment) }
     let :update_params do
       {
         user: {
@@ -89,6 +94,7 @@ describe ConsumersController, type: :request do
     before do
       appeals_api
       appeals_api_ref
+      appeals_api_environment
     end
 
     it 'updates a users APIs' do
