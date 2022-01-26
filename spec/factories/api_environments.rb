@@ -3,5 +3,7 @@
 FactoryBot.define do
   factory :api_environment do
     metadata_url { 'MyString' }
+    api
+    environment
   end
 end
