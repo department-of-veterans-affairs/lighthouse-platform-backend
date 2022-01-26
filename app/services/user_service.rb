@@ -25,12 +25,7 @@ class UserService
     apis.each do |api_name|
       next if api_name.blank?
 
-      api_id = ApiRef.find_by(name: api_name.strip)[:api_id]
-      api_model = Api.find(api_id)
-      env = Environment.find_by(name: 'sandbox')
-      api_environment = ApiEnvironment.find_by(environment: env, api: api_model)
-      consumer.api_environments << api_environment if api_environment.present? && consumer.api_environment_ids.exclude?(api_environment.id)
-      consumer.save
+      add_api_to_consumer(api_name, consumer)
     end
   end
 
@@ -47,6 +42,17 @@ class UserService
   end
 
   private
+
+  def add_api_to_consumer(api_name, consumer)
+    api_id = ApiRef.find_by(name: api_name.strip)[:api_id]
+    api_model = Api.find(api_id)
+    env = Environment.find_by(name: 'sandbox')
+    api_environment = ApiEnvironment.find_by(environment: env, api: api_model)
+    if api_environment.present? && consumer.api_environment_ids.exclude?(api_environment.id)
+      consumer.api_environments << api_environment
+    end
+    consumer.save
+  end
 
   def sandbox_gateway_ref(params)
     params.dig(:user, :consumer_attributes, :sandbox_gateway_ref)

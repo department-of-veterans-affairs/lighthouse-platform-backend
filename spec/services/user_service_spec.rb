@@ -48,7 +48,9 @@ RSpec.describe UserService do
   let(:facilities_api) { FactoryBot.create(:api, name: 'facilities', acl: 'facilities') }
   let(:facilities_ref) { FactoryBot.create(:api_ref, name: 'facilities', api_id: facilities_api.id) }
   let(:environment) { Environment.find_by(name: 'sandbox') }
-  let(:facilities_api_environment) { FactoryBot.create(:api_environment, environment: environment, api: facilities_api) }
+  let(:facilities_api_environment) do
+    FactoryBot.create(:api_environment, environment: environment, api: facilities_api)
+  end
 
   before do
     user
