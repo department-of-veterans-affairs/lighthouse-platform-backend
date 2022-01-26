@@ -4,11 +4,7 @@ class Admin::ConsumersController < ApplicationController
   def load_initial
     job = ConsumerMigrationJob.perform_later
 
-    if params[:authenticity_token].present?
-      redirect_to admin_dashboard_index_path
-    else
-      render json: { jid: job.job_id }
-    end
+    params[:authenticity_token].present? ? redirect_to(admin_dashboard_index_path) : render(json: { jid: job.job_id })
   end
 
   def destroy_all
