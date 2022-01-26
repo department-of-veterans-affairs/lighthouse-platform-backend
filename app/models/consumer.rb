@@ -50,11 +50,15 @@ class Consumer < ApplicationRecord
       api_ref = ApiRef.find_by(name: api.strip)
       next if api_ref.blank?
 
-      api_id = api_ref['api_id']
-      api_model = Api.find(api_id)
-      env = Environment.find_by(name: 'dev')
-      api_environment = ApiEnvironment.find_by(environment: env, api: api_model)
-      api_environments << api_environment if api_environment.present? && api_environment_ids.exclude?(api_environment.id)
+      assign_api_environments(api_ref)
     end
+  end
+
+  def assign_api_environments(api_ref)
+    api_id = api_ref['api_id']
+    api_model = Api.find(api_id)
+    env = Environment.find_by(name: 'sandbox')
+    api_environment = ApiEnvironment.find_by(environment: env, api: api_model)
+    api_environments << api_environment if api_environment.present? && api_environment_ids.exclude?(api_environment.id)
   end
 end
