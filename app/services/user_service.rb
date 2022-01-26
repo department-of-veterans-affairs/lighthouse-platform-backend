@@ -26,8 +26,10 @@ class UserService
       next if api_name.blank?
 
       api_id = ApiRef.find_by(name: api_name.strip)[:api_id]
-      api = Api.find(api_id)
-      consumer.apis << api if api.present?
+      api_model = Api.find(api_id)
+      env = Environment.find_by(name: 'sandbox')
+      api_environment = ApiEnvironment.find_by(environment: env, api: api_model)
+      consumer.api_environments << api_environment if api_environment.present? && consumer.api_environment_ids.exclude?(api_environment.id)
       consumer.save
     end
   end
