@@ -36,8 +36,9 @@ module V0
         [user, okta_consumer]
       end
 
-      def raise_missing_oauth_params_exception
-        raise Grape::Exceptions::Validation, message: 'missing one or more oAuth values'
+      def missing_oauth_params_exception
+        Grape::Exceptions::Validation.new(params: %w[oAuthApplicationType oAuthRedirectURI],
+                                          message: 'missing one or more oAuth values')
       end
 
       def missing_oauth_params?
@@ -64,7 +65,7 @@ module V0
         user = user_from_signup_params
 
         key_auth, oauth = ApiService.new.fetch_auth_types user.consumer.apis_list
-        raise_missing_oauth_params_exception if oauth.any? && missing_oauth_params?
+        raise missing_oauth_params_exception if oauth.any? && missing_oauth_params?
 
         user, kong_consumer = kong_signup(user, key_auth) if key_auth.present?
         user, okta_consumer = okta_signup(user, oauth) if oauth.present?
