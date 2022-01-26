@@ -7,8 +7,6 @@ services:
       dockerfile: Dockerfile
       target: ci
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 8080 -b '0.0.0.0'"
-    volumes:
-      - .:/home/ruby
     depends_on:
       - db
       - kong
