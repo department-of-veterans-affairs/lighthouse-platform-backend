@@ -12,7 +12,7 @@ SimpleCov.start 'rails' do
   add_filter 'app/mailers/application_mailer.rb'
   add_filter 'app/models/application_record.rb'
 
-  SimpleCov.minimum_coverage_by_file 90
+  SimpleCov.minimum_coverage_by_file 89
   SimpleCov.refuse_coverage_drop
 end
 
