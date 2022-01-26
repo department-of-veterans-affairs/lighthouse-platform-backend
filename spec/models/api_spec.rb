@@ -20,6 +20,13 @@ RSpec.describe Api, type: :model do
     it 'requires an acl to be valid' do
       expect(subject.acl).to eq('lca')
     end
+
+    it 'undiscards a previously discarded record' do
+      subject.discard
+      expect(subject.discarded_at).not_to eq(nil)
+      subject.undiscard
+      expect(subject.discarded_at).to eq(nil)
+    end
   end
 
   describe 'tests an incorrect input' do
