@@ -1,10 +1,12 @@
 version: "3.8"
+
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: ci
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 8080 -b '0.0.0.0'"
-    ports:
-      - "8080:8080"
     depends_on:
       - db
       - kong
@@ -12,12 +14,14 @@ services:
       - kong-database
       - dynamodb
       - elasticsearch
-    networks: &network [backend]
+    ports:
+      - "8080:8080"
     environment:
       - DATABASE_HOST=${DATABASE_HOST:-db}
       - DATABASE_USER=${DATABASE_USER:-postgres}
       - DATABASE_PASSWORD=${DATABASE_PASSWORD:-postgres}
       - RAILS_SERVE_STATIC_FILES=true
+      - RAILS_ENV=development
   db:
     image: postgres:13.1
     expose:
@@ -29,92 +33,6 @@ services:
       - POSTGRES_PASSWORD=postgres
     volumes:
       - db-data:/var/lib/postgresql/data
-    networks:
-      - backend
 
-  kong-migrations:
-    image: kong:2.3.2
-    command: kong migrations bootstrap && kong migrations up && kong migrations finish
-    depends_on: &kong-db [kong-database]
-    environment:
-      - &kong_db KONG_DATABASE=postgres
-      - &kong_pg_host KONG_PG_HOST=kong-database
-      - &kong_pg_db KONG_PG_DATABASE=kong
-      - &kong_pg_pw KONG_PG_PASSWORD=kong
-      - KONG_PG_USER=kong
-    restart: &kong-restart on-failure
-    networks: *network
-
-  kong-database:
-    image: postgres:9.6
-    environment:
-      - POSTGRES_USER=kong
-      - POSTGRES_DB=kong
-      - POSTGRES_PASSWORD=kong
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "kong"]
-      interval: 60s
-      timeout: 5s
-      retries: 5
-    networks: *network
-
-  kong:
-    image: kong:2.3.2
-    ports:
-      - 4001:8001
-      - 4000:8000
-    depends_on: *kong-db
-    environment:
-      - *kong_db
-      - *kong_pg_host
-      - *kong_pg_db
-      - *kong_pg_pw
-      - KONG_ADMIN_LISTEN=0.0.0.0:8001
-      - KONG_ADMIN_ACCESS_LOG='/dev/stdout'
-      - KONG_ADMIN_ERROR_LOG='/dev/stderr'
-    expose:
-      - 8000
-      - 8001
-    healthcheck:
-      test: ["CMD-SHELL", "curl -I -s -L http://127.0.0.1:8000 || exit 1"]
-      interval: 5s
-      retries: 10
-    networks: *network
-    command: ["kong", "docker-start"]
-    restart: *kong-restart
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
-    container_name: elasticsearch
-    environment:
-      - xpack.security.enabled=false
-      - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
-      - 9300:9300
-    expose:
-      - 9200
-      - 9300
-    networks: *network
-
-  dynamodb:
-    image: amazon/dynamodb-local:latest
-    ports:
-      - "4500:8000"
-    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
-    networks:
-      - backend
-
-networks:
-  backend:
-    driver: bridge
 volumes:
   db-data:
-  elasticsearch-data:

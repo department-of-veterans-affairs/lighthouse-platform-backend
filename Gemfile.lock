@@ -98,7 +98,6 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.16)
     bindex (0.8.1)
-    blueprinter (0.25.3)
     bootsnap (1.7.5)
       msgpack (~> 1.0)
     brakeman (5.0.4)
@@ -121,7 +120,6 @@ GEM
     childprocess (3.0.0)
     coderay (1.1.3)
     concurrent-ruby (1.1.9)
-    connection_pool (2.2.5)
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -141,6 +139,24 @@ GEM
     dotenv-rails (2.7.6)
       dotenv (= 2.7.6)
       railties (>= 3.2)
+    dry-configurable (0.14.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 0.6)
+    dry-container (0.9.0)
+      concurrent-ruby (~> 1.0)
+      dry-configurable (~> 0.13, >= 0.13.0)
+    dry-core (0.7.1)
+      concurrent-ruby (~> 1.0)
+    dry-inflector (0.2.1)
+    dry-logic (1.2.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 0.5, >= 0.5)
+    dry-types (1.5.1)
+      concurrent-ruby (~> 1.0)
+      dry-container (~> 0.3)
+      dry-core (~> 0.5, >= 0.5)
+      dry-inflector (~> 0.1, >= 0.1.2)
+      dry-logic (~> 1.0, >= 1.0.2)
     erubi (1.10.0)
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
@@ -173,6 +189,16 @@ GEM
       thor (>= 0.14.0, < 2)
     globalid (0.5.2)
       activesupport (>= 5.0)
+    grape (1.6.2)
+      activesupport
+      builder
+      dry-types (>= 1.1)
+      mustermann-grape (~> 1.0.0)
+      rack (>= 1.3.0)
+      rack-accept
+    grape-entity (0.10.1)
+      activesupport (>= 3.0.0)
+      multi_json (>= 1.3.2)
     haml (5.2.2)
       temple (>= 0.8.0)
       tilt
@@ -225,6 +251,10 @@ GEM
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
+    mustermann-grape (1.0.1)
+      mustermann (>= 1.0.0)
     nested_form (0.3.2)
     netrc (0.11.0)
     nio4r (2.5.8)
@@ -265,14 +295,14 @@ GEM
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
+    rack-accept (0.4.5)
+      rack (>= 0.4)
     rack-mini-profiler (2.3.2)
       rack (>= 1.2.0)
     rack-pjax (1.1.0)
       nokogiri (~> 1.5)
       rack (>= 1.1)
     rack-protection (2.1.0)
-      rack
-    rack-proxy (0.7.0)
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -322,7 +352,6 @@ GEM
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    redis (4.2.5)
     regexp_parser (2.1.1)
     remotipart (1.4.4)
     responders (3.0.1)
@@ -390,13 +419,8 @@ GEM
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
-    semantic_range (3.0.0)
     serviceworker-rails (0.6.0)
       railties (>= 3.1)
-    sidekiq (6.2.1)
-      connection_pool (>= 2.2.2)
-      rack (~> 2.0)
-      redis (>= 4.2.0)
     simple_form (5.1.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
@@ -444,11 +468,6 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webpacker (5.4.0)
-      activesupport (>= 5.2)
-      rack-proxy (>= 0.6.1)
-      railties (>= 5.2)
-      semantic_range (>= 2.3.0)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -463,7 +482,6 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk-dynamodb (~> 1.62)
-  blueprinter
   bootsnap (>= 1.4.4)
   brakeman
   bullet
@@ -476,6 +494,8 @@ DEPENDENCIES
   factory_bot_rails (> 5)
   faker
   figaro
+  grape
+  grape-entity
   jbuilder (~> 2.7)
   listen (~> 3.3)
   okcomputer
@@ -499,7 +519,6 @@ DEPENDENCIES
   sass-rails (>= 6)
   selenium-webdriver
   serviceworker-rails
-  sidekiq
   simple_form
   simplecov (< 0.18)
   socksify (~> 1.7)
@@ -511,7 +530,6 @@ DEPENDENCIES
   web-console (>= 4.1.0)
   webdrivers
   webmock
-  webpacker (~> 5.0)
 
 RUBY VERSION
    ruby 3.0.0p0
