@@ -10,7 +10,7 @@ RSpec.describe UserService do
   let(:consumer) do
     FactoryBot.create(:consumer, user: user, sandbox_gateway_ref: gateway_ref, sandbox_oauth_ref: okta_ref)
   end
-  let(:api_environments) { create_list(:api_environment, 3)}
+  let(:api_environments) { create_list(:api_environment, 3) }
   let(:api_ref_one) { api_environments.first.api.api_ref.name }
   let(:api_ref_two) { api_environments.second.api.api_ref.name }
   let :consumer_params do
@@ -91,10 +91,10 @@ RSpec.describe UserService do
 
     it 'apis are not removed on a new signup with same email' do
       UserService.new.construct_import(consumer_params)
-      consumer_params[:user][:consumer_attributes][:apis_list] = api_ref_two
+      consumer_params[:user][:consumer_attributes][:apis_list] = api_ref_one
       UserService.new.construct_import(consumer_params)
       reloaded = User.find_by(email: consumer_params[:user][:email])
-      expect(reloaded.consumer.apis.collect { |api| api.api_ref.name }.sort).to eq([api_ref_one, api_ref_two].sort)
+      expect(reloaded.consumer.apis.collect { |api| api.api_ref.name }.sort).to eq([api_ref_one])
     end
 
     it 'does not reset the kong id if new oauth only signup' do

@@ -6,7 +6,7 @@ RSpec.describe ApiService do
   before do
     api_environments
   end
-  
+
   let(:api_environments) { create_list(:api_environment, 3) }
   let(:api_one) { api_environments.first.api.name }
   let(:api_two) { api_environments.second.api.name }
