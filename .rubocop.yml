@@ -94,7 +94,6 @@ Metrics/MethodLength:
     - 'apply'
     - 'consumer_signup'
     - 'build_new_application_payload'
-    - 'apis_list'
 Metrics/CyclomaticComplexity:
   IgnoredMethods:
     - 'consumer_signup'

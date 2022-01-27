@@ -55,16 +55,20 @@ class Admin::ApisController < ApplicationController
 
     file_content = CSV.parse(File.read(params[:file].tempfile), headers: true)
     file_content.map do |api|
-      {
-        'api' => {
-          'name' => api['api_name'],
-          'acl' => api['acl_ref'],
-          'auth_server_access_key' => api['auth_server_access_key'],
-          'metadata_url' => api['metadata_url'],
-          'env_name' => api['environment'],
-          'api_ref' => api['api_ref']
-        }
-      }
+      restructure_api_data(api)
     end
+  end
+
+  def restructure_api_data(api)
+    {
+      'api' => {
+        'name' => api['api_name'],
+        'acl' => api['acl_ref'],
+        'auth_server_access_key' => api['auth_server_access_key'],
+        'metadata_url' => api['metadata_url'],
+        'env_name' => api['environment'],
+        'api_ref' => api['api_ref']
+      }
+    }
   end
 end
