@@ -32,7 +32,7 @@ RUN gem install bundler:${BUNDLER_VERSION}
 
 FROM base AS ci
 
-RUN bundle install --jobs 5
+RUN bundle install --jobs 5 --binstubs="./bin"
 COPY . .
 RUN bundle exec rails assets:precompile
 
