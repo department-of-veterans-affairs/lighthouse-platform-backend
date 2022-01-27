@@ -2,8 +2,9 @@
 
 FactoryBot.define do
   factory :api do
-    name { 'MyString' }
-    acl { 'MyString' }
+    name { Faker::Hipster.word }
+    acl { Faker::Hipster.word }
+    api_ref { association :api_ref, api: instance }
 
     trait :with_claims_api_ref do
       after(:create) do |api, _|
