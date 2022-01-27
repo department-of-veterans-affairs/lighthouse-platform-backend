@@ -36,15 +36,13 @@ RSpec.describe ApiService do
 
   describe '#fetch_auth_types' do
     it 'provides a list of respective key auth types' do
-      api_ref = Api.first.api_ref.name
-      key_auth, _oauth = subject.fetch_auth_types(api_ref)
+      key_auth, _oauth = subject.fetch_auth_types(api_ref_one)
       expect(key_auth.length).to eq(1)
       expect(key_auth[0]).to eq(Api.first.acl)
     end
 
     it 'provides a list of respective Oauth types' do
-      api_ref = Api.second.api_ref.name
-      _key_auth, oauth = subject.fetch_auth_types(api_ref)
+      _key_auth, oauth = subject.fetch_auth_types(api_ref_two)
       expect(oauth.length).to eq(1)
       expect(oauth.first).to eq(Api.second.auth_server_access_key)
     end
