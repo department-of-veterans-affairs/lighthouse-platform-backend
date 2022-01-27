@@ -27,9 +27,6 @@ services:
 
   kong:
     image: kong:2.3.2
-    ports:
-      - 4001:8001
-      - 4000:8000
     depends_on: *kong-db
     environment:
       - *kong_db
@@ -62,17 +59,12 @@ services:
         hard: -1
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
-      - 9300:9300
     expose:
       - 9200
       - 9300
 
   dynamodb:
     image: amazon/dynamodb-local:latest
-    ports:
-      - "4500:8000"
     command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
 
 volumes:
