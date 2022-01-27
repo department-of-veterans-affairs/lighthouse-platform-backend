@@ -37,9 +37,6 @@ end
 
 ActiveRecord::Migration.maintain_test_schema!
 
-require 'sidekiq/testing'
-Sidekiq::Testing.fake!
-
 FactoryBot::SyntaxRunner.class_eval do
   include RSpec::Mocks::ExampleMethods
 end
@@ -85,7 +82,4 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
-  config.before do
-    Sidekiq::Worker.clear_all
-  end
 end
