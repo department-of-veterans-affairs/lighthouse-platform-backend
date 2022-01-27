@@ -6,15 +6,8 @@ describe ConsumersController, type: :request do
   base = '/platform-backend/consumers'
 
   let(:api_environments) { create_list(:api_environment, 2) }
-  let(:api_ref_one) { api_environments.first.api.api_ref.name }
-  let(:api_ref_two) { api_environments.last.api.api_ref.name }
-
-  before do
-    api_environments
-    api_ref_one
-    api_ref_two
-  end
-
+  let(:api_ref_three) { added_api.first.api.api_ref.name }
+  let(:added_api) { create_list(:api_environment, 1) }
   let :valid_params do
     {
       user: {
@@ -31,6 +24,16 @@ describe ConsumersController, type: :request do
         }
       }
     }
+  end
+  let(:added_api) { create_list(:api_environment, 1) }
+  let(:api_ref_three) { added_api.first.api.api_ref.name }
+  let(:api_ref_one) { api_environments.first.api.api_ref.name }
+  let(:api_ref_two) { api_environments.last.api.api_ref.name }
+
+  before do
+    api_environments
+    api_ref_one
+    api_ref_two
   end
 
   describe 'creating a consumer' do
@@ -76,8 +79,6 @@ describe ConsumersController, type: :request do
     end
   end
 
-  let(:added_api) { create_list(:api_environment, 1) }
-  let(:api_ref_three) { added_api.first.api.api_ref.name }
   describe 'Updating a consumer' do
     let :update_params do
       {
