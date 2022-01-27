@@ -6,8 +6,6 @@ describe ConsumersController, type: :request do
   base = '/platform-backend/consumers'
 
   let(:api_environments) { create_list(:api_environment, 2) }
-  let(:api_ref_three) { added_api.first.api.api_ref.name }
-  let(:added_api) { create_list(:api_environment, 1) }
   let :valid_params do
     {
       user: {
