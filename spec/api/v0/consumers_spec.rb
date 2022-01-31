@@ -22,6 +22,12 @@ describe V0::Consumers, type: :request do
       }
     end
 
+    before do
+      api_environments.map do |env|
+        env.api.auth_server_access_key = nil
+      end
+    end
+
     context 'when signup is successful' do
       it 'creates the respective user, consumer and apis via the apply page' do
         VCR.use_cassette('okta/consumer_signup_200', match_requests_on: [:method]) do
