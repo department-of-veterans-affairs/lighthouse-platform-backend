@@ -9,11 +9,12 @@ Rails.application.routes.draw do
     mount OkComputer::Engine, at: '/health_check'
     devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
 
+    mount RailsAdmin::Engine => '/admin/rails_admin', as: 'rails_admin'
+
     mount V0::Base => '/'
 
     namespace :admin do
       root to: 'dashboard#index'
-      mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
 
       resources :dashboard, only: [:index] do
         collection do
