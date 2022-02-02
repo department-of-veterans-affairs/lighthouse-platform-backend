@@ -24,8 +24,10 @@ describe V0::Consumers, type: :request do
     end
 
     before do
-      api_environments.last.api.auth_server_access_key = 'AUTHZ_SERVER_DEFAULT'
-      api_environments.last.api.acl = nil
+      api_environments
+      api = Api.last
+      api.update!(auth_server_access_key: 'AUTHZ_SERVER_DEFAULT')
+      api.update!(acl: nil)
     end
 
     context 'when signup is successful' do
