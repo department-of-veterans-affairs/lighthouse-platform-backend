@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UserService
-  def construct_import(params)
+  def construct_import(params, environment)
     user_params = params[:user].with_indifferent_access
     user = User.find_or_initialize_by(email: user_params[:email].downcase)
     user.undiscard if user.discarded?
@@ -18,14 +18,14 @@ class UserService
     user.save
     create_or_update_consumer(user, params)
 
-    update_api_list(user.consumer, apis) if apis.present?
+    update_api_list(user.consumer, apis, environment) if apis.present?
   end
 
-  def update_api_list(consumer, apis)
+  def update_api_list(consumer, apis, environment)
     apis.each do |api_name|
       next if api_name.blank?
 
-      add_api_to_consumer(api_name, consumer)
+      add_api_to_consumer(api_name, consumer, environment)
     end
   end
 
@@ -43,10 +43,10 @@ class UserService
 
   private
 
-  def add_api_to_consumer(api_name, consumer)
+  def add_api_to_consumer(api_name, consumer, environment)
     api_id = ApiRef.find_by(name: api_name.strip)[:api_id]
     api_model = Api.find(api_id)
-    env = Environment.find_by(name: 'sandbox')
+    env = Environment.find_by(name: environment)
     api_environment = ApiEnvironment.find_by(environment: env, api: api_model)
     if api_environment.present? && consumer.api_environment_ids.exclude?(api_environment.id)
       consumer.api_environments << api_environment

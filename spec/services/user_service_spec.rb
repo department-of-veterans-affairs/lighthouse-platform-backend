@@ -56,71 +56,71 @@ RSpec.describe UserService do
   describe 'constructs a user' do
     it 'creates user for new signup' do
       expect do
-        UserService.new.construct_import(new_consumer_params)
+        UserService.new.construct_import(new_consumer_params, 'sandbox')
       end.to change(User, :count).by(1)
     end
 
     it 'adds consumer api assignments for a new signup' do
       expect do
-        UserService.new.construct_import(new_consumer_params)
+        UserService.new.construct_import(new_consumer_params, 'sandbox')
       end.to change(Consumer, :count).by(1)
     end
 
     it 'assigns apis for new signups' do
       expect do
-        UserService.new.construct_import(new_consumer_params)
+        UserService.new.construct_import(new_consumer_params, 'sandbox')
       end.to change(ConsumerApiAssignment, :count).by(1)
     end
 
     it 'updates first and last name when email is the same' do
       consumer_params[:user][:first_name] = 'Sorcerer'
       consumer_params[:user][:last_name] = 'Supreme'
-      UserService.new.construct_import(consumer_params)
+      UserService.new.construct_import(consumer_params, 'sandbox')
       reloaded = User.find_by(email: consumer_params[:user][:email])
       expect(reloaded.first_name).to eq('Sorcerer')
       expect(reloaded.last_name).to eq('Supreme')
     end
 
     it 'appends new apis when given an additional signup with new api(s)' do
-      UserService.new.construct_import(consumer_params)
+      UserService.new.construct_import(consumer_params, 'sandbox')
       consumer_params[:user][:consumer_attributes][:apis_list] = api_ref_two
-      UserService.new.construct_import(consumer_params)
+      UserService.new.construct_import(consumer_params, 'sandbox')
       reloaded = User.find_by(email: consumer_params[:user][:email])
       expect(reloaded.consumer.apis.collect { |api| api.api_ref.name }.sort).to eq([api_ref_one, api_ref_two].sort)
     end
 
     it 'apis are not removed on a new signup with same email' do
-      UserService.new.construct_import(consumer_params)
+      UserService.new.construct_import(consumer_params, 'sandbox')
       consumer_params[:user][:consumer_attributes][:apis_list] = api_ref_one
-      UserService.new.construct_import(consumer_params)
+      UserService.new.construct_import(consumer_params, 'sandbox')
       reloaded = User.find_by(email: consumer_params[:user][:email])
       expect(reloaded.consumer.apis.collect { |api| api.api_ref.name }.sort).to eq([api_ref_one])
     end
 
     it 'does not reset the kong id if new oauth only signup' do
       consumer_params[:user][:consumer_attributes][:sandbox_gateway_ref] = nil
-      UserService.new.construct_import(consumer_params)
+      UserService.new.construct_import(consumer_params, 'sandbox')
       reloaded = User.find_by(email: consumer_params[:user][:email])
       expect(reloaded.consumer.sandbox_gateway_ref).to eq('l3g1t-1d')
     end
 
     it 'does not reset the okta id if new key auth only signup' do
       consumer_params[:user][:consumer_attributes][:sandbox_oauth_ref] = nil
-      UserService.new.construct_import(consumer_params)
+      UserService.new.construct_import(consumer_params, 'sandbox')
       reloaded = User.find_by(email: consumer_params[:user][:email])
       expect(reloaded.consumer.sandbox_oauth_ref).to eq('0kt4-rul3s')
     end
 
     it 'does update the kong id to the most current signups kong id' do
       consumer_params[:user][:consumer_attributes][:sandbox_gateway_ref] = 'm@rk6'
-      UserService.new.construct_import(consumer_params)
+      UserService.new.construct_import(consumer_params, 'sandbox')
       reloaded = User.find_by(email: consumer_params[:user][:email])
       expect(reloaded.consumer.sandbox_gateway_ref).to eq('m@rk6')
     end
 
     it 'does update the okta id to the most current signups okta id' do
       consumer_params[:user][:consumer_attributes][:sandbox_oauth_ref] = 'm@rk6'
-      UserService.new.construct_import(consumer_params)
+      UserService.new.construct_import(consumer_params, 'sandbox')
       reloaded = User.find_by(email: consumer_params[:user][:email])
       expect(reloaded.consumer.sandbox_oauth_ref).to eq('m@rk6')
     end
