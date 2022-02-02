@@ -10,7 +10,7 @@ class Consumer < ApplicationRecord
 
   belongs_to :user
   has_many :consumer_api_assignments, dependent: :destroy
-  has_many :apis, through: :consumer_api_assignments
+  has_many :api_environments, through: :consumer_api_assignments
 
   accepts_nested_attributes_for :consumer_api_assignments
 
@@ -23,6 +23,14 @@ class Consumer < ApplicationRecord
 
   after_undiscard do
     consumer_api_assignments.undiscard_all if consumer_api_assignments.present?
+  end
+
+  def apis
+    api_environments.map(&:api)
+  end
+
+  def api_ids
+    apis.map(&:id)
   end
 
   private
@@ -42,9 +50,15 @@ class Consumer < ApplicationRecord
       api_ref = ApiRef.find_by(name: api.strip)
       next if api_ref.blank?
 
-      api_id = api_ref['api_id']
-      api_model = Api.find(api_id)
-      apis << api_model if api_model.present? && api_ids.exclude?(api_model.id)
+      assign_api_environments(api_ref)
     end
+  end
+
+  def assign_api_environments(api_ref)
+    api_id = api_ref['api_id']
+    api_model = Api.find(api_id)
+    env = Environment.find_by(name: 'sandbox')
+    api_environment = ApiEnvironment.find_by(environment: env, api: api_model)
+    api_environments << api_environment if api_environment.present? && api_environment_ids.exclude?(api_environment.id)
   end
 end

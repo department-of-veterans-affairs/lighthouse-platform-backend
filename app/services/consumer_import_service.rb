@@ -50,7 +50,7 @@ class ConsumerImportService
 
     user_model = build_user_from_dynamo(dynamo_consumer, consumer['id'], okta_id)
 
-    UserService.new.construct_import(user_model) if dynamo_consumer['email'].present?
+    UserService.new.construct_import(user_model, 'sandbox') if dynamo_consumer['email'].present?
     @dynamo_consumers.delete(dynamo_consumer)
   end
 
@@ -62,7 +62,7 @@ class ConsumerImportService
         if okta_application
           user_model = build_user_from_dynamo(dyn_consumer, nil, okta_application['id'])
 
-          UserService.new.construct_import(user_model)
+          UserService.new.construct_import(user_model, 'sandbox')
         end
       end
     end

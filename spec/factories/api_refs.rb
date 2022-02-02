@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :api_ref do
-    name { 'MyString' }
+    name { Faker::Hipster.word }
   end
 end

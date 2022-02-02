@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :environment do
-    name { 'MyString' }
+    name { 'sandbox' }
   end
 end

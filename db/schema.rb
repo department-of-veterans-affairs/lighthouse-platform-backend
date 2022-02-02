@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_08_222001) do
+ActiveRecord::Schema.define(version: 2022_01_21_183820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,12 +49,12 @@ ActiveRecord::Schema.define(version: 2021_12_08_222001) do
 
   create_table "consumer_api_assignments", force: :cascade do |t|
     t.bigint "consumer_id", null: false
-    t.bigint "api_id", null: false
     t.datetime "first_successful_call_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "discarded_at"
-    t.index ["api_id"], name: "index_consumer_api_assignments_on_api_id"
+    t.bigint "api_environment_id"
+    t.index ["api_environment_id"], name: "index_consumer_api_assignments_on_api_environment_id"
     t.index ["consumer_id"], name: "index_consumer_api_assignments_on_consumer_id"
     t.index ["discarded_at"], name: "index_consumer_api_assignments_on_discarded_at"
   end
@@ -106,7 +106,6 @@ ActiveRecord::Schema.define(version: 2021_12_08_222001) do
   add_foreign_key "api_environments", "apis"
   add_foreign_key "api_environments", "environments"
   add_foreign_key "api_refs", "apis"
-  add_foreign_key "consumer_api_assignments", "apis"
   add_foreign_key "consumer_api_assignments", "consumers"
   add_foreign_key "consumers", "users"
 end
