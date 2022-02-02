@@ -5,12 +5,13 @@ require 'rails_helper'
 describe V0::Consumers, type: :request do
   describe 'accepts signups from dev portal' do
     let(:apply_base) { '/platform-backend/v0/consumers/applications' }
-    let(:api_environments) { create_list(:api_environment, 2)}
+    let(:api_environments) { create_list(:api_environment, 3) }
     let(:api_ref_one) { api_environments.first.api.api_ref.name }
     let(:api_ref_two) { api_environments.second.api.api_ref.name }
+    let(:api_ref_three) { api_environments.last.api.api_ref.name }
     let :signup_params do
       {
-        apis: "#{api_ref_one},#{api_ref_two}",
+        apis: "#{api_ref_one},#{api_ref_two},#{api_ref_three}",
         description: 'Signing up for Patti',
         email: 'doug@douglas.funnie.org',
         firstName: 'Douglas',
@@ -23,9 +24,8 @@ describe V0::Consumers, type: :request do
     end
 
     before do
-      api_environments.map do |env|
-        env.api.auth_server_access_key = nil
-      end
+      api_environments.last.api.auth_server_access_key = 'AUTHZ_SERVER_DEFAULT'
+      api_environments.last.api.acl = nil
     end
 
     context 'when signup is successful' do
@@ -36,7 +36,7 @@ describe V0::Consumers, type: :request do
 
           expect(User.count).to eq(1)
           expect(Consumer.count).to eq(1)
-          expect(User.last.consumer.apis.count).to eq(2)
+          expect(User.last.consumer.apis.count).to eq(3)
         end
       end
     end
