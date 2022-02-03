@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_08_222001) do
+ActiveRecord::Schema.define(version: 2022_02_02_205558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,20 @@ ActiveRecord::Schema.define(version: 2021_12_08_222001) do
     t.index ["api_id"], name: "index_api_environments_on_api_id"
     t.index ["discarded_at"], name: "index_api_environments_on_discarded_at"
     t.index ["environment_id"], name: "index_api_environments_on_environment_id"
+  end
+
+  create_table "api_metadata", force: :cascade do |t|
+    t.bigint "api_id"
+    t.string "description"
+    t.boolean "enabled_by_default"
+    t.string "display_name"
+    t.boolean "open_data"
+    t.boolean "va_internal_only"
+    t.datetime "discarded_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["api_id"], name: "index_api_metadata_on_api_id"
+    t.index ["discarded_at"], name: "index_api_metadata_on_discarded_at"
   end
 
   create_table "api_refs", force: :cascade do |t|
@@ -105,6 +119,7 @@ ActiveRecord::Schema.define(version: 2021_12_08_222001) do
 
   add_foreign_key "api_environments", "apis"
   add_foreign_key "api_environments", "environments"
+  add_foreign_key "api_metadata", "apis"
   add_foreign_key "api_refs", "apis"
   add_foreign_key "consumer_api_assignments", "apis"
   add_foreign_key "consumer_api_assignments", "consumers"

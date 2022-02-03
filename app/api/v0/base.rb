@@ -17,5 +17,6 @@ module V0
     end
 
     mount V0::Consumers
+    mount V0::Providers
   end
 end
