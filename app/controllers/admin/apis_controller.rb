@@ -17,6 +17,15 @@ class Admin::ApisController < ApplicationController
         },
         api_ref_attributes: {
           name: api.dig('api', 'api_ref')
+        },
+        api_metadatum_attributes: {
+          description: api.dig('api', 'api_description'),
+          display_name: api.dig('api', 'display_name'),
+          open_data: api.dig('api', 'open_data'),
+          va_internal_only: api.dig('api', 'va_internal_only'),
+          api_category_attributes: {
+            name: api.dig('api', 'category', 'name')
+          }
         }
       }
       manage_api api_built
@@ -67,7 +76,12 @@ class Admin::ApisController < ApplicationController
         'auth_server_access_key' => api['auth_server_access_key'],
         'metadata_url' => api['metadata_url'],
         'env_name' => api['environment'],
-        'api_ref' => api['api_ref']
+        'api_ref' => api['api_ref'],
+        'api_description' => api['api_description'],
+        'display_name' => api['display_name'],
+        'open_data' => api['open_data'],
+        'va_internal_only' => api['va_internal_only'],
+        'category' => { 'name' api['category'] }
       }
     }
   end

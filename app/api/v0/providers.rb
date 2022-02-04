@@ -12,7 +12,7 @@ module V0
                                allow_blank: true
       end
       get '/' do
-        api_providers = Api.kept
+        api_providers = Api.kept.displayable
 
         present api_providers, with: V0::Entities::ApiProviderEntity, environment: params[:environment]
       end

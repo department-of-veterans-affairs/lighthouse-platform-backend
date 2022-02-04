@@ -10,6 +10,8 @@ class Api < ApplicationRecord
   has_many :api_environments, dependent: :destroy
   has_one :api_metadatum, dependent: :destroy
 
+  scope :displayable, -> { joins(:api_metadatum) }
+
   after_discard do
     api_ref.discard if api_ref.present?
     api_environments.discard_all if api_environments.present?
@@ -31,11 +33,12 @@ class Api < ApplicationRecord
   end
 
   def api_metadatum_attributes=(api_metadatum_attributes)
+    category = ApiCategory.find_or_create_by(name: api_metadatum_attributes.dig(:api_category_attributes, :name))
     ApiMetadatum.find_or_create_by(api_id: id,
                                    description: api_metadatum_attributes[:description],
-                                   enabled_by_default: api_metadatum_attributes[:enabled_by_default],
                                    display_name: api_metadatum_attributes[:display_name],
                                    open_data: api_metadatum_attributes[:open_data],
-                                   va_internal_only: api_metadatum_attributes[:va_internal_only])
+                                   va_internal_only: api_metadatum_attributes[:va_internal_only],
+                                   api_category: category)
   end
 end

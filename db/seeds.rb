@@ -16,9 +16,11 @@ apis = apis.each do |api|
                                },
                                api_metadatum_attributes: {
                                  description: api['api_description'],
-                                 enabled_by_default: api['enabled_by_default'],
                                  display_name: api['display_name'],
                                  open_data: api['open_data'],
-                                 va_internal_only: api['va_internal_only']
+                                 va_internal_only: api['va_internal_only'],
+                                 api_category_attributes: {
+                                   name: api['category']
+                                 }
                                })
 end

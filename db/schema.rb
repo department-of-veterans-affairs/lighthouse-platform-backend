@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_02_205558) do
+ActiveRecord::Schema.define(version: 2022_02_03_145235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "api_categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "discarded_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["discarded_at"], name: "index_api_categories_on_discarded_at"
+  end
 
   create_table "api_environments", force: :cascade do |t|
     t.bigint "api_id"
@@ -30,13 +38,15 @@ ActiveRecord::Schema.define(version: 2022_02_02_205558) do
   create_table "api_metadata", force: :cascade do |t|
     t.bigint "api_id"
     t.string "description"
-    t.boolean "enabled_by_default"
     t.string "display_name"
     t.boolean "open_data"
     t.boolean "va_internal_only"
+    t.jsonb "oauth_info"
+    t.bigint "api_category_id"
     t.datetime "discarded_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["api_category_id"], name: "index_api_metadata_on_api_category_id"
     t.index ["api_id"], name: "index_api_metadata_on_api_id"
     t.index ["discarded_at"], name: "index_api_metadata_on_discarded_at"
   end
@@ -119,6 +129,7 @@ ActiveRecord::Schema.define(version: 2022_02_02_205558) do
 
   add_foreign_key "api_environments", "apis"
   add_foreign_key "api_environments", "environments"
+  add_foreign_key "api_metadata", "api_categories"
   add_foreign_key "api_metadata", "apis"
   add_foreign_key "api_refs", "apis"
   add_foreign_key "consumer_api_assignments", "apis"
