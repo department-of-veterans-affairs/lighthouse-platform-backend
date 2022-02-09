@@ -16,6 +16,22 @@ module V0
 
         present api_providers, with: V0::Entities::ApiProviderEntity, environment: params[:environment]
       end
+
+      desc 'Provide list of apis within categories as developer-portal expects'
+      params do
+        optional :environment, type: String,
+                               values: %w[dev staging sandbox production],
+                               allow_blank: true
+      end
+      get '/transformations/legacy' do
+        categories = {}
+        ApiCategory.kept.map do |category|
+          categories[category.name.downcase] =
+            V0::Entities::Legacy::ApiProviderCategoryEntity.represent(category)
+        end
+
+        categories
+      end
     end
   end
 end
