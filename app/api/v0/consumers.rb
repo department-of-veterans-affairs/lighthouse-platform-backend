@@ -44,6 +44,19 @@ module V0
       def missing_oauth_params?
         params[:oAuthApplicationType].blank? || params[:oAuthRedirectURI].blank?
       end
+
+      def send_production_access_emails(request)
+        ProductionMailer.consumer_production_access(request).deliver_later
+        ProductionMailer.support_production_access(request).deliver_later
+      end
+
+      class Length < Grape::Validations::Validators::Base
+        def validate_param!(attr_name, params)
+          unless params[attr_name].length <= @option
+            fail Grape::Exceptions::Validation, params: [@scope.full_name(attr_name)], message: "must be at the most #{@option} characters long"
+          end
+        end
+      end
     end
 
     resource 'consumers' do
@@ -73,6 +86,59 @@ module V0
         user.undiscard if user.discarded?
 
         present user, with: V0::Entities::ConsumerApplicationEntity, kong: kong_consumer, okta: okta_consumer
+      end
+
+      desc 'Accepts request for production access'
+      params do
+        requires :apis, type: String, allow_blank: false
+        optional :appDescription, type: String
+        optional :appName, type: String
+        optional :breachManagementProcess, type: String
+        optional :businessModel, type: String
+        optional :centralizedBackendLog, type: String
+        optional :distributingAPIKeysToCustomers, type: Boolean
+        optional :exposeVeteranInformationToThirdParties, type: Boolean
+        requires :is508Compliant, type: Boolean
+        optional :listedOnMyHealthApplication, type: Boolean
+        optional :monitizationExplanation, type: String
+        requires :monitizedVeteranInformation, type: Boolean
+        optional :multipleReqSafeguards, type: String
+        optional :namingConvention, type: String
+        requires :organization, type: String
+        # test this with dashes from FE
+        optional :phoneNumber, regexp: /^(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?|\.?))[2-9]\d{2}[- .]?\d{4}((\ )?(\()?(ext|x|extension)([- .:])?\d{1,6}(\))?)?$/
+        optional :piiStorageMethod, type: String
+        optional :platforms, type: String
+        optional :policyDocuments, type: Array[String]
+        requires :primaryContact, type: Hash do
+          requires :email, type: String, regexp: /^(?!.*(test|sample|fake|email)).*/
+          requires :firstName, type: String
+          requires :lastName, type: String
+        end
+        optional :productionKeyCredentialStorage, type: String
+        optional :productionOrOAuthKeyCredentialStorage, type: String
+        optional :scopesAccessRequested, type: String
+        requires :secondaryContact, type: Hash do
+          requires :email, type: String, regexp: /^(?!.*(test|sample|fake|email)).*/
+          requires :firstName, type: String
+          requires :lastName, type: String
+        end
+        optional :signUpLink, type: Array[String]
+        requires :statusUpdateEmails, type: Array[String], regexp: /^(?!.*(test|sample|fake|email)).*/
+        requires :storePIIOrPHI, type: Boolean
+        optional :supportLink, type: Array[String]
+        optional :thirdPartyInfoDescription, type: String
+        requires :valueProvided, type: String
+        optional :vasiSystemName, type: String
+        requires :veteranFacing, type: Boolean
+        optional :veteranFacingDescription, type: String, length: 415
+        optional :vulnerabilityManagement, type: String
+        optional :website, type: String
+      end
+
+      post 'production_request' do
+        send_production_access_emails(params)
+        render status: 200, json: params
       end
     end
   end
