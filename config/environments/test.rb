@@ -74,4 +74,5 @@ Rails.application.configure do
   ENV['AWS_REGION'] = 'us-gov-west-1'
   ENV['AUTHZ_SERVER_DEFAULT'] = 'default'
   ENV['ES_ENDPOINT'] = 'http://elasticsearch:9200'
+  ENV['SUPPORT_EMAIL'] = 'user_support@the_house_of_light.com'
 end
