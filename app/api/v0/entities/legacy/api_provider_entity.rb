@@ -42,8 +42,14 @@ module V0
         expose :vaInternalOnly do |entity|
           entity.va_internal_only
         end
+        expose :oAuth do |entity|
+          entity.oauth_info.present?
+        end
         expose :oauth_info, as: :oAuthInfo do |entity|
           entity.oauth_info
+        end
+        expose :oAuthTypes do |entity|
+          []
         end
       end
     end

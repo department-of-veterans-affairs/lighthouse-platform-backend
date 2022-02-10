@@ -33,7 +33,15 @@ class Api < ApplicationRecord
   end
 
   def api_metadatum_attributes=(api_metadatum_attributes)
-    category = ApiCategory.find_or_create_by(name: api_metadatum_attributes.dig(:api_category_attributes, :name))
+    category = ApiCategory.find_or_create_by(
+      name: api_metadatum_attributes.dig(:api_category_attributes, :name),
+      short_description: api_metadatum_attributes.dig(:api_category_attributes, :short_description),
+      quickstart: api_metadatum_attributes.dig(:api_category_attributes, :quickstart),
+      veteran_redirect_link_url: api_metadatum_attributes.dig(:api_category_attributes, :veteran_redirect_link_url),
+      veteran_redirect_link_text: api_metadatum_attributes.dig(:api_category_attributes, :veteran_redirect_link_text),
+      veteran_redirect_message: api_metadatum_attributes.dig(:api_category_attributes, :veteran_redirect_message),
+      overview: api_metadatum_attributes.dig(:api_category_attributes, :overview)
+    )
     ApiMetadatum.find_or_create_by(api_id: id,
                                    description: api_metadatum_attributes[:description],
                                    display_name: api_metadatum_attributes[:display_name],

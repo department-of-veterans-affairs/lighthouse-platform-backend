@@ -7,8 +7,19 @@ module V0
         expose :name, documentation: { type: String }
         expose :name, as: :properName, documentation: { type: String }
         expose :api_metadatum, as: :apis, using: V0::Entities::Legacy::ApiProviderEntity
-        expose :content, documentation: { type: String } do |_entity|
-          'something here' # TODO: need to actually store the markdown from the portal
+        expose :content do |entity|
+          response = { consumerDocsLinkText: entity.consumer_docs_link_text, 
+                       shortDescription: entity.short_description, 
+                       quickstart: entity.quickstart,
+                       veteranRedirect: {
+                         linkUrl: entity.veteran_redirect_link_url,
+                         linkText: entity.veteran_redirect_link_text,
+                         message: entity.veteran_redirect_message
+                       },
+                       overview: entity.overview.gsub('\\n', "\n") }
+          response[:veteranRedirect] = nil if entity.veteran_redirect_link_url.blank?
+
+          response
         end
       end
     end

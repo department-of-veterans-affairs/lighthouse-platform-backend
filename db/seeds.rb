@@ -20,7 +20,13 @@ apis = apis.each do |api|
                                  open_data: api['open_data'],
                                  va_internal_only: api['va_internal_only'],
                                  api_category_attributes: {
-                                   name: api['category']
+                                   name: api['category_name'],
+                                   short_description: api['category_short_description'],
+                                   quickstart: api['category_quickstart'],
+                                   veteran_redirect_link_url: api['category_veteran_redirect_link_url'],
+                                   veteran_redirect_link_text: api['category_veteran_redirect_link_text'],
+                                   veteran_redirect_message: api['category_veteran_redirect_message'],
+                                   overview: api['category_overview']
                                  }
                                })
 end
