@@ -2,6 +2,7 @@
 
 module V0
   class Consumers < V0::Base
+    require_relative '../validators/length'
     version 'v0'
 
     helpers do
@@ -48,14 +49,6 @@ module V0
       def send_production_access_emails(request)
         ProductionMailer.consumer_production_access(request).deliver_later
         ProductionMailer.support_production_access(request).deliver_later
-      end
-
-      class Length < Grape::Validations::Validators::Base
-        def validate_param!(attr_name, params)
-          unless params[attr_name].length <= @option
-            fail Grape::Exceptions::Validation, params: [@scope.full_name(attr_name)], message: "must be at the most #{@option} characters long"
-          end
-        end
       end
     end
 
@@ -105,7 +98,6 @@ module V0
         optional :multipleReqSafeguards, type: String
         optional :namingConvention, type: String
         requires :organization, type: String
-        # test this with dashes from FE
         optional :phoneNumber, regexp: /^(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?|\.?))[2-9]\d{2}[- .]?\d{4}((\ )?(\()?(ext|x|extension)([- .:])?\d{1,6}(\))?)?$/
         optional :piiStorageMethod, type: String
         optional :platforms, type: String
@@ -131,7 +123,7 @@ module V0
         requires :valueProvided, type: String
         optional :vasiSystemName, type: String
         requires :veteranFacing, type: Boolean
-        optional :veteranFacingDescription, type: String, length: 415
+        optional :veteranFacingDescription, type: String, length: 145
         optional :vulnerabilityManagement, type: String
         optional :website, type: String
       end
