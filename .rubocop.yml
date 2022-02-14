@@ -104,10 +104,6 @@ Rails/Output:
   Exclude:
     - 'lib/tasks/**/*'
 
-Rails/SkipsModelValidations:
-  Exclude: 
-    - 'app/controllers/admin/api/v0/apis_controller.rb'
-
 Metrics/ClassLength:
   Max: 400
 
@@ -130,6 +126,7 @@ Metrics/BlockLength:
     - 'rakelib/**/*.rake'
     - 'lib/tasks/**/*.rake'
     - 'config/**/*.rb'
+    - 'app/api/v0/consumers.rb'
   IgnoredMethods:
     - 'helpers'
 
