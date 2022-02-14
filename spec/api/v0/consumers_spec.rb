@@ -73,39 +73,49 @@ describe V0::Consumers, type: :request do
     let(:production_request_base) { '/platform-backend/v0/consumers/production_request' }
     let :production_request_params do
       {
-        apis: "#{Faker::Hipster.word},#{Faker::Hipster.word}",
-        appDescription: 'App Description Here',
-        businessModel: 'Model of Business',
+        apis: 'benefits',
+        appDescription: 'A social media platform with one room.',
+        appName: 'One to Bind Them',
+        breachManagementProcess: 'golem',
+        businessModel: 'magical rings >> profit',
+        centralizedBackendLog: 'non-existent',
+        distributingAPIKeysToCustomers: false,
+        exposeVeteranInformationToThirdParties: false,
         is508Compliant: true,
+        listedOnMyHealthApplication: false,
+        monitizationExplanation: 'n/a',
         monitizedVeteranInformation: false,
-        organization: Faker::Hipster.word,
-        phoneNumber: '(555)555-5555',
-        platforms: 'iOS, iPhone, iPad, Android',
+        multipleReqSafeguards: 'golem',
+        namingConvention: 'overly-complicated',
+        organization: 'Sauron.INC',
+        phoneNumber: '555-867-5309',
+        piiStorageMethod: 'Locking away in the fires from whence it came.',
+        platforms: 'iOS',
+        policyDocuments: ['www.example.com/tos'],
         primaryContact: {
-          email: Faker::Internet.safe_email,
-          firstName: Faker::Name.first_name,
-          lastName: Faker::Name.last_name
+          email: 'sam@fellowship.com',
+          firstName: 'Samwise',
+          lastName: 'Gamgee',
         },
-        productionOrOAuthKeyCredentialStorage: 'Secretly.',
+        productionKeyCredentialStorage: 'stored in a volcano on mount doom',
+        productionOrOAuthKeyCredentialStorage: 'also stored in the volcano',
+        scopesAccessRequested: 'profile',
         secondaryContact: {
-          email: Faker::Internet.safe_email,
-          firstName: Faker::Name.first_name,
-          lastName: Faker::Name.last_name
+          email: 'frodo@fellowship.com',
+          firstName: 'Frodo',
+          lastName: 'Baggins',
         },
-        signUpLink: [
-          Faker::Internet.url(path: '/going_to_signup_now')
-        ],
-        statusUpdateEmails: [
-          Faker::Internet.safe_email
-        ],
+        signUpLink: ['www.one2bindthem.com/signup'],
+        statusUpdateEmails: ['sam@fellowship.com'],
         storePIIOrPHI: false,
-        supportLink: [
-          Faker::Internet.url(path: '/need_support')
-        ],
-        valueProvided: 'It does stuff.',
-        vasiSystemName: 'VASI',
-        veteranFacing: true,
-        website: Faker::Internet.url
+        supportLink: ['www.one2bindthem.com/support'],
+        valueProvided: 'n/a',
+        vasiSystemName: 'asdf',
+        veteranFacing: false,
+        veteranFacingDescription:
+          'Now the Elves made many rings; but secretly Sauron made One Ring to rule all the others, and their power was bound up with it, to be subject wholly to it and to last only so long as it too should last.',
+        vulnerabilityManagement: 'golem',
+        website: 'www.one2bindthem.com',
       }
     end
 
@@ -128,7 +138,7 @@ describe V0::Consumers, type: :request do
 
     context 'fails if provided' do
       it 'an excessive description' do
-        production_request_params[:veteranFacingDescription] = (0..150).map { rand(65..89).chr }.join
+        production_request_params[:veteranFacingDescription] = (0..425).map { rand(65..89).chr }.join
         post production_request_base, params: production_request_params
         expect(response.code).to eq('400')
       end
