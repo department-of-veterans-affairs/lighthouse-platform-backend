@@ -26,7 +26,6 @@ RSpec.describe ProductionMailer, type: :mailer do
 
     it 'renders the body' do
       expect(mail.body).to include(contact[:firstName])
-      expect(mail.body).to include(contact[:lastName])
       expect(mail.body).to include(production_request[:organization])
     end
   end
