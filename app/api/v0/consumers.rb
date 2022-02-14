@@ -99,11 +99,13 @@ module V0
         optional :namingConvention, type: String
         requires :organization, type: String
         optional :phoneNumber,
-                 regexp: /
-                   ^(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:-?|\ ?|\.?))
-                   [2-9]\d{2}[- .]?\d{4}((\ )?(\()
-                   ?(ext|x|extension)([- .:])?\d{1,6}(\))?)?$
-                 /x
+                 regexp: { value: /
+                            ^(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:-?|\ ?|\.?))
+                            [2-9]\d{2}[- .]?\d{4}((\ )?(\()
+                            ?(ext|x|extension)([- .:])?\d{1,6}(\))?)?$
+                          /x,
+                           message: '"phoneNumber" failed custom validation because phone number format invalid. '\
+                                    'Valid format examples: 222-333-4444, (222) 333-4444, 2223334444' }
         optional :piiStorageMethod, type: String
         optional :platforms, type: String
         optional :policyDocuments, type: Array[String]
