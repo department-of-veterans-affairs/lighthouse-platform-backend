@@ -128,7 +128,7 @@ module V0
         requires :valueProvided, type: String
         optional :vasiSystemName, type: String
         requires :veteranFacing, type: Boolean
-        optional :veteranFacingDescription, type: String, length: 145
+        optional :veteranFacingDescription, type: String, length: 415
         optional :vulnerabilityManagement, type: String
         optional :website, type: String
       end
