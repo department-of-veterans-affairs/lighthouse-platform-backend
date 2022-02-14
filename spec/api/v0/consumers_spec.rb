@@ -95,7 +95,7 @@ describe V0::Consumers, type: :request do
         primaryContact: {
           email: 'sam@fellowship.com',
           firstName: 'Samwise',
-          lastName: 'Gamgee',
+          lastName: 'Gamgee'
         },
         productionKeyCredentialStorage: 'stored in a volcano on mount doom',
         productionOrOAuthKeyCredentialStorage: 'also stored in the volcano',
@@ -103,7 +103,7 @@ describe V0::Consumers, type: :request do
         secondaryContact: {
           email: 'frodo@fellowship.com',
           firstName: 'Frodo',
-          lastName: 'Baggins',
+          lastName: 'Baggins'
         },
         signUpLink: ['www.one2bindthem.com/signup'],
         statusUpdateEmails: ['sam@fellowship.com'],
@@ -113,9 +113,11 @@ describe V0::Consumers, type: :request do
         vasiSystemName: 'asdf',
         veteranFacing: false,
         veteranFacingDescription:
-          'Now the Elves made many rings; but secretly Sauron made One Ring to rule all the others, and their power was bound up with it, to be subject wholly to it and to last only so long as it too should last.',
+          'Now the Elves made many rings; but secretly Sauron made One Ring '\
+          'to rule all the others, and their power was bound up with it, to be '\
+          'subject wholly to it and to last only so long as it too should last.',
         vulnerabilityManagement: 'golem',
-        website: 'www.one2bindthem.com',
+        website: 'www.one2bindthem.com'
       }
     end
 
