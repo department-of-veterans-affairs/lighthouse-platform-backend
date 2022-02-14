@@ -24,8 +24,14 @@ module V0
         expose :enabledByDefault, documentation: { type: String } do |_entity|
           true
         end
-        expose :lastProdAccessStep do |_entity|
-          nil # TODO: unsure on how to do this atm
+        expose :lastProdAccessStep do |entity|
+          if entity.open_data && !entity.va_internal_only
+            2
+          elsif !entity.open_data && entity.va_internal_only
+            3
+          else
+            4
+          end
         end
         expose :name, documentation: { type: String } do |entity|
           entity.display_name
@@ -46,10 +52,21 @@ module V0
           entity.oauth_info.present?
         end
         expose :oauth_info, as: :oAuthInfo do |entity|
-          entity.oauth_info
+          if entity.oauth_info.present?
+            JSON.parse(entity.oauth_info)
+          else
+            nil
+          end
         end
         expose :oAuthTypes do |entity|
-          []
+          if entity.oauth_info.present?
+            types = []
+            oauth_information = JSON.parse(entity.oauth_info)
+            types.push('AuthorizationCodeGrant') if oauth_information['acgInfo'].present?
+            types.push('ClientCredentialsGrant') if oauth_information['ccgInfo'].present?
+          else
+            nil
+          end
         end
       end
     end
