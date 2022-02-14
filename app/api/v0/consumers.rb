@@ -98,7 +98,12 @@ module V0
         optional :multipleReqSafeguards, type: String
         optional :namingConvention, type: String
         requires :organization, type: String
-        optional :phoneNumber, regexp: /^(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?|\.?))[2-9]\d{2}[- .]?\d{4}((\ )?(\()?(ext|x|extension)([- .:])?\d{1,6}(\))?)?$/
+        optional :phoneNumber,
+                 regexp: /
+                   ^(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:-?|\ ?|\.?))
+                   [2-9]\d{2}[- .]?\d{4}((\ )?(\()
+                   ?(ext|x|extension)([- .:])?\d{1,6}(\))?)?$
+                 /x
         optional :piiStorageMethod, type: String
         optional :platforms, type: String
         optional :policyDocuments, type: Array[String]
