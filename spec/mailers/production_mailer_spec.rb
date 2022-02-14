@@ -33,6 +33,7 @@ RSpec.describe ProductionMailer, type: :mailer do
 
   describe 'sends the consumer an email confirmation' do
     let(:mail) { ProductionMailer.consumer_production_access(production_request) }
+
     it 'renders the headers' do
       expect(mail.subject).to eq('Your Request for Production Access is Submitted')
       expect(mail.to).to eq([contact[:email]])

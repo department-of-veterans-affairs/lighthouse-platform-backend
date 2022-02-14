@@ -15,13 +15,13 @@ module V0
         expose :lastName
       end
 
-      expose :appName, if: lambda { |status, _options| status[:appName].present? }
+      expose :appName, if: ->(status, _options) { status[:appName].present? }
       expose :apis
       expose :is508Compliant
       expose :organization
       expose :statusUpdateEmails
 
-      expose :website, if: lambda { |status, _options| status[:website].present? }
+      expose :website, if: ->(status, _options) { status[:website].present? }
     end
   end
 end
