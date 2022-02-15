@@ -5,4 +5,5 @@ class ApiMetadatum < ApplicationRecord
 
   belongs_to :api
   belongs_to :api_category
+  has_many :api_release_notes
 end

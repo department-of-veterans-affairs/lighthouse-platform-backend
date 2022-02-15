@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_10_204827) do
+ActiveRecord::Schema.define(version: 2022_02_15_143454) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,17 @@ ActiveRecord::Schema.define(version: 2022_02_10_204827) do
     t.datetime "discarded_at"
     t.index ["api_id"], name: "index_api_refs_on_api_id"
     t.index ["discarded_at"], name: "index_api_refs_on_discarded_at"
+  end
+
+  create_table "api_release_notes", force: :cascade do |t|
+    t.bigint "api_metadatum_id"
+    t.datetime "date"
+    t.string "content"
+    t.datetime "discarded_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["api_metadatum_id"], name: "index_api_release_notes_on_api_metadatum_id"
+    t.index ["discarded_at"], name: "index_api_release_notes_on_discarded_at"
   end
 
   create_table "apis", force: :cascade do |t|
@@ -139,6 +150,7 @@ ActiveRecord::Schema.define(version: 2022_02_10_204827) do
   add_foreign_key "api_metadata", "api_categories"
   add_foreign_key "api_metadata", "apis"
   add_foreign_key "api_refs", "apis"
+  add_foreign_key "api_release_notes", "api_metadata"
   add_foreign_key "consumer_api_assignments", "apis"
   add_foreign_key "consumer_api_assignments", "consumers"
   add_foreign_key "consumers", "users"

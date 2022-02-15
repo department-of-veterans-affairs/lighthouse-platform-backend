@@ -39,8 +39,10 @@ module V0
         expose :openData do |entity|
           entity.open_data
         end
-        expose :releaseNotes do |_entity|
-          nil # TODO: unsure on how to do this atm
+        expose :releaseNotes do |entity|
+          entity.api_release_notes.map do |release_note|
+            "### #{release_note.date.strftime("%B %d, %Y")}\n\n#{release_note.content}"
+          end.join("\n\n---\n\n")
         end
         expose :urlFragment do |entity|
           entity.api.name.underscore.camelize(:lower)

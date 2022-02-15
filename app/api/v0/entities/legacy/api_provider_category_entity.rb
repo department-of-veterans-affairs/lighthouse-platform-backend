@@ -16,7 +16,7 @@ module V0
                          linkText: entity.veteran_redirect_link_text,
                          message: entity.veteran_redirect_message
                        },
-                       overview: entity.overview.gsub('\\n', "\n") }
+                       overview: entity.overview }
           response[:veteranRedirect] = nil if entity.veteran_redirect_link_url.blank?
 
           response
