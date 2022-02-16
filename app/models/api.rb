@@ -39,6 +39,7 @@ class Api < ApplicationRecord
                                    open_data: api_metadatum_attributes[:open_data],
                                    va_internal_only: api_metadatum_attributes[:va_internal_only],
                                    oauth_info: api_metadatum_attributes[:oauth_info],
+                                   multi_open_api_intro: api_metadatum_attributes[:multi_open_api_intro],
                                    api_category: category)
   end
 end

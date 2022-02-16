@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_16_194610) do
+ActiveRecord::Schema.define(version: 2022_02_16_225126) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,9 @@ ActiveRecord::Schema.define(version: 2022_02_16_194610) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "discarded_at"
+    t.string "key"
+    t.string "label"
+    t.string "api_intro"
     t.index ["api_id"], name: "index_api_environments_on_api_id"
     t.index ["discarded_at"], name: "index_api_environments_on_discarded_at"
     t.index ["environment_id"], name: "index_api_environments_on_environment_id"
@@ -54,6 +57,7 @@ ActiveRecord::Schema.define(version: 2022_02_16_194610) do
     t.datetime "discarded_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "multi_open_api_intro"
     t.index ["api_category_id"], name: "index_api_metadata_on_api_category_id"
     t.index ["api_id"], name: "index_api_metadata_on_api_id"
     t.index ["discarded_at"], name: "index_api_metadata_on_discarded_at"

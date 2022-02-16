@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+Api.destroy_all
+ApiCategory.destroy_all
+
 appeals_category = ApiCategory.create(
   name: 'Appeals APIs',
   key: 'appeals',
@@ -516,18 +519,50 @@ fhir_health_api.assign_attributes(
     }.to_json,
    api_category_attributes: {
      id: health_category.id
-   }
+   },
+   multi_open_api_intro: <<~MARKDOWN
+    The VA's FHIR Health APIs allow consumers to develop applications using Veteran data. Please see the tabs below for the specific FHIR implementations. Data entered through the production environment Veterans Health API is held in the original data source for 36 hours before it is visible elsewhere, including in any patient-facing applications. This holding period exists to allow health care providers time to discuss health data, such as sensitive diagnoses, before the patient sees this data elsewhere.
+
+    The following Veteran data is excluded from the 36 hour hold:
+    * COVID lab tests
+    * All immunizations
+
+    > **NOTICE**: Lighthouse encourages using the R4 specification to conform with the [21st Century Cures Act](https://www.federalregister.gov/documents/2020/05/01/2020-07419/21st-century-cures-act-interoperability-information-blocking-and-the-onc-health-it-certification#h-13), which requires adoption of R4 by December 31, 2022.
+   MARKDOWN
   }
 )
 ApiEnvironment.find_or_create_by(metadata_url: 'https://api.va.gov/internal/docs/fhir-r4/metadata.json',
                                  api: fhir_health_api,
-                                 environment: Environment.find_or_create_by(name: 'sandbox'))
+                                 environment: Environment.find_or_create_by(name: 'sandbox'),
+                                 key: 'r4',
+                                 label: 'R4')
 ApiEnvironment.find_or_create_by(metadata_url: 'https://api.va.gov/internal/docs/fhir-argonaut/metadata.json',
                                  api: fhir_health_api,
-                                 environment: Environment.find_or_create_by(name: 'sandbox'))
+                                 environment: Environment.find_or_create_by(name: 'sandbox'),
+                                 key: 'argonaut',
+                                 label: 'Argonaut',
+                                 api_intro: <<~MARKDOWN
+                                  ## Argonaut Data Query
+
+                                  The Argonaut Project is a joint project of major US EHR vendors to advance industry adoption of modern, open interoperability standards. VA’s FHIR Argonaut Data Query API is based upon the FHIR DSTU-2 specification, particularly the [Argonaut Data Query Implementation Guide](http://www.fhir.org/guides/argonaut/r2/index.html). As noted in the implementation guide, the resources and requirements supported by Argonaut are a subset of those profiles included in DSTU-2.
+
+                                  The profiles included in VA’s Argonaut Data Query API are compliant with the FHIR Argonaut Data Query Implementation Guide and satisfy the following two following use cases:
+
+                                   * Patient uses provider-approved web application to access health data
+                                   * Patient uses provider-approved mobile app to access health data 
+                                 MARKDOWN
+                                )
 ApiEnvironment.find_or_create_by(metadata_url: 'https://api.va.gov/internal/docs/fhir-dstu2/metadata.json',
                                  api: fhir_health_api,
-                                 environment: Environment.find_or_create_by(name: 'sandbox'))
+                                 environment: Environment.find_or_create_by(name: 'sandbox'),
+                                 key: 'dstu2',
+                                 label: 'DSTU2',
+                                 api_intro: <<~MARKDOWN
+                                  ## DSTU2
+
+                                  VA's FHIR DSTU-2 API is an industry accepted standard and consists of resources that represent granular clinical concepts, including health, administrative, and financial resources. The following describes the VA's implementation of HL7's FHIR DSTU-2 standard.
+                                 MARKDOWN
+                                )
 
 ApiReleaseNote.create(api_metadatum_id: claims_api.api_metadatum.id,
                       date: Time.now.to_date,

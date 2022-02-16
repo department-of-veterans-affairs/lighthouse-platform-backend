@@ -19,7 +19,14 @@ module V0
                                entity.api.api_environments
                              end
 
-          api_environments.map { |api_environment| { metadataUrl: api_environment.metadata_url } }
+          api_environments.map do |api_environment|
+            { 
+              metadataUrl: api_environment.metadata_url,
+              key: api_environment.key,
+              label: api_environment.label,
+              apiIntro: api_environment.api_intro
+            }
+          end
         end
         expose :enabledByDefault, documentation: { type: String } do |_entity|
           true
@@ -80,6 +87,9 @@ module V0
           else
             nil
           end
+        end
+        expose :multiOpenAPIIntro do |entity|
+          entity.multi_open_api_intro
         end
       end
     end
