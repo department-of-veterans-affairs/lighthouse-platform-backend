@@ -6,7 +6,7 @@ class Api < ApplicationRecord
   validates :name, presence: true
 
   has_one :api_ref, dependent: :destroy
-  has_many :consumer_api_assignment, dependent: :nullify
+  has_many :consumer_api_assignment, dependent: :destroy
   has_many :api_environments, dependent: :destroy
   has_one :api_metadatum, dependent: :destroy
 
@@ -33,20 +33,13 @@ class Api < ApplicationRecord
   end
 
   def api_metadatum_attributes=(api_metadatum_attributes)
-    category = ApiCategory.find_or_create_by(
-      name: api_metadatum_attributes.dig(:api_category_attributes, :name),
-      short_description: api_metadatum_attributes.dig(:api_category_attributes, :short_description),
-      quickstart: api_metadatum_attributes.dig(:api_category_attributes, :quickstart),
-      veteran_redirect_link_url: api_metadatum_attributes.dig(:api_category_attributes, :veteran_redirect_link_url),
-      veteran_redirect_link_text: api_metadatum_attributes.dig(:api_category_attributes, :veteran_redirect_link_text),
-      veteran_redirect_message: api_metadatum_attributes.dig(:api_category_attributes, :veteran_redirect_message),
-      overview: api_metadatum_attributes.dig(:api_category_attributes, :overview)
-    )
+    category = ApiCategory.find_by(id: api_metadatum_attributes.dig(:api_category_attributes, :id))
     ApiMetadatum.find_or_create_by(api_id: id,
                                    description: api_metadatum_attributes[:description],
                                    display_name: api_metadatum_attributes[:display_name],
                                    open_data: api_metadatum_attributes[:open_data],
                                    va_internal_only: api_metadatum_attributes[:va_internal_only],
+                                   oauth_info: api_metadatum_attributes[:oauth_info],
                                    api_category: category)
   end
 end

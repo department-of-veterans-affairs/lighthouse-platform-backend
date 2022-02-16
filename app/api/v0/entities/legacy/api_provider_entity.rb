@@ -5,7 +5,7 @@ module V0
     module Legacy
       class ApiProviderEntity < Grape::Entity
         expose :altID, documentation: { type: String } do |entity|
-          entity.api.name.underscore.camelize(:lower)
+          entity.api.api_ref.name
         end
         expose :description, documentation: { type: String } do |entity|
           entity.description
@@ -45,7 +45,7 @@ module V0
           end.join("\n\n---\n\n")
         end
         expose :urlFragment do |entity|
-          entity.api.name.underscore.camelize(:lower)
+          entity.api.api_ref.name.underscore
         end
         expose :vaInternalOnly do |entity|
           entity.va_internal_only
@@ -66,6 +66,17 @@ module V0
             oauth_information = JSON.parse(entity.oauth_info)
             types.push('AuthorizationCodeGrant') if oauth_information['acgInfo'].present?
             types.push('ClientCredentialsGrant') if oauth_information['ccgInfo'].present?
+          else
+            nil
+          end
+        end
+        expose :veteranRedirect do |entity|
+          if entity.api_category.veteran_redirect_link_url.present?
+            {
+              linkUrl: entity.api_category.veteran_redirect_link_url,
+              linkText: entity.api_category.veteran_redirect_link_text,
+              message: entity.api_category.veteran_redirect_message
+            }
           else
             nil
           end

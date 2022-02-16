@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_15_143454) do
+ActiveRecord::Schema.define(version: 2022_02_16_194610) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2022_02_15_143454) do
     t.string "veteran_redirect_link_text"
     t.string "veteran_redirect_message"
     t.string "overview"
+    t.string "key"
     t.index ["discarded_at"], name: "index_api_categories_on_discarded_at"
   end
 
