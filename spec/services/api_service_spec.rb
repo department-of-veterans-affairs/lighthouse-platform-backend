@@ -3,21 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe ApiService do
-  before do
-    benefits_api
-    benefits_ref
-    claims_api
-    claims_ref
-    oauth_api
-    oauth_ref
-  end
+  let(:api_environments) { create_list(:api_environment, 3) }
+  let(:apis) { api_environments.map(&:api) }
 
-  let(:benefits_api) { FactoryBot.create(:api, name: 'Benefits', acl: 'benefits') }
-  let(:benefits_ref) { FactoryBot.create(:api_ref, name: 'benefits', api_id: benefits_api.id) }
-  let(:claims_api) { FactoryBot.create(:api, name: 'Claims', acl: 'claims') }
-  let(:claims_ref) { FactoryBot.create(:api_ref, name: 'claims', api_id: claims_api.id) }
-  let(:oauth_api) { FactoryBot.create(:api, name: 'Oauth', auth_server_access_key: 'AUTHZ_SERVER_DEFAULT') }
-  let(:oauth_ref) { FactoryBot.create(:api_ref, name: 'oauth', api_id: oauth_api.id) }
+  before do
+    api_environments
+    api = Api.find(apis.last.id)
+    api.update!(acl: nil)
+    api.update!(auth_server_access_key: 'TEST')
+  end
 
   describe '.intialize' do
     let(:subject) { ApiService.new }
@@ -25,30 +19,30 @@ RSpec.describe ApiService do
 
   describe '#gather_apis' do
     it 'provides a list of apis' do
-      result = subject.gather_apis('claims')
-      expect(result.length).to eq(1)
-      expect(result.first.name).to eq('Claims')
+      result = subject.gather_apis("#{apis.first.api_ref.name},#{apis.last.api_ref.name}")
+      expect(result.length).to eq(2)
+      expect(result.first.name).to eq(apis.first.name)
     end
 
     it 'filters the correct apis' do
-      result = subject.gather_apis('claims,oauth')
+      result = subject.gather_apis("#{apis.first.api_ref.name},#{apis.second.api_ref.name}")
       expect(result.length).to eq(2)
-      expect(result.map.collect(&:name)).not_to include('Benefits')
-      expect(result.map.collect(&:name).sort).to eq(%w[Claims Oauth])
+      expect(result.map.collect(&:name)).not_to include(apis.last.name)
+      expect(result.map.collect(&:name).sort).to eq([apis.first.name, apis.second.name].sort)
     end
   end
 
   describe '#fetch_auth_types' do
     it 'provides a list of respective key auth types' do
-      key_auth, _oauth = subject.fetch_auth_types('claims')
+      key_auth, _oauth = subject.fetch_auth_types("#{apis.first.api_ref.name},#{apis.last.api_ref.name}")
       expect(key_auth.length).to eq(1)
-      expect(key_auth[0]).to eq('claims')
+      expect(key_auth[0]).to eq(Api.first.acl)
     end
 
     it 'provides a list of respective Oauth types' do
-      _key_auth, oauth = subject.fetch_auth_types('oauth')
+      _key_auth, oauth = subject.fetch_auth_types("#{apis.second.api_ref.name},#{apis.last.api_ref.name}")
       expect(oauth.length).to eq(1)
-      expect(oauth.first).to eq(oauth_api.auth_server_access_key)
+      expect(oauth.first).to eq(Api.last.auth_server_access_key)
     end
   end
 end

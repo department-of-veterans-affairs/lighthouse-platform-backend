@@ -13,7 +13,7 @@ RSpec.describe 'Admin::ConsumersController', type: :request do
   describe 'Deleting Consumers' do
     it 'discards all users/consumers' do
       user = FactoryBot.create(:user)
-      FactoryBot.create(:consumer, :with_apis, user_id: user.id)
+      FactoryBot.create(:consumer, user_id: user.id)
 
       post '/platform-backend/admin/dashboard/consumers/destroy_all'
       expect(response.status).to eq(302)

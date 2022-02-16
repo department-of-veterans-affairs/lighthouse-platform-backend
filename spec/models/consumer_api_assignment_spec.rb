@@ -4,19 +4,15 @@ require 'rails_helper'
 
 RSpec.describe ConsumerApiAssignment, type: :model do
   subject do
-    ConsumerApiAssignment.new(consumer_id: consumer.id,
-                              api_id: api.id,
-                              first_successful_call_at: current_time)
+    FactoryBot.build(:consumer_api_assignment,
+                     consumer: consumer,
+                     api_environment: api_environment)
   end
 
   let(:current_time) { DateTime.now }
   let(:user) { FactoryBot.create(:user) }
   let(:consumer) { FactoryBot.create(:consumer, user: user) }
-  let :api do
-    FactoryBot.create(:api,
-                      name: 'Appeals Status API',
-                      acl: 'appeals_status_api')
-  end
+  let(:api_environment) { FactoryBot.build(:api_environment) }
 
   describe 'creates a valid ConsumerApiAssignment' do
     it 'is valid' do
@@ -27,8 +23,8 @@ RSpec.describe ConsumerApiAssignment, type: :model do
       expect(subject.consumer_id).to eq(consumer.id)
     end
 
-    it 'receives an api_id' do
-      expect(subject.api_id).to eq(api.id)
+    it 'receives an api_environment' do
+      expect(subject.api_environment_id).to eq(api_environment.id)
     end
   end
 
@@ -38,8 +34,8 @@ RSpec.describe ConsumerApiAssignment, type: :model do
       expect(subject).not_to be_valid
     end
 
-    it 'fails without an api_id' do
-      subject.api_id = nil
+    it 'fails without an api_environment' do
+      subject.api_environment = nil
       expect(subject).not_to be_valid
     end
   end
