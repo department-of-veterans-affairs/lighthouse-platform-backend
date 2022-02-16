@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-Api.destroy_all
-ApiCategory.destroy_all
-
 appeals_category = ApiCategory.create(
   name: 'Appeals APIs',
   key: 'appeals',
