@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-Api.destroy_all
-ApiCategory.destroy_all
-
 appeals_category = ApiCategory.create(
   name: 'Appeals APIs',
   key: 'appeals',
@@ -448,6 +445,45 @@ community_care_api.assign_attributes(
         'offline_access',
         'launch/patient',
         'patient/CommunityCareEligibility.read',
+      ],
+    },
+  }.to_json,
+   api_category_attributes: {
+     id: health_category.id
+   }
+  }
+)
+
+clinical_fhir_api = Api.create(name: 'clinical_fhir_api')
+clinical_fhir_api.assign_attributes(
+  auth_server_access_key: 'AUTHZ_SERVER_HEALTH',
+  api_environments_attributes: {
+   metadata_url: 'https://api.va.gov/internal/docs/fhir-clinical-health/metadata.json',
+   environments_attributes: {
+     name: 'sandbox'
+   }
+  },
+  api_ref_attributes: {
+   name: 'health'
+  },
+  api_metadatum_attributes: {
+   description: 'Use to develop clinical-facing applications that improve access to and management of patient health data.',
+   display_name: 'Clinical Health API (FHIR)',
+   open_data: false,
+   va_internal_only: true,
+   oauth_info: {
+    acgInfo: {
+      baseAuthPath: '/oauth2/clinical-health/v1',
+      scopes: [
+        'profile',
+        'openid',
+        'offline_access',
+        'fhirUser',
+        'launch',
+        'patient/Condition.read',
+        'patient/Observation.read',
+        'patient/Patient.read',
+        'patient/Practitioner.read',
       ],
     },
   }.to_json,

@@ -25,7 +25,7 @@ module V0
       end
       get '/transformations/legacy' do
         categories = {}
-        ApiCategory.kept.order(:name).map do |category|
+        ApiCategory.kept.joins(:api_metadatum).order('api_categories.name, api_metadata.display_name').map do |category|
           categories[category.key] =
             V0::Entities::Legacy::ApiProviderCategoryEntity.represent(category)
         end
