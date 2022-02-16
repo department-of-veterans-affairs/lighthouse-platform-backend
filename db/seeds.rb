@@ -44,7 +44,7 @@ health_category = ApiCategory.create(
   key: 'health',
   short_description: 'Use our APIs to build tools that help Veterans manage their health.',
   consumer_docs_link_text: 'Read the consumer onboarding guide for getting production access',
-  overview: %Q(
+  overview: (<<~MARKDOWN
     ## Use our Health APIs to build tools that help Veterans manage their health, view their VA medical records, share their health information, and determine potential eligibility for community care. While these APIs allow greater access to health data, they do not currently allow submission of medical claims. 
 
     VA’s Health APIs use [HL7’s Fast Healthcare Interoperability Resources (FHIR) framework](https://www.hl7.org/fhir/overview.html) for providing healthcare data in a standardized format. FHIR solutions are built from a set of modular components, called resources, which can be easily assembled into working systems that solve real world clinical and administrative problems. 
@@ -52,8 +52,8 @@ health_category = ApiCategory.create(
     When you register for access to the Health APIs, you will be granted access to a synthetic set of data (provided by the MITRE Corporation) that mimics real Veteran demographics. The associated clinical resources include data generated from disease models covering up to a dozen of the most common Veteran afflictions. [Review the latest release notes](/release-notes/health).
 
     _VA is a supporter of the [CARIN Alliance](https://www.carinalliance.com/) Code of Conduct._
-  ).strip,
-  quickstart: <<~MARKDOWN
+  MARKDOWN
+  ), quickstart: <<~MARKDOWN
     VA’s Health APIs allow a user/application to make queries that will return health records in FHIR format, without interacting with or understanding the inner workings of VA systems.
 
     The database that powers the development environment is populated with synthetic Veteran data provided by MITRE Corporation. The data contains sample Veteran health records (both living and deceased) that mimic real Veteran demographics. The associated clinical resources include data generated from disease models covering up to a dozen of the most common Veteran afflictions.
@@ -77,16 +77,16 @@ health_category = ApiCategory.create(
 
     You will receive an email from the VA API team notifying you of your approval, and it will include a new Client ID and Secret for your application. The base URI for the Health API endpoints are:
 
-     * `{{ process.env.REACT_APP_API_URL }}/services/fhir/v0/argonaut/data-query/`
-     * `{{ process.env.REACT_APP_API_URL }}/services/fhir/v0/dstu2/`
-     * `{{ process.env.REACT_APP_API_URL }}/services/fhir/v0/r4/`
-     * `{{ process.env.REACT_APP_API_URL }}/services/community-care/v0/eligibility`
+     * `https://api.va.gov/services/fhir/v0/argonaut/data-query/`
+     * `https://api.va.gov/services/fhir/v0/dstu2/`
+     * `https://api.va.gov/services/fhir/v0/r4/`
+     * `https://api.va.gov/services/community-care/v0/eligibility`
 
     Accordingly, the FHIR conformance statements can be retrieved from:
 
-     * `{{ process.env.REACT_APP_API_URL }}/services/fhir/v0/argonaut/data-query/metadata`
-     * `{{ process.env.REACT_APP_API_URL }}/services/fhir/v0/dstu2/metadata`
-     * `{{ process.env.REACT_APP_API_URL }}/services/fhir/v0/r4/metadata`
+     * `https://api.va.gov/services/fhir/v0/argonaut/data-query/metadata`
+     * `https://api.va.gov/services/fhir/v0/dstu2/metadata`
+     * `https://api.va.gov/services/fhir/v0/r4/metadata`
 
     You will also be provided with a set of test accounts to use that will allow you to access specific synthetic data patient records.
 
@@ -385,9 +385,9 @@ veteran_confirmation_api.assign_attributes(
 
 veteran_verification_api = Api.create(name: 'veteran_verification')
 veteran_verification_api.assign_attributes(
-  api_environments_attributes: {
   auth_server_access_key: 'AUTHZ_SERVER_VERIFICATION',
-   metadata_url: 'https://staging-api.va.gov/internal/docs/veteran-verification/metadata.json',
+  api_environments_attributes: {
+   metadata_url: 'https://api.va.gov/internal/docs/veteran-verification/metadata.json',
    environments_attributes: {
      name: 'sandbox'
    }
@@ -418,6 +418,116 @@ veteran_verification_api.assign_attributes(
    }
   }
 )
+
+community_care_api = Api.create(name: 'internal_community_care')
+community_care_api.assign_attributes(
+  auth_server_access_key: 'AUTHZ_SERVER_COMMUNITYCARE',
+  api_environments_attributes: {
+   metadata_url: 'https://api.va.gov/internal/docs/community-care-eligibility/metadata.json',
+   environments_attributes: {
+     name: 'sandbox'
+   }
+  },
+  api_ref_attributes: {
+   name: 'communityCare'
+  },
+  api_metadatum_attributes: {
+   description: "VA's Community Care Eligibility API utilizes VA's Facility API, VA's Enrollment & Eligibility system and others to satisfy requirements found in the VA's MISSION Act of 2018.",
+   display_name: 'Community Care Eligibility API',
+   open_data: false,
+   va_internal_only: false,
+   oauth_info: {
+    acgInfo: {
+      baseAuthPath: '/oauth2/community-care/v1',
+      scopes: [
+        'profile',
+        'openid',
+        'offline_access',
+        'launch/patient',
+        'patient/CommunityCareEligibility.read',
+      ],
+    },
+  }.to_json,
+   api_category_attributes: {
+     id: health_category.id
+   }
+  }
+)
+
+fhir_health_api = Api.create(name: 'fhir_health')
+fhir_health_api.assign_attributes(
+  auth_server_access_key: 'AUTHZ_SERVER_HEALTH',
+  api_ref_attributes: {
+   name: 'health'
+  },
+  api_metadatum_attributes: {
+   description: 'Use the OpenID Connect and SMART on FHIR standards to allow Veterans to authorize third-party applications to access data on their behalf.',
+   display_name: 'Veterans Health API (FHIR)',
+   open_data: false,
+   va_internal_only: false,
+   oauth_info: {
+      acgInfo: {
+        baseAuthPath: '/oauth2/health/v1',
+        scopes: [
+          'profile',
+          'openid',
+          'offline_access',
+          'launch/patient',
+          'patient/AllergyIntolerance.read',
+          'patient/Appointment.read',
+          'patient/Condition.read',
+          'patient/Device.read',
+          'patient/DiagnosticReport.read',
+          'patient/Immunization.read',
+          'patient/Location.read',
+          'patient/Medication.read',
+          'patient/MedicationOrder.read',
+          'patient/MedicationRequest.read',
+          'patient/MedicationStatement.read',
+          'patient/Observation.read',
+          'patient/Organization.read',
+          'patient/Patient.read',
+          'patient/Practitioner.read',
+          'patient/PractitionerRole.read',
+          'patient/Procedure.read',
+        ],
+      },
+      ccgInfo: {
+        baseAuthPath: '/oauth2/health/system/v1',
+        productionAud: 'aus8evxtl123l7Td3297',
+        sandboxAud: 'aus8nm1q0f7VQ0a482p7',
+        scopes: [
+          'launch',
+          'system/AllergyIntolerance.read',
+          'system/Appointment.read',
+          'system/Condition.read',
+          'system/Coverage.read',
+          'system/Coverage.write',
+          'system/DiagnosticReport.read',
+          'system/Immunization.read',
+          'system/Location.read',
+          'system/Medication.read',
+          'system/MedicationOrder.read',
+          'system/Observation.read',
+          'system/Organization.read',
+          'system/Patient.read',
+        ],
+      },
+    }.to_json,
+   api_category_attributes: {
+     id: health_category.id
+   }
+  }
+)
+ApiEnvironment.find_or_create_by(metadata_url: 'https://api.va.gov/internal/docs/fhir-r4/metadata.json',
+                                 api: fhir_health_api,
+                                 environment: Environment.find_or_create_by(name: 'sandbox'))
+ApiEnvironment.find_or_create_by(metadata_url: 'https://api.va.gov/internal/docs/fhir-argonaut/metadata.json',
+                                 api: fhir_health_api,
+                                 environment: Environment.find_or_create_by(name: 'sandbox'))
+ApiEnvironment.find_or_create_by(metadata_url: 'https://api.va.gov/internal/docs/fhir-dstu2/metadata.json',
+                                 api: fhir_health_api,
+                                 environment: Environment.find_or_create_by(name: 'sandbox'))
 
 ApiReleaseNote.create(api_metadatum_id: claims_api.api_metadatum.id,
                       date: Time.now.to_date,
