@@ -6,7 +6,6 @@ class Api < ApplicationRecord
   validates :name, presence: true
 
   has_one :api_ref, dependent: :destroy
-  has_many :consumer_api_assignment, dependent: :destroy
   has_many :api_environments, dependent: :destroy
   has_one :api_metadatum, dependent: :destroy
 

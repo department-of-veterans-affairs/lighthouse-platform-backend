@@ -4,9 +4,8 @@
   <h2>
     <%= "#{@apis.count} APIs" %>
   </h2>
-  <%= form_tag bulk_upload_admin_apis_path, multipart: true do %>
-    <%= file_field_tag 'file', required: true %>
-    <%= submit_tag 'Upload API List' %>
+  <%= form_tag bulk_seed_admin_apis_path do %>
+    <%= submit_tag 'Seed Database' %>
   <% end %>
   <% @apis.each do |api| %>
     <p>
