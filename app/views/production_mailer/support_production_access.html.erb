@@ -88,8 +88,10 @@
       <strong>
         <div>Policy Documents:</div>
       </strong>
-      <% @request.policyDocuments.map do |doc| %>
-          <div><%= doc %></div>
+      <% if @request.policyDocuments.present? %>
+        <% @request.policyDocuments.map do |doc| %>
+            <div><%= doc %></div>
+        <% end %>
       <% end %>
     </div>
   </li>
