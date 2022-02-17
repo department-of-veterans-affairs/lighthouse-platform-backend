@@ -3,16 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ProductionMailer, type: :mailer do
-  let :production_request do
-    {
-      organization: Faker::Company.bs,
-      primaryContact: {
-        email: Faker::Internet.email,
-        firstName: Faker::Name.first_name,
-        lastName: Faker::Name.last_name
-      }
-    }
-  end
+  let(:production_request) { build(:production_access_request) }
   let(:contact) { production_request[:primaryContact] }
 
   describe 'sends support email on production access request' do

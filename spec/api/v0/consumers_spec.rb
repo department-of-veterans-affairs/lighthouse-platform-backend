@@ -71,55 +71,7 @@ describe V0::Consumers, type: :request do
 
   describe 'sends emails when prompted for production access' do
     let(:production_request_base) { '/platform-backend/v0/consumers/production_request' }
-    let :production_request_params do
-      {
-        apis: 'benefits',
-        appDescription: 'A social media platform with one room.',
-        appName: 'One to Bind Them',
-        breachManagementProcess: 'golem',
-        businessModel: 'magical rings >> profit',
-        centralizedBackendLog: 'non-existent',
-        distributingAPIKeysToCustomers: false,
-        exposeVeteranInformationToThirdParties: false,
-        is508Compliant: true,
-        listedOnMyHealthApplication: false,
-        monitizationExplanation: 'n/a',
-        monitizedVeteranInformation: false,
-        multipleReqSafeguards: 'golem',
-        namingConvention: 'overly-complicated',
-        organization: 'Sauron.INC',
-        phoneNumber: '555-867-5309',
-        piiStorageMethod: 'Locking away in the fires from whence it came.',
-        platforms: 'iOS',
-        policyDocuments: ['www.example.com/tos'],
-        primaryContact: {
-          email: 'sam@fellowship.com',
-          firstName: 'Samwise',
-          lastName: 'Gamgee'
-        },
-        productionKeyCredentialStorage: 'stored in a volcano on mount doom',
-        productionOrOAuthKeyCredentialStorage: 'also stored in the volcano',
-        scopesAccessRequested: 'profile',
-        secondaryContact: {
-          email: 'frodo@fellowship.com',
-          firstName: 'Frodo',
-          lastName: 'Baggins'
-        },
-        signUpLink: ['www.one2bindthem.com/signup'],
-        statusUpdateEmails: ['sam@fellowship.com'],
-        storePIIOrPHI: false,
-        supportLink: ['www.one2bindthem.com/support'],
-        valueProvided: 'n/a',
-        vasiSystemName: 'asdf',
-        veteranFacing: false,
-        veteranFacingDescription:
-          'Now the Elves made many rings; but secretly Sauron made One Ring '\
-          'to rule all the others, and their power was bound up with it, to be '\
-          'subject wholly to it and to last only so long as it too should last.',
-        vulnerabilityManagement: 'golem',
-        website: 'www.one2bindthem.com'
-      }
-    end
+    let(:production_request_params) { build(:production_access_request) }
 
     context 'accepts successful requests' do
       it 'provides a successful response' do

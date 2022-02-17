@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
+require 'factory_bot_rails'
+
 class ProductionMailerPreview < ActionMailer::Preview
+  include FactoryBot::Syntax::Methods
+
   def consumer_production_access
     ProductionMailer.consumer_production_access(request)
   end
@@ -12,13 +16,6 @@ class ProductionMailerPreview < ActionMailer::Preview
   private
 
   def request
-    {
-      organization: 'Origami Door to Door Sales',
-      primaryContact: {
-        email: 'origami_sales@door_2_door.com',
-        firstName: 'Mark',
-        lastName: 'Origamino'
-      }
-    }
+    build(:production_access_request)
   end
 end
