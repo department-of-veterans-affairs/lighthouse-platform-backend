@@ -52,7 +52,7 @@ module V0
           end.join("\n\n---\n\n")
         end
         expose :urlFragment do |entity|
-          entity.api.api_ref.name.underscore
+          entity.url_fragment
         end
         expose :vaInternalOnly do |entity|
           entity.va_internal_only

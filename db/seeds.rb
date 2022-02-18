@@ -157,6 +157,7 @@ appeals_status_api.assign_attributes(
    display_name: 'Appeals Status API',
    open_data: false,
    va_internal_only: true,
+   url_fragment: 'appeals',
    api_category_attributes: {
      id: appeals_category.id
    }
@@ -165,7 +166,7 @@ appeals_status_api.assign_attributes(
 
 decision_reviews_api = Api.create(name: 'decision_reviews')
 decision_reviews_api.assign_attributes(
-  acl: 'appeals',
+  acl: 'hlr',
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/appeals-decision-reviews/metadata.json',
    environments_attributes: {
@@ -173,13 +174,14 @@ decision_reviews_api.assign_attributes(
    }
   },
   api_ref_attributes: {
-   name: 'appeals'
+   name: 'decision_reviews'
   },
   api_metadatum_attributes: {
    description: 'Allows submission, management, and retrieval of decision review requests and details such as statuses in accordance with the AMA.',
    display_name: 'Decision Reviews API',
    open_data: false,
    va_internal_only: true,
+   url_fragment: 'decision_reviews',
    api_category_attributes: {
      id: appeals_category.id
    }
@@ -204,6 +206,7 @@ claims_api.assign_attributes(
    display_name: 'Benefits Claims API',
    open_data: false,
    va_internal_only: false,
+   url_fragment: 'claims',
    oauth_info: {
      acgInfo: {
        baseAuthPath: '/oauth2/claims/v1',
@@ -239,6 +242,7 @@ benefits_intake_api.assign_attributes(
    display_name: 'Benefits Intake API',
    open_data: false,
    va_internal_only: false,
+   url_fragment: 'benefits',
    api_category_attributes: {
      id: benefits_category.id
    }
@@ -262,6 +266,7 @@ benefits_reference_api.assign_attributes(
    display_name: 'Benefits Reference Data API',
    open_data: true,
    va_internal_only: false,
+   url_fragment: 'benefits_reference_data',
    api_category_attributes: {
      id: benefits_category.id
    }
@@ -285,6 +290,7 @@ facilities_api.assign_attributes(
    display_name: 'VA Facilities API',
    open_data: true,
    va_internal_only: false,
+   url_fragment: 'facilities',
    api_category_attributes: {
      id: facilities_category.id
    }
@@ -308,6 +314,7 @@ loan_guaranty_api.assign_attributes(
    display_name: 'Loan Guaranty API',
    open_data: false,
    va_internal_only: true,
+   url_fragment: 'loan_guaranty',
    api_category_attributes: {
      id: loan_guaranty_category.id
    }
@@ -331,6 +338,7 @@ forms_api.assign_attributes(
    display_name: 'VA Forms API',
    open_data: true,
    va_internal_only: false,
+   url_fragment: 'vaForms',
    api_category_attributes: {
      id: forms_category.id
    }
@@ -354,6 +362,7 @@ address_validation_api.assign_attributes(
    display_name: 'Address Validation API',
    open_data: false,
    va_internal_only: true,
+   url_fragment: 'address_validation',
    api_category_attributes: {
      id: veteran_verification_category.id
    }
@@ -377,6 +386,7 @@ veteran_confirmation_api.assign_attributes(
    display_name: 'Veteran Confirmation API',
    open_data: false,
    va_internal_only: false,
+   url_fragment: 'veteran_confirmation',
    api_category_attributes: {
      id: veteran_verification_category.id
    }
@@ -400,6 +410,7 @@ veteran_verification_api.assign_attributes(
    display_name: 'Veteran Verification API',
    open_data: false,
    va_internal_only: false,
+   url_fragment: 'veteran_verification',
    oauth_info: {
     acgInfo: {
       baseAuthPath: '/oauth2/veteran-verification/v1',
@@ -436,6 +447,7 @@ community_care_api.assign_attributes(
    display_name: 'Community Care Eligibility API',
    open_data: false,
    va_internal_only: false,
+   url_fragment: 'community_care',
    oauth_info: {
     acgInfo: {
       baseAuthPath: '/oauth2/community-care/v1',
@@ -471,6 +483,7 @@ clinical_fhir_api.assign_attributes(
    display_name: 'Clinical Health API (FHIR)',
    open_data: false,
    va_internal_only: true,
+   url_fragment: 'clinical_health',
    oauth_info: {
     acgInfo: {
       baseAuthPath: '/oauth2/clinical-health/v1',
@@ -504,6 +517,7 @@ fhir_health_api.assign_attributes(
    display_name: 'Veterans Health API (FHIR)',
    open_data: false,
    va_internal_only: false,
+   url_fragment: 'fhir',
    oauth_info: {
       acgInfo: {
         baseAuthPath: '/oauth2/health/v1',
