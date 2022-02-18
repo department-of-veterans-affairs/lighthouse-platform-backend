@@ -136,9 +136,8 @@ module V0
       end
 
       post 'production_request' do
+        status 200
         send_production_access_emails(params)
-
-        present params, with: V0::Entities::ProductionAccessEntity
       end
     end
   end
