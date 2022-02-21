@@ -10,6 +10,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'devise'
 gem 'discard'
 gem 'figaro'
+gem 'govdelivery-tms', require: 'govdelivery/tms/mail/delivery_method'
 gem 'grape'
 gem 'grape-entity'
 gem 'jbuilder', '~> 2.7'

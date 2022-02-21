@@ -191,11 +191,18 @@ GEM
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
+    faraday_middleware (1.2.0)
+      faraday (~> 1.0)
     ffi (1.15.5)
     figaro (1.2.0)
       thor (>= 0.14.0, < 2)
     globalid (1.0.0)
       activesupport (>= 5.0)
+    govdelivery-tms (2.8.4)
+      activesupport
+      faraday
+      faraday_middleware
+      mime-types
     grape (1.6.2)
       activesupport
       builder
@@ -511,6 +518,7 @@ DEPENDENCIES
   factory_bot_rails (> 5)
   faker
   figaro
+  govdelivery-tms
   grape
   grape-entity
   jbuilder (~> 2.7)
