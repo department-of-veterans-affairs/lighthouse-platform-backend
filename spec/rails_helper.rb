@@ -49,7 +49,7 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 SimpleCov.start do
-  add_filter "lib/config_helper.rb"
+  add_filter 'lib/config_helper.rb'
 end
 
 RSpec.configure do |config|
