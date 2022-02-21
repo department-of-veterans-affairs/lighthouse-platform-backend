@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'active_support/core_ext/integer/time'
+require 'config_helper'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -72,7 +73,7 @@ Rails.application.configure do
   config.active_job.queue_adapter = :async # migrate to :sidekiq before using consumer generated background jobs
   # config.active_job.queue_name_prefix = "lighthouse_platform_backend_production"
 
-  config.action_mailer.perform_caching = false
+  ConfigHelper.setup_action_mailer(config)
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
