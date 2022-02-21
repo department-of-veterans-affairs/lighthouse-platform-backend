@@ -76,7 +76,7 @@ describe V0::Consumers, type: :request do
     context 'accepts successful requests' do
       it 'provides a successful response' do
         post production_request_base, params: production_request_params
-        expect(response.code).to eq('201')
+        expect(response.code).to eq('200')
       end
 
       it 'sends an email to the consumer and support' do
