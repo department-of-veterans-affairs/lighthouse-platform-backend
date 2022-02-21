@@ -8,8 +8,8 @@ module V0
         expose :name, as: :properName, documentation: { type: String }
         expose :api_metadatum, as: :apis, using: V0::Entities::Legacy::ApiProviderEntity
         expose :content do |entity|
-          response = { consumerDocsLinkText: entity.consumer_docs_link_text, 
-                       shortDescription: entity.short_description, 
+          response = { consumerDocsLinkText: entity.consumer_docs_link_text,
+                       shortDescription: entity.short_description,
                        quickstart: entity.quickstart,
                        veteranRedirect: {
                          linkUrl: entity.veteran_redirect_link_url,
