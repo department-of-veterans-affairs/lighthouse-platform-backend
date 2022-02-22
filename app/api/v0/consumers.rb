@@ -136,10 +136,9 @@ module V0
       end
 
       post 'production_request' do
-        status 200
         send_production_access_emails(params)
 
-        present {}
+        body false
       end
     end
   end
