@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
     mount RailsAdmin::Engine => '/admin/rails_admin', as: 'rails_admin'
 
+    mount Flipper::UI.app(Flipper) => '/admin/flipper', as: 'flipper'
+
     mount V0::Base => '/'
 
     namespace :admin do

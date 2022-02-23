@@ -136,7 +136,7 @@ module V0
       end
 
       post 'production_request' do
-        send_production_access_emails(params)
+        send_production_access_emails(params) if Flipper.enabled? :send_emails
 
         body false
       end
