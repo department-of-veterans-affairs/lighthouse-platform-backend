@@ -4,11 +4,11 @@ require 'rails_helper'
 
 RSpec.describe UserService do
   let(:subject) { UserService.new }
-  let(:user) { FactoryBot.create(:user, first_name: 'Tony', last_name: 'Stark', email: 'tony@stark.com') }
+  let(:user) { create(:user, first_name: 'Tony', last_name: 'Stark', email: 'tony@stark.com') }
   let(:okta_ref) { '0kt4-rul3s' }
   let(:gateway_ref) { 'l3g1t-1d' }
   let(:consumer) do
-    FactoryBot.create(:consumer, user: user, sandbox_gateway_ref: gateway_ref, sandbox_oauth_ref: okta_ref)
+    create(:consumer, user: user, sandbox_gateway_ref: gateway_ref, sandbox_oauth_ref: okta_ref)
   end
   let(:api_environments) { create_list(:api_environment, 3) }
   let(:api_ref_one) { api_environments.first.api.api_ref.name }

@@ -4,15 +4,15 @@ require 'rails_helper'
 
 RSpec.describe ConsumerApiAssignment, type: :model do
   subject do
-    FactoryBot.build(:consumer_api_assignment,
-                     consumer: consumer,
-                     api_environment: api_environment)
+    build(:consumer_api_assignment,
+          consumer: consumer,
+          api_environment: api_environment)
   end
 
   let(:current_time) { DateTime.now }
-  let(:user) { FactoryBot.create(:user) }
-  let(:consumer) { FactoryBot.create(:consumer, user: user) }
-  let(:api_environment) { FactoryBot.build(:api_environment) }
+  let(:user) { create(:user) }
+  let(:consumer) { create(:consumer, user: user) }
+  let(:api_environment) { build(:api_environment) }
 
   describe 'creates a valid ConsumerApiAssignment' do
     it 'is valid' do
