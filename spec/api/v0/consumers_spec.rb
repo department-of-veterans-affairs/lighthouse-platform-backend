@@ -72,8 +72,8 @@ describe V0::Consumers, type: :request do
     end
   end
 
-  describe 'does not send email when flipper disabled' do
-    it 'does not to hit the production mailer' do
+  describe 'when flipper is disabled' do
+    it 'fails to hit the production mailer' do
       expect(ProductionMailer).not_to receive(:consumer_production_access)
       expect(ProductionMailer).not_to receive(:support_production_access)
       post production_request_base, params: production_request_params
