@@ -3,6 +3,9 @@
 require 'rails_helper'
 
 describe V0::Consumers, type: :request do
+  let(:production_request_base) { '/platform-backend/v0/consumers/production_request' }
+  let(:production_request_params) { build(:production_access_request) }
+
   describe 'accepts signups from dev portal' do
     let(:apply_base) { '/platform-backend/v0/consumers/applications' }
     let(:api_environments) { create_list(:api_environment, 3) }
@@ -69,9 +72,22 @@ describe V0::Consumers, type: :request do
     end
   end
 
+  describe 'does not send email when flipper disabled' do
+    it 'does not to hit the production mailer' do
+      expect(ProductionMailer).not_to receive(:consumer_production_access)
+      expect(ProductionMailer).not_to receive(:support_production_access)
+      post production_request_base, params: production_request_params
+    end
+  end
+
   describe 'sends emails when prompted for production access' do
-    let(:production_request_base) { '/platform-backend/v0/consumers/production_request' }
-    let(:production_request_params) { build(:production_access_request) }
+    after do
+      Flipper.disable :send_emails
+    end
+
+    before do
+      Flipper.enable :send_emails
+    end
 
     context 'accepts successful requests' do
       it 'provides a successful response' do
