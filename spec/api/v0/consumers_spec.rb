@@ -68,4 +68,40 @@ describe V0::Consumers, type: :request do
       end
     end
   end
+
+  describe 'sends emails when prompted for production access' do
+    let(:production_request_base) { '/platform-backend/v0/consumers/production_request' }
+    let(:production_request_params) { build(:production_access_request) }
+
+    context 'accepts successful requests' do
+      it 'provides a successful response' do
+        post production_request_base, params: production_request_params
+        expect(response.code).to eq('204')
+      end
+
+      it 'sends an email to the consumer and support' do
+        consumer_email = double
+        support_email = double
+        allow(ProductionMailer).to receive(:consumer_production_access).and_return(consumer_email)
+        allow(ProductionMailer).to receive(:support_production_access).and_return(support_email)
+        expect(consumer_email).to receive(:deliver_later)
+        expect(support_email).to receive(:deliver_later)
+        post production_request_base, params: production_request_params
+      end
+    end
+
+    context 'fails if provided' do
+      it 'an excessive description' do
+        production_request_params[:veteranFacingDescription] = (0..425).map { rand(65..89).chr }.join
+        post production_request_base, params: production_request_params
+        expect(response.code).to eq('400')
+      end
+
+      it 'an incorrect phone number' do
+        production_request_params[:phoneNumber] = '4444444444444444444'
+        post production_request_base, params: production_request_params
+        expect(response.code).to eq('400')
+      end
+    end
+  end
 end
