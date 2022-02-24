@@ -141,7 +141,7 @@ veteran_verification_category = ApiCategory.create(
 )
 
 appeals_status_api = Api.create(name: 'appeals')
-appeals_status_api.assign_attributes(
+appeals_status_api.update(
   acl: 'appeals',
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/appeals-status/metadata.json',
@@ -165,7 +165,7 @@ appeals_status_api.assign_attributes(
 )
 
 decision_reviews_api = Api.create(name: 'decision_reviews')
-decision_reviews_api.assign_attributes(
+decision_reviews_api.update(
   acl: 'hlr',
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/appeals-decision-reviews/metadata.json',
@@ -189,7 +189,7 @@ decision_reviews_api.assign_attributes(
 )
 
 claims_api = Api.create(name: 'claims')
-claims_api.assign_attributes(
+claims_api.update(
   acl: 'claims',
   auth_server_access_key: 'AUTHZ_SERVER_CLAIMS',
   api_environments_attributes: {
@@ -226,7 +226,7 @@ claims_api.assign_attributes(
 )
 
 benefits_intake_api = Api.create(name: 'benefits_intake')
-benefits_intake_api.assign_attributes(
+benefits_intake_api.update(
   acl: 'vba_documents',
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/benefits-intake/metadata.json',
@@ -250,7 +250,7 @@ benefits_intake_api.assign_attributes(
 )
 
 benefits_reference_api = Api.create(name: 'benefits_reference_data')
-benefits_reference_api.assign_attributes(
+benefits_reference_api.update(
   acl: 'benefits-reference-data',
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/benefits-reference-data/metadata.json',
@@ -274,7 +274,7 @@ benefits_reference_api.assign_attributes(
 )
 
 facilities_api = Api.create(name: 'va_facilities')
-facilities_api.assign_attributes(
+facilities_api.update(
   acl: 'va_facilities',
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/facilities/metadata.json',
@@ -298,7 +298,7 @@ facilities_api.assign_attributes(
 )
 
 loan_guaranty_api = Api.create(name: 'loan_guaranty')
-loan_guaranty_api.assign_attributes(
+loan_guaranty_api.update(
   acl: 'loan_guaranty',
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/loan_guaranty_property/metadata.json',
@@ -322,7 +322,7 @@ loan_guaranty_api.assign_attributes(
 )
 
 forms_api = Api.create(name: 'va_forms')
-forms_api.assign_attributes(
+forms_api.update(
   acl: 'va_forms',
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/forms/metadata.json',
@@ -346,7 +346,7 @@ forms_api.assign_attributes(
 )
 
 address_validation_api = Api.create(name: 'address_validation')
-address_validation_api.assign_attributes(
+address_validation_api.update(
   acl: 'internal-va:address_validation',
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/address-validation/metadata.json',
@@ -370,7 +370,7 @@ address_validation_api.assign_attributes(
 )
 
 veteran_confirmation_api = Api.create(name: 'veteran_confirmation')
-veteran_confirmation_api.assign_attributes(
+veteran_confirmation_api.update(
   acl: 'veteran_confirmation',
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/veteran-confirmation/metadata.json',
@@ -394,7 +394,7 @@ veteran_confirmation_api.assign_attributes(
 )
 
 veteran_verification_api = Api.create(name: 'veteran_verification')
-veteran_verification_api.assign_attributes(
+veteran_verification_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_VERIFICATION',
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/veteran-verification/metadata.json',
@@ -431,7 +431,7 @@ veteran_verification_api.assign_attributes(
 )
 
 community_care_api = Api.create(name: 'internal_community_care')
-community_care_api.assign_attributes(
+community_care_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_COMMUNITYCARE',
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/community-care-eligibility/metadata.json',
@@ -467,7 +467,7 @@ community_care_api.assign_attributes(
 )
 
 clinical_fhir_api = Api.create(name: 'clinical_fhir_api')
-clinical_fhir_api.assign_attributes(
+clinical_fhir_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_HEALTH',
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/fhir-clinical-health/metadata.json',
@@ -507,7 +507,7 @@ clinical_fhir_api.assign_attributes(
 )
 
 fhir_health_api = Api.create(name: 'fhir_health')
-fhir_health_api.assign_attributes(
+fhir_health_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_HEALTH',
   api_ref_attributes: {
    name: 'health'
