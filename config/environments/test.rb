@@ -45,6 +45,8 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
+  config.active_job.queue_adapter = :test
+
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
@@ -74,4 +76,5 @@ Rails.application.configure do
   ENV['AWS_REGION'] = 'us-gov-west-1'
   ENV['AUTHZ_SERVER_DEFAULT'] = 'default'
   ENV['ES_ENDPOINT'] = 'http://elasticsearch:9200'
+  ENV['SUPPORT_EMAIL'] = 'user_support@the_house_of_light.com'
 end
