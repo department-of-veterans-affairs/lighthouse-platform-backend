@@ -73,6 +73,11 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "lighthouse_platform_backend_production"
 
   config.action_mailer.perform_caching = false
+  config.action_mailer.delivery_method = :govdelivery_tms
+  config.action_mailer.govdelivery_tms_settings = {
+    auth_token: Figaro.env.govdelivery_key,
+    api_root: Figaro.env.govdelivery_host
+  }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.

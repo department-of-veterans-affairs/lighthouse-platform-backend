@@ -20,3 +20,4 @@ authz_server_claims: default
 authz_server_communitycare: default
 authz_server_health: default
 authz_server_verification: default
+support_email:
