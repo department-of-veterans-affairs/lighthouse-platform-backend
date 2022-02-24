@@ -12,7 +12,7 @@ RSpec.describe KongService do
   end
 
   describe '.intialize' do
-    let(:subject) { KongService.new }
+    subject { KongService.new }
   end
 
   describe '#list_consumers' do

@@ -69,7 +69,7 @@ def setup_github_login(name, email, is_admin) # rubocop:disable Metrics/MethodLe
                                                                 },
                                                                 credentials: {
                                                                   token: '123456',
-                                                                  expires_at: Time.zone.now + 1.week
+                                                                  expires_at: 1.week.from_now
                                                                 }
                                                               })
 end

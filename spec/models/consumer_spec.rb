@@ -16,10 +16,10 @@ RSpec.describe Consumer, type: :model do
   end
 
   let(:parent) do
-    FactoryBot.create(:user,
-                      email: 'test_user@test_user_website.com',
-                      first_name: 'Test',
-                      last_name: 'User')
+    create(:user,
+           email: 'test_user@test_user_website.com',
+           first_name: 'Test',
+           last_name: 'User')
   end
   let(:test_description) { 'This is an in depth description.' }
   let(:tos_test_time) { DateTime.now }

@@ -10,7 +10,7 @@ class ProductionMailer < ApplicationMailer
   end
 
   def support_production_access(request)
-    @request = JSON.parse(request.to_json, object_class: OpenStruct)
+    @request = request
     mail(to: Figaro.env.support_email,
          from: "#{request[:primaryContact][:firstName]} #{request[:primaryContact][:lastName]}",
          subject: "Production Access Requested for #{request[:organization]}")

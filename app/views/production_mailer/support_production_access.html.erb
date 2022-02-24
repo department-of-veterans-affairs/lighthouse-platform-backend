@@ -5,7 +5,7 @@
       <strong>
         <div>Application is 508 Compliant:</div>
       </strong>
-      <div><%= @request.is508Compliant %></div>
+      <div><%= @request[:is508Compliant] %></div>
     </div>
   </li>
 </ul>
@@ -14,29 +14,29 @@
   <li>
     <div>
       <strong><div>Primary Contact:</div></strong>
-      <div>First Name: <%= @request.primaryContact.firstName %></div>
-      <div>Last Name: <%= @request.primaryContact.lastName %></div>
-      <div>Email: <%= @request.primaryContact.email %></div>
+      <div>First Name: <%= @request[:primaryContact][:firstName] %></div>
+      <div>Last Name: <%= @request[:primaryContact][:lastName] %></div>
+      <div>Email: <%= @request[:primaryContact][:email] %></div>
     </div>
   </li>
   <li>
     <div>
       <strong><div>Secondary Contact:</div></strong>
-      <div>First Name: <%= @request.secondaryContact.firstName %></div>
-      <div>Last Name: <%= @request.secondaryContact.lastName %></div>
-      <div>Email: <%= @request.secondaryContact.email %></div>
+      <div>First Name: <%= @request[:secondaryContact][:firstName] %></div>
+      <div>Last Name: <%= @request[:secondaryContact][:lastName] %></div>
+      <div>Email: <%= @request[:secondaryContact][:email] %></div>
     </div>
   </li>
   <li>
     <div>
       <strong><div>Organization:</div></strong>
-      <div><%= @request.organization %></div>
+      <div><%= @request[:organization] %></div>
     </div>
   </li>
   <li>
     <div>
       <strong><div>Application Name:</div></strong>
-      <div><%= @request.appName %></div>
+      <div><%= @request[:appName] %></div>
     </div>
   </li>
   <li>
@@ -44,7 +44,7 @@
       <strong>
         <div>Application Description:</div>
       </strong>
-      <div><%= @request.appDescription %></div>
+      <div><%= @request[:appDescription] %></div>
     </div>
   </li>
   <li>
@@ -52,16 +52,16 @@
       <strong>
         <div>Website:</div>
       </strong>
-      <div><%= @request.website %></div>
+      <div><%= @request[:website] %></div>
     </div>
   </li>
-  <% if @request.phoneNumber.present? %>
+  <% if @request[:phoneNumber].present? %>
     <li>
       <div>
         <strong>
           <div>Phone Number:</div>
         </strong>
-        <div><%= @request.phoneNumber %></div>
+        <div><%= @request[:phoneNumber] %></div>
       </div>
     </li>
   <% end %>
@@ -70,7 +70,7 @@
       <strong>
         <div>Status Update Emails:</div>
       </strong>
-      <% @request.statusUpdateEmails.map do |email| %>
+      <% @request[:statusUpdateEmails].map do |email| %>
         <div><%= email %></div>
       <% end %>
     </div>
@@ -80,7 +80,7 @@
       <strong>
         <div>APIs:</div>
       </strong>
-      <div><%= @request.apis %></div>
+      <div><%= @request[:apis] %></div>
     </div>
   </li>
   <li>
@@ -88,8 +88,8 @@
       <strong>
         <div>Policy Documents:</div>
       </strong>
-      <% if @request.policyDocuments.present? %>
-        <% @request.policyDocuments.map do |doc| %>
+      <% if @request[:policyDocuments].present? %>
+        <% @request[:policyDocuments].map do |doc| %>
             <div><%= doc %></div>
         <% end %>
       <% end %>
@@ -100,16 +100,16 @@
       <strong>
         <div>Value Provided:</div>
       </strong>
-      <div><%= @request.valueProvided %></div>
+      <div><%= @request[:valueProvided] %></div>
     </div>
   </li>
-  <% if @request.businessModel.present? %>
+  <% if @request[:businessModel].present? %>
     <li>
       <div>
         <strong>
           <div>Business Model:</div>
         </strong>
-        <div><%= @request.businessModel %></div>
+        <div><%= @request[:businessModel] %></div>
       </div>
     </li>
   <% end %>
@@ -121,16 +121,16 @@
       <strong>
         <div>Application Monitizes Veteran Information:</div>
       </strong>
-      <div><%= @request.monitizedVeteranInformation %></div>
+      <div><%= @request[:monitizedVeteranInformation] %></div>
     </div>
   </li>
-  <% if @request.monitizedVeteranInformation.present? %>
+  <% if @request[:monitizedVeteranInformation].present? %>
     <li>
       <div>
         <strong>
           <div>Explanation:</div>
         </strong>
-        <div><%= @request.monitizationExplanation %></div>
+        <div><%= @request[:monitizationExplanation] %></div>
       </div>
     </li>
     <li>
@@ -138,16 +138,16 @@
         <strong>
           <div>App is Veteran Facing:</div>
         </strong>
-        <div><%= @request.veteranFacing %></div>
+        <div><%= @request[:veteranFacing] %></div>
       </div>
     </li>
-    <% if @request.veteranFacing.present? %>
+    <% if @request[:veteranFacing].present? %>
       <li>
         <div>
           <strong>
             <div>Link to Application's Primary Webpage:</div>
           </strong>
-          <div><%= @request.website %></div>
+          <div><%= @request[:website] %></div>
         </div>
       </li>
       <li>
@@ -155,7 +155,7 @@
           <strong>
             <div>Link to Application's Signup Page:</div>
           </strong>
-          <div><%= @request.signUpLink %></div>
+          <div><%= @request[:signUpLink] %></div>
         </div>
       </li>
       <li>
@@ -163,7 +163,7 @@
           <strong>
             <div>Link to Application's FAQ/Support Page:</div>
           </strong>
-          <div><%= @request.supportLink %></div>
+          <div><%= @request[:supportLink] %></div>
         </div>
       </li>
       <li>
@@ -171,7 +171,7 @@
           <strong>
             <div>Available on the Following Platforms:</div>
           </strong>
-          <div><%= @request.platforms %></div>
+          <div><%= @request[:platforms] %></div>
         </div>
       </li>
       <li>
@@ -179,7 +179,7 @@
           <strong>
             <div>Veteran Facing Description:</div>
           </strong>
-          <div><%= @request.veteranFacingDescription %></div>
+          <div><%= @request[:veteranFacingDescription] %></div>
         </div>
       </li>
     <% end %>
@@ -192,7 +192,7 @@
       <strong>
         <div>VASI System Name</div>
       </strong>
-      <div><%= @request.vasiSystemName %></div>
+      <div><%= @request[:vasiSystemName] %></div>
     </div>
   </li>
   <li>
@@ -200,7 +200,7 @@
       <strong>
         <div>Production Key Credential Storage:</div>
       </strong>
-      <div><%= @request.productionKeyCredentialStorage %></div>
+      <div><%= @request[:productionKeyCredentialStorage] %></div>
     </div>
   </li>
   <li>
@@ -208,7 +208,7 @@
       <strong>
         <div>Production/OAuth Key Credential Storage:</div>
       </strong>
-      <div><%= @request.productionOrOAuthKeyCredentialStorage %></div>
+      <div><%= @request[:productionOrOAuthKeyCredentialStorage] %></div>
     </div>
   </li>
   <li>
@@ -216,16 +216,16 @@
       <strong>
         <div>Application Stores PII/PHI:</div>
       </strong>
-      <div><%= @request.storePIIOrPHI %></div>
+      <div><%= @request[:storePIIOrPHI] %></div>
     </div>
   </li>
-  <% if @request.storePIIOrPHI.present? %>
+  <% if @request[:storePIIOrPHI].present? %>
     <li>
       <div>
         <strong>
           <div>How is PII/PHI Stored?:</div>
         </strong>
-        <div><%= @request.piiStorageMethod %></div>
+        <div><%= @request[:piiStorageMethod] %></div>
       </div>
     </li>
     <li>
@@ -233,7 +233,7 @@
         <strong>
           <div>Safeguards in Place:</div>
         </strong>
-        <div><%= @request.multipleReqSafeguards %></div>
+        <div><%= @request[:multipleReqSafeguards] %></div>
       </div>
     </li>
     <li>
@@ -241,7 +241,7 @@
         <strong>
           <div>Breach Management Process:</div>
         </strong>
-        <div><%= @request.breachManagementProcess %></div>
+        <div><%= @request[:breachManagementProcess] %></div>
       </div>
     </li>
     <li>
@@ -249,7 +249,7 @@
         <strong>
           <div>Vulnerability Management and Patch Process:</div>
         </strong>
-        <div><%= @request.vulnerabilityManagement %></div>
+        <div><%= @request[:vulnerabilityManagement] %></div>
       </div>
     </li>
     <li>
@@ -257,16 +257,16 @@
         <strong>
           <div>Application Exposes Veterans’ Health, Claims, Disabilities, or Service History Data to Third Parties:</div>
         </strong>
-        <div><%= @request.exposeVeteranInformationToThirdParties %></div>
+        <div><%= @request[:exposeVeteranInformationToThirdParties] %></div>
       </div>
     </li>
-    <% if @request.exposeVeteranInformationToThirdParties.present? %>
+    <% if @request[:exposeVeteranInformationToThirdParties].present? %>
       <li>
         <div>
           <strong>
             <div>Description:</div>
           </strong>
-          <div><%= @request.thirdPartyInfoDescription %></div>
+          <div><%= @request[:thirdPartyInfoDescription] %></div>
         </div>
       </li>
       <li>
@@ -274,7 +274,7 @@
           <strong>
             <div>Scopes Access Requested:</div>
           </strong>
-          <div><%= @request.scopesAccessRequested %></div>
+          <div><%= @request[:scopesAccessRequested] %></div>
         </div>
       </li>
     <% end %>
@@ -283,16 +283,16 @@
           <strong>
             <div>Distributing Production API Keys to Customers:</div>
           </strong>
-          <div><%= @request.distributingAPIKeysToCustomers %></div>
+          <div><%= @request[:distributingAPIKeysToCustomers] %></div>
         </div>
       </li>
-      <% if @request.distributingAPIKeysToCustomers.present? %>
+      <% if @request[:distributingAPIKeysToCustomers].present? %>
         <li>
           <div>
             <strong>
               <div>Naming Convention for Customers:</div>
             </strong>
-            <div><%= @request.namingConvention %></div>
+            <div><%= @request[:namingConvention] %></div>
           </div>
         </li>
         <li>
@@ -300,7 +300,7 @@
             <strong>
               <div>Centralized Backend Log of Customer Submissions:</div>
             </strong>
-            <div><%= @request.centralizedBackendLog %></div>
+            <div><%= @request[:centralizedBackendLog] %></div>
           </div>
         </li>
       <% end %>
@@ -310,7 +310,7 @@
       <strong>
         <div>Listed on MyHealthApplication.com:</div>
       </strong>
-      <div><%= @request.listedOnMyHealthApplication %></div>
+      <div><%= @request[:listedOnMyHealthApplication] %></div>
     </div>
   </li>
 </ul>
