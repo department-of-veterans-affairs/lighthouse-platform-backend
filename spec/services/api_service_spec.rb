@@ -14,7 +14,7 @@ RSpec.describe ApiService do
   end
 
   describe '.intialize' do
-    let(:subject) { ApiService.new }
+    subject { ApiService.new }
   end
 
   describe '#gather_apis' do

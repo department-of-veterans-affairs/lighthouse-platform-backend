@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe UserService do
-  let(:subject) { UserService.new }
   let(:user) { create(:user, first_name: 'Tony', last_name: 'Stark', email: 'tony@stark.com') }
   let(:okta_ref) { '0kt4-rul3s' }
   let(:gateway_ref) { 'l3g1t-1d' }
