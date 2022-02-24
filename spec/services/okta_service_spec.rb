@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe OktaService do
-  let(:subject) { OktaService.new }
+  subject { OktaService.new }
 
   describe '#list applications' do
     it 'displays all applications' do

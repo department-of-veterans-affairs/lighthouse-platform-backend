@@ -22,6 +22,7 @@ AllCops:
     - 'script/**/*'
     - 'vendor/**/*'
     - modules/**/db/migrate/*.rb
+  NewCops: enable
 
 # This allows you to use have writers like self.method_name(name) vs self.method_name=(name)
 Style/TrivialAccessors:

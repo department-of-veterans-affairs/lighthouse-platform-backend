@@ -10,7 +10,7 @@ RSpec.describe ElasticsearchService do
   end
 
   describe '.intialize' do
-    let(:subject) { ElasticsearchService.new }
+    subject { ElasticsearchService.new }
 
     it 'uses regular Net::HTTP to make a connection' do
       expect(subject.client.name).to eq('Net::HTTP')
