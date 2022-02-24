@@ -4,26 +4,10 @@ require 'rails_helper'
 
 RSpec.describe 'Admin::ApisController', type: :request do
   describe 'Creating an API' do
-    def valid_bulk_params
-      [{
-        api: {
-          name: 'claims',
-          acl: 'claimville'
-        }
-      }]
-    end
-
-    it 'creates a new api record for bulk update endpoint' do
+    it 'creates new api records through database seed file' do
       expect do
-        post '/platform-backend/admin/dashboard/apis/bulk_upload', params: { apis: valid_bulk_params }
-      end.to change(Api, :count).by(1)
-    end
-
-    it 'creates a new api record for bulk update endpoint via file upload' do
-      expect do
-        file = fixture_file_upload('spec/support/apis_list.csv', 'text/csv')
-        post '/platform-backend/admin/dashboard/apis/bulk_upload', params: { file: file }
-      end.to change(Api, :count).by(2)
+        post '/platform-backend/admin/dashboard/apis/bulk_seed'
+      end.to change(Api, :count).by(14)
     end
   end
 

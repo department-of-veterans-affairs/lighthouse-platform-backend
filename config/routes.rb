@@ -22,7 +22,7 @@ Rails.application.routes.draw do
         collection do
           resources :apis, only: [] do
             collection do
-              post :bulk_upload
+              post :bulk_seed
               post :destroy_all
             end
           end
@@ -38,5 +38,7 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    match '*path', to: 'application#not_found', via: :all
   end
 end
