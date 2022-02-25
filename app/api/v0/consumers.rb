@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
+require 'validators/length'
+
 module V0
   class Consumers < V0::Base
-    require_relative '../validators/length'
     version 'v0'
 
     helpers do
