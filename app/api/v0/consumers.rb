@@ -51,6 +51,13 @@ module V0
         ProductionMailer.consumer_production_access(request).deliver_later
         ProductionMailer.support_production_access(request).deliver_later
       end
+
+      def send_sandbox_welcome_emails(request, kong_consumer, okta_consumer)
+        SandboxMailer.consumer_sandbox_signup(request, kong_consumer, okta_consumer).deliver_later
+        if request[:apis].split(',').include?('addressValidation')
+          SandboxMailer.va_profile_sandbox_signup(request).deliver_later
+        end
+      end
     end
 
     resource 'consumers' do
@@ -65,6 +72,11 @@ module V0
         optional :oAuthRedirectURI, type: String, allow_blank: false, regexp: %r{^https?://.+}
         requires :organization, type: String
         requires :termsOfService, type: Boolean, allow_blank: false
+        optional :internalApiInfo, type: Hash do
+          optional :programName, type: String
+          optional :sponsorEmail, type: String
+          optional :vaEmail, type: String
+        end
 
         all_or_none_of :oAuthApplicationType, :oAuthRedirectURI
       end
@@ -78,6 +90,8 @@ module V0
         user, okta_consumer = okta_signup(user, oauth) if oauth.present?
         user.save!
         user.undiscard if user.discarded?
+
+        send_sandbox_welcome_emails(params, kong_consumer, okta_consumer) if Flipper.enabled? :send_emails
 
         present user, with: V0::Entities::ConsumerApplicationEntity, kong: kong_consumer, okta: okta_consumer
       end
