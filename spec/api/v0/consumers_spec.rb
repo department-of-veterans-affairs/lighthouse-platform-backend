@@ -5,34 +5,33 @@ require 'rails_helper'
 describe V0::Consumers, type: :request do
   let(:production_request_base) { '/platform-backend/v0/consumers/production-requests' }
   let(:production_request_params) { build(:production_access_request) }
+  let(:apply_base) { '/platform-backend/v0/consumers/applications' }
+  let :signup_params do
+    {
+      apis: "#{api_ref_one},#{api_ref_two},#{api_ref_three}",
+      description: 'Signing up for Patti',
+      email: 'doug@douglas.funnie.org',
+      firstName: 'Douglas',
+      lastName: 'Funnie',
+      oAuthApplicationType: 'web',
+      oAuthRedirectURI: 'http://localhost:3000/callback',
+      organization: 'Doug',
+      termsOfService: true
+    }
+  end
+  let(:api_environments) { create_list(:api_environment, 3) }
+  let(:api_ref_one) { api_environments.first.api.api_ref.name }
+  let(:api_ref_two) { api_environments.second.api.api_ref.name }
+  let(:api_ref_three) { api_environments.last.api.api_ref.name }
+
+  before do
+    api_environments
+    api = Api.last
+    api.update!(auth_server_access_key: 'AUTHZ_SERVER_DEFAULT')
+    api.update!(acl: nil)
+  end
 
   describe 'accepts signups from dev portal' do
-    let(:apply_base) { '/platform-backend/v0/consumers/applications' }
-    let(:api_environments) { create_list(:api_environment, 3) }
-    let(:api_ref_one) { api_environments.first.api.api_ref.name }
-    let(:api_ref_two) { api_environments.second.api.api_ref.name }
-    let(:api_ref_three) { api_environments.last.api.api_ref.name }
-    let :signup_params do
-      {
-        apis: "#{api_ref_one},#{api_ref_two},#{api_ref_three}",
-        description: 'Signing up for Patti',
-        email: 'doug@douglas.funnie.org',
-        firstName: 'Douglas',
-        lastName: 'Funnie',
-        oAuthApplicationType: 'web',
-        oAuthRedirectURI: 'http://localhost:3000/callback',
-        organization: 'Doug',
-        termsOfService: true
-      }
-    end
-
-    before do
-      api_environments
-      api = Api.last
-      api.update!(auth_server_access_key: 'AUTHZ_SERVER_DEFAULT')
-      api.update!(acl: nil)
-    end
-
     context 'when signup is successful' do
       it 'creates the respective user, consumer and apis via the apply page' do
         VCR.use_cassette('okta/consumer_signup_200', match_requests_on: [:method]) do
@@ -42,6 +41,27 @@ describe V0::Consumers, type: :request do
           expect(User.count).to eq(1)
           expect(Consumer.count).to eq(1)
           expect(User.last.consumer.apis.count).to eq(3)
+        end
+      end
+
+      context 'with flipper enabled' do
+        after do
+          Flipper.disable :send_emails
+        end
+
+        before do
+          Flipper.enable :send_emails
+        end
+
+        it 'sends va_profile_distribution an email if addressValidation is included' do
+          signup_params[:apis] = 'addressValidation'
+          consumer_email = double
+          va_profile_email = double
+          allow(SandboxMailer).to receive(:consumer_sandbox_signup).and_return(consumer_email)
+          allow(SandboxMailer).to receive(:va_profile_sandbox_signup).and_return(va_profile_email)
+          expect(consumer_email).to receive(:deliver_later)
+          expect(va_profile_email).to receive(:deliver_later)
+          post apply_base, params: signup_params
         end
       end
     end
@@ -73,6 +93,12 @@ describe V0::Consumers, type: :request do
   end
 
   describe 'when flipper is disabled' do
+    it 'fails to hit the sandbox mailer' do
+      expect(SandboxMailer).not_to receive(:consumer_sandbox_signup)
+      expect(SandboxMailer).not_to receive(:va_profile_sandbox_signup)
+      post apply_base, params: signup_params
+    end
+
     it 'fails to hit the production mailer' do
       expect(ProductionMailer).not_to receive(:consumer_production_access)
       expect(ProductionMailer).not_to receive(:support_production_access)

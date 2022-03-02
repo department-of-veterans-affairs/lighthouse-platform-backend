@@ -77,4 +77,5 @@ Rails.application.configure do
   ENV['AUTHZ_SERVER_DEFAULT'] = 'default'
   ENV['ES_ENDPOINT'] = 'http://elasticsearch:9200'
   ENV['SUPPORT_EMAIL'] = 'user_support@the_house_of_light.com'
+  ENV['VA_PROFILE_DISTRIBUTION'] = 'va_profile_support@the_house_of_light.com'
 end
