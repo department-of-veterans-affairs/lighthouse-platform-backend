@@ -23,9 +23,9 @@ RSpec.describe Api, type: :model do
 
     it 'undiscards a previously discarded record' do
       subject.discard
-      expect(subject.discarded_at).not_to eq(nil)
+      expect(subject.discarded_at).not_to be_nil
       subject.undiscard
-      expect(subject.discarded_at).to eq(nil)
+      expect(subject.discarded_at).to be_nil
     end
   end
 

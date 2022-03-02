@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe V0::Consumers, type: :request do
-  let(:production_request_base) { '/platform-backend/v0/consumers/production_request' }
+  let(:production_request_base) { '/platform-backend/v0/consumers/production-requests' }
   let(:production_request_params) { build(:production_access_request) }
 
   describe 'accepts signups from dev portal' do
