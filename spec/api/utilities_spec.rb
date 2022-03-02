@@ -37,6 +37,3 @@ describe Utilities, type: :request do
     end
   end
 end
-
-
-
