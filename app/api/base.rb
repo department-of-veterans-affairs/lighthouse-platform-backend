@@ -19,6 +19,7 @@ class Base < Grape::API
   mount Utilities
 
   add_swagger_documentation \
+    mount_path: '/openapi',
     info: {
       title: 'Lighthouse Consumer Management Service',
       description: 'Source of truth for information regarding a Lighthouse consumer',
