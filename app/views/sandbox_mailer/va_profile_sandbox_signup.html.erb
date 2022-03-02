@@ -1,0 +1,11 @@
+<ul>
+    <li><strong>First Name:</strong> <%= @request[:firstName] %></li>
+    <li><strong>Last Name:</strong> <%= @request[:lastName] %></li>
+    <li><strong>Organization:</strong> <%= @request[:organization] %></li>
+    <li><strong>From Email:</strong> <%= @request[:email] %></li>
+    <li><strong>Description:</strong> <%= @request[:description] %></li>
+    <li><strong>APIs:</strong> <%= list_apis(@request[:apis]) %></li>
+    <li><strong>Program Name:</strong> <%= @request[:internalApiInfo][:programName] %></li>
+    <li><strong>Sponsor Email:</strong> <%= @request[:internalApiInfo][:sponsorEmail] %></li>
+    <li><strong>VA Email:</strong> <%= @request[:internalApiInfo][:vaEmail] %></li>
+</ul>

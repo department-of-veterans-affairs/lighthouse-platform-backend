@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :api_metadatum do
     description { Faker::Lorem.sentence }
-    display_name { Faker::JapaneseMedia::Naruto.character }
+    display_name { "#{Faker::JapaneseMedia::Naruto.character} API" }
     open_data { Faker::Boolean.boolean }
     va_internal_only { Faker::Boolean.boolean }
     url_fragment { Faker::Lorem.word }
