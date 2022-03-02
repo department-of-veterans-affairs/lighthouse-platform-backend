@@ -9,34 +9,15 @@ Rails.application.routes.draw do
     mount OkComputer::Engine, at: '/health_check'
     devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
 
-    mount RailsAdmin::Engine => '/admin/rails_admin', as: 'rails_admin'
+    mount RailsAdmin::Engine => '/admin/database', as: 'rails_admin'
 
     mount Flipper::UI.app(Flipper) => '/admin/flipper', as: 'flipper'
 
-    mount V0::Base => '/'
+    mount Base => '/'
 
     namespace :admin do
-      root to: 'dashboard#index'
-
-      resources :dashboard, only: [:index] do
-        collection do
-          resources :apis, only: [] do
-            collection do
-              post :bulk_seed
-              post :destroy_all
-            end
-          end
-
-          post 'consumers:migrate', to: 'consumers#load_initial',
-                                    as: 'migrate_consumers',
-                                    constraints: { migrate: /:migrate/ }
-          resources :consumers, only: [] do
-            collection do
-              post :destroy_all
-            end
-          end
-        end
-      end
+      root to: redirect('/platform-backend/admin/dashboard')
+      mount GrapeSwaggerRails::Engine => '/dashboard'
     end
 
     match '*path', to: 'application#not_found', via: :all

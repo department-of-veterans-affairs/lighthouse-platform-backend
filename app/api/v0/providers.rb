@@ -5,7 +5,7 @@ module V0
     version 'v0'
 
     resource 'providers' do
-      desc 'Provide list of apis within categories as developer-portal expects'
+      desc 'Provide list of apis within categories as developer-portal expects', deprecated: true
       params do
         optional :environment, type: String,
                                values: %w[dev staging sandbox production],

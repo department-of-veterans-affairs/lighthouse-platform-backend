@@ -21,4 +21,5 @@ authz_server_communitycare: default
 authz_server_health: default
 authz_server_verification: default
 support_email:
+enable_github_auth:
 va_profile_distribution:
