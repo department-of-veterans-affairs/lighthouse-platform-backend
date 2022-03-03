@@ -12,10 +12,12 @@ module V0
       expose :created_at, as: :createdAt
 
       expose '@links', if: :base_url, using: V0::Entities::LinkEntity do |instance, options|
+        api_name = instance.api_metadatum.api.name
+
         [
           { rel: 'collection',
             type: 'GET',
-            url: "#{options[:base_url]}/platform-backend/v0/providers/#{instance.api_metadatum.api.name}/release-notes" }
+            url: "#{options[:base_url]}/platform-backend/v0/providers/#{api_name}/release-notes" }
         ]
       end
     end

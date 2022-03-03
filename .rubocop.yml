@@ -128,6 +128,7 @@ Metrics/BlockLength:
     - 'lib/tasks/**/*.rake'
     - 'config/**/*.rb'
     - 'app/api/v0/consumers.rb'
+    - 'app/api/v0/providers.rb'
     - 'app/api/utilities.rb'
   IgnoredMethods:
     - 'helpers'
