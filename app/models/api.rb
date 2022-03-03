@@ -4,6 +4,7 @@ class Api < ApplicationRecord
   include Discard::Model
 
   validates :name, presence: true
+  validates :name, uniqueness: true
 
   has_one :api_ref, dependent: :destroy
   has_many :api_environments, dependent: :destroy

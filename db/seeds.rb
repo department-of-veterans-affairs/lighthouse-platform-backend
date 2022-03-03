@@ -164,7 +164,7 @@ appeals_status_api.update(
   }
 )
 
-decision_reviews_api = Api.create(name: 'decision_reviews')
+decision_reviews_api = Api.create(name: 'decision-reviews')
 decision_reviews_api.update(
   acl: 'hlr',
   api_environments_attributes: {
@@ -225,7 +225,7 @@ claims_api.update(
   }
 )
 
-benefits_intake_api = Api.create(name: 'benefits_intake')
+benefits_intake_api = Api.create(name: 'benefits-intake')
 benefits_intake_api.update(
   acl: 'vba_documents',
   api_environments_attributes: {
@@ -249,7 +249,7 @@ benefits_intake_api.update(
   }
 )
 
-benefits_reference_api = Api.create(name: 'benefits_reference_data')
+benefits_reference_api = Api.create(name: 'benefits-reference-data')
 benefits_reference_api.update(
   acl: 'benefits-reference-data',
   api_environments_attributes: {
@@ -273,7 +273,7 @@ benefits_reference_api.update(
   }
 )
 
-facilities_api = Api.create(name: 'va_facilities')
+facilities_api = Api.create(name: 'va-facilities')
 facilities_api.update(
   acl: 'va_facilities',
   api_environments_attributes: {
@@ -297,7 +297,7 @@ facilities_api.update(
   }
 )
 
-loan_guaranty_api = Api.create(name: 'loan_guaranty')
+loan_guaranty_api = Api.create(name: 'loan-guaranty')
 loan_guaranty_api.update(
   acl: 'loan_guaranty',
   api_environments_attributes: {
@@ -321,7 +321,7 @@ loan_guaranty_api.update(
   }
 )
 
-forms_api = Api.create(name: 'va_forms')
+forms_api = Api.create(name: 'va-forms')
 forms_api.update(
   acl: 'va_forms',
   api_environments_attributes: {
@@ -345,7 +345,7 @@ forms_api.update(
   }
 )
 
-address_validation_api = Api.create(name: 'address_validation')
+address_validation_api = Api.create(name: 'address-validation')
 address_validation_api.update(
   acl: 'internal-va:address_validation',
   api_environments_attributes: {
@@ -369,7 +369,7 @@ address_validation_api.update(
   }
 )
 
-veteran_confirmation_api = Api.create(name: 'veteran_confirmation')
+veteran_confirmation_api = Api.create(name: 'veteran-confirmation')
 veteran_confirmation_api.update(
   acl: 'veteran_confirmation',
   api_environments_attributes: {
@@ -393,7 +393,7 @@ veteran_confirmation_api.update(
   }
 )
 
-veteran_verification_api = Api.create(name: 'veteran_verification')
+veteran_verification_api = Api.create(name: 'veteran-verification')
 veteran_verification_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_VERIFICATION',
   api_environments_attributes: {
@@ -430,7 +430,7 @@ veteran_verification_api.update(
   }
 )
 
-community_care_api = Api.create(name: 'internal_community_care')
+community_care_api = Api.create(name: 'internal-community-care')
 community_care_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_COMMUNITYCARE',
   api_environments_attributes: {
@@ -466,7 +466,7 @@ community_care_api.update(
   }
 )
 
-clinical_fhir_api = Api.create(name: 'clinical_fhir_api')
+clinical_fhir_api = Api.create(name: 'clinical-fhir-api')
 clinical_fhir_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_HEALTH',
   api_environments_attributes: {
@@ -506,7 +506,7 @@ clinical_fhir_api.update(
   }
 )
 
-fhir_health_api = Api.create(name: 'fhir_health')
+fhir_health_api = Api.create(name: 'fhir-health')
 fhir_health_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_HEALTH',
   api_ref_attributes: {
