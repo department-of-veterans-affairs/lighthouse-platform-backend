@@ -23,7 +23,7 @@ class ElasticsearchService
     first_success_query(kong_id, cid)
     req.body = @query.to_json
     response = request(req, uri)
-    extract_timestamp(response)
+    convert_time(response) if response['hits']['total']['value'].positive?
   end
 
   private
@@ -43,6 +43,11 @@ class ElasticsearchService
 
   def extract_timestamp(response)
     response['hits']['hits'].first['_source']['@timestamp']
+  end
+
+  def convert_time(response)
+    timestamp = extract_timestamp(response)
+    Date.iso8601(timestamp).strftime("%B %d, %Y")
   end
 
   def query_builder(body)
