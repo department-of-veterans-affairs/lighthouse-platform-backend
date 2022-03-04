@@ -23,7 +23,12 @@ class ElasticsearchService
     first_success_query(kong_id, cid)
     req.body = @query.to_json
     response = request(req, uri)
-    convert_time(response) if response['hits']['total']['value'].positive?
+    if response['hits']['total']['value'].positive?
+      first_call = parse_times(response)
+      convert_time(first_call)
+    else
+      nil
+    end
   end
 
   private
@@ -45,9 +50,16 @@ class ElasticsearchService
     response['hits']['hits'].first['_source']['@timestamp']
   end
 
-  def convert_time(response)
-    timestamp = extract_timestamp(response)
-    Date.iso8601(timestamp).strftime("%B %d, %Y")
+  def convert_time(timestamp)
+    timestamp.strftime("%B %d, %Y")
+  end
+
+  def parse_times(response)
+    [].tap do |time|
+      response['hits']['hits'].map do |log|
+        time << Date.iso8601(log['_source']['@timestamp'])
+      end
+    end.min
   end
 
   def query_builder(body)
