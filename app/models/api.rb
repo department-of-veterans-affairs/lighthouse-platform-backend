@@ -23,7 +23,7 @@ class Api < ApplicationRecord
   end
 
   def status
-    active? ? 'active' : 'inactive'
+    kept? ? 'active' : 'inactive'
   end
 
   def activate!
@@ -31,10 +31,6 @@ class Api < ApplicationRecord
     save!
 
     undiscard! if discarded?
-  end
-
-  def active?
-    kept?
   end
 
   def deactivate!(deactivation_content: '', deactivation_date: Time.zone.now)
