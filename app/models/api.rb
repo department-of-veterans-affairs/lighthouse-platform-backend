@@ -22,6 +22,45 @@ class Api < ApplicationRecord
     api_environments.undiscard_all if api_environments.present?
   end
 
+  def status
+    active? ? 'active' : 'inactive'
+  end
+
+  def activate!
+    self.deactivation_info = nil
+    save!
+
+    undiscard! if discarded?
+  end
+
+  def active?
+    kept?
+  end
+
+  def deactivate!(deactivation_content: '', deactivation_date: Time.zone.now)
+    temp = api_metadatum.deactivation_info.present? ? JSON.parse(api_metadatum.deactivation_info) : {}
+    temp[:deactivationContent] = deactivation_content
+    temp[:deactivationDate] = deactivation_date
+
+    metadatum = api_metadatum
+    metadatum.deactivation_info = temp.to_json
+    metadatum.save!
+
+    discard! if undiscarded?
+  end
+
+  def deprecate!(deprecation_content: '', deprecation_date: Time.zone.now)
+    temp = api_metadatum.deactivation_info.present? ? JSON.parse(api_metadatum.deactivation_info) : {}
+    temp[:deprecationContent] = deprecation_content
+    temp[:deprecationDate] = deprecation_date
+
+    metadatum = api_metadatum
+    metadatum.deactivation_info = temp.to_json
+    metadatum.save!
+
+    discard! if undiscarded?
+  end
+
   def api_environments_attributes=(api_environments_attributes)
     environment = Environment.find_or_create_by(name: api_environments_attributes.dig(:environments_attributes, :name))
     api_environments << ApiEnvironment.find_or_create_by(metadata_url: api_environments_attributes[:metadata_url],

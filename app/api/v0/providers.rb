@@ -6,8 +6,17 @@ module V0
 
     resource 'providers' do
       desc 'Return list of API providers'
+      params do
+        optional :status, type: String,
+                          values: %w[active inactive],
+                          allow_blank: true
+      end
       get '/' do
-        present Api.kept.order(:name), with: V0::Entities::ApiEntity
+        apis = Api
+        apis = apis.kept if params[:status] == 'active'
+        apis = apis.discarded if params[:status] == 'inactive'
+
+        present apis.order(:name), with: V0::Entities::ApiEntity
       end
 
       desc 'Provide list of apis within categories as developer-portal expects', deprecated: true
@@ -32,12 +41,12 @@ module V0
           requires :providerName, type: String, allow_blank: false, description: 'Name of provider'
         end
         get '/release-notes' do
-          release_notes = Api.kept.find_by!(name: params[:providerName]).api_metadatum.api_release_notes.kept
+          release_notes = Api.find_by!(name: params[:providerName]).api_metadatum.api_release_notes.kept
 
           present release_notes.kept.order(date: :desc), with: V0::Entities::ApiReleaseNoteEntity
         end
 
-        desc 'Publish release note'
+        desc 'Publish release note to an active API provider'
         params do
           requires :providerName, type: String, allow_blank: false, description: 'Name of provider'
           optional :date, type: Date, allow_blank: false, default: Time.zone.now.to_date.strftime('%Y-%m-%d')

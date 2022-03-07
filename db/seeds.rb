@@ -466,6 +466,32 @@ community_care_api.update(
   }
 )
 
+urgent_care_api = Api.create(name: 'urgent-care')
+urgent_care_api.update(
+  api_metadatum_attributes: {
+   description: "The VA's Health Urgent Care Eligibility API supports industry standards (e.g., Fast Healthcare Interoperability Resources [FHIR]) and provides access to a Veteran's urgent care eligibility status.",
+   display_name: 'Urgent Care Eligibility API (FHIR)',
+   open_data: false,
+   va_internal_only: false,
+   url_fragment: 'urgent_care',
+   api_category_attributes: {
+     id: health_category.id
+   }
+  }
+)
+urgent_care_api.deprecate!(deprecation_date: Time.parse('13 Jul 2020 00:00 EDT'),
+                           deprecation_content: (<<~MARKDOWN
+                              This API is deprecated and scheduled for deactivation in the 3rd quarter of 2020. 
+                            MARKDOWN
+                            ))
+urgent_care_api.deactivate!(deactivation_date: Time.parse('20 Jul 2020 00:00 EDT'),
+                            deactivation_content: (<<~MARKDOWN
+                                Our Urgent Care Eligibility API was deactivated on July 20, 2020. The API and related 
+                                documentation is no longer accessible. For more information, [contact us](/support/contact-us) 
+                                or visit our [Google Developer Forum](https://groups.google.com/forum/m/#!forum/va-lighthouse).
+                              MARKDOWN
+                              ))
+
 clinical_fhir_api = Api.create(name: 'clinical-fhir-api')
 clinical_fhir_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_HEALTH',
@@ -613,6 +639,37 @@ ApiEnvironment.find_or_create_by(metadata_url: 'https://api.va.gov/internal/docs
                                   VA's FHIR DSTU-2 API is an industry accepted standard and consists of resources that represent granular clinical concepts, including health, administrative, and financial resources. The following describes the VA's implementation of HL7's FHIR DSTU-2 standard.
                                  MARKDOWN
                                 )
+
+ApiReleaseNote.create(api_metadatum_id: urgent_care_api.api_metadatum.id,
+                      date: Date.strptime('July 21, 2020', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        Our Urgent Care Eligibility API was deactivated on July 21, 2020. The API and related documentation is no longer accessible. For more information, [contact us](https://developer.va.gov/support/contact-us) or visit our [Google Developer Forum](https://groups.google.com/forum/m/#!forum/va-lighthouse)
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: urgent_care_api.api_metadatum.id,
+                      date: Date.strptime('July 13, 2020', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        The Urgent Care Eligibility API is deprecated and scheduled for deactivation in the 3rd quarter of 2020.
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: urgent_care_api.api_metadatum.id,
+                      date: Date.strptime('June 10, 2020', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        The optional query parameter `prompt` has been added to the authorization flow.
+
+                        - Supported prompts: login. If specified, the user will be forced to provide credentials regardless of session state. If omitted, an existing active session with the identity provider may not require the user to provide credentials.
+
+                        [View code changes(s)](https://github.com/department-of-veterans-affairs/vets-saml-proxy/pull/111)
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: urgent_care_api.api_metadatum.id,
+                      date: Date.strptime('July 30, 2019', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        Launch of the Urgent Care Eligibility API
+                      MARKDOWN
+                     )
+
+
 ApiReleaseNote.create(api_metadatum_id: appeals_status_api.api_metadatum.id,
                       date: Date.strptime('January 31, 2019', '%B %d, %Y'),
                       content: <<~MARKDOWN
