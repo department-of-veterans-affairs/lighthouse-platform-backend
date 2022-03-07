@@ -15,19 +15,16 @@ class ElasticsearchService
     request(req, uri)
   end
 
-  def first_successful_call(user)
+  def first_successful_call(consumer)
     uri = URI.parse("#{@es_base}/_search")
     req = Net::HTTP::Get.new(uri)
-    kong_id = user.consumer.sandbox_gateway_ref
-    cid = user.consumer.sandbox_oauth_ref
+    kong_id, cid = consumer.values_at(:sandbox_gateway_ref, :sandbox_oauth_ref)
     first_success_query(kong_id, cid)
     req.body = @query.to_json
     response = request(req, uri)
     if response['hits']['total']['value'].positive?
       first_call = parse_times(response)
       convert_time(first_call)
-    else
-      nil
     end
   end
 
@@ -51,7 +48,7 @@ class ElasticsearchService
   end
 
   def convert_time(timestamp)
-    timestamp.strftime("%B %d, %Y")
+    timestamp.strftime('%B %d, %Y')
   end
 
   def parse_times(response)

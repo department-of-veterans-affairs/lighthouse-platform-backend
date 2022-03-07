@@ -13,5 +13,12 @@ FactoryBot.define do
         consumer.api_environments << ApiEnvironment.second
       end
     end
+
+    trait :with_sandbox_ids do
+      before(:create) do |consumer, _|
+        consumer.sandbox_gateway_ref = '65a46870-a16a-4ded-85f1-e9fc33b03270'
+        consumer.sandbox_oauth_ref = '4n-0kt4-1d-f0r-us'
+      end
+    end
   end
 end
