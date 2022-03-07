@@ -7,7 +7,7 @@ describe Utilities, type: :request do
     it 'creates new api records through database seed file' do
       expect do
         post '/platform-backend/utilities/database/seed-requests'
-      end.to change(Api, :count).by(14)
+      end.to change(Api, :count).by(15)
     end
   end
 
