@@ -3,12 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe ElasticsearchService do
-  before(:all) do
-    ElasticsearchService.new.seed_elasticsearch
-  rescue RuntimeError
-    # assume valid state
-  end
-
   describe '.intialize' do
     subject { ElasticsearchService.new }
 
