@@ -6,6 +6,7 @@ class ElasticsearchService
   def initialize
     @client = Net::HTTP
     @es_base = Figaro.env.es_endpoint || 'http://localhost:9200'
+    @uri = URI.parse("#{@es_base}/_search")
   end
 
   def seed_elasticsearch
@@ -16,12 +17,12 @@ class ElasticsearchService
   end
 
   def first_successful_call(consumer)
-    uri = URI.parse("#{@es_base}/_search")
-    req = Net::HTTP::Get.new(uri)
-    kong_id, cid = consumer.values_at(:sandbox_gateway_ref, :sandbox_oauth_ref)
+    req = Net::HTTP::Get.new(@uri)
+    kong_id = consumer[:sandbox_gateway_ref]
+    cid = consumer[:sandbox_oauth_ref]
     first_success_query(kong_id, cid)
     req.body = @query.to_json
-    response = request(req, uri)
+    response = request(req, @uri)
     if response['hits']['total']['value'].positive?
       first_call = parse_times(response)
       convert_time(first_call)
