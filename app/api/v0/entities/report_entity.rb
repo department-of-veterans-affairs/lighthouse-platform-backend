@@ -2,7 +2,7 @@
 
 module V0
   module Entities
-    class ElasticsearchEntity < Grape::Entity
+    class ReportEntity < Grape::Entity
       expose :first_call
     end
   end
