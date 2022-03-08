@@ -26,7 +26,7 @@ class Utilities < Base
       get '/' do
         users = User.kept.select { |user| user.consumer.present? }
 
-        present users, with: V0::Entities::UserEntity
+        present users, with: Entities::UserEntity
       end
 
       desc 'Delete all consumers'
@@ -49,7 +49,7 @@ class Utilities < Base
       get '/' do
         apis = Api.left_joins(:api_ref).kept
 
-        present apis, with: V0::Entities::ApiEntity
+        present apis, with: Entities::ApiEntity
       end
 
       desc 'Delete all APIs'

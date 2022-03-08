@@ -22,5 +22,6 @@ FactoryBot.define do
       }.to_json
     end
     api_category { association :api_category }
+    api_release_notes { build_list :api_release_note, 3 }
   end
 end

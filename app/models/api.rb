@@ -4,6 +4,7 @@ class Api < ApplicationRecord
   include Discard::Model
 
   validates :name, presence: true
+  validates :name, uniqueness: true
 
   has_one :api_ref, dependent: :destroy
   has_many :api_environments, dependent: :destroy
@@ -19,6 +20,41 @@ class Api < ApplicationRecord
   after_undiscard do
     api_ref.undiscard if api_ref.present?
     api_environments.undiscard_all if api_environments.present?
+  end
+
+  def status
+    kept? ? 'active' : 'inactive'
+  end
+
+  def activate!
+    self.deactivation_info = nil
+    save!
+
+    undiscard! if discarded?
+  end
+
+  def deactivate!(deactivation_content: '', deactivation_date: Time.zone.now)
+    temp = api_metadatum.deactivation_info.present? ? JSON.parse(api_metadatum.deactivation_info) : {}
+    temp[:deactivationContent] = deactivation_content
+    temp[:deactivationDate] = deactivation_date
+
+    metadatum = api_metadatum
+    metadatum.deactivation_info = temp.to_json
+    metadatum.save!
+
+    discard! if undiscarded?
+  end
+
+  def deprecate!(deprecation_content: '', deprecation_date: Time.zone.now)
+    temp = api_metadatum.deactivation_info.present? ? JSON.parse(api_metadatum.deactivation_info) : {}
+    temp[:deprecationContent] = deprecation_content
+    temp[:deprecationDate] = deprecation_date
+
+    metadatum = api_metadatum
+    metadatum.deactivation_info = temp.to_json
+    metadatum.save!
+
+    discard! if undiscarded?
   end
 
   def api_environments_attributes=(api_environments_attributes)

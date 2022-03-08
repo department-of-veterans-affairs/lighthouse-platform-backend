@@ -5,7 +5,7 @@ module V0
     module Legacy
       class ApiProviderEntity < Grape::Entity
         expose :altID, documentation: { type: String } do |entity|
-          entity.api.api_ref.name
+          entity.api.api_ref.name if entity.api.api_ref.present?
         end
         expose :description, documentation: { type: String }
         expose :docSources do |entity, options|
@@ -41,7 +41,7 @@ module V0
         expose :display_name, as: :name, documentation: { type: String }
         expose :open_data, as: :openData
         expose :releaseNotes do |entity|
-          entity.api_release_notes.map do |release_note|
+          entity.api_release_notes.order(date: :desc).map do |release_note|
             "### #{release_note.date.strftime('%B %d, %Y')}\n\n#{release_note.content}"
           end.join("\n\n---\n\n")
         end
@@ -71,6 +71,10 @@ module V0
           end
         end
         expose :multi_open_api_intro, as: :multiOpenAPIIntro
+        expose :deactivation_info, if: ->(entity) { entity.deactivation_info.present? },
+                                   as: :deactivationInfo do |entity|
+          JSON.parse(entity.deactivation_info)
+        end
       end
     end
   end

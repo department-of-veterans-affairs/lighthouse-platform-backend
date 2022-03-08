@@ -24,7 +24,7 @@ gem 'oktakit', git: 'https://github.com/charleystran/oktakit', branch: 'add_auth
 gem 'omniauth', '~> 2.0.0'
 gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
 gem 'omniauth-rails_csrf_protection'
-gem 'pg', '<= 1.3.2'
+gem 'pg', '~> 1.1'
 gem 'premailer-rails'
 gem 'puma', '~> 5.5'
 gem 'rack-protection', '< 2.2.0'
@@ -67,7 +67,7 @@ end
 group :test do
   gem 'capybara', '>= 3.26'
   gem 'selenium-webdriver'
-  gem 'simplecov', '< 0.18', require: false
+  gem 'simplecov', require: false
   gem 'webdrivers'
 end
 
