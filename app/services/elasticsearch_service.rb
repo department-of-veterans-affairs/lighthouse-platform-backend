@@ -49,10 +49,6 @@ class ElasticsearchService
     JSON.parse(response.body) unless response.body.nil?
   end
 
-  def extract_timestamp(response)
-    response['hits']['hits'].first['_source']['@timestamp']
-  end
-
   def convert_time(timestamp)
     timestamp.strftime('%B %d, %Y')
   end
