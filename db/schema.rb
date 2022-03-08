@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_22_215613) do
+ActiveRecord::Schema.define(version: 2022_03_04_193002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 2022_02_22_215613) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "multi_open_api_intro"
     t.string "url_fragment"
+    t.jsonb "deactivation_info"
     t.index ["api_category_id"], name: "index_api_metadata_on_api_category_id"
     t.index ["api_id"], name: "index_api_metadata_on_api_id"
     t.index ["discarded_at"], name: "index_api_metadata_on_discarded_at"
@@ -93,6 +94,7 @@ ActiveRecord::Schema.define(version: 2022_02_22_215613) do
     t.string "acl"
     t.string "auth_server_access_key"
     t.index ["discarded_at"], name: "index_apis_on_discarded_at"
+    t.index ["name"], name: "index_apis_on_name", unique: true
   end
 
   create_table "consumer_api_assignments", force: :cascade do |t|

@@ -84,6 +84,7 @@ Metrics/MethodLength:
     - 'app/controllers/admin/api/v0/apis_controller.rb'
     - 'spec/services/consumer_import_service_spec.rb'
     - 'spec/services/dynamo_service_spec.rb'
+    - 'app/models/api.rb'
   IgnoredMethods:
     - 'user_params'
     - 'signup_params'
@@ -128,6 +129,7 @@ Metrics/BlockLength:
     - 'lib/tasks/**/*.rake'
     - 'config/**/*.rb'
     - 'app/api/v0/consumers.rb'
+    - 'app/api/v0/providers.rb'
     - 'app/api/utilities.rb'
   IgnoredMethods:
     - 'helpers'
