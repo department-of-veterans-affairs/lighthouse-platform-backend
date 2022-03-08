@@ -12,7 +12,8 @@ module V0
                         description: 'User ID from Lighthouse Consumer Management Service'
         end
         consumer = User.find(params[:id]).consumer
-        ElasticsearchService.new.first_successful_call consumer
+        first_call = ElasticsearchService.new.first_successful_call consumer
+        present first_call, with: V0::Entities::ElasticsearchEntity
       end
     end
   end
