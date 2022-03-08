@@ -9,6 +9,11 @@ class ElasticsearchService
     @uri = URI.parse("#{@es_base}/_search")
   end
 
+  def search_connection
+    req = Net::HTTP::Get.new(@uri)
+    request(req, @uri)
+  end
+
   def seed_elasticsearch
     uri = URI.parse("#{@es_base}/_bulk")
     req = Net::HTTP::Post.new(uri)

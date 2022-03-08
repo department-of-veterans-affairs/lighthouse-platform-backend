@@ -61,8 +61,17 @@ class OktaCheck < BaseCheck
   end
 end
 
+class ElasticsearchCheck < BaseCheck
+  def check
+    ElasticsearchService.new.search_connection ? process_success : process_failure
+  rescue
+    process_failure
+  end
+end
+
 OkComputer::Registry.register 'kong', KongCheck.new
 OkComputer::Registry.register 'okta', OktaCheck.new
 OkComputer::Registry.register 'dynamodb', DynamoCheck.new
+OkComputer::Registry.register 'elasticsearch', ElasticsearchCheck.new
 
 OkComputer.make_optional %w[dynamodb]
