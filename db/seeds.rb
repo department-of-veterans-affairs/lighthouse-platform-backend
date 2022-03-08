@@ -321,6 +321,38 @@ loan_guaranty_api.update(
   }
 )
 
+lgy_guaranty_remittance_api = Api.create(name: 'lgy-guaranty-remittance')
+lgy_guaranty_remittance_api.update(
+  auth_server_access_key: 'AUTHZ_SERVER_LOAN_GUARANTY',
+  api_environments_attributes: {
+   metadata_url: 'https://api.va.gov/internal/docs/lgy-remittance/metadata.json',
+   environments_attributes: {
+     name: 'sandbox'
+   }
+  },
+  api_ref_attributes: {
+   name: 'lgyGuarantyRemittance'
+  },
+  api_metadatum_attributes: {
+   description: 'Lets lenders automate parts of the mortgage post-closing process.',
+   display_name: 'Guaranty Remittance API',
+   open_data: false,
+   va_internal_only: false,
+   url_fragment: 'lgy_guaranty_remittance',
+   oauth_info: {
+    ccgInfo: {
+      baseAuthPath: '/oauth2/loan-guaranty/system/v1',
+      productionAud: 'ausbts6ndxFQDyeBM297',
+      sandboxAud: 'auseavl6o5AjGZr2n2p7',
+      scopes: ['system.loan-remittance.read', 'system.loan-remittance.write', 'system.remediation-evidence.write'],
+    },
+  }.to_json,
+   api_category_attributes: {
+     id: loan_guaranty_category.id
+   }
+  }
+)
+
 forms_api = Api.create(name: 'va-forms')
 forms_api.update(
   acl: 'va_forms',
