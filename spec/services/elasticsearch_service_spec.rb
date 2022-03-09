@@ -16,7 +16,7 @@ RSpec.describe ElasticsearchService do
     let(:consumer) { create(:consumer, :with_sandbox_ids, user: user) }
 
     it 'retrieves a successful first call by a consumer' do
-      expect(subject.first_successful_call(consumer)).to eq({ firstSandboxInteractionAt: 'July 03, 2015' })
+      expect(subject.first_successful_call(consumer)).to eq({ first_sandbox_interaction_at: 'July 03, 2015' })
     end
   end
 end

@@ -30,7 +30,7 @@ class ElasticsearchService
     response = request(req, @uri)
     if response['hits']['total']['value'].positive?
       first_call = parse_times(response)
-      { firstSandboxInteractionAt: convert_time(first_call) }
+      { first_sandbox_interaction_at: convert_time(first_call) }
     end
   end
 
