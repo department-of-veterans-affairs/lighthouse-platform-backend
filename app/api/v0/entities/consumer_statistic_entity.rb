@@ -3,7 +3,7 @@
 module V0
   module Entities
     class ConsumerStatisticEntity < Grape::Entity
-      expose :first_call
+      expose :firstSandboxInteractionAt
     end
   end
 end
