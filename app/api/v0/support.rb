@@ -32,7 +32,7 @@ module V0
           optional :apiDescription, type: String
           requires :apiDetails, type: String, allow_blank: false
           requires :apiInternalOnly, type: Boolean, allow_blank: false
-          given apiInternalOnly: ->(val) { val == true } do
+          given apiInternalOnly: ->(val) { val } do
             requires :apiInternalOnlyDetails, type: String, allow_blank: false
           end
           optional :apiOtherInfo, type: String
