@@ -10,7 +10,7 @@ trap "docker-compose down -v --rmi local" EXIT
 
 echo 'Building container and running CI'
 docker-compose build --no-cache
-docker-compose run app bundle exec rails db:create ci
+docker-compose run app /bin/bash wait-for-it.sh bundle exec rails db:create ci
 
 echo 'Building production container...'
 docker build --pull --file $BASEDIR/Dockerfile --target prod --tag $REPOSITORY:$VERSION $BASEDIR

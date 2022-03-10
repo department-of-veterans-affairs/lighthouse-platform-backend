@@ -146,4 +146,20 @@ describe V0::Consumers, type: :request do
       end
     end
   end
+
+  describe 'consumer statistics api' do
+    let(:user) { create(:user) }
+    let(:consumer) { create(:consumer, :with_sandbox_ids, user: user) }
+
+    before do
+      consumer
+    end
+
+    it 'returns a successful first call' do
+      get "/platform-backend/v0/consumers/#{consumer[:id]}/statistics"
+      expect(response.code).to eq('200')
+
+      expect(response.body).to include('July 03, 2015')
+    end
+  end
 end

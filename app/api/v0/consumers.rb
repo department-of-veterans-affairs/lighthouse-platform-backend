@@ -155,6 +155,17 @@ module V0
 
         body false
       end
+
+      desc 'Peruses Elasticsearch for a successful consumer first-call (via oauth and/or key-auth)'
+      get '/:consumerId/statistics' do
+        params do
+          requires :consumerId, type: String, allow_blank: false,
+                        description: 'Consumer ID from Lighthouse Consumer Management Service'
+        end
+        consumer = Consumer.find(params[:consumerId])
+        first_call = ElasticsearchService.new.first_successful_call consumer
+        present first_call, with: V0::Entities::ConsumerStatisticEntity
+      end
     end
   end
 end
