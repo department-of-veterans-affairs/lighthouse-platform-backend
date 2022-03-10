@@ -17,27 +17,37 @@ module V0
     resource 'support' do
       desc 'Handles contact-us support requests'
       params do
-        optional :apis, type: Array[String]
-        optional :apiDescription, type: String
-        optional :apiDetails, type: String
-        optional :apiInternalOnly, type: Boolean
-        optional :apiInternalOnlyDetails, type: String
-        optional :apiOtherInfo, type: String
-        optional :description, type: String
-        requires :email, as: :requester, type: String
-        requires :firstName, type: String
-        requires :lastName, type: String
+        requires :email, as: :requester, type: String, allow_blank: false
+        requires :firstName, type: String, allow_blank: false
+        requires :lastName, type: String, allow_blank: false
         optional :organization, type: String
+        requires :type, type: String,
+                        values: %w[DEFAULT PUBLISHING],
+                        allow_blank: false
+        given type: ->(val) { val == 'DEFAULT' } do
+          optional :apis, type: Array[String]
+          requires :description, type: String
+        end
+        given type: ->(val) { val == 'PUBLISHING' } do
+          optional :apiDescription, type: String
+          requires :apiDetails, type: String, allow_blank: false
+          requires :apiInternalOnly, type: Boolean, allow_blank: false
+          given apiInternalOnly: ->(val) { val == true } do
+            requires :apiInternalOnlyDetails, type: String, allow_blank: false
+          end
+          optional :apiOtherInfo, type: String
+        end
       end
 
       post 'contact-us' do
         body false
         return unless Flipper.enabled? :send_emails
 
+        email_params = declared(params, include_missing: false)
         if params[:type] == 'PUBLISHING'
-          publishing_support_email declared(params)
+          publishing_support_email email_params
         else
-          consumer_support_email declared(params)
+          consumer_support_email email_params
         end
       end
     end
