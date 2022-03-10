@@ -3,15 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe ApiService do
-  let(:api_environments) { create_list(:api_environment, 3) }
-  let(:apis) { api_environments.map(&:api) }
-
-  before do
-    api_environments
-    api = Api.find(apis.last.id)
-    api.update!(acl: nil)
-    api.update!(auth_server_access_key: 'TEST')
-  end
+  let(:api_environments) { create_list(:api_environment, 2) }
+  let(:api_env_with_auth_server) { create(:api_environment, :auth_server_access_key) }
+  let(:apis) { api_environments.push(api_env_with_auth_server).map(&:api) }
 
   describe '.intialize' do
     subject { ApiService.new }
