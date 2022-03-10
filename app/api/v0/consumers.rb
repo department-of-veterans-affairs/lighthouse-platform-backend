@@ -160,7 +160,7 @@ module V0
       get '/:consumerId/statistics' do
         params do
           requires :consumerId, type: String, allow_blank: false,
-                        description: 'Consumer ID from Lighthouse Consumer Management Service'
+                                description: 'Consumer ID from Lighthouse Consumer Management Service'
         end
         consumer = Consumer.find(params[:consumerId])
         first_call = ElasticsearchService.new.first_successful_call consumer
