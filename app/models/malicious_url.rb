@@ -1,0 +1,2 @@
+class MaliciousUrl < ApplicationRecord
+end
