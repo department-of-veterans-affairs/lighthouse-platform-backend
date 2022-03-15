@@ -70,9 +70,9 @@ module V0
         requires :firstName, type: String
         requires :lastName, type: String
         optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: false
-        optional :oAuthRedirectURI, type: String, 
-                                    allow_blank: false, 
-                                    regexp: %r{^https?://.+}, 
+        optional :oAuthRedirectURI, type: String,
+                                    allow_blank: false,
+                                    regexp: %r{^https?://.+},
                                     malicious_url_protection: true
         requires :organization, type: String
         requires :termsOfService, type: Boolean, allow_blank: false
@@ -164,7 +164,7 @@ module V0
       get '/:consumerId/statistics' do
         params do
           requires :consumerId, type: String, allow_blank: false,
-                        description: 'Consumer ID from Lighthouse Consumer Management Service'
+                                description: 'Consumer ID from Lighthouse Consumer Management Service'
         end
         consumer = Consumer.find(params[:consumerId])
         first_call = ElasticsearchService.new.first_successful_call consumer
