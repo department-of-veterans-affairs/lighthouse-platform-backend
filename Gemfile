@@ -5,6 +5,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.0.0'
 
+gem 'activerecord-import'
 gem 'aws-sdk-dynamodb', '~> 1.62'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'devise'
@@ -18,6 +19,7 @@ gem 'grape'
 gem 'grape-entity'
 gem 'grape-swagger'
 gem 'grape-swagger-rails'
+gem 'httparty'
 gem 'jbuilder', '~> 2.7'
 gem 'okcomputer'
 gem 'oktakit', git: 'https://github.com/charleystran/oktakit', branch: 'add_authorization_servers'

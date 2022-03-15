@@ -5,9 +5,11 @@ require 'rails_helper'
 describe Utilities, type: :request do
   describe 'Running database seeds' do
     it 'creates new api records through database seed file' do
-      expect do
-        post '/platform-backend/utilities/database/seed-requests'
-      end.to change(Api, :count).by(16)
+      VCR.use_cassette('urlhaus/malicious_urls_200', match_requests_on: [:method]) do
+        expect do
+          post '/platform-backend/utilities/database/seed-requests'
+        end.to change(Api, :count).by(16)
+      end
     end
   end
 
