@@ -90,6 +90,14 @@ describe V0::Consumers, type: :request do
         expect(response.code).to eq('500')
       end
     end
+
+    context 'when url is malicious' do
+      it 'responds with bad request' do
+        signup_params[:oAuthApplicationType] = create(:malicious_url).url
+        post apply_base, params: signup_params
+        expect(response.code).to eq('400')
+      end
+    end
   end
 
   describe 'when flipper is disabled' do
