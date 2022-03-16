@@ -75,7 +75,7 @@ module V0
                                     regexp: %r{^https?://.+},
                                     malicious_url_protection: true
         requires :organization, type: String
-        requires :termsOfService, type: Boolean, allow_blank: false
+        requires :termsOfService, type: Boolean, allow_blank: false, values: [true]
         optional :internalApiInfo, type: Hash do
           optional :programName, type: String
           optional :sponsorEmail, type: String
