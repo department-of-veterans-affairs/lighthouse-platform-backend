@@ -39,7 +39,7 @@ module V0
         end
       end
 
-      post 'contact-us' do
+      post 'contact-us/requests' do
         body false
         return unless Flipper.enabled? :send_emails
 

@@ -19,7 +19,7 @@ describe V0::Support, type: :request do
         email = double
         allow(SupportMailer).to receive(:consumer_support_email).and_return(email)
         expect(email).to receive(:deliver_later)
-        post '/platform-backend/v0/support/contact-us', params: request
+        post '/platform-backend/v0/support/contact-us/requests', params: request
         expect(response.code).to eq('204')
       end
     end
@@ -27,7 +27,7 @@ describe V0::Support, type: :request do
     context 'with flipper disabled' do
       it 'does not send an email' do
         expect(SupportMailer).not_to receive(:consumer_support_email)
-        post '/platform-backend/v0/support/contact-us', params: request
+        post '/platform-backend/v0/support/contact-us/requests', params: request
         expect(response.code).to eq('204')
       end
     end
@@ -49,7 +49,7 @@ describe V0::Support, type: :request do
         email = double
         allow(SupportMailer).to receive(:publishing_support_email).and_return(email)
         expect(email).to receive(:deliver_later)
-        post '/platform-backend/v0/support/contact-us', params: request
+        post '/platform-backend/v0/support/contact-us/requests', params: request
         expect(response.code).to eq('204')
       end
     end
@@ -57,7 +57,7 @@ describe V0::Support, type: :request do
     context 'with flipper disabled' do
       it 'does not send an email' do
         expect(SupportMailer).not_to receive(:publishing_support_email)
-        post '/platform-backend/v0/support/contact-us', params: request
+        post '/platform-backend/v0/support/contact-us/requests', params: request
         expect(response.code).to eq('204')
       end
     end
