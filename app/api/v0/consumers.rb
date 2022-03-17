@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'validators/length'
+require 'validators/malicious_url_protection'
 
 module V0
   class Consumers < V0::Base
@@ -69,7 +70,10 @@ module V0
         requires :firstName, type: String
         requires :lastName, type: String
         optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: false
-        optional :oAuthRedirectURI, type: String, allow_blank: false, regexp: %r{^https?://.+}
+        optional :oAuthRedirectURI, type: String,
+                                    allow_blank: false,
+                                    regexp: %r{^https?://.+},
+                                    malicious_url_protection: true
         requires :organization, type: String
         requires :termsOfService, type: Boolean, allow_blank: false
         optional :internalApiInfo, type: Hash do

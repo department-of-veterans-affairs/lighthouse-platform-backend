@@ -1,5 +1,13 @@
 # frozen_string_literal: true
 
+columns = [ :url ]
+values =  HTTParty.get('https://urlhaus.abuse.ch/downloads/text/').body
+                                                                  .split("\r\n")
+                                                                  .delete_if { |line| line.starts_with?('#') }
+                                                                  .map { |line| [line] }
+MaliciousUrl.import columns, values, validate: false
+
+
 appeals_category = ApiCategory.create(
   name: 'Appeals APIs',
   key: 'appeals',
