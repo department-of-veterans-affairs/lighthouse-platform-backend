@@ -40,6 +40,8 @@ module V0
       end
 
       post 'contact-us/requests' do
+        protect_from_forgery
+        
         body false
         return unless Flipper.enabled? :send_emails
 

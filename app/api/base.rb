@@ -14,9 +14,20 @@ class Base < Grape::API
     error!({ errors: [Entities::ErrorEntity.represent({ title: 'Not Found',
                                                         detail: 'Item not found with given identifier' })] }, 404)
   end
+  rescue_from ForbiddenError do |_e|
+    error!({ errors: [Entities::ErrorEntity.represent({ title: 'Forbidden',
+                                                        detail: 'Access is forbidden' })] }, 403)
+  end
   rescue_from :all do |e|
     error!({ errors: [Entities::ErrorEntity.represent({ title: 'Internal Server Error',
                                                         detail: e.message })] }, 500)
+  end
+
+  helpers do
+    def protect_from_forgery
+      raise ForbiddenError.new if headers['X-CSRF-Token'].blank?
+      raise ForbiddenError.new unless cookies['CSRF-TOKEN'] == headers['X-CSRF-Token']
+    end
   end
 
   mount V0::Base

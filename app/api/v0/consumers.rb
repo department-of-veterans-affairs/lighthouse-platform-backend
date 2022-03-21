@@ -85,6 +85,8 @@ module V0
         all_or_none_of :oAuthApplicationType, :oAuthRedirectURI
       end
       post 'applications' do
+        protect_from_forgery
+
         user = user_from_signup_params
 
         key_auth, oauth = ApiService.new.fetch_auth_types user.consumer.apis_list
@@ -155,6 +157,8 @@ module V0
       end
 
       post 'production-requests' do
+        protect_from_forgery
+        
         send_production_access_emails(params) if Flipper.enabled? :send_emails
 
         body false
