@@ -15,7 +15,7 @@ module V0
     end
 
     resource 'support' do
-      desc 'Handles contact-us support requests'
+      desc 'Handles contact-us support requests', deprecated: true
       params do
         requires :email, as: :requester, type: String, allow_blank: false
         requires :firstName, type: String, allow_blank: false
