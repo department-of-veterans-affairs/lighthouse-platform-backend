@@ -23,6 +23,8 @@ namespace :spec do
     if ENV['CC_TEST_REPORTER_ID']
       puts 'reporting coverage to CodeClimate'
       system('cc-test-reporter after-build -t simplecov')
+    else
+      system('cat coverage/coverage.json')
     end
     exit exit_status
   end
