@@ -7,8 +7,8 @@ module Validators
       return if params[attr_name].blank?
       return if MaliciousUrl.find_by(url: params[attr_name]).blank?
 
-      fail Grape::Exceptions::Validation.new params: [@scope.full_name(attr_name)],
-                                             message: 'is an invalid url'
+      raise Grape::Exceptions::Validation.new params: [@scope.full_name(attr_name)],
+                                              message: 'is an invalid url'
     end
   end
 end

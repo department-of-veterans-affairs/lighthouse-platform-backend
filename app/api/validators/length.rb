@@ -6,8 +6,8 @@ module Validators
       return if params[attr_name].blank?
       return if params[attr_name].length <= @option
 
-      fail Grape::Exceptions::Validation.new params: [@scope.full_name(attr_name)],
-                                             message: "must be at the most #{@option} characters long"
+      raise Grape::Exceptions::Validation.new params: [@scope.full_name(attr_name)],
+                                              message: "must be at the most #{@option} characters long"
     end
   end
 end

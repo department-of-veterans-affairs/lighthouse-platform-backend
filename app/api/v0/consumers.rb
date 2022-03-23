@@ -157,7 +157,7 @@ module V0
       end
       post 'production-requests' do
         protect_from_forgery
-        
+
         send_production_access_emails(params) if Flipper.enabled? :send_emails
 
         body false
