@@ -24,7 +24,7 @@ namespace :spec do
       puts 'reporting coverage to CodeClimate'
       system('cc-test-reporter after-build -t simplecov')
     else
-      system('cat coverage/coverage.json')
+      system('cat coverage/results.csv')
     end
     exit exit_status
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'simplecov'
-require 'simplecov_json_formatter'
+require 'simplecov-csv'
 
 SimpleCov.start 'rails' do
   track_files '**/{app,lib}/**/*.rb'
@@ -18,7 +18,7 @@ SimpleCov.start 'rails' do
 
   SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
                                                                     SimpleCov::Formatter::HTMLFormatter,
-                                                                    SimpleCov::Formatter::JSONFormatter
+                                                                    SimpleCov::Formatter::CSVFormatter
                                                                   ])
 end
 
