@@ -20,8 +20,8 @@ class Base < Grape::API
 
   helpers do
     def protect_from_forgery
-      raise ForbiddenError.new if headers['X-CSRF-Token'].blank?
-      raise ForbiddenError.new unless cookies['CSRF-TOKEN'] == headers['X-CSRF-Token']
+      raise ForbiddenError.new if headers['X-Csrf-Token'].blank?
+      raise ForbiddenError.new unless cookies['CSRF-TOKEN'] == headers['X-Csrf-Token']
     end
   end
 

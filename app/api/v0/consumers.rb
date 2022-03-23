@@ -65,7 +65,7 @@ module V0
       desc 'Accept form submission from developer-portal', deprecated: true
       params do
         requires :apis, type: String, allow_blank: false
-        requires :description, type: String
+        optional :description, type: String
         requires :email, type: String, allow_blank: false, regexp: /.+@.+/
         requires :firstName, type: String
         requires :lastName, type: String
