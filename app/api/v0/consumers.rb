@@ -120,7 +120,7 @@ module V0
       desc 'Returns a list of APIs for a provider consumer and environment'
       params do
         requires :consumerId, type: Integer, allow_blank: false
-        requires :environment, type: String, allow_blank: false
+        requires :environment, type: String, allow_blank: false, values: %w[sandbox production]
       end
       get ':consumerId/apis/:environment' do
         consumer = Consumer.find(params[:consumerId])
