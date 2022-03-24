@@ -6,13 +6,17 @@ require 'socksify/http'
 class KongService
   attr_reader :client
 
-  def initialize
+  def initialize(env = nil)
     @client = if Figaro.env.socks_host.present?
                 Net::HTTP.SOCKSProxy(Figaro.env.socks_host, 2001)
               else
                 Net::HTTP
               end
-    @kong_elb = Figaro.env.kong_elb || 'http://localhost:4001'
+    @kong_elb = if env.nil?
+                  Figaro.env.kong_elb || 'http://localhost:4001'
+                else
+                  Figaro.env.prod_kong_elb || 'http://localhost:4003'
+                end
   end
 
   # seeds local gateway for testing purposes

@@ -3,8 +3,11 @@
 require 'oktakit'
 
 class OktaService
-  def initialize
-    @client = Oktakit::Client.new(token: Figaro.env.okta_token, api_endpoint: Figaro.env.okta_api_endpoint)
+  def initialize(env = nil)
+    @env = env
+    set_token
+    set_endpoint
+    @client = Oktakit::Client.new(token: @token, api_endpoint: @api_endpoint)
   end
 
   def list_applications
@@ -21,7 +24,7 @@ class OktaService
     application, status_code = @client.add_application(new_application_request)
     raise application[:errorSummary] unless status_code == 200
 
-    assign_response, status_code = @client.assign_group_to_application(application.id, Figaro.env.idme_group_id)
+    assign_response, status_code = @client.assign_group_to_application(application.id, declare_idme_group)
     raise assign_response[:errorSummary] unless status_code == 200
 
     client_id = application.credentials.oauthClient.client_id
@@ -44,6 +47,38 @@ class OktaService
 
   def consumer_name(user)
     "LPB-#{"#{user.consumer.organization}#{user.last_name}".gsub(/\W/, '')}"
+  end
+
+  def declare_va_redirect
+    if @env.nil?
+      Figaro.env.okta_redirect_url
+    else
+      Figaro.env.prod_okta_redirect_url
+    end
+  end
+
+  def declare_idme_group
+    if @env.nil?
+      Figaro.env.idme_group_id
+    else
+      Figaro.env.prod_idme_group_id
+    end
+  end
+
+  def set_token
+    @token = if @env.nil?
+               Figaro.env.okta_token
+             else
+               Figaro.env.prod_okta_token
+             end
+  end
+
+  def set_endpoint
+    @api_endpoint = if @env.nil?
+                      Figaro.env.okta_api_endpoint
+                    else
+                      Figaro.env.prod_okta_api_endpoint
+                    end
   end
 
   def build_new_application_payload(user, application_type:, redirect_uri:)
@@ -73,7 +108,7 @@ class OktaService
           consent_method: 'REQUIRED',
           grant_types: %w[authorization_code refresh_token],
           initiate_login_uri: Figaro.env.okta_login_url,
-          redirect_uris: [redirect_uri, Figaro.env.okta_redirect_url],
+          redirect_uris: [redirect_uri, declare_va_redirect],
           response_types: ['code']
         }
       }
