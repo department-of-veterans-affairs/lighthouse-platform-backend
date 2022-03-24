@@ -154,7 +154,7 @@ appeals_status_api.update(
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/appeals-status/metadata.json',
    environments_attributes: {
-     name: 'sandbox'
+     name: ['sandbox', 'production']
    }
   },
   api_ref_attributes: {
@@ -178,7 +178,7 @@ decision_reviews_api.update(
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/appeals-decision-reviews/metadata.json',
    environments_attributes: {
-     name: 'sandbox'
+     name: ['sandbox', 'production']
    }
   },
   api_ref_attributes: {
@@ -203,7 +203,7 @@ claims_api.update(
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/benefits-claims/metadata.json',
    environments_attributes: {
-     name: 'sandbox'
+     name: ['sandbox', 'production']
    }
   },
   api_ref_attributes: {
@@ -239,7 +239,7 @@ benefits_intake_api.update(
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/benefits-intake/metadata.json',
    environments_attributes: {
-     name: 'sandbox'
+     name: ['sandbox', 'production']
    }
   },
   api_ref_attributes: {
@@ -263,7 +263,7 @@ benefits_reference_api.update(
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/benefits-reference-data/metadata.json',
    environments_attributes: {
-     name: 'sandbox'
+     name: ['sandbox', 'production']
    }
   },
   api_ref_attributes: {
@@ -287,7 +287,7 @@ facilities_api.update(
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/facilities/metadata.json',
    environments_attributes: {
-     name: 'sandbox'
+     name: ['sandbox', 'production']
    }
   },
   api_ref_attributes: {
@@ -311,7 +311,7 @@ loan_guaranty_api.update(
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/loan_guaranty_property/metadata.json',
    environments_attributes: {
-     name: 'sandbox'
+     name: ['sandbox', 'production']
    }
   },
   api_ref_attributes: {
@@ -335,7 +335,7 @@ lgy_guaranty_remittance_api.update(
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/lgy-remittance/metadata.json',
    environments_attributes: {
-     name: 'sandbox'
+     name: ['sandbox', 'production']
    }
   },
   api_ref_attributes: {
@@ -367,7 +367,7 @@ forms_api.update(
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/forms/metadata.json',
    environments_attributes: {
-     name: 'sandbox'
+     name: ['sandbox', 'production']
    }
   },
   api_ref_attributes: {
@@ -391,7 +391,7 @@ address_validation_api.update(
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/address-validation/metadata.json',
    environments_attributes: {
-     name: 'sandbox'
+     name: ['sandbox', 'production']
    }
   },
   api_ref_attributes: {
@@ -415,7 +415,7 @@ veteran_confirmation_api.update(
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/veteran-confirmation/metadata.json',
    environments_attributes: {
-     name: 'sandbox'
+     name: ['sandbox', 'production']
    }
   },
   api_ref_attributes: {
@@ -439,7 +439,7 @@ veteran_verification_api.update(
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/veteran-verification/metadata.json',
    environments_attributes: {
-     name: 'sandbox'
+     name: ['sandbox', 'production']
    }
   },
   api_ref_attributes: {
@@ -476,7 +476,7 @@ community_care_api.update(
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/community-care-eligibility/metadata.json',
    environments_attributes: {
-     name: 'sandbox'
+     name: ['sandbox', 'production']
    }
   },
   api_ref_attributes: {
@@ -538,7 +538,7 @@ clinical_fhir_api.update(
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/fhir-clinical-health/metadata.json',
    environments_attributes: {
-     name: 'sandbox'
+     name: ['sandbox', 'production']
    }
   },
   api_ref_attributes: {
