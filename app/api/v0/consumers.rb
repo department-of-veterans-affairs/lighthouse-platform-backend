@@ -22,19 +22,28 @@ module V0
         user
       end
 
-      def kong_signup(user, key_auth)
-        kong_consumer = KongService.new.consumer_signup(user, key_auth)
-        user.consumer.sandbox_gateway_ref = kong_consumer[:kong_id]
+      def kong_signup(user, key_auth, env = nil)
+        kong_consumer = KongService.new(env).consumer_signup(user, key_auth)
+
+        if env.nil?
+          user.consumer.sandbox_gateway_ref = kong_consumer[:kong_id]
+        else
+          user.consumer.prod_gateway_ref = kong_consumer[:kong_id]
+        end
 
         [user, kong_consumer]
       end
 
-      def okta_signup(user, oauth)
-        okta_consumer = OktaService.new.consumer_signup(user,
-                                                        oauth,
-                                                        application_type: params[:oAuthApplicationType],
-                                                        redirect_uri: params[:oAuthRedirectURI])
-        user.consumer.sandbox_oauth_ref = okta_consumer.id
+      def okta_signup(user, oauth, env = nil)
+        okta_consumer = OktaService.new(env).consumer_signup(user,
+                                                             oauth,
+                                                             application_type: params[:oAuthApplicationType],
+                                                             redirect_uri: params[:oAuthRedirectURI])
+        if env.nil?
+          user.consumer.sandbox_oauth_ref = okta_consumer.id
+        else
+          user.consumer.prod_oauth_ref = okta_consumer.id
+        end
 
         [user, okta_consumer]
       end
@@ -58,6 +67,14 @@ module V0
         if request[:apis].split(',').include?('addressValidation')
           SandboxMailer.va_profile_sandbox_signup(request).deliver_later
         end
+      end
+
+      def promote_consumer(user, apis_list)
+        key_auth, oauth = ApiService.new.fetch_auth_types apis_list
+
+        _user, kong_consumer = kong_signup(user, key_auth, 'prod') if key_auth.present?
+        _user, okta_consumer = okta_signup(user, oauth, 'prod') if oauth.present?
+        [kong_consumer, okta_consumer]
       end
     end
 
@@ -98,6 +115,25 @@ module V0
         send_sandbox_welcome_emails(params, kong_consumer, okta_consumer) if Flipper.enabled? :send_emails
 
         present user, with: V0::Entities::ConsumerApplicationEntity, kong: kong_consumer, okta: okta_consumer
+      end
+
+      desc 'Returns a list of APIs for a provider consumer and environment'
+      params do
+        requires :consumerId, type: Integer, allow_blank: false
+        requires :environment, type: String, allow_blank: false
+      end
+      get ':consumerId/apis/:environment' do
+        consumer = Consumer.find(params[:consumerId])
+        api_envs = consumer.api_environments.filter do |api_env|
+          api_env.environment.eql?(Environment.find_by(name: params[:environment]))
+        end
+        apis = [].tap do |api|
+          api_envs.map do |api_env|
+            api << Api.find(api_env.api_id)
+          end
+        end
+
+        present apis, with: Entities::ConsumerApiEntity
       end
 
       desc 'Accepts request for production access'
@@ -169,6 +205,38 @@ module V0
         consumer = Consumer.find(params[:consumerId])
         first_call = ElasticsearchService.new.first_successful_call consumer
         present first_call, with: V0::Entities::ConsumerStatisticEntity
+      end
+
+      desc 'Promotes a consumer to the production environment for the provided API(s)'
+      post '/:consumerId/promote' do
+        params do
+          requires :apis, type: String, allow_blank: false,
+                          description: 'Comma separated values of APIs for promotion to production'
+          optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: false
+          optional :oAuthRedirectURI, type: String,
+                                      allow_blank: false,
+                                      regexp: %r{^https?://.+},
+                                      malicious_url_protection: true
+        end
+        consumer = Consumer.find(params[:consumerId])
+        consumer_api_refs = consumer.apis.map(&:api_ref).map(&:name)
+
+        apis = [].tap do |api_signup|
+          params[:apis].split(',').map do |api_ref|
+            api_signup << api_ref if consumer_api_refs.include?(api_ref)
+          end
+        end
+        if apis.empty?
+          response = { title: 'Invalid APIs',
+                       detail: "This consumer is not approved for #{params[:apis].split(',').to_sentence} in Sandbox" }
+          present response, with: V0::Entities::ErrorResponseEntity
+        else
+          apis.map { |api_ref| consumer.promote_to_prod(api_ref) }
+          kong_consumer, okta_consumer = promote_consumer(consumer.user, apis.join(','))
+          consumer.user.save!
+
+          present consumer.user, with: V0::Entities::ConsumerApplicationEntity, kong: kong_consumer, okta: okta_consumer
+        end
       end
     end
   end
