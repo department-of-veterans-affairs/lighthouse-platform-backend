@@ -40,6 +40,7 @@ module V0
       end
 
       post 'contact-us/requests' do
+        header 'Access-Control-Allow-Origin', request.host_with_port
         protect_from_forgery
 
         body false

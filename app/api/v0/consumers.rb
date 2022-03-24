@@ -85,6 +85,7 @@ module V0
         all_or_none_of :oAuthApplicationType, :oAuthRedirectURI
       end
       post 'applications' do
+        header 'Access-Control-Allow-Origin', request.host_with_port
         protect_from_forgery
 
         user = user_from_signup_params
@@ -156,6 +157,7 @@ module V0
         optional :website, type: String
       end
       post 'production-requests' do
+        header 'Access-Control-Allow-Origin', request.host_with_port
         protect_from_forgery
 
         send_production_access_emails(params) if Flipper.enabled? :send_emails
