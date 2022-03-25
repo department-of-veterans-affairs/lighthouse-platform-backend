@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'simplecov'
+require 'simplecov-csv'
 
 SimpleCov.start 'rails' do
   track_files '**/{app,lib}/**/*.rb'
@@ -14,6 +15,11 @@ SimpleCov.start 'rails' do
 
   SimpleCov.minimum_coverage_by_file 88
   SimpleCov.refuse_coverage_drop
+
+  SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
+                                                                    SimpleCov::Formatter::HTMLFormatter,
+                                                                    SimpleCov::Formatter::CSVFormatter
+                                                                  ])
 end
 
 RSpec.configure do |config|

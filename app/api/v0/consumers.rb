@@ -62,17 +62,17 @@ module V0
     end
 
     resource 'consumers' do
-      desc 'Accept form submission from developer-portal'
+      desc 'Accept form submission from developer-portal', deprecated: true
       params do
         requires :apis, type: String, allow_blank: false
-        requires :description, type: String
+        optional :description, type: String
         requires :email, type: String, allow_blank: false, regexp: /.+@.+/
         requires :firstName, type: String
         requires :lastName, type: String
-        optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: false
+        optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: true
         optional :oAuthRedirectURI, type: String,
-                                    allow_blank: false,
-                                    regexp: %r{^https?://.+},
+                                    allow_blank: true,
+                                    regexp: %r{^(https?://.+|)$},
                                     malicious_url_protection: true
         requires :organization, type: String
         requires :termsOfService, type: Boolean, allow_blank: false, values: [true]
@@ -85,6 +85,9 @@ module V0
         all_or_none_of :oAuthApplicationType, :oAuthRedirectURI
       end
       post 'applications' do
+        header 'Access-Control-Allow-Origin', request.host_with_port
+        protect_from_forgery
+
         user = user_from_signup_params
 
         key_auth, oauth = ApiService.new.fetch_auth_types user.consumer.apis_list
@@ -100,7 +103,7 @@ module V0
         present user, with: V0::Entities::ConsumerApplicationEntity, kong: kong_consumer, okta: okta_consumer
       end
 
-      desc 'Accepts request for production access'
+      desc 'Accepts request for production access', deprecated: true
       params do
         requires :apis, type: String, allow_blank: false
         optional :appDescription, type: String
@@ -153,8 +156,10 @@ module V0
         optional :vulnerabilityManagement, type: String
         optional :website, type: String
       end
-
       post 'production-requests' do
+        header 'Access-Control-Allow-Origin', request.host_with_port
+        protect_from_forgery
+
         send_production_access_emails(params) if Flipper.enabled? :send_emails
 
         body false
