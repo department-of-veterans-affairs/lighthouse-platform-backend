@@ -25,13 +25,20 @@ Deployment repository for this project can be found here: https://github.com/dep
 
 #### Running entirely through docker
 ```
-docker-compose up -d
+docker-compose -f docker-compose.yml -f docker-compose.ports.yml -f docker-compose.dependencies.yml -f docker-compose.dependencies.ports.yml up -d
 ```
 App should be available on localhost:8080
 
 #### Running application natively and only dependencies through docker
 ```
-docker-compose -f docker-compose.override.yml up -d
+docker-compose -f docker-compose.dependencies.yml -f docker-compose.dependencies.ports.yml up -d
+
+export DATABASE_HOST=localhost
+export DATABASE_USER=postgres
+export DATABASE_PASSWORD=postgres
+export RAILS_SERVE_STATIC_FILES=true
+export RAILS_ENV=development
+
 rake db:create
 rake db:migrate
 rake db:seed
