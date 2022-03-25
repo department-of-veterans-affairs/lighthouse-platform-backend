@@ -30,8 +30,8 @@ gem 'pg', '~> 1.1'
 gem 'premailer-rails'
 gem 'puma', '~> 5.5'
 gem 'rack-protection', '< 2.2.0'
-gem 'rails', '~> 6.1.3', '>= 6.1.3.1'
-gem 'rails_admin', '~> 2.0'
+gem 'rails'
+gem 'rails_admin', '~> 3.0'
 gem 'rails-healthcheck'
 gem 'rest-client'
 gem 'sass-rails', '>= 6'
@@ -75,3 +75,4 @@ group :test do
 end
 
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+gem "sassc-rails"
