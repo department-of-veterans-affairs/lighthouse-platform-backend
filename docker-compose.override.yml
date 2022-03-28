@@ -89,8 +89,6 @@ services:
   dynamodb:
     image: amazon/dynamodb-local:latest
     command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
-    ports:
-      - "4500:4500"
 
 volumes:
   elasticsearch-data:
