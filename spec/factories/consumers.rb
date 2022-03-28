@@ -25,7 +25,7 @@ FactoryBot.define do
       after(:create) do |consumer, _|
         api = create(:api)
         environment = Environment.find_or_create_by(name: 'production')
-        consumer.api_environments <<  ApiEnvironment.find_or_create_by(api: api, environment: environment)
+        consumer.api_environments << ApiEnvironment.find_or_create_by(api: api, environment: environment)
       end
     end
   end

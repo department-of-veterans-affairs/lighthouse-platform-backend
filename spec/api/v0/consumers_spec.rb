@@ -186,9 +186,10 @@ describe V0::Consumers, type: :request do
 
     context 'with production environments' do
       let(:production_consumer) { create(:consumer, :with_production_apis, user: user) }
+
       it 'returns a list of production APIs' do
         get "/platform-backend/v0/consumers/#{production_consumer[:id]}/apis/#{production_env}"
-    
+
         expect(response.code).to eq('200')
         expect(JSON.parse(response.body).count).to eq(1)
       end
