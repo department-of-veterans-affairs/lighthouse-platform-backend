@@ -227,9 +227,10 @@ module V0
           end
         end
         if apis.empty?
+          status 422
           response = { title: 'Invalid APIs',
                        detail: "This consumer is not approved for #{params[:apis].split(',').to_sentence} in Sandbox" }
-          present response, with: V0::Entities::ErrorResponseEntity
+          present response, with: V0::Entities::InvalidRequestEntity
         else
           apis.map { |api_ref| consumer.promote_to_prod(api_ref) }
           kong_consumer, okta_consumer = promote_consumer(consumer.user, apis.join(','))

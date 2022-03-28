@@ -2,7 +2,7 @@
 
 module V0
   module Entities
-    class ErrorResponseEntity < Grape::Entity
+    class InvalidRequestEntity < Grape::Entity
       expose :title, documentation: { type: 'String' }
       expose :detail, documentation: { type: 'String' }
     end
