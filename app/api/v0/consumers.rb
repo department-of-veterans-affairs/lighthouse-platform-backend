@@ -117,7 +117,7 @@ module V0
         present user, with: V0::Entities::ConsumerApplicationEntity, kong: kong_consumer, okta: okta_consumer
       end
 
-      desc 'Returns a list of APIs for a provider consumer and environment'
+      desc 'Returns a list of APIs for a provided consumer per environment'
       params do
         requires :consumerId, type: Integer, allow_blank: false
         requires :environment, type: String, allow_blank: false, values: %w[sandbox production]
