@@ -221,19 +221,19 @@ module V0
         consumer = Consumer.find(params[:consumerId])
         consumer_api_refs = consumer.apis.map(&:api_ref).map(&:name)
 
-        apis = [].tap do |api_signup|
+        api_refs = [].tap do |api_signup|
           params[:apis].split(',').map do |api_ref|
             api_signup << api_ref if consumer_api_refs.include?(api_ref)
           end
         end
-        if apis.empty?
+        if api_refs.empty?
           status 422
           response = { title: 'Invalid APIs',
                        detail: "This consumer is not approved for #{params[:apis].split(',').to_sentence} in Sandbox" }
           present response, with: V0::Entities::InvalidRequestEntity
         else
-          apis.map { |api_ref| consumer.promote_to_prod(api_ref) }
-          kong_consumer, okta_consumer = promote_consumer(consumer.user, apis.join(','))
+          api_refs.map { |api_ref| consumer.promote_to_prod(api_ref) }
+          kong_consumer, okta_consumer = promote_consumer(consumer.user, params[:apis])
           consumer.user.save!
 
           present consumer.user, with: V0::Entities::ConsumerApplicationEntity, kong: kong_consumer, okta: okta_consumer
