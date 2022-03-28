@@ -81,6 +81,14 @@ class OktaService
                     end
   end
 
+  def set_login_url
+    @api_endpoint = if @env.nil?
+                      Figaro.env.okta_login_url
+                    else
+                      Figaro.env.prod_okta_login_url
+                    end
+  end
+
   def build_new_application_payload(user, application_type:, redirect_uri:)
     {
       name: 'oidc_client',
@@ -107,7 +115,7 @@ class OktaService
           application_type: application_type,
           consent_method: 'REQUIRED',
           grant_types: %w[authorization_code refresh_token],
-          initiate_login_uri: Figaro.env.okta_login_url,
+          initiate_login_uri: set_login_url,
           redirect_uris: [redirect_uri, declare_va_redirect],
           response_types: ['code']
         }
