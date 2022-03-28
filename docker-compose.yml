@@ -10,8 +10,11 @@ services:
     depends_on:
       - db
       - kong
+      - prod-kong
       - kong-migrations
+      - prod-kong-migrations
       - kong-database
+      - prod-kong-database
       - dynamodb
       - elasticsearch
     environment:
