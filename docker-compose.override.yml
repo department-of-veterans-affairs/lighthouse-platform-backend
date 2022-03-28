@@ -21,7 +21,7 @@ services:
       - *kong_pg_pw
       - *kong_pg_user
       - *kong_pg_db
-      - &kong-prod-pg-host KONG_PG_HOST=prod-kong-database
+      - &kong_prod_pg_host KONG_PG_HOST=prod-kong-database
 
   kong-database: &kong_database
     image: postgres:9.6
@@ -49,13 +49,10 @@ services:
       - &kong_admin_listen KONG_ADMIN_LISTEN=0.0.0.0:8001
       - &kong_admin_access KONG_ADMIN_ACCESS_LOG='/dev/stdout'
       - &kong_admin_error KONG_ADMIN_ERROR_LOG='/dev/stderr'
-    ports:
-      - "4000:8000"
-      - "4001:8001"
-    expose: &kong_expose
+    expose:
       - 8000
       - 8001
-    healthcheck: &kong_healthcheck
+    healthcheck:
       test: ["CMD-SHELL", "curl -I -s -L http://127.0.0.1:8000 || exit 1"]
       interval: 5s
       retries: 10
@@ -67,14 +64,11 @@ services:
     depends_on: *kong_prod_db_service
     environment:
       - *kong_pg_db
-      - *kong-prod-pg-host
+      - *kong_prod_pg_host
       - *kong_pg_pw
       - *kong_admin_listen
       - *kong_admin_access
       - *kong_admin_error
-    ports:
-      - "4002:8000"
-      - "4003:8001"
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
@@ -88,8 +82,6 @@ services:
         hard: -1
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
     expose:
       - 9200
       - 9300
