@@ -22,7 +22,7 @@ RSpec.describe Consumer, type: :model do
            last_name: 'User')
   end
   let(:test_description) { 'This is an in depth description.' }
-  let(:tos_test_time) { DateTime.now }
+  let(:tos_test_time) { Time.zone.now }
   let(:auth_info) do
     {
       sandbox: {
