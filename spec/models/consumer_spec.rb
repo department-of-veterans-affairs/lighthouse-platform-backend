@@ -22,7 +22,7 @@ RSpec.describe Consumer, type: :model do
            last_name: 'User')
   end
   let(:test_description) { 'This is an in depth description.' }
-  let(:tos_test_time) { Time.zone.now }
+  let(:tos_test_time) { DateTime.current }
   let(:auth_info) do
     {
       sandbox: {
@@ -46,7 +46,7 @@ RSpec.describe Consumer, type: :model do
     end
 
     it 'generates a tos_accepted_at value' do
-      expect(subject[:tos_accepted_at]).to eq(tos_test_time)
+      expect(subject[:tos_accepted_at].to_datetime).to eq(tos_test_time)
     end
 
     it 'receives a tos_version' do

@@ -40,7 +40,7 @@ class Consumer < ApplicationRecord
   end
 
   def set_tos
-    self.tos_accepted_at = Time.zone.now unless persisted?
+    self.tos_accepted_at = DateTime.current unless persisted?
   end
 
   def manage_apis
