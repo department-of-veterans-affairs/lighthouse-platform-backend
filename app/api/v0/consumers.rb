@@ -133,12 +133,12 @@ module V0
         requires :consumerId, type: Integer, allow_blank: false
       end
       segment ':consumerId' do
-        resource '/environments' do
+        resource 'environments' do
           params do
             requires :environmentId, type: Integer, allow_blank: false
           end
           segment ':environmentId' do
-            get '/apis' do
+            get 'apis' do
               consumer = Consumer.find(params[:consumerId])
               api_envs = consumer.api_environments.filter do |api_env|
                 api_env.environment.eql?(Environment.find(params[:environmentId]))
