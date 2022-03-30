@@ -128,12 +128,12 @@ module V0
       desc 'Returns a list of APIs for a provided consumer per environment'
       params do
         requires :consumerId, type: Integer, allow_blank: false
-        requires :environment, type: String, allow_blank: false, values: %w[sandbox production]
+        requires :environmentId, type: Integer, allow_blank: false
       end
-      get ':consumerId/apis/:environment' do
+      get ':consumerId/environments/:environmentId/apis' do
         consumer = Consumer.find(params[:consumerId])
         api_envs = consumer.api_environments.filter do |api_env|
-          api_env.environment.eql?(Environment.find_by(name: params[:environment]))
+          api_env.environment.eql?(Environment.find(params[:environmentId]))
         end
         apis = [].tap do |api|
           api_envs.map do |api_env|
