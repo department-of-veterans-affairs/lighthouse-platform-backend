@@ -71,8 +71,8 @@ RSpec.describe Consumer, type: :model do
   end
 
   describe 'fails on an invalid input' do
-    it 'fails without a description' do
-      subject[:description] = nil
+    it 'fails without an organization' do
+      subject[:organization] = nil
       expect(subject).not_to be_valid
     end
   end

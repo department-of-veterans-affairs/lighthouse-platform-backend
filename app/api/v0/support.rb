@@ -15,7 +15,7 @@ module V0
     end
 
     resource 'support' do
-      desc 'Handles contact-us support requests'
+      desc 'Handles contact-us support requests', deprecated: true
       params do
         requires :email, as: :requester, type: String, allow_blank: false
         requires :firstName, type: String, allow_blank: false
@@ -40,6 +40,9 @@ module V0
       end
 
       post 'contact-us/requests' do
+        header 'Access-Control-Allow-Origin', request.host_with_port
+        protect_from_forgery
+
         body false
         return unless Flipper.enabled? :send_emails
 

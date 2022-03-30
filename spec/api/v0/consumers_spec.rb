@@ -46,13 +46,13 @@ describe V0::Consumers, type: :request do
         end
       end
 
-      context 'with flipper enabled' do
-        after do
-          Flipper.disable :send_emails
-        end
-
+      context 'with send_emails flag enabled' do
         before do
           Flipper.enable :send_emails
+        end
+
+        after do
+          Flipper.disable :send_emails
         end
 
         it 'sends va_profile_distribution an email if addressValidation is included' do
@@ -64,6 +64,21 @@ describe V0::Consumers, type: :request do
           expect(consumer_email).to receive(:deliver_later)
           expect(va_profile_email).to receive(:deliver_later)
           post apply_base, params: signup_params
+        end
+      end
+
+      context 'with protect_from_forgery flag enabled' do
+        before do
+          Flipper.enable :protect_from_forgery
+        end
+
+        after do
+          Flipper.disable :protect_from_forgery
+        end
+
+        it 'responds with forbidden if request not sent from developer-portal' do
+          post apply_base, params: signup_params, headers: { 'X-Csrf-Token': 'testing123' }
+          expect(response.code).to eq('403')
         end
       end
     end
