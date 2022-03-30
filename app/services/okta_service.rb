@@ -24,7 +24,7 @@ class OktaService
     application, status_code = @client.add_application(new_application_request)
     raise application[:errorSummary] unless status_code == 200
 
-    assign_response, status_code = @client.assign_group_to_application(application.id, declare_idme_group)
+    assign_response, status_code = @client.assign_group_to_application(application.id, set_idme_group)
     raise assign_response[:errorSummary] unless status_code == 200
 
     client_id = application.credentials.oauthClient.client_id
@@ -49,7 +49,7 @@ class OktaService
     "LPB-#{"#{user.consumer.organization}#{user.last_name}".gsub(/\W/, '')}"
   end
 
-  def declare_va_redirect
+  def set_va_redirect
     if @env.nil?
       Figaro.env.okta_redirect_url
     else
@@ -57,7 +57,7 @@ class OktaService
     end
   end
 
-  def declare_idme_group
+  def set_idme_group
     if @env.nil?
       Figaro.env.idme_group_id
     else
@@ -116,7 +116,7 @@ class OktaService
           consent_method: 'REQUIRED',
           grant_types: %w[authorization_code refresh_token],
           initiate_login_uri: set_login_url,
-          redirect_uris: [redirect_uri, declare_va_redirect],
+          redirect_uris: [redirect_uri, set_va_redirect],
           response_types: ['code']
         }
       }
