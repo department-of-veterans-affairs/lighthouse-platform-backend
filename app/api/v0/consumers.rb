@@ -131,20 +131,28 @@ module V0
       desc 'Returns a list of APIs for a provided consumer per environment'
       params do
         requires :consumerId, type: Integer, allow_blank: false
-        requires :environmentId, type: Integer, allow_blank: false
       end
-      get ':consumerId/environments/:environmentId/apis' do
-        consumer = Consumer.find(params[:consumerId])
-        api_envs = consumer.api_environments.filter do |api_env|
-          api_env.environment.eql?(Environment.find(params[:environmentId]))
-        end
-        apis = [].tap do |api|
-          api_envs.map do |api_env|
-            api << Api.find(api_env.api_id)
+      segment ':consumerId' do
+        resource '/environments' do
+          params do
+            requires :environmentId, type: Integer, allow_blank: false
+          end
+          segment ':environmentId' do
+            get '/apis' do
+              consumer = Consumer.find(params[:consumerId])
+              api_envs = consumer.api_environments.filter do |api_env|
+                api_env.environment.eql?(Environment.find(params[:environmentId]))
+              end
+              apis = [].tap do |api|
+                api_envs.map do |api_env|
+                  api << Api.find(api_env.api_id)
+                end
+              end
+
+              present apis, with: V0::Entities::ConsumerApiEntity
+            end
           end
         end
-
-        present apis, with: V0::Entities::ConsumerApiEntity
       end
 
       desc 'Accepts request for production access', deprecated: true
