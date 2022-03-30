@@ -219,7 +219,7 @@ describe V0::Consumers, type: :request do
     it 'promotes a consumer if given the appropriate sandbox APIs' do
       post "/platform-backend/v0/consumers/#{consumer[:id]}/promote", params: params
 
-      expect(response.code).to eq('201')
+      expect(response.code).to eq('200')
       expect(consumer.prod_gateway_ref).to eq(JSON.parse(response.body)[:token])
       expect(consumer.api_environments.count).to eq(3)
     end

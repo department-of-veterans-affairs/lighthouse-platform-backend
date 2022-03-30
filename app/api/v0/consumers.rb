@@ -76,6 +76,14 @@ module V0
         _user, okta_consumer = okta_signup(user, oauth, 'prod') if oauth.present?
         [kong_consumer, okta_consumer]
       end
+
+      def validate_refs(consumer_api_refs)
+        [].tap do |ref|
+          params[:apis].split(',').map do |api_ref|
+            ref << api_ref if consumer_api_refs.include?(api_ref)
+          end
+        end
+      end
     end
 
     resource 'consumers' do
@@ -221,17 +229,14 @@ module V0
         consumer = Consumer.find(params[:consumerId])
         consumer_api_refs = consumer.apis.map(&:api_ref).map(&:name)
 
-        api_refs = [].tap do |api_signup|
-          params[:apis].split(',').map do |api_ref|
-            api_signup << api_ref if consumer_api_refs.include?(api_ref)
-          end
-        end
+        api_refs = validate_refs(consumer_api_refs)
         if api_refs.empty?
           status 422
           response = { title: 'Invalid APIs',
                        detail: "This consumer is not approved for #{params[:apis].split(',').to_sentence} in Sandbox" }
           present response, with: V0::Entities::InvalidRequestEntity
         else
+          status 200
           api_refs.map { |api_ref| consumer.promote_to_prod(api_ref) }
           kong_consumer, okta_consumer = promote_consumer(consumer.user, params[:apis])
           consumer.user.save!
