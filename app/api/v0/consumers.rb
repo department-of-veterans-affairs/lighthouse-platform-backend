@@ -141,7 +141,7 @@ module V0
           end
         end
 
-        present apis, with: Entities::ConsumerApiEntity
+        present apis, with: V0::Entities::ConsumerApiEntity
       end
 
       desc 'Accepts request for production access'
@@ -219,7 +219,7 @@ module V0
       post '/:consumerId/promote' do
         params do
           requires :apis, type: String, allow_blank: false,
-                          description: 'Comma separated values of APIs for promotion to production'
+                          description: 'Comma separated values of API Refs for promotion to production'
           optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: false
           optional :oAuthRedirectURI, type: String,
                                       allow_blank: false,
@@ -232,7 +232,7 @@ module V0
         api_refs = validate_refs(consumer_api_refs)
         if api_refs.empty?
           status 422
-          response = { title: 'Invalid APIs',
+          response = { title: 'Invalid API Refs',
                        detail: "This consumer is not approved for #{params[:apis].split(',').to_sentence} in Sandbox" }
           present response, with: V0::Entities::InvalidRequestEntity
         else

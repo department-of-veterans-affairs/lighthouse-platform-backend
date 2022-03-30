@@ -179,8 +179,8 @@ describe V0::Consumers, type: :request do
 
     it 'returns a list for sandbox' do
       get "/platform-backend/v0/consumers/#{consumer[:id]}/environments/#{sandbox_env_id}/apis"
-      expect(response.code).to eq('200')
 
+      expect(response.code).to eq('200')
       expect(JSON.parse(response.body).count).to eq(2)
     end
 
