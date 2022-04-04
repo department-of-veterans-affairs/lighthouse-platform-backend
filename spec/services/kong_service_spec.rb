@@ -7,6 +7,24 @@ RSpec.describe KongService do
 
   describe '.intialize' do
     subject { KongService.new }
+
+    it 'uses regular Net::HTTP to make a connection' do
+      expect(subject.client.name).to eq('Net::HTTP')
+    end
+  end
+
+  describe 'defaults to "sandbox"' do
+    it 'when not provided an env' do
+      expect(subject.instance_variable_get(:@kong_elb)).to eq(Figaro.env.kong_elb)
+    end
+  end
+
+  describe 'uses the production instance' do
+    let(:prod_kong) { KongService.new('prod') }
+
+    it 'when provided an env' do
+      expect(prod_kong.instance_variable_get(:@kong_elb)).to eq(Figaro.env.prod_kong_elb)
+    end
   end
 
   describe '#list_consumers' do
