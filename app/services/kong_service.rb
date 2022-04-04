@@ -7,16 +7,9 @@ class KongService
   attr_reader :client
 
   def initialize(env = nil)
-    @client = if Figaro.env.socks_host.present?
-                Net::HTTP.SOCKSProxy(Figaro.env.socks_host, 2001)
-              else
-                Net::HTTP
-              end
-    @kong_elb = if env.nil?
-                  Figaro.env.kong_elb || 'http://localhost:4001'
-                else
-                  Figaro.env.prod_kong_elb || 'http://localhost:4003'
-                end
+    @env = env
+    @client = set_client
+    @kong_elb = set_kong_elb
   end
 
   # seeds local gateway for testing purposes
@@ -148,8 +141,34 @@ class KongService
     [kong_id, kong_consumer_name, kong_api_key]
   end
 
+  def set_client
+    if Figaro.env.socks_host.present?
+      Net::HTTP.SOCKSProxy(Figaro.env.socks_host, 2001)
+    else
+      Net::HTTP
+    end
+  end
+
+  def set_kong_elb
+    if @env.nil?
+      Figaro.env.kong_elb || 'http://localhost:4001'
+    else
+      Figaro.env.prod_kong_elb || 'http://localhost:4003'
+    end
+  end
+
+  def set_kong_password
+    return nil unless Rails.env.production?
+
+    if @env.nil?
+      Figaro.env.kong_password
+    else
+      Figaro.env.prod_kong_password
+    end
+  end
+
   def request(req, uri)
-    req.basic_auth 'kong_admin', Figaro.env.kong_password if Figaro.env.kong_password.present?
+    req.basic_auth 'kong_admin', set_kong_password
     response = @client.start(uri.host, uri.port) do |http|
       http.request(req)
     end
