@@ -16,7 +16,7 @@ RSpec.describe SupportMailer, type: :mailer do
 
       it 'renders the body' do
         expect(mail.body).to include(request[:firstName])
-        expect(mail.body).to include(request[:organization])
+        expect(mail.body).to include(request[:requester])
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe SupportMailer, type: :mailer do
 
       it 'renders the body' do
         expect(mail.body).to include(request[:firstName])
-        expect(mail.body).to include(request[:organization])
+        expect(mail.body).to include(request[:requester])
       end
     end
   end
