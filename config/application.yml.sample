@@ -6,6 +6,7 @@ aws_region: "us-gov-west-1"
 kong_elb: "http://localhost:4001"
 prod_kong_elb: "http://localhost:4003"
 kong_password:
+prod_kong_password:
 es_endpoint:
 okta_token:
 prod_okta_token:
