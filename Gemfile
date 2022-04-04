@@ -74,5 +74,5 @@ group :test do
   gem 'webdrivers'
 end
 
+gem 'sassc-rails'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-gem "sassc-rails"
