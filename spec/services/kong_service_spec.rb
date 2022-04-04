@@ -34,10 +34,24 @@ RSpec.describe KongService do
     end
   end
 
+  describe '#list_all_consumers' do
+    it 'retrieves a list of all consumers' do
+      result = subject.list_all_consumers
+      expect(result.length > 0).to be_truthy
+    end
+  end
+
   describe '#get_consumer' do
     it 'retrieves a consumer via an ID' do
       result = subject.get_consumer(consumer_name)
       expect(result['username']).to eq(consumer_name)
+    end
+  end
+
+  describe '#get_acls' do
+    it 'retrieves a list of ACLs for the given consumer' do
+      result = subject.get_acls(consumer_name)
+      expect(result['data'].length).to eq(0)
     end
   end
 
