@@ -25,11 +25,8 @@ module V0
       def kong_signup(user, key_auth, env = nil)
         kong_consumer = KongService.new(env).consumer_signup(user, key_auth)
 
-        if env.nil?
-          user.consumer.sandbox_gateway_ref = kong_consumer[:kong_id]
-        else
-          user.consumer.prod_gateway_ref = kong_consumer[:kong_id]
-        end
+        user.consumer.sandbox_gateway_ref = kong_consumer[:kong_id] if env.blank?
+        user.consumer.prod_gateway_ref = kong_consumer[:kong_id] if env.present?
 
         [user, kong_consumer]
       end
@@ -39,11 +36,8 @@ module V0
                                                              oauth,
                                                              application_type: params[:oAuthApplicationType],
                                                              redirect_uri: params[:oAuthRedirectURI])
-        if env.nil?
-          user.consumer.sandbox_oauth_ref = okta_consumer.id
-        else
-          user.consumer.prod_oauth_ref = okta_consumer.id
-        end
+        user.consumer.sandbox_oauth_ref = okta_consumer.id if env.blank?
+        user.consumer.prod_oauth_ref = okta_consumer.id if env.present?
 
         [user, okta_consumer]
       end
