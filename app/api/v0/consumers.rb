@@ -202,7 +202,7 @@ module V0
       end
 
       desc 'Promotes a consumer to the production environment for the provided API(s)'
-      post '/:consumerId/promote' do
+      post '/:consumerId/promotion-requests' do
         params do
           requires :apis, type: String, allow_blank: false,
                           description: 'Comma separated values of API Refs for promotion to production'
@@ -212,23 +212,18 @@ module V0
                                       regexp: %r{^https?://.+},
                                       malicious_url_protection: true
         end
+        status 200
         consumer = Consumer.find(params[:consumerId])
         consumer_api_refs = consumer.apis.map(&:api_ref).map(&:name)
 
         api_refs = validate_refs(consumer_api_refs)
-        if api_refs.empty?
-          status 422
-          response = { title: 'Invalid API Refs',
-                       detail: "This consumer is not approved for #{params[:apis].split(',').to_sentence} in Sandbox" }
-          present response, with: V0::Entities::InvalidRequestEntity
-        else
-          status 200
-          api_refs.map { |api_ref| consumer.promote_to_prod(api_ref) }
-          kong_consumer, okta_consumer = promote_consumer(consumer.user, params[:apis])
-          consumer.user.save!
+        raise InvalidRequestError if api_refs.empty?
+        
+        api_refs.map { |api_ref| consumer.promote_to_prod(api_ref) }
+        kong_consumer, okta_consumer = promote_consumer(consumer.user, params[:apis])
+        consumer.user.save!
 
-          present consumer.user, with: V0::Entities::ConsumerApplicationEntity, kong: kong_consumer, okta: okta_consumer
-        end
+        present consumer.user, with: V0::Entities::ConsumerApplicationEntity, kong: kong_consumer, okta: okta_consumer
       end
     end
   end

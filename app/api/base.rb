@@ -14,6 +14,9 @@ class Base < Grape::API
   rescue_from ForbiddenError do |_e|
     error!({ errors: ['Access is forbidden'] }, 403)
   end
+  rescue_from ApiValidationError do |_e|
+    error!({ errors: ['Invalid API list for consumer'] }, 422)
+  end
   rescue_from :all do |e|
     error!({ errors: [e.message] }, 500)
   end
