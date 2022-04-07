@@ -211,8 +211,8 @@ module V0
         consumer_api_refs = consumer.apis.map(&:api_ref).map(&:name)
 
         api_refs = validate_refs(consumer_api_refs)
-        raise InvalidRequestError if api_refs.empty?
-        
+        raise ApiValidationError if api_refs.empty?
+
         api_refs.map { |api_ref| consumer.promote_to_prod(api_ref) }
         kong_consumer, okta_consumer = promote_consumer(consumer.user, params[:apis])
         consumer.user.save!
