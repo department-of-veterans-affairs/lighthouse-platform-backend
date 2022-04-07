@@ -209,7 +209,7 @@ describe V0::Consumers, type: :request do
     it 'promotes a consumer if given the appropriate sandbox APIs' do
       post "/platform-backend/v0/consumers/#{consumer[:id]}/promotion-requests", params: params
 
-      expect(response.code).to eq('200')
+      expect(response.status).to eq(200)
       expect(consumer.prod_gateway_ref).to eq(JSON.parse(response.body)[:token])
       expect(consumer.api_environments.count).to eq(3)
     end
@@ -217,8 +217,8 @@ describe V0::Consumers, type: :request do
     it 'fails to promote if a consumer does not have sandbox access' do
       post "/platform-backend/v0/consumers/#{consumer[:id]}/promotion-requests", params: bad_params
 
-      expect(response.code).to eq('422')
-      expect(response.body).to raise(ApiValidationError)
+      expect(response.status).to eq(422)
+      expect(JSON.parse(response.body)['errors']).to include('Invalid API list for consumer')
     end
   end
 end
