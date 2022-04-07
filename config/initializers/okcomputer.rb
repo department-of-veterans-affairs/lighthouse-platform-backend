@@ -67,6 +67,10 @@ class ElasticsearchCheck < BaseCheck
   rescue
     process_failure
   end
+
+  def name
+    'Elasticsearch'
+  end
 end
 
 OkComputer::Registry.register 'kong', KongCheck.new
