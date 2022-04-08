@@ -108,8 +108,8 @@ module Kong
       raise 'Missing key auth APIs' if key_auth.empty?
 
       kong_id, kong_consumer_name, kong_api_key = handle_key_auth_flow(user.consumer.organization,
-                                                                      user.last_name,
-                                                                      key_auth)
+                                                                       user.last_name,
+                                                                       key_auth)
 
       { kong_id: kong_id, kongUsername: kong_consumer_name, token: kong_api_key }
     end
