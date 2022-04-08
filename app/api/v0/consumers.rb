@@ -22,8 +22,9 @@ module V0
         user
       end
 
-      def kong_signup(user, key_auth, env = nil)
-        kong_consumer = KongService.new(env).consumer_signup(user, key_auth)
+      def kong_signup(user, key_auth, environment = nil)
+        kong_service = environment.eql?(:production) ? Kong::ProductionService : Kong::SandboxService
+        kong_consumer = kong_service.new.consumer_signup(user, key_auth)
 
         user.consumer.sandbox_gateway_ref = kong_consumer[:kong_id] if env.blank?
         user.consumer.prod_gateway_ref = kong_consumer[:kong_id] if env.present?
@@ -65,9 +66,9 @@ module V0
 
       def promote_consumer(user, apis_list)
         key_auth, oauth = ApiService.new.fetch_auth_types apis_list
-
-        _user, kong_consumer = kong_signup(user, key_auth, 'prod') if key_auth.present?
-        _user, okta_consumer = okta_signup(user, oauth, 'prod') if oauth.present?
+        kong_signup(user, key_auth, :production)
+        _user, kong_consumer = kong_signup(user, key_auth, :production) if key_auth.present?
+        _user, okta_consumer = okta_signup(user, oauth, :production) if oauth.present?
         [kong_consumer, okta_consumer]
       end
 
