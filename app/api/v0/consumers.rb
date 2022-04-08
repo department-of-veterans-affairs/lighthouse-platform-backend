@@ -66,7 +66,7 @@ module V0
 
       def promote_consumer(user, apis_list)
         key_auth, oauth = ApiService.new.fetch_auth_types apis_list
-        kong_signup(user, key_auth, :production)
+
         _user, kong_consumer = kong_signup(user, key_auth, :production) if key_auth.present?
         _user, okta_consumer = okta_signup(user, oauth, :production) if oauth.present?
         [kong_consumer, okta_consumer]
