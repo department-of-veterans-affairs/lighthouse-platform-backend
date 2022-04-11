@@ -13,6 +13,9 @@ SimpleCov.start 'rails' do
   add_filter 'app/mailers/application_mailer.rb'
   add_filter 'app/models/application_record.rb'
 
+  # services used for development and testing
+  add_filter '/app/services/utilities/*.rb'
+
   SimpleCov.minimum_coverage_by_file 88
   SimpleCov.refuse_coverage_drop
 
@@ -51,8 +54,8 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
+    Utility::SeedService.new.seed_kong
     ElasticsearchService.new.seed_elasticsearch
-    KongService.new.seed_kong
   rescue RuntimeError
     # assume valid state
   end
