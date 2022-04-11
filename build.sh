@@ -6,7 +6,7 @@ RELEASE=${RELEASE:-false}
 REPOSITORY=${ECR_REGISTRY}/lighthouse-platform-backend
 VERSION=${VERSION:-$(cat $BASEDIR/VERSION)}
 
-trap "docker-compose down -v --rmi local" EXIT
+trap "docker-compose -f docker-compose.yml -f docker-compose.dependencies.yml down -v --rmi local" EXIT
 
 echo 'Building container and running CI'
 docker-compose -f docker-compose.yml -f docker-compose.dependencies.yml build --no-cache
