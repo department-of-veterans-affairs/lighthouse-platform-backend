@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe KongService do
+RSpec.describe Kong::SandboxService do
   let(:mock_response) { Struct.new(:items) }
 
   describe 'importing consumers from dynamo and Kong' do
@@ -13,9 +13,9 @@ RSpec.describe KongService do
     end
 
     it 'imports the the users' do
-      allow_any_instance_of(KongService).to receive(:list_all_consumers).and_return(kong_mock_response)
+      allow_any_instance_of(Kong::SandboxService).to receive(:list_all_consumers).and_return(kong_mock_response)
       allow_any_instance_of(DynamoService).to receive(:fetch_dynamo_db).and_return(dynamo_mock_response)
-      allow_any_instance_of(OktaService).to receive(:list_applications).and_return(okta_mock_response)
+      allow_any_instance_of(Okta::SandboxService).to receive(:list_applications).and_return(okta_mock_response)
       service = ConsumerImportService.new
       expect do
         service.import

@@ -100,7 +100,7 @@ describe V0::Consumers, type: :request do
 
     context 'when signup raises an unexpected exception' do
       it 'responds with internal server error' do
-        allow_any_instance_of(KongService).to receive(:consumer_signup).and_raise(StandardError)
+        allow_any_instance_of(Kong::SandboxService).to receive(:consumer_signup).and_raise(StandardError)
         post apply_base, params: signup_params
         expect(response.code).to eq('500')
       end
