@@ -32,11 +32,12 @@ module V0
         [user, kong_consumer]
       end
 
-      def okta_signup(user, oauth, env = nil)
-        okta_consumer = OktaService.new(env).consumer_signup(user,
-                                                             oauth,
-                                                             application_type: params[:oAuthApplicationType],
-                                                             redirect_uri: params[:oAuthRedirectURI])
+      def okta_signup(user, oauth, environment = nil)
+        okta_service = environment.eql?(:production) ? Okta::ProductionService : Okta::SandboxService
+        okta_consumer = okta_service.new.consumer_signup(user,
+                                                         oauth,
+                                                         application_type: params[:oAuthApplicationType],
+                                                         redirect_uri: params[:oAuthRedirectURI])
         user.consumer.sandbox_oauth_ref = okta_consumer.id if env.blank?
         user.consumer.prod_oauth_ref = okta_consumer.id if env.present?
 

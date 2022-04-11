@@ -4,9 +4,9 @@ class ConsumerImportService
   attr_accessor :kong_consumers, :dynamo_consumers, :okta_applications, :users_list
 
   def initialize
-    @kong_consumers = KongService.new.list_all_consumers
+    @kong_consumers = Kong::SandboxService.new.list_all_consumers
     @dynamo_consumers = DynamoService.new.fetch_dynamo_db.items
-    @okta_applications = OktaService.new.list_applications
+    @okta_applications = Okta::SandboxService.new.list_applications
   end
 
   def import

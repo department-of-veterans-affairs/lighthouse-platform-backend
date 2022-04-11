@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe OktaService do
-  subject { OktaService.new }
+RSpec.describe Okta::SandboxService do
+  subject { Okta::SandboxService.new }
 
   describe '#list applications' do
     it 'displays all applications' do
