@@ -9,7 +9,7 @@ VERSION=${VERSION:-$(cat $BASEDIR/VERSION)}
 trap "docker-compose down -v --rmi local" EXIT
 
 echo 'Building container and running CI'
-docker-compose build --no-cache
+docker-compose -f docker-compose.yml -f docker-compose.dependencies.yml build --no-cache
 docker-compose -f docker-compose.yml -f docker-compose.dependencies.yml run app /bin/bash wait-for-it.sh bundle exec rails db:create ci
 
 echo 'Building production container...'
