@@ -1,4 +1,25 @@
-# Lighthouse Platform Backend (LPB) 
+# Lighthouse Consumer Management Service (LCMS) 
+
+## About
+
+This service is the "source of truth" for information regarding a Lighthouse API consumer.
+It provides data about consumers that can be retrieved and processed by various Lighthouse systems, such as SalesForce.
+These internal systems can then manage Lighthouse consumers, such as promoting a consumer from sandbox to the production environment.
+
+## Deployment
+
+Service lives within the DVP environment and can be found here in production: https://blue.production.lighthouse.va.gov/platform-backend
+within the VA network. 
+
+Deploying to production requires a Maintenance Request (MR)
+An MR can be created here: https://github.com/department-of-veterans-affairs/lighthouse-devops-support/issues/new/choose
+
+MR Example here: https://github.com/department-of-veterans-affairs/lighthouse-devops-support/issues/1314
+
+Jenkins CI build for master branch can be found here: https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/lighthouse-platform-backend/job/master/
+
+Deployment repository for this project can be found here: https://github.com/department-of-veterans-affairs/lighthouse-platform-backend-deployment
+
 
 ## Getting Started
 
