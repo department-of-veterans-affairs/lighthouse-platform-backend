@@ -84,23 +84,23 @@ module Okta
     protected
 
     def idme_group
-      nil
+      raise "NotImplemented"
     end
 
     def login_url
-      Figaro.env.okta_login_url
+      raise "NotImplemented"
     end
 
     def okta_api_endpoint
-      nil
+      raise "NotImplemented"
     end
 
     def okta_token
-      nil
+      raise "NotImplemented"
     end
 
     def va_redirect
-      nil
+      raise "NotImplemented"
     end
   end
 end
