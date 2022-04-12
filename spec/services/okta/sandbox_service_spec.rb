@@ -15,4 +15,13 @@ RSpec.describe Okta::SandboxService do
       end
     end
   end
+
+  describe 'receives sandbox' do
+    it 'as the environment values' do
+      expect(subject.send(:idme_group)).to eq(Figaro.env.idme_group_id)
+      expect(subject.send(:okta_api_endpoint)).to eq(Figaro.env.okta_api_endpoint)
+      expect(subject.send(:okta_token)).to eq(Figaro.env.okta_token)
+      expect(subject.send(:va_redirect)).to eq(Figaro.env.okta_redirect_url)
+    end
+  end
 end
