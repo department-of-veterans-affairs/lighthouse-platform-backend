@@ -22,7 +22,7 @@ module Okta
       application, status_code = @client.add_application(new_application_request)
       raise application[:errorSummary] unless status_code == 200
 
-      assign_response, status_code = @client.assign_group_to_application(application.id, set_idme_group)
+      assign_response, status_code = @client.assign_group_to_application(application.id, idme_group)
       raise assign_response[:errorSummary] unless status_code == 200
 
       client_id = application.credentials.oauthClient.client_id
