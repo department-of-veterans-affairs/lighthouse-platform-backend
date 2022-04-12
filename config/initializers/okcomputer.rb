@@ -21,7 +21,7 @@ end
 
 class KongCheck < BaseCheck
   def check
-    KongService.new.list_all_consumers ? process_success : process_failure
+    Kong::SandboxService.new.list_all_consumers ? process_success : process_failure
   rescue
     process_failure
   end
@@ -49,7 +49,7 @@ end
 
 class OktaCheck < BaseCheck
   def check
-    OktaService.new.list_applications ? process_success : process_failure
+    Okta::SandboxService.new.list_applications ? process_success : process_failure
   rescue
     process_failure
   end

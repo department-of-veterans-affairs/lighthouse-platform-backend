@@ -22,19 +22,24 @@ module V0
         user
       end
 
-      def kong_signup(user, key_auth)
-        kong_consumer = KongService.new.consumer_signup(user, key_auth)
-        user.consumer.sandbox_gateway_ref = kong_consumer[:kong_id]
+      def kong_signup(user, key_auth, environment = nil)
+        kong_service = environment.eql?(:production) ? Kong::ProductionService : Kong::SandboxService
+        kong_consumer = kong_service.new.consumer_signup(user, key_auth)
+
+        user.consumer.sandbox_gateway_ref = kong_consumer[:kong_id] if env.blank?
+        user.consumer.prod_gateway_ref = kong_consumer[:kong_id] if env.present?
 
         [user, kong_consumer]
       end
 
-      def okta_signup(user, oauth)
-        okta_consumer = OktaService.new.consumer_signup(user,
-                                                        oauth,
-                                                        application_type: params[:oAuthApplicationType],
-                                                        redirect_uri: params[:oAuthRedirectURI])
-        user.consumer.sandbox_oauth_ref = okta_consumer.id
+      def okta_signup(user, oauth, environment = nil)
+        okta_service = environment.eql?(:production) ? Okta::ProductionService : Okta::SandboxService
+        okta_consumer = okta_service.new.consumer_signup(user,
+                                                         oauth,
+                                                         application_type: params[:oAuthApplicationType],
+                                                         redirect_uri: params[:oAuthRedirectURI])
+        user.consumer.sandbox_oauth_ref = okta_consumer.id if env.blank?
+        user.consumer.prod_oauth_ref = okta_consumer.id if env.present?
 
         [user, okta_consumer]
       end
@@ -57,6 +62,22 @@ module V0
         SandboxMailer.consumer_sandbox_signup(request, kong_consumer, okta_consumer).deliver_later
         if request[:apis].split(',').include?('addressValidation')
           SandboxMailer.va_profile_sandbox_signup(request).deliver_later
+        end
+      end
+
+      def promote_consumer(user, apis_list)
+        key_auth, oauth = ApiService.new.fetch_auth_types apis_list
+
+        _user, kong_consumer = kong_signup(user, key_auth, :production) if key_auth.present?
+        _user, okta_consumer = okta_signup(user, oauth, :production) if oauth.present?
+        [kong_consumer, okta_consumer]
+      end
+
+      def validate_refs(consumer_api_refs)
+        [].tap do |ref|
+          params[:apis].split(',').map do |api_ref|
+            ref << api_ref if consumer_api_refs.include?(api_ref)
+          end
         end
       end
     end
@@ -174,6 +195,35 @@ module V0
         consumer = Consumer.find(params[:consumerId])
         first_call = ElasticsearchService.new.first_successful_call consumer
         present first_call, with: V0::Entities::ConsumerStatisticEntity
+      end
+
+      desc 'Promotes a consumer to the production environment for the provided API(s)'
+      post '/:consumerId/promotion-requests' do
+        params do
+          requires :apis, type: String, allow_blank: false,
+                          description: 'Comma separated values of API Refs for promotion to production'
+          optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: false
+          optional :oAuthRedirectURI, type: String,
+                                      allow_blank: false,
+                                      regexp: %r{^https?://.+},
+                                      malicious_url_protection: true
+        end
+        status 200
+        consumer = Consumer.find(params[:consumerId])
+        consumer_api_refs = consumer.apis.map(&:api_ref).map(&:name)
+
+        api_refs = validate_refs(consumer_api_refs)
+        raise ApiValidationError if api_refs.empty?
+
+        begin
+          api_refs.map { |api_ref| consumer.promote_to_prod(api_ref) }
+        rescue
+          raise ApiValidationError
+        end
+        kong_consumer, okta_consumer = promote_consumer(consumer.user, params[:apis])
+        consumer.user.save!
+
+        present consumer.user, with: V0::Entities::ConsumerApplicationEntity, kong: kong_consumer, okta: okta_consumer
       end
     end
   end

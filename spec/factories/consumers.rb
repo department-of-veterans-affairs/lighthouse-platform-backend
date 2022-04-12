@@ -20,5 +20,13 @@ FactoryBot.define do
         consumer.sandbox_oauth_ref = '4n-0kt4-1d-f0r-us'
       end
     end
+
+    trait :with_production_apis do
+      after(:create) do |consumer, _|
+        api = create(:api)
+        environment = Environment.find_or_create_by(name: 'production')
+        consumer.api_environments << ApiEnvironment.find_or_create_by(api: api, environment: environment)
+      end
+    end
   end
 end

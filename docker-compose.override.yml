@@ -1,19 +1,29 @@
 version: "3.8"
 
 services:
-  kong-migrations:
+  kong-migrations: &kong_migrations
     image: kong:2.3.2
     command: kong migrations bootstrap && kong migrations up && kong migrations finish
-    depends_on: &kong-db [kong-database]
+    depends_on: &kong_db_service [kong-database]
     environment:
       - &kong_db KONG_DATABASE=postgres
       - &kong_pg_host KONG_PG_HOST=kong-database
       - &kong_pg_db KONG_PG_DATABASE=kong
       - &kong_pg_pw KONG_PG_PASSWORD=kong
-      - KONG_PG_USER=kong
+      - &kong_pg_user KONG_PG_USER=kong
     restart: &kong-restart on-failure
 
-  kong-database:
+  prod-kong-migrations:
+    <<: *kong_migrations
+    depends_on: &kong_prod_db_service [prod-kong-database]
+    environment:
+      - *kong_db
+      - *kong_pg_pw
+      - *kong_pg_user
+      - *kong_pg_db
+      - &kong_prod_pg_host KONG_PG_HOST=prod-kong-database
+
+  kong-database: &kong_database
     image: postgres:9.6
     environment:
       - POSTGRES_USER=kong
@@ -25,17 +35,20 @@ services:
       timeout: 5s
       retries: 5
 
-  kong:
+  prod-kong-database:
+    <<: *kong_database
+
+  kong: &kong
     image: kong:2.3.2
-    depends_on: *kong-db
+    depends_on: *kong_db_service
     environment:
       - *kong_db
       - *kong_pg_host
       - *kong_pg_db
       - *kong_pg_pw
-      - KONG_ADMIN_LISTEN=0.0.0.0:8001
-      - KONG_ADMIN_ACCESS_LOG='/dev/stdout'
-      - KONG_ADMIN_ERROR_LOG='/dev/stderr'
+      - &kong_admin_listen KONG_ADMIN_LISTEN=0.0.0.0:8001
+      - &kong_admin_access KONG_ADMIN_ACCESS_LOG='/dev/stdout'
+      - &kong_admin_error KONG_ADMIN_ERROR_LOG='/dev/stderr'
     expose:
       - 8000
       - 8001
@@ -46,12 +59,23 @@ services:
     command: ["kong", "docker-start"]
     restart: *kong-restart
 
+  prod-kong:
+    <<: *kong
+    depends_on: *kong_prod_db_service
+    environment:
+      - *kong_pg_db
+      - *kong_prod_pg_host
+      - *kong_pg_pw
+      - *kong_admin_listen
+      - *kong_admin_access
+      - *kong_admin_error
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
     environment:
       - xpack.security.enabled=false
       - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms64m -Xmx128m"
     ulimits:
       memlock:
         soft: -1

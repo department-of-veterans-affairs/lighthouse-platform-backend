@@ -14,13 +14,6 @@ class ElasticsearchService
     request(req, @uri)
   end
 
-  def seed_elasticsearch
-    uri = URI.parse("#{@es_base}/_bulk")
-    req = Net::HTTP::Post.new(uri)
-    req.body = File.read(File.join(File.dirname(__FILE__), '../../spec/support/elasticsearch/mock_logs.json'))
-    request(req, uri)
-  end
-
   def first_successful_call(consumer)
     req = Net::HTTP::Get.new(@uri)
     kong_id = consumer[:sandbox_gateway_ref]
