@@ -123,7 +123,7 @@ module Kong
     def set_kong_elb
       raise 'NotImplemented'
     end
-    
+
     def set_kong_password
       raise 'NotImplemented'
     end

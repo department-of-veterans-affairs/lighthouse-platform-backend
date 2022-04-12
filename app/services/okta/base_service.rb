@@ -88,7 +88,7 @@ module Okta
     end
 
     def login_url
-      raise 'NotImplemented'
+      Figaro.env.okta_login_url
     end
 
     def okta_api_endpoint
