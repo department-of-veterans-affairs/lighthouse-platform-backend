@@ -36,6 +36,7 @@ class Consumer < ApplicationRecord
   def promote_to_prod(api_ref)
     api = ApiRef.find_by(name: api_ref).api
     raise 'API not found' if api.nil?
+
     env = Environment.find_by(name: 'production')
     api_environment = ApiEnvironment.find_by(api: api, environment: env)
     api_environments << api_environment if api_environment.present? && api_environment_ids.exclude?(api_environment.id)
