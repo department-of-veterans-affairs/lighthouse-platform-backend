@@ -121,11 +121,11 @@ module Kong
     protected
 
     def set_kong_elb
-      raise "NotImplemented"
+      raise 'NotImplemented'
     end
     
     def set_kong_password
-      raise "NotImplemented"
+      raise 'NotImplemented'
     end
   end
 end

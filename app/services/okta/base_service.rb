@@ -84,23 +84,23 @@ module Okta
     protected
 
     def idme_group
-      raise "NotImplemented"
+      raise 'NotImplemented'
     end
 
     def login_url
-      raise "NotImplemented"
+      raise 'NotImplemented'
     end
 
     def okta_api_endpoint
-      raise "NotImplemented"
+      raise 'NotImplemented'
     end
 
     def okta_token
-      raise "NotImplemented"
+      raise 'NotImplemented'
     end
 
     def va_redirect
-      raise "NotImplemented"
+      raise 'NotImplemented'
     end
   end
 end
