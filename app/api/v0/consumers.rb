@@ -26,8 +26,8 @@ module V0
         kong_service = environment.eql?(:production) ? Kong::ProductionService : Kong::SandboxService
         kong_consumer = kong_service.new.consumer_signup(user, key_auth)
 
-        user.consumer.sandbox_gateway_ref = kong_consumer[:kong_id] if env.blank?
-        user.consumer.prod_gateway_ref = kong_consumer[:kong_id] if env.present?
+        user.consumer.sandbox_gateway_ref = kong_consumer[:kong_id] if environment.nil?
+        user.consumer.prod_gateway_ref = kong_consumer[:kong_id] if environment.present?
 
         [user, kong_consumer]
       end
@@ -38,8 +38,8 @@ module V0
                                                          oauth,
                                                          application_type: params[:oAuthApplicationType],
                                                          redirect_uri: params[:oAuthRedirectURI])
-        user.consumer.sandbox_oauth_ref = okta_consumer.id if env.blank?
-        user.consumer.prod_oauth_ref = okta_consumer.id if env.present?
+        user.consumer.sandbox_oauth_ref = okta_consumer.id if environment.nil?
+        user.consumer.prod_oauth_ref = okta_consumer.id if environment.present?
 
         [user, okta_consumer]
       end
