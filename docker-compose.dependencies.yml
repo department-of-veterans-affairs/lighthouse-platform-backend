@@ -1,6 +1,16 @@
 version: "3.8"
 
 services:
+  db:
+    image: postgres:13.1
+    expose:
+      - "5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
   kong-migrations: &kong_migrations
     image: kong:2.3.2
     command: kong migrations bootstrap && kong migrations up && kong migrations finish
@@ -89,6 +99,6 @@ services:
   dynamodb:
     image: amazon/dynamodb-local:latest
     command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
-
 volumes:
   elasticsearch-data:
+  db-data:
