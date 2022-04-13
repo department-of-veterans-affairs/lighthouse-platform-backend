@@ -5,7 +5,7 @@ values =  HTTParty.get('https://urlhaus.abuse.ch/downloads/text/').body
                                                                   .split("\r\n")
                                                                   .delete_if { |line| line.starts_with?('#') }
                                                                   .map { |line| [line] }
-MaliciousUrl.import columns, values, validate: false
+MaliciousUrl.import columns, values, validate: false, on_duplicate_key_ignore: true
 
 
 appeals_category = ApiCategory.create(
