@@ -41,6 +41,13 @@ module Okta
       application
     end
 
+    def list_applications
+      applications, status_code = @client.list_applications
+      raise 'Unable to retrieve Applications from Okta' unless status_code == 200
+
+      applications
+    end
+
     private
 
     def consumer_name(user)
