@@ -1,0 +1,4 @@
+okta_drift:
+  every: 1 minute
+  class: OktaDriftJob
+  description: 'Performs drift check for Okta environments within the last 24 hours'
