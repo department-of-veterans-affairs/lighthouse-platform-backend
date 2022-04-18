@@ -56,7 +56,7 @@ module V0
           api_metadatum = Api.kept.find_by!(name: params[:providerName]).api_metadatum
           release_note = ApiReleaseNote.create(api_metadatum_id: api_metadatum.id,
                                                date: params[:date],
-                                               content: params[:content])
+                                               content: CGI.unescape(params[:content]))
 
           present release_note, with: V0::Entities::ApiReleaseNoteEntity, base_url: request.base_url
         end
