@@ -25,8 +25,13 @@ class Base < Grape::API
     def protect_from_forgery
       return unless Flipper.enabled? :protect_from_forgery
 
-      raise ForbiddenError if headers['X-Csrf-Token'].blank?
-      raise ForbiddenError unless cookies['CSRF-TOKEN'] == headers['X-Csrf-Token']
+      Rails.logger.info "headers['X-Csrf-Token'] is blank" if headers['X-Csrf-Token'].blank?
+      raise "headers['X-Csrf-Token'] is blank" if headers['X-Csrf-Token'].blank?
+
+      unless cookies['CSRF-TOKEN'] == headers['X-Csrf-Token']
+        Rails.logger.info "#{cookies['CSRF-TOKEN']} does not equal #{headers['X-Csrf-Token']}"
+        raise "#{cookies['CSRF-TOKEN']} does not equal #{headers['X-Csrf-Token']}"
+      end
     end
   end
 
