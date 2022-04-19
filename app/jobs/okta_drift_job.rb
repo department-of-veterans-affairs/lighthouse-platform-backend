@@ -7,5 +7,6 @@ class OktaDriftJob
 
   def perform
     Okta::DriftService.new.detect_drift if Flipper.enabled?(:alert_drift)
+    Okta::DriftService.new(:production).detect_drift if Flipper.enabled?(:alert_drift)
   end
 end
