@@ -23,7 +23,7 @@ module Okta
 
     def filter_last_day(applications)
       applications.filter do |app|
-        app[:created] >= 1.day.ago
+        app[:created] >= 1.day.ago && !app[:label].end_with?('-dev')
       end
     end
 

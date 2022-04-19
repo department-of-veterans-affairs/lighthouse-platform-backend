@@ -54,10 +54,18 @@ module Okta
       "LPB-#{"#{user.consumer.organization}#{user.last_name}".gsub(/\W/, '')}"
     end
 
+    def is_lower_env?
+      Figaro.env.denote_okta_lower.present?
+    end
+
+    def construct_label(user)
+      "#{consumer_name(user)}-#{Time.now.to_i}#{is_lower_env? ? '-dev' : ''}"
+    end
+
     def build_new_application_payload(user, application_type:, redirect_uri:)
       {
         name: 'oidc_client',
-        label: "#{consumer_name(user)}-#{Time.now.to_i}",
+        label: construct_label(user),
         signOnMode: 'OPENID_CONNECT',
         credentials: {
           oauthClient: {
