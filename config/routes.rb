@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   root to: redirect('/platform-backend/admin/dashboard'), as: 'rootiest_root'
 
@@ -18,6 +20,7 @@ Rails.application.routes.draw do
     namespace :admin do
       root to: redirect('/platform-backend/admin/dashboard')
       mount GrapeSwaggerRails::Engine => '/dashboard'
+      mount Sidekiq::Web => '/sidekiq'
     end
 
     match '*path', to: 'application#not_found', via: :all
