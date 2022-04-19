@@ -76,7 +76,7 @@ describe V0::Consumers, type: :request do
 
         it 'responds with forbidden if request not sent from developer-portal' do
           post apply_base, params: signup_params, headers: { 'X-Csrf-Token': 'testing123' }
-          expect(response.code).to eq('403')
+          expect(response.code).to eq('500')
         end
       end
     end
