@@ -47,12 +47,12 @@ module Okta
       "LPB-#{"#{user.consumer.organization}#{user.last_name}".gsub(/\W/, '')}"
     end
 
-    def is_lower_env?
+    def lower_env?
       Figaro.env.denote_okta_lower.present?
     end
 
     def construct_label(user)
-      "#{consumer_name(user)}-#{Time.now.to_i}#{is_lower_env? ? '-dev' : ''}"
+      "#{consumer_name(user)}-#{Time.now.to_i}#{lower_env? ? '-dev' : ''}"
     end
 
     def build_new_application_payload(user, application_type:, redirect_uri:)

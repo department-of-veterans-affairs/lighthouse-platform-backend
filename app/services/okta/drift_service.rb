@@ -4,7 +4,7 @@ module Okta
   class DriftService
     def initialize(environment = nil)
       @env = environment
-      @client = is_production? ? Okta::ProductionService : Okta::SandboxService
+      @client = production? ? Okta::ProductionService : Okta::SandboxService
     end
 
     def detect_drift
@@ -29,7 +29,7 @@ module Okta
 
     def detect_unknown_entities(alert_list)
       alert_list.filter do |app|
-        is_new_record? app
+        new_record? app
       end
     end
 
@@ -38,11 +38,11 @@ module Okta
       @slack_service.alert_slack(Figaro.env.drift_webhook, message)
     end
 
-    def is_new_record?(application)
+    def new_record?(application)
       Consumer.find_by(sandbox_oauth_ref: application[:credentials][:oauthClient][:client_id]).nil?
     end
 
-    def is_production?
+    def production?
       @env.eql?(:production)
     end
   end
