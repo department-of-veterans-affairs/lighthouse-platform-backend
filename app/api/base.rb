@@ -30,7 +30,7 @@ class Base < Grape::API
 
       unless cookies['CSRF-TOKEN'] == headers['X-Csrf-Token']
         Rails.logger.info "#{cookies['CSRF-TOKEN']} does not equal #{headers['X-Csrf-Token']}"
-        raise "#{cookies['CSRF-TOKEN']} does not equal #{headers['X-Csrf-Token']}"
+        raise "#{cookies['CSRF-TOKEN']} does not equal #{headers['X-Csrf-Token']}, #{cookies.to_json}"
       end
     end
   end
