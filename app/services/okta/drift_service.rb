@@ -17,6 +17,8 @@ module Okta
           alert_slack consumer
         end
       end
+      
+      { success: true }
     end
 
     private
@@ -34,6 +36,7 @@ module Okta
     end
 
     def alert_slack(consumer)
+      @slack_service ||= SlackService.new
       message = "Consumer: #{consumer[:credentials][:oauthClient][:client_id]}"
       @slack_service.alert_slack(Figaro.env.drift_webhook, message)
     end
