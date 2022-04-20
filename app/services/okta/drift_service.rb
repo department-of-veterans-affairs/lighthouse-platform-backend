@@ -17,7 +17,7 @@ module Okta
           alert_slack consumer
         end
       end
-      
+
       { success: true }
     end
 
