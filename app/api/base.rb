@@ -32,7 +32,8 @@ class Base < Grape::API
       csrf_token = result.present? ? result.named_captures['csrf_token'] : nil
       unless csrf_token == headers['X-Csrf-Token']
         Rails.logger.info "#{csrf_token} does not equal #{headers['X-Csrf-Token']}"
-        raise "#{csrf_token} does not equal #{headers['X-Csrf-Token']}, #{@env['HTTP_COOKIE']}"
+        cookies_header = request.fetch_header('rack.request.cookie_hash').to_json
+        raise "#{csrf_token} does not equal #{headers['X-Csrf-Token']}, #{cookies_header}"
       end
     end
   end
