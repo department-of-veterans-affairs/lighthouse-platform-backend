@@ -25,7 +25,7 @@ module Okta
 
     def filter_last_day(applications)
       applications.filter do |app|
-        app[:created] >= 1.day.ago && !app[:label].end_with?('-dev')
+        app[:created] >= 1.month.ago && !app[:label].end_with?('-dev')
       end
     end
 
@@ -37,7 +37,7 @@ module Okta
 
     def alert_slack(consumer)
       @slack_service ||= SlackService.new
-      message = "Consumer: #{consumer[:credentials][:oauthClient][:client_id]}"
+      message = build_message(consumer)
       @slack_service.alert_slack(Figaro.env.drift_webhook, message)
     end
 
@@ -47,6 +47,40 @@ module Okta
 
     def production?
       @env.eql?(:production)
+    end
+
+    def trim_url(url)
+      url[0...-5]
+    end
+
+    def build_message(consumer)
+      url = trim_url(consumer[:_links][:uploadLogo][:href])
+      environment = production? ? 'Production' : 'Sandbox'
+      {
+        blocks: [
+          {
+            type: 'section',
+            text: {
+              type: 'mrkdwn',
+              text: '*Lighthouse Consumer Management Service Notification*'
+            }
+          },
+          {
+            type: 'section',
+            text: {
+              type: 'mrkdwn',
+              text: "Detected an unknown Consumer within Okta Environment: #{environment}"
+            }
+          },
+          {
+            type: 'section',
+            text: {
+              type: 'mrkdwn',
+              text: "Client ID: <#{url}|#{consumer[:credentials][:oauthClient][:client_id]}>"
+            }
+          }
+        ]
+      }
     end
   end
 end
