@@ -15,7 +15,14 @@ module V0
     end
 
     resource 'support' do
-      desc 'Handles contact-us support requests', deprecated: true
+      desc 'Handles contact-us support requests', {
+        deprecated: true,
+        headers: {
+          'X-Csrf-Token' => {
+            required: true
+          }
+        }
+      }
       params do
         requires :email, as: :requester, type: String, allow_blank: false
         requires :firstName, type: String, allow_blank: false
