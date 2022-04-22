@@ -42,8 +42,9 @@ module Okta
     end
 
     def new_record?(application)
-      if application[:credentials][:oauthClient].present? && application[:credentials][:oauthClient][:client_id].present?
-        Consumer.find_by(sandbox_oauth_ref: application[:credentials][:oauthClient][:client_id]).nil?
+      credentials = application[:credentials]
+      if credentials[:oauthClient].present? && credentials[:oauthClient][:client_id].present?
+        Consumer.find_by(sandbox_oauth_ref: credentials[:oauthClient][:client_id]).nil?
       end
     end
 
@@ -56,7 +57,7 @@ module Okta
     end
 
     def build_message(consumer)
-      url = trim_url(consumer[:_links][:uploadLogo][:href])
+      url = trim_url(consumer[:_links][:uploadLogo][:href]) if consumer[:_links].present?
       environment = production? ? 'Production' : 'Sandbox'
       {
         blocks: [
