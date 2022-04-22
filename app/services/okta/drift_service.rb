@@ -25,7 +25,7 @@ module Okta
 
     def filter_last_day(applications)
       applications.filter do |app|
-        app[:created] >= 1.month.ago && !app[:label].end_with?('-dev')
+        app[:created] >= 1.day.ago && !app[:label].end_with?('-dev')
       end
     end
 
@@ -42,7 +42,9 @@ module Okta
     end
 
     def new_record?(application)
-      Consumer.find_by(sandbox_oauth_ref: application[:credentials][:oauthClient][:client_id]).nil?
+      if application[:credentials][:oauthClient].present? && application[:credentials][:oauthClient][:client_id].present?
+        Consumer.find_by(sandbox_oauth_ref: application[:credentials][:oauthClient][:client_id]).nil?
+      end
     end
 
     def production?
