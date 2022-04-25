@@ -48,7 +48,7 @@ module Okta
     end
 
     def lower_env?
-      Figaro.env.denote_okta_lower.present?
+      Figaro.env.denote_lower_env.present?
     end
 
     def construct_label(user)
