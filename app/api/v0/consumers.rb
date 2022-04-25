@@ -83,7 +83,14 @@ module V0
     end
 
     resource 'consumers' do
-      desc 'Accept form submission from developer-portal', deprecated: true
+      desc 'Accept form submission from developer-portal', {
+        deprecated: true,
+        headers: {
+          'X-Csrf-Token' => {
+            required: true
+          }
+        }
+      }
       params do
         requires :apis, type: String, allow_blank: false
         optional :description, type: String
@@ -124,7 +131,14 @@ module V0
         present user, with: V0::Entities::ConsumerApplicationEntity, kong: kong_consumer, okta: okta_consumer
       end
 
-      desc 'Accepts request for production access', deprecated: true
+      desc 'Accepts request for production access', {
+        deprecated: true,
+        headers: {
+          'X-Csrf-Token' => {
+            required: true
+          }
+        }
+      }
       params do
         requires :apis, type: String, allow_blank: false
         optional :appDescription, type: String
