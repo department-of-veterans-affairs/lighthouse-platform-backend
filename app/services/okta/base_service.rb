@@ -48,7 +48,7 @@ module Okta
     end
 
     def lower_env?
-      Figaro.env.denote_lower_env.present?
+      Flipper.enabled? :denote_lower_environment
     end
 
     def construct_label(user)

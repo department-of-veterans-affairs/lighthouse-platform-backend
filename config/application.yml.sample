@@ -30,4 +30,3 @@ support_email:
 enable_github_auth:
 va_profile_distribution:
 drift_webhook:
-denote_lower_env: true
