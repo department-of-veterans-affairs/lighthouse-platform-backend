@@ -38,7 +38,7 @@ module Okta
     def alert_slack(consumer)
       @slack_service ||= SlackService.new
       message = build_message(consumer)
-      @slack_service.alert_slack(Figaro.env.drift_webhook, message)
+      @slack_service.alert_slack(Figaro.env.slack_drift_channel, message)
     end
 
     def new_record?(application)
@@ -59,31 +59,11 @@ module Okta
     def build_message(consumer)
       url = trim_url(consumer[:_links][:uploadLogo][:href]) if consumer[:_links].present?
       environment = production? ? 'Production' : 'Sandbox'
-      {
-        blocks: [
-          {
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: '*Lighthouse Consumer Management Service Notification*'
-            }
-          },
-          {
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: "Detected an unknown Consumer within Okta Environment: #{environment}"
-            }
-          },
-          {
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: "Client ID: <#{url}|#{consumer[:credentials][:oauthClient][:client_id]}>"
-            }
-          }
-        ]
-      }
+      [
+        '*Lighthouse Consumer Management Service Notification*',
+        "Detected an unknown Consumer within Okta Environment: #{environment}",
+        "Client ID: <#{url}|#{consumer[:credentials][:oauthClient][:client_id]}"
+      ].join("\n")
     end
   end
 end

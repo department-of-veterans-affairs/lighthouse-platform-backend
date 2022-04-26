@@ -83,5 +83,6 @@ Rails.application.configure do
   ENV['ES_ENDPOINT'] = 'http://elasticsearch:9200'
   ENV['SUPPORT_EMAIL'] = 'user_support@the_house_of_light.com'
   ENV['VA_PROFILE_DISTRIBUTION'] = 'va_profile_support@the_house_of_light.com'
-  ENV['DRIFT_WEBHOOK'] = 'https://hooks.slack.com/services/4bs01ut3/l3g1t1m4t3/w3bh00k'
+  ENV['SLACK_API_TOKEN'] = 't4c0s4lyf3'
+  ENV['SLACK_DRIFT_CHANNEL'] = '#test'
 end
