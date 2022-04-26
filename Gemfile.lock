@@ -170,6 +170,8 @@ GEM
       dry-inflector (~> 0.1, >= 0.1.2)
       dry-logic (~> 1.0, >= 1.0.2)
     erubi (1.10.0)
+    et-orbi (1.2.7)
+      tzinfo
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
@@ -215,6 +217,10 @@ GEM
       rack (>= 1.4, < 3)
       rack-protection (>= 1.5.3, < 2.2.0)
       sanitize (< 7)
+    fugit (1.5.3)
+      et-orbi (~> 1, >= 1.2.7)
+      raabro (~> 1.4)
+    gli (2.21.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
     govdelivery-tms (2.8.4)
@@ -351,6 +357,7 @@ GEM
     public_suffix (4.0.6)
     puma (5.6.4)
       nio4r (~> 2.0)
+    raabro (1.4.0)
     racc (1.6.0)
     rack (2.2.3)
     rack-accept (0.4.5)
@@ -450,6 +457,8 @@ GEM
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
+    rufus-scheduler (3.8.1)
+      fugit (~> 1.1, >= 1.1.6)
     sanitize (6.0.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -483,6 +492,12 @@ GEM
       simplecov
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
+    slack-ruby-client (1.0.0)
+      faraday (>= 1.0)
+      faraday_middleware
+      gli
+      hashie
+      websocket-driver
     socksify (1.7.1)
     spring (4.0.0)
     sprockets (4.0.3)
@@ -585,6 +600,7 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rspec
   rubocop-thread_safety
+  rufus-scheduler
   sass-rails (>= 6)
   sassc-rails
   selenium-webdriver
@@ -592,6 +608,7 @@ DEPENDENCIES
   simple_form
   simplecov
   simplecov-csv
+  slack-ruby-client
   socksify (~> 1.7)
   spring
   timecop

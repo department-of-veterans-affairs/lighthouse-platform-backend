@@ -1,0 +1,86 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://slack.com/api/chat.postMessage
+    body:
+      encoding: UTF-8
+      string: as_user=true&channel=%23test&text=test
+    headers:
+      Accept:
+      - application/json; charset=utf-8
+      User-Agent:
+      - Slack Ruby Client/1.0.0
+      Authorization:
+      - Bearer <Slack Token>
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 26 Apr 2022 21:22:08 GMT
+      Server:
+      - Apache
+      X-Powered-By:
+      - HHVM/4.153.1
+      Access-Control-Allow-Origin:
+      - "*"
+      Referrer-Policy:
+      - no-referrer
+      X-Slack-Backend:
+      - r
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Access-Control-Allow-Headers:
+      - slack-route, x-slack-version-ts, x-b3-traceid, x-b3-spanid, x-b3-parentspanid,
+        x-b3-sampled, x-b3-flags
+      Access-Control-Expose-Headers:
+      - x-slack-req-id, retry-after
+      X-Oauth-Scopes:
+      - chat:write
+      X-Accepted-Oauth-Scopes:
+      - chat:write
+      Expires:
+      - Mon, 26 Jul 1997 05:00:00 GMT
+      Cache-Control:
+      - private, no-cache, no-store, must-revalidate
+      Pragma:
+      - no-cache
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Slack-Req-Id:
+      - 4fcac92eee7556a0513cd57d07aac2f5
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '343'
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Envoy-Upstream-Service-Time:
+      - '192'
+      X-Backend:
+      - main_normal main_bedrock_normal_with_overflow main_canary_with_overflow main_bedrock_canary_with_overflow
+        main_control_with_overflow main_bedrock_control_with_overflow
+      X-Server:
+      - slack-www-hhvm-main-iad-pq9y
+      X-Slack-Shared-Secret-Outcome:
+      - no-match
+      Via:
+      - envoy-www-iad-78c8, envoy-edge-pdx-svoc
+      X-Edge-Backend:
+      - envoy-www
+      X-Slack-Edge-Shared-Secret-Outcome:
+      - no-match
+    body:
+      encoding: ASCII-8BIT
+      string: '{"ok":true,"channel":"CH4NN3L","ts":"1651008128.904959","message":{"bot_id":"B0T_1D","type":"message","text":"test","user":"US3R","ts":"1651008128.904959","app_id":"APP_1D","team":"T34M_1D","bot_profile":{"id":"BOT_1D","app_id":"APP_1D","name":"Developer
+        Portal","icons":{"image_36":"https://bit.ly/3rTNuWG","image_48":"https://bit.ly/3KjI9hB","image_72":"https://bit.ly/3LmoBKK"},"deleted":false,"updated":1597760321,"team_id":"T34M_1D"}}}'
+  recorded_at: Tue, 26 Apr 2022 21:22:08 GMT
+recorded_with: VCR 6.0.0
