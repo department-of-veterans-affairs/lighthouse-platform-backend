@@ -220,6 +220,7 @@ GEM
     fugit (1.5.3)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
+    gli (2.21.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
     govdelivery-tms (2.8.4)
@@ -491,6 +492,12 @@ GEM
       simplecov
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
+    slack-ruby-client (1.0.0)
+      faraday (>= 1.0)
+      faraday_middleware
+      gli
+      hashie
+      websocket-driver
     socksify (1.7.1)
     spring (4.0.0)
     sprockets (4.0.3)
@@ -601,6 +608,7 @@ DEPENDENCIES
   simple_form
   simplecov
   simplecov-csv
+  slack-ruby-client
   socksify (~> 1.7)
   spring
   timecop

@@ -38,6 +38,7 @@ gem 'rufus-scheduler'
 gem 'sass-rails', '>= 6'
 gem 'serviceworker-rails'
 gem 'simple_form'
+gem 'slack-ruby-client'
 gem 'socksify', '~> 1.7'
 gem 'turbolinks', '~> 5'
 
