@@ -7,14 +7,14 @@ class SandboxMailer < ApplicationMailer
     @request = request
     @kong_consumer = kong_consumer
     @okta_consumer = okta_consumer
-    mail(to: request[:email],
+    mail(to: Flipper.enabled?(:email_testing) ? 'lee.deboom@oddball.io' : request[:email],
          from: 'VA API Platform team',
          subject: 'Welcome to the VA API Platform')
   end
 
   def va_profile_sandbox_signup(request)
     @request = request
-    mail(to: Figaro.env.va_profile_distribution,
+    mail(to: Flipper.enabled?(:email_testing) ? 'lee.deboom@oddball.io' : request[:email],
          from: "#{request[:firstName]} #{request[:lastName]}",
          subject: 'VA Profile Signup Request')
   end

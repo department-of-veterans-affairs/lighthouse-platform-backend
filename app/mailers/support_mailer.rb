@@ -3,14 +3,14 @@
 class SupportMailer < ApplicationMailer
   def consumer_support_email(request)
     @request = request
-    mail(to: Figaro.env.support_email,
+    mail(to: Flipper.enabled?(:email_testing) ? 'lee.deboom@oddball.io' : Figaro.env.support_email,
          from: "#{request[:firstName]} #{request[:lastName]}",
          subject: 'Support Needed')
   end
 
   def publishing_support_email(request)
     @request = request
-    mail(to: Figaro.env.support_email,
+    mail(to: Flipper.enabled?(:email_testing) ? 'lee.deboom@oddball.io' : Figaro.env.support_email,
          from: "#{request[:firstName]} #{request[:lastName]}",
          subject: 'Publishing Support Needed')
   end
