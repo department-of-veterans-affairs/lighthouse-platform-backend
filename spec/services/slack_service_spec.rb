@@ -9,7 +9,7 @@ RSpec.describe SlackService do
     it 'uses the respective webhook and message' do
       VCR.use_cassette('slack/alert_200', match_requests_on: [:method]) do
         result = subject.alert_slack(Figaro.env.slack_drift_channel, 'test')
-        expect(result.ok).to eq(true)
+        expect(result.ok).to be(true)
       end
     end
   end
