@@ -50,7 +50,7 @@ RSpec.describe Okta::DriftService do
     it 'can alert slack if needed' do
       VCR.use_cassette('slack/alert_200', match_requests_on: [:method]) do
         result = subject.send(:alert_slack, mock.first)
-        expect(result.ok).to eq(true)
+        expect(result.ok).to be(true)
       end
     end
   end
