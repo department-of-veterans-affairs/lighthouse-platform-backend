@@ -30,7 +30,7 @@ module GithubService
   end
 
   private_class_method def self.get_approved_teams(team_page)
-    Rails.configuration.github.teams.yield_self do |teams|
+    Rails.configuration.github.teams.then do |teams|
       # Transform team['id'] to a string in comparison. Figaro pulls all values as strings
       teams.select { |team| team_page.any? { |page_team| page_team['id'].to_s == team[:id] } }
     end
