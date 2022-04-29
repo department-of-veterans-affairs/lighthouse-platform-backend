@@ -44,7 +44,8 @@ module Okta
     def new_record?(application)
       credentials = application[:credentials]
       if credentials[:oauthClient].present? && credentials[:oauthClient][:client_id].present?
-        Consumer.find_by(sandbox_oauth_ref: credentials[:oauthClient][:client_id]).nil?
+        cid = credentials[:oauthClient][:client_id]
+        Consumer.find_by(production? ? { prod_oauth_ref: cid } : { sandbox_oauth_ref: cid }).nil?
       end
     end
 
@@ -62,7 +63,7 @@ module Okta
       [
         '*Lighthouse Consumer Management Service Notification*',
         "Detected an unknown Consumer within Okta Environment: #{environment}",
-        "Client ID: <#{url}|#{consumer[:credentials][:oauthClient][:client_id]}"
+        "Client ID: <#{url}|#{consumer[:credentials][:oauthClient][:client_id]}>"
       ].join("\n")
     end
   end
