@@ -11,7 +11,7 @@ RSpec.describe SupportMailer, type: :mailer do
       it 'renders the headers' do
         expect(mail.subject).to eq('Support Needed')
         expect(mail.to).to eq([Figaro.env.support_email])
-        expect(mail.from).to eq("#{request[:email]}")
+        expect(mail.from).to eq(request[:email].to_s)
       end
 
       it 'renders the body' do
@@ -27,7 +27,7 @@ RSpec.describe SupportMailer, type: :mailer do
       it 'renders the headers' do
         expect(mail.subject).to eq('Publishing Support Needed')
         expect(mail.to).to eq([Figaro.env.support_email])
-        expect(mail.from).to eq("#{request[:email]}")
+        expect(mail.from).to eq(request[:email].to_s)
       end
 
       it 'renders the body' do
