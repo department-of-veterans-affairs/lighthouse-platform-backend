@@ -37,6 +37,9 @@ Style/StringLiterals:
 Style/Documentation:
   Enabled: false
 
+Rails/I18nLocaleTexts:
+  Enabled: false
+
 Style/ClassAndModuleChildren:
   Enabled: false
 
