@@ -12,7 +12,7 @@ RSpec.describe ProductionMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq("Production Access Requested for #{production_request[:organization]}")
       expect(mail.to).to eq([Figaro.env.support_email])
-      expect(mail.from).to eq("#{contact[:firstName]} #{contact[:lastName]}")
+      expect(mail.from).to eq(['no-reply@va.gov'])
     end
 
     it 'renders the body' do
@@ -27,7 +27,7 @@ RSpec.describe ProductionMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq('Your Request for Production Access is Submitted')
       expect(mail.to).to eq([contact[:email]])
-      expect(mail.from).to eq('VA API Platform team')
+      expect(mail.from).to eq([Figaro.env.support_email])
     end
 
     it 'renders the body' do
