@@ -16,7 +16,6 @@ RSpec.describe SandboxMailer, type: :mailer do
 
     it 'renders the headers' do
       expect(mail.to).to eq([sandbox_request[:email]])
-      expect(mail.from).to eq([Figaro.env.support_email])
     end
 
     it 'renders the body' do
@@ -64,7 +63,6 @@ RSpec.describe SandboxMailer, type: :mailer do
 
     it 'renders the headers' do
       expect(mail.to).to eq([Figaro.env.va_profile_distribution])
-      expect(mail.from).to eq(['no-reply@va.gov'])
     end
 
     it 'renders the body' do
