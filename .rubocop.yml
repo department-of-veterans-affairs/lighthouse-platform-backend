@@ -103,6 +103,9 @@ Metrics/MethodLength:
 Metrics/CyclomaticComplexity:
   IgnoredMethods:
     - 'consumer_signup'
+Metrics/PerceivedComplexity:
+  IgnoredMethods:
+    - 'consumer_signup'
 Rails:
   Enabled: true
 
