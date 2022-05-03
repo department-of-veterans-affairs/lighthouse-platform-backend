@@ -35,7 +35,8 @@ module Okta
         raise "No default policy for clientId: #{client_id}, authServerId: #{auth_server_id}" if default_policy.blank?
 
         default_policy.conditions.clients.include.push(client_id)
-        @client.update_authorization_server_policy(auth_server_id, default_policy.id, default_policy)
+        @client.update_authorization_server_policy(auth_server_id, default_policy.id, default_policy.to_h)
+        raise "Okta failed to add clientId: #{client_id} to policy: #{default_policy.id}" unless status_code == 200
       end
 
       application
