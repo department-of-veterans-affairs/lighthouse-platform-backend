@@ -107,7 +107,7 @@ module Kong
     end
 
     def request(req, uri)
-      req.basic_auth 'kong_admin', set_kong_password
+      kong_through_kong? ? (req['apikey'] = set_kong_password) : req.basic_auth('kong_admin', set_kong_password)
       response = @client.start(uri.host, uri.port) do |http|
         http.request(req)
       end
@@ -126,6 +126,12 @@ module Kong
 
     def set_kong_password
       raise 'NotImplemented'
+    end
+
+    private
+
+    def kong_through_kong?
+      Flipper.enabled? :kong_through_kong
     end
   end
 end
