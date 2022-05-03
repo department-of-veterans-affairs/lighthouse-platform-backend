@@ -107,7 +107,7 @@ module Kong
     end
 
     def request(req, uri)
-      kong_through_kong? ? req['apikey'] = set_kong_password : req.basic_auth('kong_admin', set_kong_password)
+      kong_through_kong? ? (req['apikey'] = set_kong_password) : req.basic_auth('kong_admin', set_kong_password)
       response = @client.start(uri.host, uri.port) do |http|
         http.request(req)
       end
