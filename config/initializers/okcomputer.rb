@@ -21,7 +21,7 @@ end
 
 class KongCheck < BaseCheck
   def check
-    Kong::SandboxService.new.list_all_consumers ? process_success : process_failure
+    Kong::SandboxService.new.list_consumers ? process_success : process_failure
   rescue
     process_failure
   end
