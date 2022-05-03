@@ -8,12 +8,14 @@ class SandboxMailer < ApplicationMailer
     @kong_consumer = kong_consumer
     @okta_consumer = okta_consumer
     mail(to: request[:email],
+         from: from_email_wrapper('VA API Platform team'),
          subject: 'Welcome to the VA API Platform')
   end
 
   def va_profile_sandbox_signup(request)
     @request = request
     mail(to: Figaro.env.va_profile_distribution,
+         from: from_email_wrapper("#{request[:firstName]} #{request[:lastName]}"),
          subject: 'VA Profile Signup Request')
   end
 end
