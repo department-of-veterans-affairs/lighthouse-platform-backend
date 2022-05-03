@@ -115,6 +115,7 @@ module Kong
 
       response.tap { |res| res['ok'] = res.is_a? Net::HTTPSuccess }
       Rails.logger.info "!!!!!!! KONG !!!!!!! #{response.body} !!!!!!!"
+      Rails.logger.info "!!!!!!! KONG !!!!!!! #{response.each_header.to_h} !!!!!!!"
       raise 'Failed to retrieve kong consumers list' unless response['ok']
 
       JSON.parse(response.body) unless response.body.nil?
