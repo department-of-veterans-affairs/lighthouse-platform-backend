@@ -66,5 +66,12 @@ class Utilities < Base
         { success: true }
       end
     end
+
+    resource 'kong' do
+      desc 'Return list Kong consumers'
+      get '/consumers' do
+        Kong::SandboxService.new.list_all_consumers
+      end
+    end
   end
 end
