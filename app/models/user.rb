@@ -15,7 +15,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :consumer
 
   before_save do
-    consumer.save!
+    consumer.save! if consumer.present?
   end
 
   after_discard do
