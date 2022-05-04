@@ -14,7 +14,7 @@ class User < ApplicationRecord
   has_one :consumer, dependent: :destroy
   accepts_nested_attributes_for :consumer
 
-  before_save do
+  before_update do
     consumer.save! if consumer.present?
   end
 
