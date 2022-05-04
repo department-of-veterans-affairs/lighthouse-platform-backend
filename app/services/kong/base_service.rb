@@ -109,7 +109,7 @@ module Kong
 
     def request(req, uri)
       kong_through_kong? ? (req['apikey'] = set_kong_password) : req.basic_auth('kong_admin', set_kong_password)
-      response = @client.start(uri.host, uri.port) do |http|
+      response = @client.start(uri.host, uri.port, use_ssl: uri.to_s.start_with?('https')) do |http|
         http.request(req)
       end
 
