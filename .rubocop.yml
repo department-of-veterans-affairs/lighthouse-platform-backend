@@ -118,6 +118,8 @@ Metrics/ClassLength:
 
 Metrics/AbcSize:
   Max: 40
+  IgnoredMethods:
+    - 'consumer_signup'
 
 # removing rule because get_session implies HTTP GET, and informs method
 Naming/AccessorMethodName:
