@@ -38,8 +38,8 @@ module V0
                                                          oauth,
                                                          application_type: params[:oAuthApplicationType],
                                                          redirect_uri: params[:oAuthRedirectURI])
-        user.consumer.sandbox_oauth_ref = okta_consumer.id if environment.nil?
-        user.consumer.prod_oauth_ref = okta_consumer.id if environment.present?
+        user.consumer.sandbox_oauth_ref = okta_consumer[:id] if environment.nil?
+        user.consumer.prod_oauth_ref = okta_consumer[:id] if environment.present?
 
         [user, okta_consumer]
       end

@@ -8,11 +8,11 @@ module V0
       end
 
       expose :clientId, documentation: { type: String } do |_user, options|
-        options[:okta].credentials.oauthClient.client_id if options[:okta].present?
+        options[:okta][:credentials][:oauthClient][:client_id] if options[:okta].present?
       end
 
       expose :clientSecret, documentation: { type: String } do |_user, options|
-        options[:okta].credentials.oauthClient.client_secret if options[:okta].present?
+        options[:okta][:credentials][:oauthClient][:client_secret] if options[:okta].present?
       end
 
       expose :email, documentation: { type: String }
@@ -26,7 +26,7 @@ module V0
       end
 
       expose :redirectURI, documentation: { type: String } do |_user, options|
-        options[:okta].settings.oauthClient.redirect_uris.first if options[:okta].present?
+        options[:okta][:settings][:oauthClient][:redirect_uris].first if options[:okta].present?
       end
     end
   end

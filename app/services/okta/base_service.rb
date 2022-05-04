@@ -39,7 +39,7 @@ module Okta
         raise "Okta failed to add clientId: #{client_id} to policy: #{default_policy.id}" unless status_code == 200
       end
 
-      application
+      application.to_h
     end
 
     private
