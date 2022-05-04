@@ -31,3 +31,4 @@ enable_github_auth:
 va_profile_distribution:
 slack_api_token:
 slack_drift_channel:
+slack_signup_channel:
