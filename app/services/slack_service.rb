@@ -6,7 +6,10 @@ class SlackService
   end
 
   def alert_slack(channel, message)
-    @client.chat_postMessage(channel: channel, attachments: message[:attachments], as_user: true) if use_attachments? message
+    if use_attachments? message
+      @client.chat_postMessage(channel: channel, attachments: message[:attachments],
+                               as_user: true)
+    end
     @client.chat_postMessage(channel: channel, text: message, as_user: true) unless use_attachments? message
   end
 

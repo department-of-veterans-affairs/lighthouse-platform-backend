@@ -84,26 +84,27 @@ module V0
       def send_slack_signup_alert
         SlackService.new.alert_slack(Figaro.env.slack_signup_channel, slack_success_message(slack_signup_message))
       end
-  
+
       def slack_signup_message
         [
           "#{params[:firstName]}, #{params[:lastName]}: #{slack_email_list}",
           "Description: #{params[:description]}",
           'Requested access to:',
-          "#{map_apis(params[:apis])}"
+          map_apis(params[:apis]).to_s
         ].join(" \n")
       end
-  
+
       def map_apis(apis)
         apis.split(',').map { |api| "* #{api}" }.join("\n")
       end
-      
+
       def include_va_email?
         params[:internalApiInfo][:vaEmail].present? if params[:internalApiInfo]
       end
 
       def slack_email_list
-        "Contact Email: #{params[:email]}#{(include_va_email? ? " | VA Email: #{params[:internalApiInfo][:vaEmail]}" : '')}"
+        "Contact Email: #{params[:email]}"\
+          "#{include_va_email? ? " | VA Email: #{params[:internalApiInfo][:vaEmail]}" : ''}"
       end
 
       def slack_success_message(message)
