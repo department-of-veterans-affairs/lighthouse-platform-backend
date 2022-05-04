@@ -20,7 +20,6 @@ module Kong
     end
 
     def list_consumers(query = nil)
-      Rails.logger.info "!!!!!!! KONG.list_consumers !!!!!!! #{@kong_elb}/consumers#{query} !!!!!!!"
       uri = URI.parse("#{@kong_elb}/consumers#{query}")
       req = Net::HTTP::Get.new(uri)
       request(req, uri)
@@ -114,8 +113,6 @@ module Kong
       end
 
       response.tap { |res| res['ok'] = res.is_a? Net::HTTPSuccess }
-      Rails.logger.info "!!!!!!! KONG !!!!!!! #{response.body} !!!!!!!"
-      Rails.logger.info "!!!!!!! KONG !!!!!!! #{response.each_header.to_h} !!!!!!!"
       raise 'Failed to retrieve kong consumers list' unless response['ok']
 
       JSON.parse(response.body) unless response.body.nil?
