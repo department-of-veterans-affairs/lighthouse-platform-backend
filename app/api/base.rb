@@ -1,23 +1,31 @@
 # frozen_string_literal: true
 
 class Base < Grape::API
+  use GrapeLogging::Middleware::RequestLogger, instrumentation_key: 'grape_key'
+
   format :json
   rescue_from Grape::Exceptions::ValidationErrors do |e|
+    Rails.logger.warn "??? #{e.message}"
     error!({ errors: e.message.split(',') }, 400)
   end
   rescue_from Grape::Exceptions::Validation do |e|
+    Rails.logger.warn "??? #{e.message}"
     error!({ errors: e.message.split(',') }, 400)
   end
-  rescue_from ActiveRecord::RecordNotFound do |_e|
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    Rails.logger.warn "??? #{e.message}"
     error!({ errors: ['Item not found with given identifier'] }, 404)
   end
-  rescue_from ForbiddenError do |_e|
+  rescue_from ForbiddenError do |e|
+    Rails.logger.warn "??? #{e.message}"
     error!({ errors: ['Access is forbidden'] }, 403)
   end
-  rescue_from ApiValidationError do |_e|
+  rescue_from ApiValidationError do |e|
+    Rails.logger.warn "??? #{e.message}"
     error!({ errors: ['Invalid API list for consumer'] }, 422)
   end
   rescue_from :all do |e|
+    Rails.logger.error "!!! #{e.message}\n#{e.backtrace}"
     error!({ errors: [e.message] }, 500)
   end
 
