@@ -20,7 +20,7 @@ class Base < Grape::API
     Rails.logger.warn "??? #{e.message}"
     error!({ errors: ['Access is forbidden'] }, 403)
   end
-  rescue_from ApiValidationError do |_e|
+  rescue_from ApiValidationError do |e|
     Rails.logger.warn "??? #{e.message}"
     error!({ errors: ['Invalid API list for consumer'] }, 422)
   end
