@@ -14,6 +14,7 @@ class BaseCheck < OkComputer::Check
   end
 
   def process_failure
+    Rails.logger.warn "??? #{name} is unavailable"
     mark_failure
     mark_message "#{name} is unavailable"
   end

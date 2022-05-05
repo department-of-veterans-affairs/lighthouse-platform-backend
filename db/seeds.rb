@@ -197,9 +197,7 @@ decision_reviews_api.update(
 )
 
 claims_api = Api.create(name: 'claims')
-claims_api.update(
-  acl: 'claims',
-  auth_server_access_key: 'AUTHZ_SERVER_CLAIMS',
+claims_api.update(  auth_server_access_key: 'AUTHZ_SERVER_CLAIMS',
   api_environments_attributes: {
    metadata_url: 'https://api.va.gov/internal/docs/benefits-claims/metadata.json',
    environments_attributes: {
