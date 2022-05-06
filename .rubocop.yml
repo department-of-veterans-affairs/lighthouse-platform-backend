@@ -100,6 +100,7 @@ Metrics/MethodLength:
     - 'consumer_signup'
     - 'build_new_application_payload'
     - 'build_message'
+    - 'add_api_to_consumer'
 Metrics/CyclomaticComplexity:
   IgnoredMethods:
     - 'consumer_signup'

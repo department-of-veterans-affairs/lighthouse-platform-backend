@@ -44,7 +44,13 @@ class UserService
   private
 
   def add_api_to_consumer(api_name, consumer, environment)
-    api_id = ApiRef.find_by(name: api_name.strip)[:api_id]
+    api_ref = ApiRef.find_by(name: api_name.strip)
+    if api_ref.blank?
+      Rails.logger.warn "??? #{api_name.strip} api_ref not found when importing consumer"
+      return
+    end
+
+    api_id = api_ref[:api_id]
     api_model = Api.find(api_id)
     env = Environment.find_by(name: environment)
     api_environment = ApiEnvironment.find_by(environment: env, api: api_model)
