@@ -2,6 +2,8 @@
 
 require 'validators/length'
 require 'validators/malicious_url_protection'
+require 'validators/consumer_has_sandbox_api'
+require 'validators/provided_oauth_params'
 
 module V0
   class Consumers < V0::Base
@@ -22,102 +24,36 @@ module V0
         user
       end
 
-      def kong_signup(user, key_auth, environment = nil)
-        kong_service = environment.eql?(:production) ? Kong::ProductionService : Kong::SandboxService
-        kong_consumer = kong_service.new.consumer_signup(user, key_auth)
-
-        user.consumer.sandbox_gateway_ref = kong_consumer[:kong_id] if environment.nil?
-        user.consumer.prod_gateway_ref = kong_consumer[:kong_id] if environment.present?
-
-        [user, kong_consumer]
-      end
-
-      def okta_signup(user, oauth, environment = nil)
-        okta_service = environment.eql?(:production) ? Okta::ProductionService : Okta::SandboxService
-        okta_consumer = okta_service.new.consumer_signup(user,
-                                                         oauth,
-                                                         application_type: params[:oAuthApplicationType],
-                                                         redirect_uri: params[:oAuthRedirectURI])
-        user.consumer.sandbox_oauth_ref = okta_consumer[:id] if environment.nil?
-        user.consumer.prod_oauth_ref = okta_consumer[:id] if environment.present?
-
-        [user, okta_consumer]
-      end
-
-      def missing_oauth_params_exception
-        Grape::Exceptions::Validation.new(params: %w[oAuthApplicationType oAuthRedirectURI],
-                                          message: 'missing one or more oAuth values')
-      end
-
-      def missing_oauth_params?
-        params[:oAuthApplicationType].blank? || params[:oAuthRedirectURI].blank?
-      end
-
       def send_production_access_emails(request)
         ProductionMailer.consumer_production_access(request).deliver_later
         ProductionMailer.support_production_access(request).deliver_later
       end
 
-      def send_sandbox_welcome_emails(request, kong_consumer, okta_consumer)
-        SandboxMailer.consumer_sandbox_signup(request, kong_consumer, okta_consumer).deliver_later
-        if request[:apis].split(',').include?('addressValidation')
+      def send_sandbox_welcome_emails(request, kong_consumer, okta_consumers)
+        SandboxMailer.consumer_sandbox_signup(request, kong_consumer, okta_consumers).deliver_later
+        if request[:apis].map(&:api_ref).map(&:name).include?('addressValidation')
           SandboxMailer.va_profile_sandbox_signup(request).deliver_later
         end
       end
 
-      def promote_consumer(user, apis_list)
-        key_auth, oauth = ApiService.new.fetch_auth_types apis_list
-
-        _user, kong_consumer = kong_signup(user, key_auth, :production) if key_auth.present?
-        _user, okta_consumer = okta_signup(user, oauth, :production) if oauth.present?
-        [kong_consumer, okta_consumer]
-      end
-
-      def validate_refs(consumer_api_refs)
-        [].tap do |ref|
-          params[:apis].split(',').map do |api_ref|
-            ref << api_ref if consumer_api_refs.include?(api_ref)
-          end
-        end
-      end
-
-      def send_slack_signup_alert
-        Slack::AlertService.new.alert_slack(Figaro.env.slack_signup_channel,
-                                            slack_success_message(slack_signup_message))
-      end
-
-      def slack_signup_message
-        [
-          "#{params[:firstName]}, #{params[:lastName]}: #{slack_email_list}",
-          "Description: #{params[:description]}",
-          'Requested access to:',
-          map_apis(params[:apis]).to_s
-        ].join(" \n")
-      end
-
-      def map_apis(apis)
-        apis.split(',').map { |api| "* #{api}" }.join("\n")
-      end
-
-      def include_va_email?
-        params[:internalApiInfo][:vaEmail].present? if params[:internalApiInfo]
-      end
-
-      def slack_email_list
-        "Contact Email: #{params[:email]}"\
-          "#{include_va_email? ? " | VA Email: #{params[:internalApiInfo][:vaEmail]}" : ''}"
-      end
-
-      def slack_success_message(message)
+      def slack_signup_options
         {
-          attachments: [
-            {
-              color: 'good',
-              fallback: message,
-              text: message,
-              title: 'New User Application'
-            }
-          ]
+          first_name: params[:firstName],
+          last_name: params[:lastName],
+          description: params[:description],
+          apis: params[:apis],
+          email: params[:email],
+          internal_api_info: {
+            va_email: params.dig(:internalApiInfo, :vaEmail)
+          }
+        }
+      end
+
+      def okta_signup_options
+        {
+          application_type: params[:oAuthApplicationType],
+          redirect_uri: params[:oAuthRedirectURI],
+          application_public_key: params[:oAuthPublicKey]
         }
       end
     end
@@ -139,7 +75,10 @@ module V0
         }
       }
       params do
-        requires :apis, type: String, allow_blank: false
+        requires :apis, type: Array[Api],
+                        allow_blank: false,
+                        coerce_with: ->(value) { ApiService.parse(value) },
+                        provided_oauth_params: true
         optional :description, type: String
         requires :email, type: String, allow_blank: false, regexp: /.+@.+/
         requires :firstName, type: String
@@ -149,6 +88,7 @@ module V0
                                     allow_blank: true,
                                     regexp: %r{^(https?://.+|)$},
                                     malicious_url_protection: true
+        optional :oAuthPublicKey, type: JSON
         requires :organization, type: String
         requires :termsOfService, type: Boolean, allow_blank: false, values: [true]
         optional :internalApiInfo, type: Hash do
@@ -165,19 +105,16 @@ module V0
 
         user = user_from_signup_params
 
-        key_auth, oauth = ApiService.new.fetch_auth_types user.consumer.apis_list
-        raise missing_oauth_params_exception if oauth.any? && missing_oauth_params?
-
-        user, kong_consumer = kong_signup(user, key_auth) if key_auth.present?
-        user, okta_consumer = okta_signup(user, oauth) if oauth.present?
-        user.save!
-        user.undiscard if user.discarded?
+        kong_consumer = Kong::ServiceFactory.service(:sandbox).consumer_signup(user)
+        okta_consumers = Okta::ServiceFactory.service(:sandbox).consumer_signup(user, okta_signup_options)
         Event.create(event_type: Event::EVENT_TYPES[:sandbox_signup], content: params)
 
-        send_sandbox_welcome_emails(params, kong_consumer, okta_consumer) if Flipper.enabled? :send_emails
-        send_slack_signup_alert if Flipper.enabled? :send_slack_signup
+        send_sandbox_welcome_emails(params, kong_consumer, okta_consumers) if Flipper.enabled? :send_emails
+        Slack::AlertService.new.send_slack_signup_alert(slack_signup_options) if Flipper.enabled? :send_slack_signup
 
-        present user, with: V0::Entities::ConsumerApplicationEntity, kong: kong_consumer, okta: okta_consumer
+        present user, with: V0::Entities::ConsumerApplicationEntity,
+                      kong_consumer: kong_consumer,
+                      okta_consumers: okta_consumers
       end
 
       desc 'Accepts request for production access', {
@@ -250,43 +187,41 @@ module V0
       end
 
       desc 'Peruses Elasticsearch for a successful consumer first-call (via oauth and/or key-auth)'
+      params do
+        requires :consumerId, type: String, allow_blank: false,
+                              description: 'Consumer ID from Lighthouse Consumer Management Service'
+      end
       get '/:consumerId/statistics' do
-        params do
-          requires :consumerId, type: String, allow_blank: false,
-                                description: 'Consumer ID from Lighthouse Consumer Management Service'
-        end
         consumer = Consumer.find(params[:consumerId])
         first_call = ElasticsearchService.new.first_successful_call consumer
         present first_call, with: V0::Entities::ConsumerStatisticEntity
       end
 
       desc 'Promotes a consumer to the production environment for the provided API(s)'
+      params do
+        requires :apis, type: Array[Api],
+                        allow_blank: false,
+                        description: 'Comma separated values of API Refs for promotion to production',
+                        consumer_has_sandbox_api: true,
+                        coerce_with: ->(value) { ApiService.parse(value) }
+        optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: false
+        optional :oAuthRedirectURI, type: String,
+                                    allow_blank: false,
+                                    regexp: %r{^https?://.+},
+                                    malicious_url_protection: true
+        optional :oAuthPublicKey, type: JSON
+      end
       post '/:consumerId/promotion-requests' do
-        params do
-          requires :apis, type: String, allow_blank: false,
-                          description: 'Comma separated values of API Refs for promotion to production'
-          optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: false
-          optional :oAuthRedirectURI, type: String,
-                                      allow_blank: false,
-                                      regexp: %r{^https?://.+},
-                                      malicious_url_protection: true
-        end
-        status 200
-        consumer = Consumer.find(params[:consumerId])
-        consumer_api_refs = consumer.apis.map(&:api_ref).map(&:name)
+        user = Consumer.find(params[:consumerId]).user
+        params[:apis].map { |api| user.consumer.promote_to_prod(api.api_ref.name) }
 
-        api_refs = validate_refs(consumer_api_refs)
-        raise ApiValidationError if api_refs.empty?
+        user.consumer.apis_list = params[:apis]
+        kong_consumer = Kong::ServiceFactory.service(:production).consumer_signup(user)
+        okta_consumers = Okta::ServiceFactory.service(:production).consumer_signup(user, okta_signup_options)
 
-        begin
-          api_refs.map { |api_ref| consumer.promote_to_prod(api_ref) }
-        rescue
-          raise ApiValidationError
-        end
-        kong_consumer, okta_consumer = promote_consumer(consumer.user, params[:apis])
-        consumer.user.save!
-
-        present consumer.user, with: V0::Entities::ConsumerApplicationEntity, kong: kong_consumer, okta: okta_consumer
+        present user, with: V0::Entities::ConsumerApplicationEntity,
+                      kong_consumer: kong_consumer,
+                      okta_consumers: okta_consumers
       end
     end
   end

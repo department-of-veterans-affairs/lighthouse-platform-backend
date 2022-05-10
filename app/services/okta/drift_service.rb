@@ -5,18 +5,14 @@ module Okta
     def initialize(environment = nil)
       @env = environment
       @client = production? ? Okta::ProductionService : Okta::SandboxService
+      @slack_service = Slack::AlertService.new
     end
 
     def detect_drift
       applications = @client.new.list_applications
       apps_last_day = filter_last_day(applications)
       alert_on_list = detect_unknown_entities(apps_last_day) unless apps_last_day.empty?
-      if alert_on_list.present?
-        @slack_service = Slack::AlertService.new
-        alert_on_list.map do |consumer|
-          alert_slack consumer
-        end
-      end
+      alert_on_list.map { |consumer| alert_slack consumer } if alert_on_list.present?
 
       { success: true }
     end
@@ -30,22 +26,22 @@ module Okta
     end
 
     def detect_unknown_entities(alert_list)
-      alert_list.filter do |app|
-        new_record? app
-      end
+      alert_list.filter { |app| new_record? app }
     end
 
     def alert_slack(consumer)
-      @slack_service ||= Slack::AlertService.new
       message = build_message(consumer)
-      @slack_service.alert_slack(Figaro.env.slack_drift_channel, { text: message })
+      @slack_service.send_message(Figaro.env.slack_drift_channel, { text: message })
     end
 
     def new_record?(application)
       credentials = application[:credentials]
       if credentials[:oauthClient].present? && credentials[:oauthClient][:client_id].present?
         cid = credentials[:oauthClient][:client_id]
-        Consumer.find_by(production? ? { prod_oauth_ref: cid } : { sandbox_oauth_ref: cid }).nil?
+        ConsumerAuthRef.find_by('(key=? or key=?) and value=?',
+                                ConsumerAuthRef::KEYS[:sandbox_acg_oauth_ref],
+                                ConsumerAuthRef::KEYS[:prod_acg_oauth_ref],
+                                cid)&.consumer.blank?
       end
     end
 

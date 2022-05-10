@@ -24,8 +24,10 @@ class ConsumerImportService
         consumer_attributes: {
           description: consumer['description'],
           organization: consumer['organization'],
-          sandbox_gateway_ref: gateway_id,
-          sandbox_oauth_ref: oauth_id,
+          consumer_auth_refs_attributes: [
+            { key: ConsumerAuthRef::KEYS[:sandbox_gateway_ref], value: gateway_id },
+            { key: ConsumerAuthRef::KEYS[:sandbox_acg_oauth_ref], value: oauth_id }
+          ],
           apis_list: consumer['apis'],
           tos_accepted: consumer['tosAccepted']
         }

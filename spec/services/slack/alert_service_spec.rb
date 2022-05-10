@@ -8,7 +8,7 @@ RSpec.describe Slack::AlertService do
 
     it 'uses the respective webhook and message' do
       VCR.use_cassette('slack/alert_200', match_requests_on: [:method]) do
-        result = subject.alert_slack(Figaro.env.slack_drift_channel, { text: 'test' })
+        result = subject.send_message(Figaro.env.slack_drift_channel, { text: 'test' })
         expect(result.ok).to be(true)
       end
     end
@@ -25,7 +25,7 @@ RSpec.describe Slack::AlertService do
         ]
       }
       VCR.use_cassette('slack/signup_alert_200', match_requests_on: [:method]) do
-        result = subject.alert_slack(Figaro.env.slack_signup_channel, message)
+        result = subject.send_message(Figaro.env.slack_signup_channel, message)
         expect(result.ok).to be(true)
       end
     end
@@ -38,7 +38,7 @@ RSpec.describe Slack::AlertService do
           }
         ]
       }
-      expect { subject.alert_slack(Figaro.env.slack_signup_channel, message) }.to raise_error(RuntimeError)
+      expect { subject.send_message(Figaro.env.slack_signup_channel, message) }.to raise_error(RuntimeError)
     end
   end
 end

@@ -98,7 +98,8 @@ Metrics/MethodLength:
     - 'build_user_from_dynamo'
     - 'apply'
     - 'consumer_signup'
-    - 'build_new_application_payload'
+    - 'build_new_acg_application_payload'
+    - 'build_new_ccg_application_payload'
     - 'build_message'
     - 'add_api_to_consumer'
     - 'weekly_report_message'
@@ -106,9 +107,12 @@ Metrics/MethodLength:
 Metrics/CyclomaticComplexity:
   IgnoredMethods:
     - 'consumer_signup'
+    - 'validate_param!'
+    - 'construct_import'
 Metrics/PerceivedComplexity:
   IgnoredMethods:
     - 'consumer_signup'
+    - 'construct_import'
 Rails:
   Enabled: true
 
@@ -127,6 +131,7 @@ Metrics/AbcSize:
   Max: 40
   IgnoredMethods:
     - 'consumer_signup'
+    - 'construct_import'
 
 # removing rule because get_session implies HTTP GET, and informs method
 Naming/AccessorMethodName:
