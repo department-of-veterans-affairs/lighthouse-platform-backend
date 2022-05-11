@@ -32,7 +32,7 @@ class ElasticsearchService
   def request(req, uri)
     req['Content-type'] = 'application/json'
     req['kbn-xsrf'] = true
-    response = @client.start(uri.host, uri.port) do |http|
+    response = @client.start(uri.host, uri.port, use_ssl: uri.to_s.start_with?('https')) do |http|
       http.request(req)
     end
 
