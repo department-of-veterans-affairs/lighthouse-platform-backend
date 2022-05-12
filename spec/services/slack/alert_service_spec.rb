@@ -8,7 +8,7 @@ RSpec.describe Slack::AlertService do
 
     it 'uses the respective webhook and message' do
       VCR.use_cassette('slack/alert_200', match_requests_on: [:method]) do
-        result = subject.alert_slack(Figaro.env.slack_drift_channel, 'test')
+        result = subject.alert_slack(Figaro.env.slack_drift_channel, { text: 'test' })
         expect(result.ok).to be(true)
       end
     end
@@ -28,6 +28,17 @@ RSpec.describe Slack::AlertService do
         result = subject.alert_slack(Figaro.env.slack_signup_channel, message)
         expect(result.ok).to be(true)
       end
+    end
+
+    it 'raises an error when provided an incorrect key' do
+      message = {
+        invalid: [
+          {
+            text: 'test'
+          }
+        ]
+      }
+      expect { subject.alert_slack(Figaro.env.slack_signup_channel, message) }.to raise_error(RuntimeError)
     end
   end
 end

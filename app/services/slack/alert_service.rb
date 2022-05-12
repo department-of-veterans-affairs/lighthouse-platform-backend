@@ -8,11 +8,14 @@ module Slack
 
     def alert_slack(channel, message)
       @key = message.keys.first
-      @client.chat_postMessage(channel: channel, @key => message[@key], as_user: true) if valid_key?(message)
+      @client.chat_postMessage(channel: channel, @key => message[@key], as_user: true) if valid_key?
     end
 
     def valid_key?
-      @key == :attachments || @key == :blocks || @key == :text
+      if @key == :attachments || @key == :blocks || @key == :text
+        return true
+      end
+      raise 'Invalid Slack Key'
     end
   end
 end
