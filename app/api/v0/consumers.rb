@@ -82,7 +82,8 @@ module V0
       end
 
       def send_slack_signup_alert
-        Slack::AlertService.new.alert_slack(Figaro.env.slack_signup_channel, slack_success_message(slack_signup_message))
+        Slack::AlertService.new.alert_slack(Figaro.env.slack_signup_channel,
+                                            slack_success_message(slack_signup_message))
       end
 
       def slack_signup_message

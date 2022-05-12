@@ -81,6 +81,7 @@ Layout/LineLength:
     - 'Gemfile'
     - 'config/initializers/devise.rb'
     - 'config/initializers/simple_form.rb'
+    - 'app/services/slack/report_service.rb'
 Metrics/MethodLength:
   Exclude:
     - 'rakelib/support/shell_command.rb'
@@ -101,6 +102,7 @@ Metrics/MethodLength:
     - 'build_new_application_payload'
     - 'build_message'
     - 'add_api_to_consumer'
+    - 'weekly_report_message'
 Metrics/CyclomaticComplexity:
   IgnoredMethods:
     - 'consumer_signup'
@@ -113,6 +115,10 @@ Rails:
 Rails/Output:
   Exclude:
     - 'lib/tasks/**/*'
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - 'app/services/dynamo_import_service.rb'
 
 Metrics/ClassLength:
   Max: 400
