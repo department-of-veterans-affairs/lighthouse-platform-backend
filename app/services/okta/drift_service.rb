@@ -12,7 +12,7 @@ module Okta
       apps_last_day = filter_last_day(applications)
       alert_on_list = detect_unknown_entities(apps_last_day) unless apps_last_day.empty?
       if alert_on_list.present?
-        @slack_service = SlackService.new
+        @slack_service = Slack::AlertService.new
         alert_on_list.map do |consumer|
           alert_slack consumer
         end
@@ -36,9 +36,9 @@ module Okta
     end
 
     def alert_slack(consumer)
-      @slack_service ||= SlackService.new
+      @slack_service ||= Slack::AlertService.new
       message = build_message(consumer)
-      @slack_service.alert_slack(Figaro.env.slack_drift_channel, message)
+      @slack_service.alert_slack(Figaro.env.slack_drift_channel, { text: message })
     end
 
     def new_record?(application)
