@@ -73,5 +73,14 @@ class Utilities < Base
         Kong::SandboxService.new.list_all_consumers
       end
     end
+
+    resource 'events' do
+      desc 'Imports events from Dynamo DB'
+      get '/' do
+        DynamoImportJob.perform_later
+
+        { success: true }
+      end
+    end
   end
 end
