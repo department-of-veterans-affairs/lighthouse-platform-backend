@@ -3,5 +3,25 @@
 require 'rails_helper'
 
 RSpec.describe Event, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:event) do
+    Event.create({
+                   event_type: Faker::Lorem.unique.word,
+                   event: { apis: 'test' }
+                 })
+  end
+
+  describe 'an event' do
+    it 'is valid' do
+      expect(event).to be_valid
+      expect(Event.all.count).to eq(1)
+    end
+
+    it 'is labeled with an event type' do
+      expect(Event.first.event_type).to eq(event.event_type)
+    end
+
+    it 'has an event included' do
+      expect(Event.first.event).to eq(event.event)
+    end
+  end
 end

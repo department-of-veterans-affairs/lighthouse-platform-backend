@@ -1,0 +1,96 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://slack.com/api/chat.postMessage
+    body:
+      encoding: UTF-8
+      string: as_user=true&channel=%23test&text=test
+    headers:
+      Accept:
+      - application/json; charset=utf-8
+      User-Agent:
+      - Slack Ruby Client/1.0.0
+      Authorization:
+      - Bearer <Slack Token>
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 16 May 2022 20:39:25 GMT
+      Server:
+      - Apache
+      X-Powered-By:
+      - HHVM/4.153.1
+      Access-Control-Allow-Origin:
+      - "*"
+      Referrer-Policy:
+      - no-referrer
+      X-Slack-Backend:
+      - r
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Access-Control-Allow-Headers:
+      - slack-route, x-slack-version-ts, x-b3-traceid, x-b3-spanid, x-b3-parentspanid,
+        x-b3-sampled, x-b3-flags
+      Access-Control-Expose-Headers:
+      - x-slack-req-id, retry-after
+      X-Oauth-Scopes:
+      - chat:write
+      X-Accepted-Oauth-Scopes:
+      - chat:write
+      Expires:
+      - Mon, 26 Jul 1997 05:00:00 GMT
+      Cache-Control:
+      - private, no-cache, no-store, must-revalidate
+      Pragma:
+      - no-cache
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Slack-Req-Id:
+      - 8d9a3b090e43968d57c4f28c1e4bbd28
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '760'
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Envoy-Upstream-Service-Time:
+      - '117'
+      X-Backend:
+      - main_normal main_bedrock_normal_with_overflow main_canary_with_overflow main_bedrock_canary_with_overflow
+        main_control_with_overflow main_bedrock_control_with_overflow
+      X-Server:
+      - slack-www-hhvm-main-iad-la2w
+      X-Slack-Shared-Secret-Outcome:
+      - no-match
+      Via:
+      - envoy-www-iad-3kkb, envoy-edge-pdx-higw
+      X-Edge-Backend:
+      - envoy-www
+      X-Slack-Edge-Shared-Secret-Outcome:
+      - no-match
+    body:
+      encoding: ASCII-8BIT
+      string: '{"ok":true,"channel":"CH4NN3L","ts":"1652733565.659049","message":{"bot_id":"B0T_1D","type":"message","text":"This
+        content can''t be displayed.","user":"US3R","ts":"1652733565.659049","app_id":"APP_1D","team":"T34M_1D","bot_profile":{"id":"BOT_1D","app_id":"APP_1D","name":"Developer Portal","icons":{"image_36":"https://bit.ly/3rTNuWG","image_48":"https://bit.ly/3KjI9hB","image_72":"https://bit.ly/3LmoBKK"},"deleted":false,"updated":1651095778,"team_id":"T34M_1D"},"blocks":[{"type":"section","block_id":"kdKb","text":{"type":"mrkdwn","text":"*Weekly
+        Sign-ups and Access Requests* for Week Ending 05\/16\/2022","verbatim":false}},{"type":"section","block_id":"bSaII","text":{"type":"mrkdwn","text":"*Environment:*
+        sandbox","verbatim":false}},{"type":"divider","block_id":"qootL"},{"type":"section","block_id":"9nX3m","text":{"type":"mrkdwn","text":"*New
+        User Sign-ups* (excludes established users requesting additional APIs)","verbatim":false}},{"type":"section","block_id":"83Ad","fields":[{"type":"mrkdwn","text":"_This
+        week:_ 1 new users","verbatim":false},{"type":"mrkdwn","text":"_All-time:_
+        1 new users","verbatim":false}]},{"type":"divider","block_id":"CkDan"},{"type":"section","block_id":"0ifl","text":{"type":"mrkdwn","text":"*API
+        Access Requests* (includes new users, and established users requesting additional
+        APIs)","verbatim":false}},{"type":"section","block_id":"6CjlM","fields":[{"type":"mrkdwn","text":"_quinoa_:
+        1 new requests (1 all-time)","verbatim":false},{"type":"mrkdwn","text":"_twee_:
+        1 new requests (1 all-time)","verbatim":false}]},{"type":"divider","block_id":"AGlM"},{"type":"section","block_id":"JPn5","text":{"type":"mrkdwn","text":"_Have
+        questions about these numbers? Read <https://bit.ly/3LmoBKK>._","verbatim":false}}]}}'
+  recorded_at: Mon, 16 May 2022 20:39:25 GMT
+recorded_with: VCR 6.1.0
