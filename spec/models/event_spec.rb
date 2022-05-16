@@ -17,11 +17,11 @@ RSpec.describe Event, type: :model do
     end
 
     it 'is labeled with an event type' do
-      expect(Event.first.event_type).to eq(event.event_type)
+      expect(event.event_type).to eq(Event.first.event_type)
     end
 
     it 'has an event included' do
-      expect(Event.first.event).to eq(event.event)
+      expect(event.event).to eq(Event.first.event)
     end
   end
 end
