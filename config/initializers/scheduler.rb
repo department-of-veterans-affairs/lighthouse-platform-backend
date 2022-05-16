@@ -9,5 +9,5 @@ s.cron '0 2 * * *' do
 end
 
 s.cron '0 7 * * 1' do
-  WeeklySignupsReport.perform_now
+  WeeklySignupsReportJob.perform_now
 end
