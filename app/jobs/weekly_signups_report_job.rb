@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class WeeklySignupsReport < ApplicationJob
+class WeeklySignupsReportJob < ApplicationJob
   queue_as :default
 
   def perform(*_args)

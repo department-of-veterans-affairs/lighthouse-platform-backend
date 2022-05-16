@@ -7,6 +7,8 @@ class DynamoImportService
     Event.upsert_all(events)
   end
 
+  private
+
   def build_events(events)
     events.map { |event| { event_type: Event::EVENT_TYPES[:sandbox_signup], event: event } }
   end

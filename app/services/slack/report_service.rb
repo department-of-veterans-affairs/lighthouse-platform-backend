@@ -47,10 +47,10 @@ module Slack
 
     def manage_calculations(event, calc_object, is_current)
       email = event['event']['email']
-      calc_object[:all_time_signups] << email if is_current.nil? && calc_object[:all_time_signups].exclude?(email)
-      if !is_current.nil? && (calc_object[:new_signups].exclude?(email) && calc_object[:all_time_signups].exclude?(email))
+      if is_current && (calc_object[:new_signups].exclude?(email) && calc_object[:all_time_signups].exclude?(email))
         calc_object[:new_signups] << email
       end
+      calc_object[:all_time_signups] << email if calc_object[:all_time_signups].exclude?(email)
     end
 
     def build_calculation_array

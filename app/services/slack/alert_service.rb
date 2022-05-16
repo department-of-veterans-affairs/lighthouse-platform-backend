@@ -12,9 +12,8 @@ module Slack
     end
 
     def valid_key?
-      if @key == :attachments || @key == :blocks || @key == :text
-        return true
-      end
+      return true if @key == :attachments || @key == :blocks || @key == :text
+
       raise 'Invalid Slack Key'
     end
   end
