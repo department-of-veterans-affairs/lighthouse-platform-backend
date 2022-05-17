@@ -72,7 +72,7 @@ module Slack
           },
           {
             text: {
-              text: "*Environment:* #{environment}",
+              text: "*Environment:* #{Figaro.env.dsva_environment}",
               type: 'mrkdwn'
             },
             type: 'section'
