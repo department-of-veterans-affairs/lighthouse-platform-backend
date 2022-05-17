@@ -10,6 +10,11 @@ services:
       - 4001:8001
       - 4000:8000
 
+  prod-kong:
+    ports:
+      - 4003:8001
+      - 4002:8000
+
   elasticsearch:
     ports:
       - 9200:9200
