@@ -31,6 +31,23 @@ describe V0::Consumers, type: :request do
     api.update!(acl: nil)
   end
 
+  describe 'lists consumers' do
+    let(:user) { create(:user) }
+    let(:consumer) { create(:consumer, user_id: user.id) }
+
+    before do
+      consumer
+    end
+
+    it 'that are kept' do
+      get '/platform-backend/v0/consumers'
+      first_consumer = JSON.parse(response.body).first
+      expect(response.status).to eq(200)
+      expect(first_consumer['id']).to eq(consumer.id)
+      expect(first_consumer['email']).to eq(consumer.user.email)
+    end
+  end
+
   describe 'accepts signups from dev portal' do
     context 'when signup is successful' do
       it 'creates the respective user, consumer and apis via the apply page' do
