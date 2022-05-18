@@ -122,6 +122,13 @@ module V0
     end
 
     resource 'consumers' do
+      desc 'Lists all kept consumers'
+      get '/' do
+        consumers = Consumer.kept
+
+        present consumers, with: V0::Entities::ConsumerEntity
+      end
+
       desc 'Accept form submission from developer-portal', {
         deprecated: true,
         headers: {
