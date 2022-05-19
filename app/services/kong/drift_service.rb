@@ -4,7 +4,7 @@ module Kong
   class DriftService
     def initialize(environment = nil)
       @env = environment
-        @client = production? ? Kong::ProductionService : Kong::SandboxService
+        @client = Kong::SandboxService
      end
 
     def detect_drift
