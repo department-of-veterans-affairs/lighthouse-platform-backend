@@ -11,6 +11,5 @@ FactoryBot.define do
         event[:event] = build(:sandbox_signup_request, :mimic_event)
       end
     end
-    # "./app/services/dynamo_import_service.rb",0,13,10,0,10
   end
 end
