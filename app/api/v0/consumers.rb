@@ -172,7 +172,7 @@ module V0
         user, okta_consumer = okta_signup(user, oauth) if oauth.present?
         user.save!
         user.undiscard if user.discarded?
-        Event.create(event_type: Event::EVENT_TYPES[:sandbox_signup], event: params)
+        Event.create(event_type: Event::EVENT_TYPES[:sandbox_signup], content: params)
 
         send_sandbox_welcome_emails(params, kong_consumer, okta_consumer) if Flipper.enabled? :send_emails
         send_slack_signup_alert if Flipper.enabled? :send_slack_signup
