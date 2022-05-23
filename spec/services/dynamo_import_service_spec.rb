@@ -38,8 +38,8 @@ RSpec.describe DynamoImportService do
 
   describe 'dynamo service' do
     it 'provides an event builder' do
-      results = subject.send(:build_events, dynamo_mock_response)
-      expect(results.first[:content]).to eq(dynamo_mock_response.first)
+      results = subject.send(:build_events, dynamo_mock_response.items)
+      expect(results.first[:content]).to eq(dynamo_mock_response.items.first)
     end
 
     it 'mass upserts all' do
