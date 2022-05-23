@@ -19,12 +19,12 @@ class Utilities < Base
 
         { jid: job.job_id }
       end
-
+      
       desc 'Imports events from Dynamo DB'
       post '/event-migration-requests' do
-        DynamoImportJob.perform_later
-
-        { success: true }
+        job = DynamoImportJob.perform_later
+        
+        { jid: job.job_id }
       end
     end
 
