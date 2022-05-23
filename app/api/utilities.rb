@@ -19,6 +19,13 @@ class Utilities < Base
 
         { jid: job.job_id }
       end
+
+      desc 'Imports events from Dynamo DB'
+      post '/event-migration-requests' do
+        DynamoImportJob.perform_later
+
+        { success: true }
+      end
     end
 
     resource 'consumers' do
@@ -71,15 +78,6 @@ class Utilities < Base
       desc 'Return list Kong consumers'
       get '/consumers' do
         Kong::SandboxService.new.list_all_consumers
-      end
-    end
-
-    resource 'events' do
-      desc 'Imports events from Dynamo DB'
-      get '/' do
-        DynamoImportJob.perform_later
-
-        { success: true }
       end
     end
   end
