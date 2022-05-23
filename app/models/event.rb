@@ -4,7 +4,11 @@ class Event < ApplicationRecord
   validates :event_type, presence: true
   validates :content, presence: true
   serialize :content
-  scope :timeframe, ->(span) { where(created_at: span) }
+  scope :timeframe, ->(timeframe) { where(created_at: timeframe) }
 
   EVENT_TYPES = { sandbox_signup: 'sandbox_signup' }.freeze
+
+  def include_api?(ref)
+    content['apis'].split(',').include?(ref) if content['apis'].present?
+  end
 end

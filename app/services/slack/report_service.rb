@@ -3,58 +3,49 @@
 module Slack
   class ReportService < AlertService
     def send_weekly_report
-      time_span_signups, all_time_signups = calculate_signups
       totals = calculate_new_and_all_time
-      message = weekly_report_message('week', time_span_signups, all_time_signups, totals)
+      new_signups = totals.pluck(:new_signups).flatten.uniq.count
+      all_time_signups = totals.pluck(:all_time_signups).flatten.uniq.count
+      message = weekly_report_message('week', new_signups, all_time_signups, totals)
       alert_slack(Figaro.env.slack_signup_channel, message)
     end
 
     private
-
-    def calculate_signups
-      last_weeks_emails = Event.timeframe(1.week.ago..).pluck('content').pluck('email').uniq
-      all_time_emails = Event.timeframe(..1.week.ago).pluck('content').pluck('email').uniq
-      time_span_signups = last_weeks_emails.filter do |email|
-        all_time_emails.exclude?(email)
-      end
-      total_signups = all_time_emails.concat(time_span_signups).count
-
-      [time_span_signups.count, total_signups]
-    end
 
     def calculate_new_and_all_time
       current_week_count = Event.timeframe(1.week.ago..)
       all_time_count = Event.timeframe(..1.week.ago)
       calculations = build_calculation_array
 
-      all_time_count.map do |event|
-        handle_event_filter(event, calculations) if apis?(event)
-      end
-
-      current_week_count.map do |event|
-        handle_event_filter(event, calculations, true) if apis?(event)
+      ApiRef.all.map(&:name).map do |ref|
+        calc_object = calculations.select { |calc| calc[:key] == ref }.first
+        all_time_signups(calc_object, all_time_count, ref)
+        current_week_signups(calc_object, current_week_count, ref)
       end
 
       calculations
+    end
+
+    def all_time_signups(calc_object, all_time_count, ref)
+      all_time_count.all.map do |e|
+        email = e[:content]['email']
+        calc_object[:all_time_signups] << email if e.include_api?(ref) && email?(calc_object[:all_time_signups], email)
+      end
+    end
+
+    def current_week_signups(calc_object, current_week, ref)
+      current_week.map do |e|
+        email = e[:content]['email']
+        calc_object[:new_signups] << email if email?(calc_object[:all_time_signups], email) && e.include_api?(ref)
+      end
     end
 
     def apis?(event)
       event['content']['apis'].present?
     end
 
-    def handle_event_filter(event, calculations, is_current = nil)
-      event['content']['apis'].split(',').map do |api_ref|
-        calc_object = calculations.find { |api| api[:key] == api_ref }
-        manage_calculations(event, calc_object, is_current) if calc_object
-      end
-    end
-
-    def manage_calculations(event, calc_object, is_current)
-      email = event['content']['email']
-      if is_current && (calc_object[:new_signups].exclude?(email) && calc_object[:all_time_signups].exclude?(email))
-        calc_object[:new_signups] << email
-      end
-      calc_object[:all_time_signups] << email if calc_object[:all_time_signups].exclude?(email)
+    def email?(array, email)
+      array.exclude?(email)
     end
 
     def build_calculation_array

@@ -17,12 +17,6 @@ RSpec.describe Slack::ReportService do
       end
     end
 
-    it 'calculates the time span and total signups' do
-      time_span_total, total = subject.send(:calculate_signups)
-      expect(time_span_total).to eq(1)
-      expect(total).to eq(1)
-    end
-
     it 'calculates new and all time API signups via the events table' do
       results = subject.send(:calculate_new_and_all_time)
       api_ref = ApiRef.first.name
