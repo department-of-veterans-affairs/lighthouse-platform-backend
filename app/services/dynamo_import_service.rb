@@ -10,6 +10,6 @@ class DynamoImportService
   private
 
   def build_events(events)
-    events.map { |event| { event_type: Event::EVENT_TYPES[:sandbox_signup], content: event } }
+    events.map { |event| { event_type: Event::EVENT_TYPES[:sandbox_signup], content: event, created_at: event['createdAt'] } }
   end
 end
