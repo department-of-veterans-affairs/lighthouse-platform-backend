@@ -5,15 +5,15 @@ module Slack
     def send_weekly_report
       time_span_signups, all_time_signups = calculate_signups
       totals = calculate_new_and_all_time
-      message = weekly_report_message('week', 'sandbox', time_span_signups, all_time_signups, totals)
+      message = weekly_report_message('week', time_span_signups, all_time_signups, totals)
       alert_slack(Figaro.env.slack_signup_channel, message)
     end
 
     private
 
     def calculate_signups
-      last_weeks_emails = Event.new.sandbox_signup_per_span(1.week.ago..).pluck('event').pluck('email').uniq
-      all_time_emails = Event.new.sandbox_signup_per_span(..1.week.ago).pluck('event').pluck('email').uniq
+      last_weeks_emails = Event.timeframe(1.week.ago..).pluck('content').pluck('email').uniq
+      all_time_emails = Event.timeframe(..1.week.ago).pluck('content').pluck('email').uniq
       time_span_signups = last_weeks_emails.filter do |email|
         all_time_emails.exclude?(email)
       end
@@ -23,30 +23,34 @@ module Slack
     end
 
     def calculate_new_and_all_time
-      current_week_count = Event.new.sandbox_signup_per_span(1.week.ago..)
-      all_time_count = Event.new.sandbox_signup_per_span(..1.week.ago)
+      current_week_count = Event.timeframe(1.week.ago..)
+      all_time_count = Event.timeframe(..1.week.ago)
       calculations = build_calculation_array
 
       all_time_count.map do |event|
-        handle_event_filter(event, calculations) if event['event']['apis'].present?
+        handle_event_filter(event, calculations) if apis?(event)
       end
 
       current_week_count.map do |event|
-        handle_event_filter(event, calculations, true) if event['event']['apis'].present?
+        handle_event_filter(event, calculations, true) if apis?(event)
       end
 
       calculations
     end
 
+    def apis?(event)
+      event['content']['apis'].present?
+    end
+
     def handle_event_filter(event, calculations, is_current = nil)
-      event['event']['apis'].split(',').map do |api_ref|
+      event['content']['apis'].split(',').map do |api_ref|
         calc_object = calculations.find { |api| api[:key] == api_ref }
         manage_calculations(event, calc_object, is_current) if calc_object
       end
     end
 
     def manage_calculations(event, calc_object, is_current)
-      email = event['event']['email']
+      email = event['content']['email']
       if is_current && (calc_object[:new_signups].exclude?(email) && calc_object[:all_time_signups].exclude?(email))
         calc_object[:new_signups] << email
       end
@@ -59,7 +63,7 @@ module Slack
       end
     end
 
-    def weekly_report_message(duration, environment, time_span_signups, all_time_signups, totals)
+    def weekly_report_message(duration, time_span_signups, all_time_signups, totals)
       end_date = DateTime.now.strftime('%m/%d/%Y')
       message = {
         blocks: [

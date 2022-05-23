@@ -6,7 +6,7 @@ RSpec.describe Event, type: :model do
   let(:event) do
     Event.create({
                    event_type: Faker::Lorem.unique.word,
-                   event: { apis: 'test' }
+                   content: { apis: 'test' }
                  })
   end
 
@@ -21,7 +21,7 @@ RSpec.describe Event, type: :model do
     end
 
     it 'has an event included' do
-      expect(event.event).to eq(Event.first.event)
+      expect(event.content).to eq(Event.first.content)
     end
   end
 end
