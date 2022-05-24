@@ -7,15 +7,17 @@ module Kong
         @client = Kong::SandboxService
      end
 
-    def detect_drift
+    def pull_kong_consumers
       kong_consumers = @client.new.list_all_consumers
+    end
+
+    def time_sort
       time_array = [].tap do |consumer_time|
-        kong_consumers.each do |consumer|
+        pull_kong_consumers.each do |consumer|
           consumer_time << consumer['created_at']
         end
       end
       time_array.sort {|a,b| b <=> a}
-
     end
   end
 end
