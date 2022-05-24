@@ -19,24 +19,17 @@ module Slack
 
       ApiRef.all.map(&:name).map do |ref|
         calc_object = calculations.select { |calc| calc[:key] == ref }.first
-        all_time_signups(calc_object, all_time_count, ref)
-        current_week_signups(calc_object, current_week_count, ref)
+        add_to_calculations(calc_object, all_time_count, ref, :all_time_signups)
+        add_to_calculations(calc_object, current_week_count, ref, :new_signups)
       end
 
       calculations
     end
 
-    def all_time_signups(calc_object, all_time_count, ref)
-      all_time_count.all.map do |e|
+    def add_to_calculations(calc_object, count_array, ref, symbol)
+      count_array.all.map do |e|
         email = e[:content]['email']
-        calc_object[:all_time_signups] << email if e.include_api?(ref) && email?(calc_object[:all_time_signups], email)
-      end
-    end
-
-    def current_week_signups(calc_object, current_week, ref)
-      current_week.map do |e|
-        email = e[:content]['email']
-        calc_object[:new_signups] << email if email?(calc_object[:all_time_signups], email) && e.include_api?(ref)
+        calc_object[symbol] << email if e.include_api?(ref) && email?(calc_object[:all_time_signups], email)
       end
     end
 
