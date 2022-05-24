@@ -19,10 +19,13 @@ module Kong
       end
       time_array.sort {|a,b| b <=> a}
     end
+
+    def last_20_consumers
+      [].tap do |last_20_consumers|
+        time_sort[0..19].each do |obj|
+          last_20_consumers << obj
+        end
+      end
+    end
   end
 end
-
-#grab consumers from kong
-#grab consumers from lcms
-#take each consumers found and match them
-#left over consumers added to lcms
