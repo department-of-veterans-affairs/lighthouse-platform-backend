@@ -14,7 +14,7 @@ module Kong
 
     def time_sort
       pull_kong_consumers.filter do |consumer|
-        consumer_time << consumer if Time.at(consumer['created_at']) == Date.yesterday
+        consumer if consumer['created_at'] >= Date.yesterday.to_time.to_i
       end
     end
   end
