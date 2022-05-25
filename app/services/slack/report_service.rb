@@ -3,51 +3,39 @@
 module Slack
   class ReportService < AlertService
     def send_weekly_report
-      totals = calculate_new_and_all_time
-      new_signups = totals.pluck(:new_signups).flatten.uniq.count
-      all_time_signups = totals.pluck(:all_time_signups).flatten.uniq.count
-      message = weekly_report_message('week', new_signups, all_time_signups, totals)
+      message = weekly_report_message('week', query_events)
       alert_slack(Figaro.env.slack_signup_channel, message)
     end
 
     private
 
-    def calculate_new_and_all_time
-      current_week_count = Event.timeframe(1.week.ago..)
-      all_time_count = Event.timeframe(..1.week.ago)
-      calculations = build_calculation_array
-
-      ApiRef.all.map(&:name).map do |ref|
-        calc_object = calculations.select { |calc| calc[:key] == ref }.first
-        add_to_calculations(calc_object, all_time_count, ref, :all_time_signups)
-        add_to_calculations(calc_object, current_week_count, ref, :new_signups)
-      end
-
-      calculations
+    def sort_refs
+      ApiRef.all.map(&:name).uniq.sort
     end
 
-    def add_to_calculations(calc_object, count_array, ref, symbol)
-      count_array.all.map do |e|
-        email = e[:content]['email']
-        calc_object[symbol] << email if e.include_api?(ref) && email?(calc_object[:all_time_signups], email)
+    def generate_query
+      sort_refs.map do |ref|
+        "#{new_query(ref)} #{all_time_query(ref)}"
       end
     end
 
-    def apis?(event)
-      event['content']['apis'].present?
+    def new_query(ref)
+      "SUM((case WHEN (created_at > '#{1.week.ago}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{1.week.ago}') AND content->>'apis' LIKE '%#{ref}%') then 1 else 0 end)) as #{ref}_new_count,"
     end
 
-    def email?(array, email)
-      array.exclude?(email)
+    def all_time_query(ref)
+      "COUNT(DISTINCT (case when created_at < '#{1.week.ago}' AND content->>'apis' LIKE '%#{ref}%' then content->'email' end)) as #{ref}_all_count,"
     end
 
-    def build_calculation_array
-      [].tap do |a|
-        ApiRef.order(:name).map(&:name).uniq.map { |ref| a << { key: ref.to_s, new_signups: [], all_time_signups: [] } }
-      end
+    def build_query
+      "SELECT #{generate_query.join(' ')} SUM(case WHEN (created_at > '#{1.week.ago}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{1.week.ago}')) then 1 else 0 end) as weekly_count, COUNT(DISTINCT content->'email') as total_count FROM events WHERE event_type='sandbox_signup';"
     end
 
-    def weekly_report_message(duration, time_span_signups, all_time_signups, totals)
+    def query_events
+      ActiveRecord::Base.connection.execute(build_query).first
+    end
+
+    def weekly_report_message(duration, totals)
       end_date = DateTime.now.strftime('%m/%d/%Y')
       message = {
         blocks: [
@@ -78,11 +66,11 @@ module Slack
           {
             fields: [
               {
-                text: "_This week:_ #{time_span_signups} new users",
+                text: "_This week:_ #{totals['weekly_count']} new users",
                 type: 'mrkdwn'
               },
               {
-                text: "_All-time:_ #{all_time_signups} new users",
+                text: "_All-time:_ #{totals['total_count']} new users",
                 type: 'mrkdwn'
               }
             ],
@@ -100,20 +88,22 @@ module Slack
           }
         ]
       }
-
-      while totals.length.positive?
+      refs = sort_refs
+      while refs.length.positive?
         # fields cannot be longer than 10 or slack returns an error
-        ten_at_a_time = totals.slice(0, 10)
+        ten_at_a_time = refs.slice(0, 10)
         fields = [].tap do |f|
           ten_at_a_time.map do |api|
+            weekly = totals["#{api}_new_count"]
+            all_time = totals["#{api}_all_count"]
             f << {
-              text: "_#{api[:key]}_: #{api[:new_signups].count} new requests (#{api[:all_time_signups].count} all-time)",
+              text: "_#{api}_: #{weekly} new requests (#{all_time} all-time)",
               type: 'mrkdwn'
             }
           end
         end
         message[:blocks] << { type: 'section', fields: fields }
-        totals.slice!(0, 10)
+        refs.slice!(0, 10)
       end
       message[:blocks] << { type: 'divider' }
       message[:blocks] << {

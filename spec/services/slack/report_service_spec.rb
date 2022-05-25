@@ -18,21 +18,30 @@ RSpec.describe Slack::ReportService do
     end
 
     it 'calculates new and all time API signups via the events table' do
-      results = subject.send(:calculate_new_and_all_time)
-      api_ref = ApiRef.first.name
-      grab_ref = results.filter { |api| api[:key] == api_ref }
-      expect(grab_ref.first[:new_signups].count).to eq(1)
+      results = subject.send(:generate_query).first
+      api_ref = ApiRef.all.map(&:name)
+      expect(results).to include(api_ref.first).or include(api_ref.last)
     end
 
-    it 'builds an array to assist in calculating signups' do
-      results = subject.send(:build_calculation_array)
+    it 'build the query for new signups' do
       api_ref = ApiRef.first.name
-      names = results.pluck(:key)
+      results = subject.send(:new_query, api_ref)
+      expect(results).to include("content->>'apis' LIKE '%#{api_ref}%'")
+    end
 
-      expect(names).to include(api_ref)
-      expect(results.first).to have_key(:key)
-      expect(results.first).to have_key(:new_signups)
-      expect(results.first).to have_key(:all_time_signups)
+    it 'build the query for all time signups' do
+      api_ref = ApiRef.first.name
+      results = subject.send(:all_time_query, api_ref)
+      expect(results).to include("content->>'apis' LIKE '%#{api_ref}%'")
+    end
+
+    it 'builds the query for connection' do
+      api_refs = ApiRef.all.map(&:name)
+      results = subject.send(:build_query)
+      expect(results).to include(api_refs.first)
+      expect(results).to include(api_refs.last)
+      expect(results).to include('weekly_count')
+      expect(results).to include('total_count')
     end
   end
 end
