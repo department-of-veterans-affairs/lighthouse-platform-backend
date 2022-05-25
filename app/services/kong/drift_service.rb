@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'date'
 
 module Kong
   class DriftService
@@ -12,19 +13,8 @@ module Kong
     end
 
     def time_sort
-      time_array = [].tap do |consumer_time|
-        pull_kong_consumers.each do |consumer|
-          consumer_time << consumer['created_at']
-        end
-      end
-      time_array.sort {|a,b| b <=> a}
-    end
-
-    def last_20_consumers
-      [].tap do |last_20_consumers|
-        time_sort[0..19].each do |obj|
-          last_20_consumers << obj
-        end
+      pull_kong_consumers.filter do |consumer|
+        consumer_time << consumer if Time.at(consumer['created_at']) == Date.yesterday
       end
     end
   end
