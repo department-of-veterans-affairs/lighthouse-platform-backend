@@ -3,7 +3,6 @@
 class Event < ApplicationRecord
   validates :event_type, presence: true
   validates :content, presence: true
-  serialize :content
   scope :timeframe, ->(timeframe) { where(created_at: timeframe) }
 
   EVENT_TYPES = { sandbox_signup: 'sandbox_signup' }.freeze

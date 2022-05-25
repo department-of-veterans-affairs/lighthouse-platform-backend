@@ -135,7 +135,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_09_154414) do
 
   create_table "events", force: :cascade do |t|
     t.string "event_type", null: false
-    t.text "content", null: false
+    t.jsonb "content", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
