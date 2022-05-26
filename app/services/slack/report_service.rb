@@ -9,6 +9,13 @@ module Slack
 
     private
 
+    def ref_builder(ref)
+      {
+        all: "#{ref.downcase}_all_count",
+        new: "#{ref.downcase}_new_count"
+      }
+    end
+
     def sort_refs
       ApiRef.all.map(&:name).uniq.sort
     end
@@ -24,11 +31,11 @@ module Slack
     end
 
     def new_query(ref)
-      "SUM((case WHEN (created_at > '#{1.week.ago}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{1.week.ago}') AND #{like_query(ref)}) then 1 else 0 end)) as #{ref}_new_count,"
+      "SUM((case WHEN (created_at > '#{1.week.ago}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{1.week.ago}') AND #{like_query(ref)}) then 1 else 0 end)) as \"#{ref_buider(ref)[:new]}\","
     end
 
     def all_time_query(ref)
-      "COUNT(DISTINCT (case when created_at < '#{1.week.ago}' AND #{like_query(ref)} then content->'email' end)) as #{ref}_all_count,"
+      "COUNT(DISTINCT (case when created_at < '#{1.week.ago}' AND #{like_query(ref)} then content->'email' end)) as \"#{ref_buider(ref)[:all]}\","
     end
 
     def build_query
@@ -98,8 +105,8 @@ module Slack
         ten_at_a_time = refs.slice(0, 10)
         fields = [].tap do |f|
           ten_at_a_time.map do |api|
-            weekly = totals["#{api.downcase}_new_count"]
-            all_time = totals["#{api.downcase}_all_count"]
+            weekly = totals[ref_builder(api)[:new]]
+            all_time = totals[ref_builder(api)[:all]]
             f << {
               text: "_#{api}_: #{weekly} new requests (#{all_time} all-time)",
               type: 'mrkdwn'
