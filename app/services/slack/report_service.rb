@@ -19,12 +19,16 @@ module Slack
       end
     end
 
+    def like_query(ref)
+      "(content->>'apis' like '#{ref}' or content->>'apis' like '%,#{ref}' or content->>'apis' like '#{ref},%' or content->>'apis' like '%,#{ref},%')"
+    end
+
     def new_query(ref)
-      "SUM((case WHEN (created_at > '#{1.week.ago}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{1.week.ago}') AND content->>'apis' LIKE '%#{ref}%') then 1 else 0 end)) as #{ref}_new_count,"
+      "SUM((case WHEN (created_at > '#{1.week.ago}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{1.week.ago}') AND #{like_query(ref)}) then 1 else 0 end)) as #{ref}_new_count,"
     end
 
     def all_time_query(ref)
-      "COUNT(DISTINCT (case when created_at < '#{1.week.ago}' AND content->>'apis' LIKE '%#{ref}%' then content->'email' end)) as #{ref}_all_count,"
+      "COUNT(DISTINCT (case when created_at < '#{1.week.ago}' AND #{like_query(ref)} then content->'email' end)) as #{ref}_all_count,"
     end
 
     def build_query
@@ -94,8 +98,8 @@ module Slack
         ten_at_a_time = refs.slice(0, 10)
         fields = [].tap do |f|
           ten_at_a_time.map do |api|
-            weekly = totals["#{api}_new_count"]
-            all_time = totals["#{api}_all_count"]
+            weekly = totals["#{api.downcase}_new_count"]
+            all_time = totals["#{api.downcase}_all_count"]
             f << {
               text: "_#{api}_: #{weekly} new requests (#{all_time} all-time)",
               type: 'mrkdwn'
