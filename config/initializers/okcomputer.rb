@@ -23,7 +23,7 @@ end
 class KongCheck < BaseCheck
   def check
     Kong::SandboxService.new.list_consumers ? process_success : process_failure
-  rescue
+  rescue StandardError
     process_failure
   end
 
@@ -37,7 +37,7 @@ end
 class DynamoCheck < BaseCheck
   def check
     DynamoService.new.fetch_dynamo_db ? process_success : process_failure
-  rescue
+  rescue StandardError
     process_failure
   end
 
@@ -51,7 +51,7 @@ end
 class OktaCheck < BaseCheck
   def check
     Okta::SandboxService.new.list_applications ? process_success : process_failure
-  rescue
+  rescue StandardError
     process_failure
   end
 
@@ -65,7 +65,7 @@ end
 class ElasticsearchCheck < BaseCheck
   def check
     ElasticsearchService.new.search_connection ? process_success : process_failure
-  rescue
+  rescue StandardError
     process_failure
   end
 

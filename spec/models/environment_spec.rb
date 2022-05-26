@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Environment, type: :model do
   subject do
-    Environment.new(name: 'OuterSpace')
+    described_class.new(name: 'OuterSpace')
   end
 
   describe 'tests a valid Environment model' do

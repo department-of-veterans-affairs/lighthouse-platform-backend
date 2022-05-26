@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Slack::AlertService do
   describe 'slack service' do
-    subject { Slack::AlertService.new }
+    subject { described_class.new }
 
     it 'uses the respective webhook and message' do
       VCR.use_cassette('slack/alert_200', match_requests_on: [:method]) do

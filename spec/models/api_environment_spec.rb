@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe ApiEnvironment, type: :model do
   subject do
-    ApiEnvironment.new(api_id: api.id,
-                       environments_attributes: { name: 'TheMoon' },
-                       metadata_url: 'http://outofthisworldsuits.com')
+    described_class.new(api_id: api.id,
+                        environments_attributes: { name: 'TheMoon' },
+                        metadata_url: 'http://outofthisworldsuits.com')
   end
 
   let :api do

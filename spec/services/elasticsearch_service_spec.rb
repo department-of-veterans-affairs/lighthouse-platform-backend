@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ElasticsearchService do
   describe '.intialize' do
-    subject { ElasticsearchService.new }
+    subject { described_class.new }
 
     it 'uses regular Net::HTTP to make a connection' do
       expect(subject.client.name).to eq('Net::HTTP')

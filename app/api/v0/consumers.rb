@@ -31,9 +31,9 @@ module V0
 
       def send_sandbox_welcome_emails(request, kong_consumer, okta_consumers)
         SandboxMailer.consumer_sandbox_signup(request, kong_consumer, okta_consumers).deliver_later
-        if request[:apis].map(&:api_ref).map(&:name).include?('addressValidation')
-          SandboxMailer.va_profile_sandbox_signup(request).deliver_later
-        end
+        return unless request[:apis].map(&:api_ref).map(&:name).include?('addressValidation')
+
+        SandboxMailer.va_profile_sandbox_signup(request).deliver_later
       end
 
       def slack_signup_options

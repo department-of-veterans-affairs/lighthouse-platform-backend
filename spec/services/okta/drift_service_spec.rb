@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Okta::DriftService do
-  subject { Okta::DriftService.new }
+  subject { described_class.new }
 
   let(:mock) do
     [

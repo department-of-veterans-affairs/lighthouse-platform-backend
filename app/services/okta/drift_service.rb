@@ -36,13 +36,13 @@ module Okta
 
     def new_record?(application)
       credentials = application[:credentials]
-      if credentials[:oauthClient].present? && credentials[:oauthClient][:client_id].present?
-        cid = credentials[:oauthClient][:client_id]
-        ConsumerAuthRef.find_by('(key=? or key=?) and value=?',
-                                ConsumerAuthRef::KEYS[:sandbox_acg_oauth_ref],
-                                ConsumerAuthRef::KEYS[:prod_acg_oauth_ref],
-                                cid)&.consumer.blank?
-      end
+      return unless credentials[:oauthClient].present? && credentials[:oauthClient][:client_id].present?
+
+      cid = credentials[:oauthClient][:client_id]
+      ConsumerAuthRef.find_by('(key=? or key=?) and value=?',
+                              ConsumerAuthRef::KEYS[:sandbox_acg_oauth_ref],
+                              ConsumerAuthRef::KEYS[:prod_acg_oauth_ref],
+                              cid)&.consumer.blank?
     end
 
     def production?

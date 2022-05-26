@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe Api, type: :model do
   subject do
-    Api.new(name: 'Appeals Status API',
-            acl: 'lca')
+    described_class.new(name: 'Appeals Status API',
+                        acl: 'lca')
   end
 
   describe 'tests a valid Api model' do

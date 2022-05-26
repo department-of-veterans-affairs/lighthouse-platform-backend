@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe ApiRef, type: :model do
   subject do
-    ApiRef.new(name: 'swingline_staplers',
-               api_id: api.id)
+    described_class.new(name: 'swingline_staplers',
+                        api_id: api.id)
   end
 
   let :api do

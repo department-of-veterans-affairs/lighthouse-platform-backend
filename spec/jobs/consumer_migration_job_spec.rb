@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ConsumerMigrationJob, type: :job do
   include ActiveJob::TestHelper
 
-  subject(:job) { ConsumerMigrationJob.perform_later }
+  subject(:job) { described_class.perform_later }
 
   after do
     clear_enqueued_jobs

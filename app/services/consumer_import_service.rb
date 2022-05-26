@@ -59,14 +59,14 @@ class ConsumerImportService
   def update_dynamo_consumers
     @dynamo_consumers.map do |dyn_consumer|
       dyn_consumer = dyn_consumer.with_indifferent_access
-      if dyn_consumer['tosAccepted']
-        okta_application = @okta_applications.find { |okta_app| okta_app['id'] == dyn_consumer['okta_application_id'] }
-        if okta_application
-          user_model = build_user_from_dynamo(dyn_consumer, nil, okta_application['id'])
+      next unless dyn_consumer['tosAccepted']
 
-          UserService.new.construct_import(user_model, 'sandbox')
-        end
-      end
+      okta_application = @okta_applications.find { |okta_app| okta_app['id'] == dyn_consumer['okta_application_id'] }
+      next unless okta_application
+
+      user_model = build_user_from_dynamo(dyn_consumer, nil, okta_application['id'])
+
+      UserService.new.construct_import(user_model, 'sandbox')
     end
   end
 end

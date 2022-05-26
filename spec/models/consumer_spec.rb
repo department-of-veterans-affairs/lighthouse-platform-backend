@@ -4,18 +4,20 @@ require 'rails_helper'
 
 RSpec.describe Consumer, type: :model do
   subject do
-    Consumer.new(description: test_description,
-                 organization: 'Test User Organization',
-                 tos_accepted_at: tos_test_time,
-                 tos_version: 1,
-                 consumer_auth_refs_attributes: [
-                   { key: ConsumerAuthRef::KEYS[:sandbox_gateway_ref], value: auth_info[:sandbox][:gateway] },
-                   { key: ConsumerAuthRef::KEYS[:sandbox_acg_oauth_ref], value: auth_info[:sandbox][:acg_oauth] },
-                   { key: ConsumerAuthRef::KEYS[:sandbox_ccg_oauth_ref], value: auth_info[:sandbox][:ccg_oauth] },
-                   { key: ConsumerAuthRef::KEYS[:prod_gateway_ref], value: auth_info[:prod][:gateway] },
-                   { key: ConsumerAuthRef::KEYS[:prod_acg_oauth_ref], value: auth_info[:prod][:acg_oauth] }
-                 ],
-                 user_id: parent[:id])
+    described_class.new(description: test_description,
+                        organization: 'Test User Organization',
+                        tos_accepted_at: tos_test_time,
+                        tos_version: 1,
+                        consumer_auth_refs_attributes: [
+                          { key: ConsumerAuthRef::KEYS[:sandbox_gateway_ref], value: auth_info[:sandbox][:gateway] },
+                          { key: ConsumerAuthRef::KEYS[:sandbox_acg_oauth_ref],
+                            value: auth_info[:sandbox][:acg_oauth] },
+                          { key: ConsumerAuthRef::KEYS[:sandbox_ccg_oauth_ref],
+                            value: auth_info[:sandbox][:ccg_oauth] },
+                          { key: ConsumerAuthRef::KEYS[:prod_gateway_ref], value: auth_info[:prod][:gateway] },
+                          { key: ConsumerAuthRef::KEYS[:prod_acg_oauth_ref], value: auth_info[:prod][:acg_oauth] }
+                        ],
+                        user_id: parent[:id])
   end
 
   let(:parent) do

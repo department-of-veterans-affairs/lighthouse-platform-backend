@@ -6,7 +6,7 @@ RSpec.describe SupportMailer, type: :mailer do
   describe 'sends the support team an email when an individual reaches out' do
     context 'for general support' do
       let(:request) { build(:support_request) }
-      let(:mail) { SupportMailer.consumer_support_email(request) }
+      let(:mail) { described_class.consumer_support_email(request) }
 
       it 'renders the headers' do
         expect(mail.subject).to eq('Support Needed')
@@ -21,7 +21,7 @@ RSpec.describe SupportMailer, type: :mailer do
 
     context 'for publishing support' do
       let(:request) { build(:support_request, :set_publishing) }
-      let(:mail) { SupportMailer.publishing_support_email(request) }
+      let(:mail) { described_class.publishing_support_email(request) }
 
       it 'renders the headers' do
         expect(mail.subject).to eq('Publishing Support Needed')

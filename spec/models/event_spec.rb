@@ -4,24 +4,24 @@ require 'rails_helper'
 
 RSpec.describe Event, type: :model do
   let(:event) do
-    Event.create({
-                   event_type: Faker::Lorem.unique.word,
-                   content: { apis: 'test' }
-                 })
+    described_class.create({
+                             event_type: Faker::Lorem.unique.word,
+                             content: { apis: 'test' }
+                           })
   end
 
   describe 'an event' do
     it 'is valid' do
       expect(event).to be_valid
-      expect(Event.all.count).to eq(1)
+      expect(described_class.all.count).to eq(1)
     end
 
     it 'is labeled with an event type' do
-      expect(event.event_type).to eq(Event.first.event_type)
+      expect(event.event_type).to eq(described_class.first.event_type)
     end
 
     it 'has an event included' do
-      expect(event.content).to eq(Event.first.content)
+      expect(event.content).to eq(described_class.first.content)
     end
   end
 end

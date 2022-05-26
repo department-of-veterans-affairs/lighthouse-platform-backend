@@ -9,7 +9,7 @@ RSpec.describe User, type: :model do
       last_name: 'Smith',
       email: 'jsmith@email.com'
     }
-    @user1 = User.create user
+    @user1 = described_class.create user
   end
 
   let(:test_email) { 'chuck.norris@texas_rangers_rule.com' }
@@ -42,9 +42,9 @@ RSpec.describe User, type: :model do
 
   describe User, '#from_omniauth' do
     it 'creates an admin user if is_admin=true' do
-      expect(User.count).to eq 1
-      user = User.from_omniauth(auth_hash, true)
-      expect(User.count).to eq 2
+      expect(described_class.count).to eq 1
+      user = described_class.from_omniauth(auth_hash, true)
+      expect(described_class.count).to eq 2
 
       expect(user.uid).to eq '1234'
       expect(user.email).to eq 'user@example.com'
@@ -54,7 +54,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'retrieves an existing user' do
-      user = User.new(
+      user = described_class.new(
         provider: 'github',
         first_name: 'user',
         last_name: 'one',
@@ -62,15 +62,15 @@ RSpec.describe User, type: :model do
         email: 'user@example.com'
       )
       user.save
-      omniauth_user = User.from_omniauth(auth_hash, false)
+      omniauth_user = described_class.from_omniauth(auth_hash, false)
 
       expect(user).to eq(omniauth_user)
     end
 
     it 'creates a new user' do
-      expect(User.count).to eq 1
-      user = User.from_omniauth(auth_hash, false)
-      expect(User.count).to eq 2
+      expect(described_class.count).to eq 1
+      user = described_class.from_omniauth(auth_hash, false)
+      expect(described_class.count).to eq 2
 
       expect(user.uid).to eq '1234'
       expect(user.email).to eq 'user@example.com'
@@ -80,16 +80,16 @@ RSpec.describe User, type: :model do
     end
 
     it 'updates existing users' do
-      expect(User.count).to eq 1
-      User.from_omniauth(auth_hash, false)
-      expect(User.count).to eq 2
+      expect(described_class.count).to eq 1
+      described_class.from_omniauth(auth_hash, false)
+      expect(described_class.count).to eq 2
 
-      user = User.from_omniauth(updated_auth_hash, false)
+      user = described_class.from_omniauth(updated_auth_hash, false)
       expect(user.email).to eq 'different.email@example.com'
       expect(user.first_name).to eq 'Gimly'
       expect(user.last_name).to eq 'wrong'
 
-      user = User.from_omniauth(auth_hash, false)
+      user = described_class.from_omniauth(auth_hash, false)
       expect(user.email).to eq 'user@example.com'
       expect(user.first_name).to eq 'Gimli'
       expect(user.last_name).to eq 'Gloin'
@@ -98,9 +98,9 @@ RSpec.describe User, type: :model do
 
   describe 'tests a valid user model' do
     subject do
-      User.new(email: test_email,
-               first_name: 'Chuck',
-               last_name: 'Norris')
+      described_class.new(email: test_email,
+                          first_name: 'Chuck',
+                          last_name: 'Norris')
     end
 
     it 'is valid' do
@@ -122,9 +122,9 @@ RSpec.describe User, type: :model do
 
   describe 'tests an incorrect input' do
     subject do
-      User.new(email: test_email,
-               first_name: 'Chuck',
-               last_name: 'Norris')
+      described_class.new(email: test_email,
+                          first_name: 'Chuck',
+                          last_name: 'Norris')
     end
 
     it 'will not save without an email' do

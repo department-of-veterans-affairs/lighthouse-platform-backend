@@ -21,10 +21,10 @@ class ElasticsearchService
     first_success_query(kong_id, cid)
     req.body = @query.to_json
     response = request(req, @uri)
-    if response['hits']['total']['value'].positive?
-      first_call = parse_times(response)
-      { first_sandbox_interaction_at: convert_time(first_call) }
-    end
+    return unless response['hits']['total']['value'].positive?
+
+    first_call = parse_times(response)
+    { first_sandbox_interaction_at: convert_time(first_call) }
   end
 
   private

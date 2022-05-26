@@ -6,7 +6,7 @@ RSpec.describe Kong::SandboxService do
   let(:consumer_name) { 'kong-consumer' }
 
   describe '.intialize' do
-    subject { Kong::SandboxService.new }
+    subject { described_class.new }
 
     it 'uses regular Net::HTTP to make a connection' do
       expect(subject.client.name).to eq('Net::HTTP')
@@ -27,14 +27,14 @@ RSpec.describe Kong::SandboxService do
   describe '#list_consumers' do
     it 'retrieves a list of consumers' do
       result = subject.list_consumers
-      expect(result['data'].length > 0).to be_truthy
+      expect(!result['data'].empty?).to be_truthy
     end
   end
 
   describe '#list_all_consumers' do
     it 'retrieves a list of all consumers' do
       result = subject.list_all_consumers
-      expect(result.length > 0).to be_truthy
+      expect(!result.empty?).to be_truthy
     end
   end
 

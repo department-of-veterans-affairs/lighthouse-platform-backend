@@ -35,10 +35,10 @@ class Base < Grape::API
 
       raise ForbiddenError if headers['X-Csrf-Token'].blank?
 
+      return if cookies['CSRF-TOKEN'] == headers['X-Csrf-Token']
+
       # TODO: Revert to ForbiddenError when CSRF protection through nginx is resolved
-      unless cookies['CSRF-TOKEN'] == headers['X-Csrf-Token']
-        raise "#{cookies['CSRF-TOKEN']} does not equal #{headers['X-Csrf-Token']}, #{cookies.to_json}"
-      end
+      raise "#{cookies['CSRF-TOKEN']} does not equal #{headers['X-Csrf-Token']}, #{cookies.to_json}"
     end
   end
 

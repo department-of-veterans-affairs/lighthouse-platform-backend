@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe DynamoImportService do
-  subject { DynamoImportService.new }
+  subject { described_class.new }
 
   let(:mock_response) { Struct.new(:items) }
 

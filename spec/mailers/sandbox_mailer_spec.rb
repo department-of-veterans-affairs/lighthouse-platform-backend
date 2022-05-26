@@ -9,9 +9,9 @@ RSpec.describe SandboxMailer, type: :mailer do
 
   describe 'sends a welcome email to the consumer' do
     let(:mail) do
-      SandboxMailer.consumer_sandbox_signup(sandbox_request,
-                                            kong_consumer,
-                                            okta_consumers)
+      described_class.consumer_sandbox_signup(sandbox_request,
+                                              kong_consumer,
+                                              okta_consumers)
     end
 
     it 'renders the headers' do
@@ -35,9 +35,9 @@ RSpec.describe SandboxMailer, type: :mailer do
 
     context 'with no key_auth values' do
       let(:oauth_email) do
-        SandboxMailer.consumer_sandbox_signup(sandbox_request,
-                                              nil,
-                                              okta_consumers)
+        described_class.consumer_sandbox_signup(sandbox_request,
+                                                nil,
+                                                okta_consumers)
       end
 
       it 'hides the key_auth fields' do
@@ -47,9 +47,9 @@ RSpec.describe SandboxMailer, type: :mailer do
 
     context 'with no oauth values' do
       let(:key_auth_email) do
-        SandboxMailer.consumer_sandbox_signup(sandbox_request,
-                                              kong_consumer,
-                                              nil)
+        described_class.consumer_sandbox_signup(sandbox_request,
+                                                kong_consumer,
+                                                nil)
       end
 
       it 'hides the oauth fields' do
@@ -59,7 +59,7 @@ RSpec.describe SandboxMailer, type: :mailer do
   end
 
   describe 'sends va_profile_distribution an email' do
-    let(:mail) { SandboxMailer.va_profile_sandbox_signup(sandbox_request) }
+    let(:mail) { described_class.va_profile_sandbox_signup(sandbox_request) }
 
     it 'renders the headers' do
       expect(mail.to).to eq([Figaro.env.va_profile_distribution])

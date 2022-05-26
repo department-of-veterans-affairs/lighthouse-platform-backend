@@ -6,7 +6,7 @@ RSpec.describe Kong::ProductionService do
   let(:consumer_name) { 'kong-consumer' }
 
   describe '.intialize' do
-    subject { Kong::ProductionService.new }
+    subject { described_class.new }
 
     it 'uses regular Net::HTTP to make a connection' do
       expect(subject.client.name).to eq('Net::HTTP')

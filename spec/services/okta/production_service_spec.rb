@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Okta::ProductionService do
-  subject { Okta::ProductionService.new }
+  subject { described_class.new }
 
   describe 'receives sandbox' do
     it 'as the environment values' do

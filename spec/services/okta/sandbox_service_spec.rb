@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Okta::SandboxService do
-  subject { Okta::SandboxService.new }
+  subject { described_class.new }
 
   let(:request) { Struct.new(:last_name, :consumer) }
   let(:nested) { Struct.new(:organization) }

@@ -489,9 +489,6 @@ GEM
       rubyzip (>= 1.2.2)
     serviceworker-rails (0.6.0)
       railties (>= 3.1)
-    simple_form (5.1.0)
-      actionpack (>= 5.2)
-      activemodel (>= 5.2)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -615,7 +612,6 @@ DEPENDENCIES
   sassc-rails
   selenium-webdriver
   serviceworker-rails
-  simple_form
   simplecov
   simplecov-csv
   slack-ruby-client

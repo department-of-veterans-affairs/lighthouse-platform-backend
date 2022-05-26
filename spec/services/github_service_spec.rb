@@ -24,17 +24,17 @@ end
 RSpec.describe GithubService do
   it 'returns matching team from config' do
     stub_github_team_req(1, '[{"id": "0", "name": "name in response"}]')
-    expect(GithubService.user_teams('fake_token')).to eq [id: '0', name: 'test team']
+    expect(described_class.user_teams('fake_token')).to eq [id: '0', name: 'test team']
   end
 
   it 'returns a blank array if no teams match' do
     stub_github_team_req(1, '[{"id": "1", "name": "not the test team"}]')
-    expect(GithubService.user_teams('fake_token')).to eq []
+    expect(described_class.user_teams('fake_token')).to eq []
   end
 
   it 'handles pagination' do
     stub_github_team_req(1, '[{"id": "1", "name": "does not match test team id"}]', 2)
     stub_github_team_req(2, '[{"id": "0", "name": "name in response"}]')
-    expect(GithubService.user_teams('fake_token')).to eq [id: '0', name: 'test team']
+    expect(described_class.user_teams('fake_token')).to eq [id: '0', name: 'test team']
   end
 end

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Slack::ReportService do
   describe 'Slack report service' do
-    subject { Slack::ReportService.new }
+    subject { described_class.new }
 
     before do
       create(:event, :sandbox_signup)

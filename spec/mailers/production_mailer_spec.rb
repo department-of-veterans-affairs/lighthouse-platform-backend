@@ -7,7 +7,7 @@ RSpec.describe ProductionMailer, type: :mailer do
   let(:contact) { production_request[:primaryContact] }
 
   describe 'sends support email on production access request' do
-    let(:mail) { ProductionMailer.support_production_access(production_request) }
+    let(:mail) { described_class.support_production_access(production_request) }
 
     it 'renders the headers' do
       expect(mail.subject).to eq("Production Access Requested for #{production_request[:organization]}")
@@ -21,7 +21,7 @@ RSpec.describe ProductionMailer, type: :mailer do
   end
 
   describe 'sends the consumer an email confirmation' do
-    let(:mail) { ProductionMailer.consumer_production_access(production_request) }
+    let(:mail) { described_class.consumer_production_access(production_request) }
 
     it 'renders the headers' do
       expect(mail.subject).to eq('Your Request for Production Access is Submitted')
