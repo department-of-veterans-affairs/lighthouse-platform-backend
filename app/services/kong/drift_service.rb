@@ -36,4 +36,23 @@ module Kong
         Consumer.find_by(production? ? { user_id: cid } : { user_id: cid }).nil?
       end
     end
+
+    def production?
+      @env.eql?(:production)
+    end
+
+    def trim_url(url)
+      url[0...-5]
+    end
+
+    def build_message(consumer)
+      url = trim_url(consumer[:_links][:uploadLogo][:href]) if consumer[:_links].present?
+      environment = production? ? 'Production' : 'Sandbox'
+      [
+        '*Lighthouse Consumer Management Service Notification*',
+        "Detected an unknown Consumer within Kong Environment: #{environment}",
+        "Client ID: <#{url}|#{consumer[:credentials][:oauthClient][:client_id]}>"
+      ].join("\n")
+    end
+  end
 end
