@@ -57,7 +57,7 @@ module V0
         }
       end
 
-      def event_signup_content
+      def sandbox_signup_event_content
         content = params.dup
         content[:apis] = params[:apis].map(&:api_ref).map(&:name).join(',')
 
@@ -114,7 +114,7 @@ module V0
 
         kong_consumer = Kong::ServiceFactory.service(:sandbox).consumer_signup(user)
         okta_consumers = Okta::ServiceFactory.service(:sandbox).consumer_signup(user, okta_signup_options)
-        Event.create(event_type: Event::EVENT_TYPES[:sandbox_signup], content: event_signup_content)
+        Event.create(event_type: Event::EVENT_TYPES[:sandbox_signup], content: sandbox_signup_event_content)
 
         send_sandbox_welcome_emails(params, kong_consumer, okta_consumers) if Flipper.enabled? :send_emails
         Slack::AlertService.new.send_slack_signup_alert(slack_signup_options) if Flipper.enabled? :send_slack_signup
