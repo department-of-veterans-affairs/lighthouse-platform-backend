@@ -1,20 +1,35 @@
 # frozen_string_literal: true
 
 class ApiService
-  def gather_apis(api_list)
-    applied_for_apis = api_list.split(',')
-    Api.kept.filter do |api|
-      api.api_ref.present? && applied_for_apis.include?(api.api_ref.name)
+  AUTH_TYPES = %w[acg ccg apikey].freeze
+
+  def self.parse(api_list_str)
+    api_list = api_list_str.strip.split(',')
+    api_list.map do |api|
+      api_parts = api.strip.split('/')
+      raise invalid_api_exception(api) if api_parts.blank? || api_parts.count > 2
+
+      api_ref = ApiRef.find_by(name: api_parts.last)
+      raise invalid_api_exception(api) if api_ref.blank?
+
+      api = api_ref.api
+      api.auth_type = api_parts.count > 1 ? validate_auth_type(api_parts.first) : default_auth_type(api)
+
+      api
     end
   end
 
-  def fetch_auth_types(api_list)
-    key_auth = []
-    oauth = []
-    gather_apis(api_list).map do |api|
-      key_auth << api.acl if api.acl.present?
-      oauth << api.auth_server_access_key if api.auth_server_access_key.present?
-    end
-    [key_auth, oauth]
+  def self.validate_auth_type(auth_type)
+    raise "Invalid auth type: #{auth_type}" unless AUTH_TYPES.include?(auth_type)
+
+    auth_type
+  end
+
+  def self.default_auth_type(api)
+    api.auth_server_access_key.present? ? 'acg' : 'apikey'
+  end
+
+  def self.invalid_api_exception(api)
+    Grape::Exceptions::Validation.new(params: %w[apis], message: "invalid api provided: #{api}")
   end
 end

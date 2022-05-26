@@ -8,13 +8,14 @@ describe V0::Consumers, type: :request do
   let(:apply_base) { '/platform-backend/v0/consumers/applications' }
   let :signup_params do
     {
-      apis: "#{api_ref_one},#{api_ref_two},#{api_ref_three}",
+      apis: "#{api_ref_one},#{api_ref_two},#{api_ref_three},ccg/#{api_ref_three}",
       description: 'Signing up for Patti',
       email: 'doug@douglas.funnie.org',
       firstName: 'Douglas',
       lastName: 'Funnie',
       oAuthApplicationType: 'web',
       oAuthRedirectURI: 'http://localhost:3000/callback',
+      oAuthPublicKey: { kty: 'RSA', n: 'key-value-here', e: 'AQAB' }.to_json,
       organization: 'Doug',
       termsOfService: true
     }
@@ -52,18 +53,25 @@ describe V0::Consumers, type: :request do
     context 'when signup is successful' do
       it 'creates the respective user, consumer and apis via the apply page' do
         VCR.use_cassette('okta/consumer_signup_200', match_requests_on: [:method]) do
-          post apply_base, params: signup_params
-          expect(response.code).to eq('201')
+          VCR.use_cassette('okta/consumer_signup_ccg_200', match_requests_on: [:method]) do
+            post apply_base, params: signup_params
+            expect(response.code).to eq('201')
 
-          expect(User.count).to eq(1)
-          expect(Consumer.count).to eq(1)
-          expect(User.last.consumer.apis.count).to eq(3)
+            expect(User.count).to eq(1)
+            expect(Consumer.count).to eq(1)
+            expect(User.last.consumer.apis.count).to eq(3)
+          end
         end
       end
 
       context 'with send_emails flag enabled' do
         before do
           Flipper.enable :send_emails
+
+          api_environment = create(:api_environment)
+          api_ref = api_environment.api.api_ref
+          api_ref.name = 'addressValidation'
+          api_ref.save!
         end
 
         after do
@@ -82,6 +90,26 @@ describe V0::Consumers, type: :request do
         end
       end
 
+      context 'with send_slack_signup flag enabled' do
+        before do
+          Flipper.enable :send_slack_signup
+        end
+
+        after do
+          Flipper.disable :send_slack_signup
+        end
+
+        it 'sends slack signup message' do
+          signup_params[:apis] = api_ref_one
+          signup_params[:oAuthApplicationType] = nil
+          signup_params[:oAuthRedirectURI] = nil
+          signup_params[:oAuthPublicKey] = nil
+
+          expect_any_instance_of(Slack::Web::Client).to receive(:chat_postMessage)
+          post apply_base, params: signup_params
+        end
+      end
+
       context 'with protect_from_forgery flag enabled' do
         before do
           Flipper.enable :protect_from_forgery
@@ -91,9 +119,18 @@ describe V0::Consumers, type: :request do
           Flipper.disable :protect_from_forgery
         end
 
-        it 'responds with forbidden if request not sent from developer-portal' do
-          post apply_base, params: signup_params, headers: { 'X-Csrf-Token': 'testing123' }
-          expect(response.code).to eq('500')
+        context 'when no x-csrf-token provided' do
+          it 'responds with forbidden' do
+            post apply_base, params: signup_params
+            expect(response.code).to eq('403')
+          end
+        end
+
+        context 'when an invalid x-csrf-token is provided' do
+          it 'responds with forbidden' do
+            post apply_base, params: signup_params, headers: { 'X-Csrf-Token': 'testing123' }
+            expect(response.code).to eq('500')
+          end
         end
       end
     end
@@ -110,6 +147,22 @@ describe V0::Consumers, type: :request do
     context 'when oauth arguments are invalid' do
       it 'responds with bad request' do
         signup_params[:oAuthApplicationType] = 'invalid-value'
+        post apply_base, params: signup_params
+        expect(response.code).to eq('400')
+      end
+    end
+
+    context 'when invalid api is passed' do
+      it 'responds with bad request' do
+        signup_params[:apis] = 'invalid-api-here'
+        post apply_base, params: signup_params
+        expect(response.code).to eq('400')
+      end
+    end
+
+    context 'when invalid auth_type is passed' do
+      it 'responds with bad request' do
+        signup_params[:apis] = "invalid-auth-type/#{api_ref_one}"
         post apply_base, params: signup_params
         expect(response.code).to eq('400')
       end
@@ -221,13 +274,17 @@ describe V0::Consumers, type: :request do
     before do
       ApiEnvironment.find_or_create_by(api: consumer.apis.first,
                                        environment: Environment.find_or_create_by(name: 'production'))
+
+      api_environment = create(:api_environment)
+      api_ref = api_environment.api.api_ref
+      api_ref.name = '1234'
+      api_ref.save!
     end
 
     it 'promotes a consumer if given the appropriate sandbox APIs' do
       post "/platform-backend/v0/consumers/#{consumer[:id]}/promotion-requests", params: params
 
-      expect(response.status).to eq(200)
-      expect(consumer.prod_gateway_ref).to eq(JSON.parse(response.body)[:token])
+      expect(response.status).to eq(201)
       expect(consumer.api_environments.count).to eq(3)
     end
 

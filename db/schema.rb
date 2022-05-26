@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_09_154414) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_10_181838) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -108,16 +108,21 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_09_154414) do
     t.index ["discarded_at"], name: "index_consumer_api_assignments_on_discarded_at"
   end
 
+  create_table "consumer_auth_refs", force: :cascade do |t|
+    t.string "key"
+    t.string "value"
+    t.bigint "consumer_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["consumer_id"], name: "index_consumer_auth_refs_on_consumer_id"
+  end
+
   create_table "consumers", force: :cascade do |t|
     t.string "description"
     t.datetime "tos_accepted_at", precision: nil
     t.integer "tos_version"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "sandbox_gateway_ref"
-    t.string "sandbox_oauth_ref"
-    t.string "prod_gateway_ref"
-    t.string "prod_oauth_ref"
     t.bigint "user_id", null: false
     t.string "organization"
     t.datetime "discarded_at", precision: nil
@@ -189,5 +194,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_09_154414) do
   add_foreign_key "api_refs", "apis"
   add_foreign_key "api_release_notes", "api_metadata"
   add_foreign_key "consumer_api_assignments", "consumers"
+  add_foreign_key "consumer_auth_refs", "consumers"
   add_foreign_key "consumers", "users"
 end

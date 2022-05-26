@@ -9,7 +9,7 @@ module Kong
 
     def initialize
       @client = Figaro.env.socks_host.present? ? Net::HTTP.SOCKSProxy(Figaro.env.socks_host, 2001) : Net::HTTP
-      @kong_elb = set_kong_elb
+      @kong_elb = kong_elb
     end
 
     def create_consumer(consumer_name)
@@ -69,17 +69,42 @@ module Kong
       request(req, uri)
     end
 
-    def consumer_signup(user, key_auth)
-      raise 'Missing key auth APIs' if key_auth.empty?
+    def consumer_signup(user)
+      key_auth_apis = user.consumer.apis_list.select { |api| api.auth_type == 'apikey' }
+      return if key_auth_apis.blank?
 
       kong_id, kong_consumer_name, kong_api_key = handle_key_auth_flow(user.consumer.organization,
                                                                        user.last_name,
-                                                                       key_auth)
+                                                                       key_auth_apis.map(&:acl))
 
-      { kong_id: kong_id, kongUsername: kong_consumer_name, token: kong_api_key }
+      save_id_to_user(user, kong_id)
+
+      { kong_id: kong_id, kong_username: kong_consumer_name, token: kong_api_key }
+    end
+
+    protected
+
+    def kong_elb
+      raise 'NotImplemented'
+    end
+
+    def kong_password
+      raise 'NotImplemented'
+    end
+
+    def environment_key
+      raise 'NotImplemented'
     end
 
     private
+
+    def save_id_to_user(user, id)
+      auth_ref_key = ConsumerAuthRef::KEYS["#{environment_key}_gateway_ref".to_sym]
+      auth_ref = ConsumerAuthRef.new(consumer: user.consumer, key: auth_ref_key, value: id)
+      user.consumer.consumer_auth_refs.push(auth_ref)
+      user.save!
+      user.undiscard if user.discarded?
+    end
 
     def generate_consumer_name(organization, last_name)
       # Prepend LPB- during test phase to define consumers from LPB
@@ -107,7 +132,7 @@ module Kong
     end
 
     def request(req, uri)
-      kong_through_kong? ? (req['apikey'] = set_kong_password) : req.basic_auth('kong_admin', set_kong_password)
+      kong_through_kong? ? (req['apikey'] = kong_password) : req.basic_auth('kong_admin', kong_password)
       response = @client.start(uri.host, uri.port, use_ssl: uri.to_s.start_with?('https')) do |http|
         http.request(req)
       end
@@ -117,18 +142,6 @@ module Kong
 
       JSON.parse(response.body) unless response.body.nil?
     end
-
-    protected
-
-    def set_kong_elb
-      raise 'NotImplemented'
-    end
-
-    def set_kong_password
-      raise 'NotImplemented'
-    end
-
-    private
 
     def kong_through_kong?
       Flipper.enabled? :kong_through_kong

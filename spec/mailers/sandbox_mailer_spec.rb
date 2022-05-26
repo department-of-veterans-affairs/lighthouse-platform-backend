@@ -5,13 +5,13 @@ require 'rails_helper'
 RSpec.describe SandboxMailer, type: :mailer do
   let(:sandbox_request) { build(:sandbox_signup_request, :generate_apis) }
   let(:kong_consumer) { build(:kong_consumer) }
-  let(:okta_consumer) { build(:okta_consumer) }
+  let(:okta_consumers) { { acg: build(:okta_consumer) } }
 
   describe 'sends a welcome email to the consumer' do
     let(:mail) do
       SandboxMailer.consumer_sandbox_signup(sandbox_request,
                                             kong_consumer,
-                                            okta_consumer)
+                                            okta_consumers)
     end
 
     it 'renders the headers' do
@@ -37,7 +37,7 @@ RSpec.describe SandboxMailer, type: :mailer do
       let(:oauth_email) do
         SandboxMailer.consumer_sandbox_signup(sandbox_request,
                                               nil,
-                                              okta_consumer)
+                                              okta_consumers)
       end
 
       it 'hides the key_auth fields' do

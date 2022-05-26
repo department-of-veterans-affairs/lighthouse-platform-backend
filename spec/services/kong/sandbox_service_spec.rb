@@ -19,8 +19,8 @@ RSpec.describe Kong::SandboxService do
     end
 
     it 'sets the correct values for sandbox' do
-      expect(subject.send(:set_kong_elb)).to eq(Figaro.env.kong_elb)
-      expect(subject.send(:set_kong_password)).to eq(Figaro.env.kong_password)
+      expect(subject.send(:kong_elb)).to eq(Figaro.env.kong_elb)
+      expect(subject.send(:kong_password)).to eq(Figaro.env.kong_password)
     end
   end
 

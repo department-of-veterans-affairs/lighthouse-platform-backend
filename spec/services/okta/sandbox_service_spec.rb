@@ -38,8 +38,8 @@ RSpec.describe Okta::SandboxService do
   describe 'uses the base service' do
     it 'to build needed values' do
       expect(subject.send(:consumer_name, user)).to eq('LPB-TestingBonJovi')
-      expect(subject.send(:build_new_application_payload, user, application_type: 'web',
-                                                                redirect_uri: 'example.com')).to include(:settings)
+      expect(subject.send(:build_new_acg_application_payload, user, application_type: 'web',
+                                                                    redirect_uri: 'example.com')).to include(:settings)
     end
   end
 end

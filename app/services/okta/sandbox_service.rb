@@ -19,5 +19,9 @@ module Okta
     def va_redirect
       Figaro.env.okta_redirect_url
     end
+
+    def environment_key
+      'sandbox'
+    end
   end
 end
