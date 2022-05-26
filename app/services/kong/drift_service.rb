@@ -1,15 +1,16 @@
 # frozen_string_literal: true
+
 require 'date'
 
 module Kong
   class DriftService
     def initialize(environment = nil)
       @env = environment
-        @client = Kong::SandboxService
-     end
+      @client = Kong::SandboxService
+    end
 
     def pull_kong_consumers
-      kong_consumers = @client.new.list_all_consumers
+      @client.new.list_all_consumers
     end
 
     def time_sort
