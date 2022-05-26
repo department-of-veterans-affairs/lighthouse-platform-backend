@@ -4,7 +4,7 @@ module Slack
   class ReportService < AlertService
     def send_weekly_report
       message = weekly_report_message('week', query_events)
-      alert_slack(Figaro.env.slack_signup_channel, message)
+      send_message(Figaro.env.slack_signup_channel, message)
     end
 
     private
