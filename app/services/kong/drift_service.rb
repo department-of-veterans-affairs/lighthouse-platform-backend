@@ -34,12 +34,8 @@ module Kong
     def new_record?(consumer)
       cid = consumer['created_at']
       if cid.present?
-        Consumer.find_by(production? user_id: cid
+        Consumer.find_by(user_id: cid)
       end
-    end
-
-    def production?
-      @env.eql?(:production)
     end
 
     def trim_url(url)
