@@ -3,10 +3,10 @@
 class SandboxMailer < ApplicationMailer
   helper :mailer
 
-  def consumer_sandbox_signup(request, kong_consumer, okta_consumer)
+  def consumer_sandbox_signup(request, kong_consumer, okta_consumers)
     @request = request
     @kong_consumer = kong_consumer
-    @okta_consumer = okta_consumer
+    @okta_consumers = okta_consumers
     mail(to: request[:email],
          from: from_email_wrapper('VA API Platform team'),
          subject: 'Welcome to the VA API Platform')

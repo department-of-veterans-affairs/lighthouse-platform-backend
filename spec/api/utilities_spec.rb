@@ -34,6 +34,11 @@ describe Utilities, type: :request do
     expect(response.status).to eq(201)
   end
 
+  it 'initializes migration of events from dynamo' do
+    post '/platform-backend/utilities/database/event-migration-requests'
+    expect(response.status).to eq(201)
+  end
+
   describe 'consumers' do
     before do
       user = create(:user)

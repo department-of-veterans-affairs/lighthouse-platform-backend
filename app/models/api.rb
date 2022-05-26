@@ -3,6 +3,8 @@
 class Api < ApplicationRecord
   include Discard::Model
 
+  attr_accessor :auth_type
+
   validates :name, presence: true
   validates :name, uniqueness: true
 

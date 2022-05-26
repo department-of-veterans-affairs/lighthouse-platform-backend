@@ -42,10 +42,8 @@ export RAILS_ENV=development
 rake db:create
 rake db:migrate
 rake db:seed
-rake dynamo:migrate
 rake dynamo:seed
-rake kong:seed_gateway
-rake kong:seed_consumers
+rake kong:seed
 rake elasticsearch:seed
 
 rails s
