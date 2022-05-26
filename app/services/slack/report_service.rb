@@ -31,11 +31,11 @@ module Slack
     end
 
     def new_query(ref)
-      "SUM((case WHEN (created_at > '#{1.week.ago}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{1.week.ago}') AND #{like_query(ref)}) then 1 else 0 end)) as \"#{ref_buider(ref)[:new]}\","
+      "SUM((case WHEN (created_at > '#{1.week.ago}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{1.week.ago}') AND #{like_query(ref)}) then 1 else 0 end)) as \"#{ref_builder(ref)[:new]}\","
     end
 
     def all_time_query(ref)
-      "COUNT(DISTINCT (case when created_at < '#{1.week.ago}' AND #{like_query(ref)} then content->'email' end)) as \"#{ref_buider(ref)[:all]}\","
+      "COUNT(DISTINCT (case when created_at < '#{1.week.ago}' AND #{like_query(ref)} then content->'email' end)) as \"#{ref_builder(ref)[:all]}\","
     end
 
     def build_query
