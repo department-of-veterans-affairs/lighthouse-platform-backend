@@ -6,15 +6,19 @@ class SandboxMailerPreview < ActionMailer::Preview
   include FactoryBot::Syntax::Methods
 
   def consumer_sandbox_signup
-    SandboxMailer.consumer_sandbox_signup(sandbox_request, kong_consumer, okta_consumer)
+    SandboxMailer.consumer_sandbox_signup(sandbox_request, kong_consumer, okta_consumers)
   end
 
   def consumer_sandbox_signup_key_auth_only
     SandboxMailer.consumer_sandbox_signup(sandbox_request, kong_consumer, nil)
   end
 
-  def consumer_sandbox_signup_oauth_only
-    SandboxMailer.consumer_sandbox_signup(sandbox_request, nil, okta_consumer)
+  def consumer_sandbox_signup_acg_oauth_only
+    SandboxMailer.consumer_sandbox_signup(sandbox_request, nil, { acg: okta_consumers[:acg] })
+  end
+
+  def consumer_sandbox_signup_ccg_oauth_only
+    SandboxMailer.consumer_sandbox_signup(sandbox_request, nil, { ccg: okta_consumers[:ccg] })
   end
 
   def va_profile_sandbox_signup
@@ -31,7 +35,7 @@ class SandboxMailerPreview < ActionMailer::Preview
     build(:kong_consumer)
   end
 
-  def okta_consumer
-    build(:okta_consumer)
+  def okta_consumers
+    { acg: build(:okta_consumer), ccg: build(:okta_consumer) }
   end
 end

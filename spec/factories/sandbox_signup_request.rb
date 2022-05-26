@@ -18,6 +18,15 @@ FactoryBot.define do
       end
     end
 
+    trait :mimic_event do
+      after(:build) do |signup, _|
+        api_one = create(:api)
+        api_two = create(:api)
+        signup['email'] = Faker::Internet.safe_email
+        signup['apis'] = "#{api_one.api_ref.name},#{api_two.api_ref.name}"
+      end
+    end
+
     initialize_with { attributes }
   end
 end

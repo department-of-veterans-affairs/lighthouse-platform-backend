@@ -10,16 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_14_212117) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_05_10_181838) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "api_categories", force: :cascade do |t|
     t.string "name"
-    t.datetime "discarded_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "discarded_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "consumer_docs_link_text"
     t.string "short_description"
     t.string "quickstart"
@@ -35,9 +34,9 @@ ActiveRecord::Schema.define(version: 2022_03_14_212117) do
     t.bigint "api_id"
     t.bigint "environment_id"
     t.string "metadata_url"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "discarded_at", precision: nil
     t.string "key"
     t.string "label"
     t.string "api_intro"
@@ -54,9 +53,9 @@ ActiveRecord::Schema.define(version: 2022_03_14_212117) do
     t.boolean "va_internal_only"
     t.jsonb "oauth_info"
     t.bigint "api_category_id"
-    t.datetime "discarded_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "discarded_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "multi_open_api_intro"
     t.string "url_fragment"
     t.jsonb "deactivation_info"
@@ -68,29 +67,29 @@ ActiveRecord::Schema.define(version: 2022_03_14_212117) do
   create_table "api_refs", force: :cascade do |t|
     t.string "name"
     t.bigint "api_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "discarded_at", precision: nil
     t.index ["api_id"], name: "index_api_refs_on_api_id"
     t.index ["discarded_at"], name: "index_api_refs_on_discarded_at"
   end
 
   create_table "api_release_notes", force: :cascade do |t|
     t.bigint "api_metadatum_id"
-    t.datetime "date"
+    t.datetime "date", precision: nil
     t.string "content"
-    t.datetime "discarded_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "discarded_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["api_metadatum_id"], name: "index_api_release_notes_on_api_metadatum_id"
     t.index ["discarded_at"], name: "index_api_release_notes_on_discarded_at"
   end
 
   create_table "apis", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "discarded_at", precision: nil
     t.string "acl"
     t.string "auth_server_access_key"
     t.index ["discarded_at"], name: "index_apis_on_discarded_at"
@@ -99,45 +98,57 @@ ActiveRecord::Schema.define(version: 2022_03_14_212117) do
 
   create_table "consumer_api_assignments", force: :cascade do |t|
     t.bigint "consumer_id", null: false
-    t.datetime "first_successful_call_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "discarded_at"
+    t.datetime "first_successful_call_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "discarded_at", precision: nil
     t.bigint "api_environment_id"
     t.index ["api_environment_id"], name: "index_consumer_api_assignments_on_api_environment_id"
     t.index ["consumer_id"], name: "index_consumer_api_assignments_on_consumer_id"
     t.index ["discarded_at"], name: "index_consumer_api_assignments_on_discarded_at"
   end
 
+  create_table "consumer_auth_refs", force: :cascade do |t|
+    t.string "key"
+    t.string "value"
+    t.bigint "consumer_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["consumer_id"], name: "index_consumer_auth_refs_on_consumer_id"
+  end
+
   create_table "consumers", force: :cascade do |t|
     t.string "description"
-    t.datetime "tos_accepted_at"
+    t.datetime "tos_accepted_at", precision: nil
     t.integer "tos_version"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "sandbox_gateway_ref"
-    t.string "sandbox_oauth_ref"
-    t.string "prod_gateway_ref"
-    t.string "prod_oauth_ref"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.string "organization"
-    t.datetime "discarded_at"
+    t.datetime "discarded_at", precision: nil
     t.index ["discarded_at"], name: "index_consumers_on_discarded_at"
     t.index ["user_id"], name: "index_consumers_on_user_id"
   end
 
   create_table "environments", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "discarded_at", precision: nil
     t.index ["discarded_at"], name: "index_environments_on_discarded_at"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string "event_type", null: false
+    t.jsonb "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "flipper_features", force: :cascade do |t|
     t.string "key", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["key"], name: "index_flipper_features_on_key", unique: true
   end
 
@@ -145,15 +156,15 @@ ActiveRecord::Schema.define(version: 2022_03_14_212117) do
     t.string "feature_key", null: false
     t.string "key", null: false
     t.string "value"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
   end
 
   create_table "malicious_urls", force: :cascade do |t|
     t.string "url", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["url"], name: "index_malicious_urls_on_url", unique: true
   end
 
@@ -161,16 +172,16 @@ ActiveRecord::Schema.define(version: 2022_03_14_212117) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "first_name"
     t.string "last_name"
     t.string "role", default: "user"
     t.string "provider", limit: 50, default: "", null: false
     t.string "uid", limit: 50, default: "", null: false
-    t.datetime "discarded_at"
+    t.datetime "discarded_at", precision: nil
     t.index ["discarded_at"], name: "index_users_on_discarded_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -183,5 +194,6 @@ ActiveRecord::Schema.define(version: 2022_03_14_212117) do
   add_foreign_key "api_refs", "apis"
   add_foreign_key "api_release_notes", "api_metadata"
   add_foreign_key "consumer_api_assignments", "consumers"
+  add_foreign_key "consumer_auth_refs", "consumers"
   add_foreign_key "consumers", "users"
 end

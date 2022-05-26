@@ -11,18 +11,22 @@ class Consumer < ApplicationRecord
   belongs_to :user
   has_many :consumer_api_assignments, dependent: :destroy
   has_many :api_environments, through: :consumer_api_assignments
+  has_many :consumer_auth_refs, dependent: :destroy
 
   accepts_nested_attributes_for :consumer_api_assignments
+  accepts_nested_attributes_for :consumer_auth_refs
 
   before_save :set_tos
   before_save :manage_apis
 
   after_discard do
     consumer_api_assignments.discard_all if consumer_api_assignments.present?
+    consumer_auth_refs.discard_all if consumer_auth_refs.present?
   end
 
   after_undiscard do
     consumer_api_assignments.undiscard_all if consumer_api_assignments.present?
+    consumer_auth_refs.undiscard_all if consumer_auth_refs.present?
   end
 
   def apis
@@ -55,11 +59,10 @@ class Consumer < ApplicationRecord
   def manage_apis
     return if apis_list.blank?
 
-    apis_list.split(',').map do |api|
-      api_ref = ApiRef.find_by(name: api.strip)
-      next if api_ref.blank?
+    apis_list.map do |api|
+      next if api.api_ref.blank?
 
-      assign_api_environments(api_ref)
+      assign_api_environments(api.api_ref)
     end
   end
 

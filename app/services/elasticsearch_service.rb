@@ -16,8 +16,8 @@ class ElasticsearchService
 
   def first_successful_call(consumer)
     req = Net::HTTP::Get.new(@uri)
-    kong_id = consumer[:sandbox_gateway_ref]
-    cid = consumer[:sandbox_oauth_ref]
+    kong_id = consumer.consumer_auth_refs.find_by(key: ConsumerAuthRef::KEYS[:sandbox_gateway_ref])&.value
+    cid = consumer.consumer_auth_refs.find_by(key: ConsumerAuthRef::KEYS[:sandbox_acg_oauth_ref])&.value
     first_success_query(kong_id, cid)
     req.body = @query.to_json
     response = request(req, @uri)
@@ -32,7 +32,7 @@ class ElasticsearchService
   def request(req, uri)
     req['Content-type'] = 'application/json'
     req['kbn-xsrf'] = true
-    response = @client.start(uri.host, uri.port) do |http|
+    response = @client.start(uri.host, uri.port, use_ssl: uri.to_s.start_with?('https')) do |http|
       http.request(req)
     end
 

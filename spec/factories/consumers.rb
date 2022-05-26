@@ -16,8 +16,15 @@ FactoryBot.define do
 
     trait :with_sandbox_ids do
       before(:create) do |consumer, _|
-        consumer.sandbox_gateway_ref = '65a46870-a16a-4ded-85f1-e9fc33b03270'
-        consumer.sandbox_oauth_ref = '4n-0kt4-1d-f0r-us'
+        create(:consumer_auth_ref, key: 'sandbox_gateway_ref',
+                                   value: '65a46870-a16a-4ded-85f1-e9fc33b03270',
+                                   consumer: consumer)
+        create(:consumer_auth_ref, key: 'sandbox_acg_oauth_ref',
+                                   value: '4n-0kt4-1d-f0r-us',
+                                   consumer: consumer)
+        create(:consumer_auth_ref, key: 'sandbox_ccg_oauth_ref',
+                                   value: '4n-0kt4-1d-f0r-us-ccg',
+                                   consumer: consumer)
       end
     end
 

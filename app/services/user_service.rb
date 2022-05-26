@@ -12,8 +12,25 @@ class UserService
                 end
     apis = (@api_list << user_params[:consumer_attributes][:apis_list].split(',')).flatten.uniq
     user_params[:consumer_attributes][:apis_list] = nil
-    user_params[:consumer_attributes][:sandbox_gateway_ref] ||= user.consumer.try(&:sandbox_gateway_ref)
-    user_params[:consumer_attributes][:sandbox_oauth_ref] ||= user.consumer.try(&:sandbox_oauth_ref)
+    user_params[:consumer_attributes][:consumer_auth_refs_attributes].delete_if do |auth_ref_attr|
+      auth_ref_attr[:value].blank?
+    end
+    if keep?(user, user_params, 'sandbox_gateway_ref')
+      user_params[:consumer_attributes][:consumer_auth_refs_attributes].push(
+        {
+          key: 'sandbox_gateway_ref',
+          value: user.consumer.consumer_auth_refs.find_by(key: 'sandbox_gateway_ref')&.value
+        }
+      )
+    end
+    if keep?(user, user_params, 'sandbox_acg_oauth_ref')
+      user_params[:consumer_attributes][:consumer_auth_refs_attributes].push(
+        {
+          key: 'sandbox_acg_oauth_ref',
+          value: user.consumer.consumer_auth_refs.find_by(key: 'sandbox_acg_oauth_ref')&.value
+        }
+      )
+    end
     user.assign_attributes(user_params)
     user.save
     create_or_update_consumer(user, params)
@@ -34,8 +51,8 @@ class UserService
     consumer.undiscard if consumer.discarded?
     consumer.description = params[:description]
     consumer.organization = params[:organization]
-    consumer.sandbox_gateway_ref = sandbox_gateway_ref(params) if sandbox_gateway_ref(params).present?
-    consumer.sandbox_oauth_ref = params[:okta_id] if params[:okta_id].present?
+    consumer.consumer_auth_refs.push(sandbox_gateway_ref(params)) if sandbox_gateway_ref(params).present?
+    consumer.consumer_auth_refs.push(sandbox_acg_oauth_ref(params)) if sandbox_acg_oauth_ref(params).present?
     consumer.tos_accepted_at = Time.zone.now
     consumer.tos_version = Figaro.env.current_tos_version
     consumer.save if consumer.valid?
@@ -61,6 +78,28 @@ class UserService
   end
 
   def sandbox_gateway_ref(params)
-    params.dig(:user, :consumer_attributes, :sandbox_gateway_ref)
+    ref_value = params.dig(:user, :consumer_attributes, :consumer_auth_refs_attributes)&.detect do |auth_ref|
+      auth_ref[:key] == 'sandbox_gateway_ref'
+    end&.dig(:value)
+
+    return if ref_value.blank?
+
+    ConsumerAuthRef.new(key: 'sandbox_gateway_ref', value: ref_value)
+  end
+
+  def sandbox_acg_oauth_ref(params)
+    ref_value = params.dig(:user, :consumer_attributes, :consumer_auth_refs_attributes)&.detect do |auth_ref|
+      auth_ref[:key] == 'sandbox_acg_oauth_ref'
+    end&.dig(:value)
+
+    return if ref_value.blank?
+
+    ConsumerAuthRef.new(key: 'sandbox_acg_oauth_ref', value: ref_value)
+  end
+
+  def keep?(user, user_params, key)
+    user_params.dig(:consumer_attributes, :consumer_auth_refs_attributes)&.detect do |auth_ref|
+      auth_ref[:key] == key
+    end.blank? && user.consumer&.consumer_auth_refs&.find_by(key: key)&.value.present?
   end
 end
