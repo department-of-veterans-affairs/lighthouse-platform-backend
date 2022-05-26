@@ -82,7 +82,8 @@ module V0
       end
 
       def send_slack_signup_alert
-        SlackService.new.alert_slack(Figaro.env.slack_signup_channel, slack_success_message(slack_signup_message))
+        Slack::AlertService.new.alert_slack(Figaro.env.slack_signup_channel,
+                                            slack_success_message(slack_signup_message))
       end
 
       def slack_signup_message
@@ -171,6 +172,7 @@ module V0
         user, okta_consumer = okta_signup(user, oauth) if oauth.present?
         user.save!
         user.undiscard if user.discarded?
+        Event.create(event_type: Event::EVENT_TYPES[:sandbox_signup], content: params)
 
         send_sandbox_welcome_emails(params, kong_consumer, okta_consumer) if Flipper.enabled? :send_emails
         send_slack_signup_alert if Flipper.enabled? :send_slack_signup
