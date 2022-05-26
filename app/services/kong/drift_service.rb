@@ -34,7 +34,7 @@ module Kong
     def new_record?(consumer)
       cid = consumer['created_at']
       if cid.present?
-        Consumer.find_by(production? ? { user_id: cid } : { user_id: cid }).nil?
+        Consumer.find_by(production? user_id: cid
       end
     end
 
