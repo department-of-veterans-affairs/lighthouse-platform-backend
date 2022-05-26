@@ -17,5 +17,23 @@ module Kong
         consumer if consumer['created_at'] >= Date.yesterday.to_time.to_i
       end
     end
-  end
+
+    def detect_unknown_entities(alert_list)
+      alert_list.filter do |cid|
+        new_record? cid
+      end
+    end
+
+    def alert_slack(consumer)
+      @slack_service ||= SlackService.new
+      message = build_message(consumer)
+      @slack_service.alert_slack(Figaro.env.slack_drift_channel, message)
+    end
+
+    def new_record?(consumer)
+      cid = consumer['created_at']
+      if cid.present?
+        Consumer.find_by(production? ? { user_id: cid } : { user_id: cid }).nil?
+      end
+    end
 end
