@@ -38,15 +38,26 @@ module Okta
       credentials = application[:credentials]
       if credentials[:oauthClient].present? && credentials[:oauthClient][:client_id].present?
         cid = credentials[:oauthClient][:client_id]
-        ConsumerAuthRef.find_by('(key=? or key=?) and value=?',
-                                ConsumerAuthRef::KEYS[:sandbox_acg_oauth_ref],
-                                ConsumerAuthRef::KEYS[:prod_acg_oauth_ref],
-                                cid)&.consumer.blank?
+        (production? ? prod_auth_ref_query(cid) : sandbox_auth_ref_query(cid))&.consumer.blank?
       end
     end
 
     def production?
       @env.eql?(:production)
+    end
+
+    def sandbox_auth_ref_query(cid)
+      ConsumerAuthRef.find_by('(key=? or key=?) and value=?',
+                              ConsumerAuthRef::KEYS[:sandbox_acg_oauth_ref],
+                              ConsumerAuthRef::KEYS[:sandbox_ccg_oauth_ref],
+                              cid)
+    end
+
+    def prod_auth_ref_query(cid)
+      ConsumerAuthRef.find_by('(key=? or key=?) and value=?',
+                              ConsumerAuthRef::KEYS[:prod_acg_oauth_ref],
+                              ConsumerAuthRef::KEYS[:prod_ccg_oauth_ref],
+                              cid)
     end
 
     def trim_url(url)
