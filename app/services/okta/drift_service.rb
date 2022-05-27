@@ -57,7 +57,7 @@ module Okta
       url = trim_url(consumer[:_links][:uploadLogo][:href]) if consumer[:_links].present?
       environment = production? ? 'Production' : 'Sandbox'
       [
-        '*Lighthouse Consumer Management Service Notification*',
+        '*Lighthouse Platform Backend Notification*',
         "Detected an unknown Consumer within Okta Environment: #{environment}",
         "Client ID: <#{url}|#{consumer[:credentials][:oauthClient][:client_id]}>"
       ].join("\n")
