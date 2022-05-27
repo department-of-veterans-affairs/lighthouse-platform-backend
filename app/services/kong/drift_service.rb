@@ -27,7 +27,7 @@ module Kong
     def build_message(consumer)
       environment = production? ? 'Production' : 'Sandbox'
       [
-        '*Lighthouse Consumer Management Service Notification*',
+        '*Lighthouse Platform Backend Notification*',
         "Detected an unknown Consumer within Kong Environment: #{environment}",
         "Kong Consumer ID: #{consumer['id']}"
       ].join("\n")
