@@ -104,6 +104,7 @@ Metrics/MethodLength:
     - 'add_api_to_consumer'
     - 'weekly_report_message'
     - 'dynamo_mock_response'
+    - 'create_or_update_consumer'
 Metrics/CyclomaticComplexity:
   IgnoredMethods:
     - 'consumer_signup'

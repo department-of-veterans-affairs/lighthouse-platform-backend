@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe SandboxMailer, type: :mailer do
-  let(:sandbox_request) { build(:sandbox_signup_request, :generate_apis) }
+  let(:sandbox_request) { build(:sandbox_signup_request, :generate_apis_after_parse) }
   let(:kong_consumer) { build(:kong_consumer) }
   let(:okta_consumers) { { acg: build(:okta_consumer) } }
 

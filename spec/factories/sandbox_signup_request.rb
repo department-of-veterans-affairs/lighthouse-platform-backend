@@ -10,20 +10,16 @@ FactoryBot.define do
     internalApiInfo { association :internal_sandbox_request }
     organization { Faker::Hipster.word }
 
-    trait :generate_apis do
+    trait :generate_apis_after_parse do
       after(:build) do |signup, _|
-        api_one = create(:api)
-        api_two = create(:api)
-        signup[:apis] = "#{api_one.api_ref.name},#{api_two.api_ref.name}"
+        signup[:apis] = create_list(:api, 2)
       end
     end
 
     trait :mimic_event do
       after(:build) do |signup, _|
-        api_one = create(:api)
-        api_two = create(:api)
         signup['email'] = Faker::Internet.safe_email
-        signup['apis'] = "#{api_one.api_ref.name},#{api_two.api_ref.name}"
+        signup['apis'] = create_list(:api, 2).map(&:api_ref).map(&:name).join(',')
       end
     end
 
