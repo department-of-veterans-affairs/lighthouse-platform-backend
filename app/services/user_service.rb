@@ -112,7 +112,7 @@ class UserService
   def existing_ref(consumer, key, ref_value = nil)
     return ConsumerAuthRef.find_by(key: key, consumer_id: consumer.id).present? if ref_value.blank?
 
-    existing = ConsumerAuthRef.find_by(key: key, value: ref_value, consumer_id: consumer.id).present?
+    existing = ConsumerAuthRef.find_by(key: key, value: ref_value, consumer_id: consumer.id)
     return if existing.blank?
 
     existing.undiscard
