@@ -50,9 +50,9 @@ module Kong
     def new_record?(consumer)
       consumer_id = consumer['id']
       ConsumerAuthRef.find_by(
-        '(key=? or key=?) and value=?', 
-        ConsumerAuthRef::KEYS[:sandbox_gateway_ref], 
-        ConsumerAuthRef::KEYS[:prod_gateway_ref], 
+        '(key=? or key=?) and value=?',
+        ConsumerAuthRef::KEYS[:sandbox_gateway_ref],
+        ConsumerAuthRef::KEYS[:prod_gateway_ref],
         consumer_id
       )
     end
