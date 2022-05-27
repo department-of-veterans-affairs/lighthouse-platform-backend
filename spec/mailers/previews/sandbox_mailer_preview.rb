@@ -28,7 +28,7 @@ class SandboxMailerPreview < ActionMailer::Preview
   private
 
   def sandbox_request
-    build(:sandbox_signup_request, :generate_apis)
+    build(:sandbox_signup_request, :generate_apis_after_parse)
   end
 
   def kong_consumer
