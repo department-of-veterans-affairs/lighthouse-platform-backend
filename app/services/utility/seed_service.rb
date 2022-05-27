@@ -119,7 +119,8 @@ module Utility
               description: ['no description', Faker::Lorem.paragraph].sample,
               email: "#{first_name}.#{last_name}@va.gov",
               tosAccepted: [true, false].sample,
-              kongConsumerId: %w[b11ae7d9-2949-4e80-aa55-ccd30d4c7287 6b6f692b-0ec1-4224-9016-f7c65de680f9].sample
+              kongConsumerId: %w[b11ae7d9-2949-4e80-aa55-ccd30d4c7287 6b6f692b-0ec1-4224-9016-f7c65de680f9].sample,
+              okta_application_id: Faker::Alphanumeric.alphanumeric(number: 20).upcase
             },
             table_name: Figaro.env.dynamo_table_name
           }

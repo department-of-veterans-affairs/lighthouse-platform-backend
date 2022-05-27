@@ -51,8 +51,10 @@ class UserService
     consumer.undiscard if consumer.discarded?
     consumer.description = params[:description]
     consumer.organization = params[:organization]
-    consumer.consumer_auth_refs.push(sandbox_gateway_ref(params)) if sandbox_gateway_ref(params).present?
-    consumer.consumer_auth_refs.push(sandbox_acg_oauth_ref(params)) if sandbox_acg_oauth_ref(params).present?
+    sgr = sandbox_gateway_ref(params, consumer)
+    consumer.consumer_auth_refs.push(sgr) if sgr.present?
+    saor = sandbox_acg_oauth_ref(params, consumer)
+    consumer.consumer_auth_refs.push(saor) if saor.present?
     consumer.tos_accepted_at = Time.zone.now
     consumer.tos_version = Figaro.env.current_tos_version
     consumer.save if consumer.valid?
@@ -77,24 +79,44 @@ class UserService
     consumer.save
   end
 
-  def sandbox_gateway_ref(params)
+  def sandbox_gateway_ref(params, consumer)
     ref_value = params.dig(:user, :consumer_attributes, :consumer_auth_refs_attributes)&.detect do |auth_ref|
       auth_ref[:key] == 'sandbox_gateway_ref'
     end&.dig(:value)
 
     return if ref_value.blank?
+    return if existing_ref(consumer, 'sandbox_gateway_ref', ref_value).present?
 
-    ConsumerAuthRef.new(key: 'sandbox_gateway_ref', value: ref_value)
+    auth_ref = ConsumerAuthRef.new(key: 'sandbox_gateway_ref', value: ref_value)
+    return auth_ref if existing_ref(consumer, 'sandbox_gateway_ref').blank?
+
+    auth_ref.discard
+    auth_ref
   end
 
-  def sandbox_acg_oauth_ref(params)
+  def sandbox_acg_oauth_ref(params, consumer)
     ref_value = params.dig(:user, :consumer_attributes, :consumer_auth_refs_attributes)&.detect do |auth_ref|
       auth_ref[:key] == 'sandbox_acg_oauth_ref'
     end&.dig(:value)
 
     return if ref_value.blank?
+    return if existing_ref(consumer, 'sandbox_acg_oauth_ref', ref_value).present?
 
-    ConsumerAuthRef.new(key: 'sandbox_acg_oauth_ref', value: ref_value)
+    auth_ref = ConsumerAuthRef.new(key: 'sandbox_acg_oauth_ref', value: ref_value)
+    return auth_ref if existing_ref(consumer, 'sandbox_acg_oauth_ref').blank?
+
+    auth_ref.discard
+    auth_ref
+  end
+
+  def existing_ref(consumer, key, ref_value = nil)
+    return ConsumerAuthRef.find_by(key: key, consumer_id: consumer.id).present? if ref_value.blank?
+
+    existing = ConsumerAuthRef.find_by(key: key, value: ref_value, consumer_id: consumer.id).present?
+    return if existing.blank?
+
+    existing.undiscard
+    nil
   end
 
   def keep?(user, user_params, key)
