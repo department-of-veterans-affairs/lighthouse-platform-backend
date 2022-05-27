@@ -6,7 +6,7 @@ module Kong
   class DriftService
     def initialize(environment = nil)
       @env = environment
-      @client = Kong::SandboxService
+      @client = production? ? Kong::ProductionService : Kong::SandboxService
     end
 
     def pull_kong_consumers
