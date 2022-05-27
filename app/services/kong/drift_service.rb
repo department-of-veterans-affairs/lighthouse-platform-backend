@@ -10,8 +10,35 @@ module Kong
       @slack_service = Slack::AlertService.new
     end
 
-    def pull_kong_consumers
-      @client.new.list_all_consumers
+    def detect_drift
+      consumers = @client.new.pull_kong_consumers
+      consumers_last_day = filter_last_day(consumers)
+      alert_on_list = detect_unknown_entities(consumers_last_day) unless consumers_last_day.empty?
+      alert_on_list.map { |consumer| alert_slack consumer } if alert_on_list.present?
+
+      { success: true }
+    end
+
+    private
+
+    def alert_slack(consumer)
+      message = build_message(consumer)
+      @slack_service.send_message(Figaro.env.slack_drift_channel, { text: message })
+    end
+
+    def build_message(consumer)
+      environment = production? ? 'Production' : 'Sandbox'
+      [
+        '*Lighthouse Consumer Management Service Notification*',
+        "Detected an unknown Consumer within Kong Environment: #{environment}",
+        "Client ID: <#{consumer[:client_id]}>"
+      ].join("\n")
+    end
+
+    def detect_unknown_entities
+      filter_last_day.filter do |id|
+        new_record? id
+      end
     end
 
     def filter_last_day
@@ -30,37 +57,12 @@ module Kong
       )
     end
 
-    def detect_unknown_entities
-      filter_last_day.filter do |id|
-        new_record? id
-      end
-    end
-
-    def detect_drift
-      consumers = @client.new.pull_kong_consumers
-      consumers_last_day = filter_last_day(consumers)
-      alert_on_list = detect_unknown_entities(consumers_last_day) unless consumers_last_day.empty?
-      alert_on_list.map { |consumer| alert_slack consumer } if alert_on_list.present?
-
-      { success: true }
-    end
-
-    def alert_slack(consumer)
-      message = build_message(consumer)
-      @slack_service.send_message(Figaro.env.slack_drift_channel, { text: message })
-    end
-
     def production?
       @env.eql?(:production)
     end
 
-    def build_message(consumer)
-      environment = production? ? 'Production' : 'Sandbox'
-      [
-        '*Lighthouse Consumer Management Service Notification*',
-        "Detected an unknown Consumer within Kong Environment: #{environment}",
-        "Client ID: <#{consumer[:client_id]}>"
-      ].join("\n")
+    def pull_kong_consumers
+      @client.new.list_all_consumers
     end
   end
 end
