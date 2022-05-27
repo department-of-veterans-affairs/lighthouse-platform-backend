@@ -15,4 +15,13 @@ class ConsumerAuthRef < ApplicationRecord
 
   validates :key, presence: true, acceptance: { accept: KEYS.values }
   validates :value, presence: true
+  validate :unique_key_per_consumer
+
+  private
+
+  def unique_key_per_consumer
+    return if ConsumerAuthRef.where(key: key, consumer_id: consumer.id, discarded_at: nil).blank?
+
+    errors.add(:key, 'key already exists for consumer')
+  end
 end

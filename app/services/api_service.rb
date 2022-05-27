@@ -9,7 +9,7 @@ class ApiService
       api_parts = api.strip.split('/')
       raise invalid_api_exception(api) if api_parts.blank? || api_parts.count > 2
 
-      api_ref = ApiRef.find_by(name: api_parts.last)
+      api_ref = ApiRef.kept.find_by(name: api_parts.last)
       raise invalid_api_exception(api) if api_ref.blank?
 
       api = api_ref.api

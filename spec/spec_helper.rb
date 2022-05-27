@@ -16,7 +16,7 @@ SimpleCov.start 'rails' do
   # services used for development and testing
   add_filter '/app/services/utility/*.rb'
 
-  SimpleCov.minimum_coverage_by_file 90
+  SimpleCov.minimum_coverage_by_file 88
   SimpleCov.refuse_coverage_drop
 
   SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
