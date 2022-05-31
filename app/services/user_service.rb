@@ -51,13 +51,19 @@ class UserService
     consumer.undiscard if consumer.discarded?
     consumer.description = params[:description]
     consumer.organization = params[:organization]
+    consumer.tos_accepted_at = Time.zone.now
+    consumer.tos_version = Figaro.env.current_tos_version
+    return unless consumer.valid?
+
+    consumer.save
+
     sgr = sandbox_gateway_ref(params, consumer)
     consumer.consumer_auth_refs.push(sgr) if sgr.present?
     saor = sandbox_acg_oauth_ref(params, consumer)
     consumer.consumer_auth_refs.push(saor) if saor.present?
-    consumer.tos_accepted_at = Time.zone.now
-    consumer.tos_version = Figaro.env.current_tos_version
-    consumer.save if consumer.valid?
+    return unless consumer.valid?
+
+    consumer.save
   end
 
   private
