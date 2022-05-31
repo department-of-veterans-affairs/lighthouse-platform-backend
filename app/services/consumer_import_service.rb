@@ -16,7 +16,7 @@ class ConsumerImportService
 
   def build_user_from_dynamo(consumer, gateway_id, oauth_id)
     consumer = consumer.with_indifferent_access
-    {
+    user = {
       user: {
         email: consumer['email'],
         first_name: consumer['firstName'],
@@ -24,15 +24,26 @@ class ConsumerImportService
         consumer_attributes: {
           description: consumer['description'],
           organization: consumer['organization'],
-          consumer_auth_refs_attributes: [
-            { key: ConsumerAuthRef::KEYS[:sandbox_gateway_ref], value: gateway_id },
-            { key: ConsumerAuthRef::KEYS[:sandbox_acg_oauth_ref], value: oauth_id }
-          ],
+          consumer_auth_refs_attributes: [],
           apis_list: consumer['apis'],
           tos_accepted: consumer['tosAccepted']
         }
       }
-    }.with_indifferent_access
+    }
+
+    if gateway_id.present?
+      user[:user][:consumer_attributes][:consumer_auth_refs_attributes].push(
+        { key: ConsumerAuthRef::KEYS[:sandbox_gateway_ref], value: gateway_id }
+      )
+    end
+
+    if oauth_id.present?
+      user[:user][:consumer_attributes][:consumer_auth_refs_attributes].push(
+        { key: ConsumerAuthRef::KEYS[:sandbox_acg_oauth_ref], value: oauth_id }
+      )
+    end
+
+    user.with_indifferent_access
   end
 
   def update_kong_consumers
