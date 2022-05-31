@@ -42,13 +42,6 @@ RSpec.describe Kong::DriftService do
         result = subject.send(:detect_unknown_entities, consumers)
         expect(result.length).to eq(5)
       end
-
-      it 'can alert slack if needed' do
-        VCR.use_cassette('slack/kong_alert_200', match_requests_on: [:method]) do
-          result = subject.send(:alert_slack, consumers.first)
-          expect(result.ok).to be(true)
-        end
-      end
     end
   end
 end
