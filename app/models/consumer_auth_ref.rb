@@ -22,6 +22,6 @@ class ConsumerAuthRef < ApplicationRecord
   def unique_key_per_consumer
     return if ConsumerAuthRef.where(key: key, consumer_id: consumer.id, discarded_at: nil).blank?
 
-    errors.add(:key, 'key already exists for consumer')
+    errors.add(:key, 'already exists for consumer')
   end
 end
