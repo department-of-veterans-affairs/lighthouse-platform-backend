@@ -96,7 +96,7 @@ class UserService
     auth_ref = ConsumerAuthRef.new(key: 'sandbox_gateway_ref', value: ref_value, consumer_id: consumer.id)
     return auth_ref if existing_ref(consumer, 'sandbox_gateway_ref').blank?
 
-    auth_ref.discard
+    auth_ref.discarded_at = Time.zone.now
     auth_ref
   end
 
@@ -111,18 +111,14 @@ class UserService
     auth_ref = ConsumerAuthRef.new(key: 'sandbox_acg_oauth_ref', value: ref_value, consumer_id: consumer.id)
     return auth_ref if existing_ref(consumer, 'sandbox_acg_oauth_ref').blank?
 
-    auth_ref.discard
+    auth_ref.discarded_at = Time.zone.now
     auth_ref
   end
 
   def existing_ref(consumer, key, ref_value = nil)
-    return ConsumerAuthRef.find_by(key: key, consumer_id: consumer.id).present? if ref_value.blank?
+    return ConsumerAuthRef.find_by(key: key, consumer_id: consumer.id) if ref_value.blank?
 
-    existing = ConsumerAuthRef.find_by(key: key, value: ref_value, consumer_id: consumer.id)
-    return if existing.blank?
-
-    existing.undiscard
-    nil
+    ConsumerAuthRef.find_by(key: key, value: ref_value, consumer_id: consumer.id)
   end
 
   def keep?(user, user_params, key)
