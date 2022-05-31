@@ -23,7 +23,7 @@ RSpec.describe Kong::DriftService do
   describe 'detects drifts' do
     it 'filters and alerts slack if needed' do
       VCR.use_cassette('kong/list_consumers_200', match_requests_on: [:method]) do
-        VCR.use_cassette('slack/kong_alert_200', match_requests_on: [:method]) do
+        VCR.use_cassette('slack/alert_200', match_requests_on: [:method]) do
           result = subject.detect_drift
           expect(result).to eq({ success: true })
         end
