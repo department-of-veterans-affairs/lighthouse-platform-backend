@@ -1,4 +1,4 @@
-# Lighthouse Consumer Management Service (LCMS) 
+# Lighthouse Platform Backend (LPB) 
 
 ## About
 
