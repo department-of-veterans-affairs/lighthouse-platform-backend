@@ -196,7 +196,7 @@ module V0
       desc 'Peruses Elasticsearch for a successful consumer first-call (via oauth and/or key-auth)'
       params do
         requires :consumerId, type: String, allow_blank: false,
-                              description: 'Consumer ID from Lighthouse Consumer Management Service'
+                              description: 'Consumer ID from Lighthouse Platform Backend'
       end
       get '/:consumerId/statistics' do
         consumer = Consumer.find(params[:consumerId])

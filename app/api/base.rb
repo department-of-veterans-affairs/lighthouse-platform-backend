@@ -48,7 +48,7 @@ class Base < Grape::API
   add_swagger_documentation \
     mount_path: '/openapi',
     info: {
-      title: 'Lighthouse Consumer Management Service',
+      title: 'Lighthouse Platform Backend',
       description: 'Source of truth for information regarding a Lighthouse consumer',
       contact_url: 'https://github.com/department-of-veterans-affairs/lighthouse-platform-backend'
     }
