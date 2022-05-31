@@ -9,7 +9,7 @@ RSpec.describe Kong::DriftService do
     [
       {
         custom_id: null,
-        created_at: 1_556_314_152,
+        created_at: Date.yesterday.to_time.to_i,
         id: '1234-22a8-4a6d-ba20-fd3b262a3o4d',
         tags: null,
         username: 'test_user_1'
