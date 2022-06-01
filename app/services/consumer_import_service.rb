@@ -6,7 +6,7 @@ class ConsumerImportService
   def initialize
     @kong_consumers = Kong::SandboxService.new.list_all_consumers
     @dynamo_consumers = DynamoService.new.fetch_dynamo_db.items
-    @okta_applications = Okta::SandboxService.new.list_applications
+    @okta_applications = Okta::SandboxService.new.list_all_applications
   end
 
   def import
@@ -26,8 +26,10 @@ class ConsumerImportService
           organization: consumer['organization'],
           consumer_auth_refs_attributes: [],
           apis_list: consumer['apis'],
-          tos_accepted: consumer['tosAccepted']
-        }
+          tos_accepted: consumer['tosAccepted'],
+          created_at: consumer['createdAt']
+        },
+        created_at: consumer['createdAt']
       }
     }
 
