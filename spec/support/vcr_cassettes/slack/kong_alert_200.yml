@@ -1,0 +1,173 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://slack.com/api/chat.postMessage
+    body:
+      encoding: UTF-8
+      string: as_user=true&channel=%23vaapi-alerts-testing&text=%2ALighthouse+Platform+Backend+Notification%2A%0ADetected+an+unknown+Consumer+within+Kong+Environment%3A+Sandbox%0AKong+Consumer+ID%3A+3bf465b0-de63-4daf-937a-387dbf3b1e5f
+    headers:
+      Accept:
+      - application/json; charset=utf-8
+      User-Agent:
+      - Slack Ruby Client/1.0.0
+      Authorization:
+      - Bearer <Slack Token>
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 01 Jun 2022 16:19:55 GMT
+      Server:
+      - Apache
+      X-Powered-By:
+      - HHVM/4.153.1
+      Access-Control-Allow-Origin:
+      - "*"
+      Referrer-Policy:
+      - no-referrer
+      X-Slack-Backend:
+      - r
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Access-Control-Allow-Headers:
+      - slack-route, x-slack-version-ts, x-b3-traceid, x-b3-spanid, x-b3-parentspanid,
+        x-b3-sampled, x-b3-flags
+      Access-Control-Expose-Headers:
+      - x-slack-req-id, retry-after
+      X-Oauth-Scopes:
+      - channels:read,chat:write,groups:read,im:read,mpim:read,users:read,files:read,files:write,links:read,links:write,app_mentions:read,commands,chat:write.customize,chat:write.public,reactions:read,reactions:write,reminders:write
+      X-Accepted-Oauth-Scopes:
+      - chat:write
+      Expires:
+      - Mon, 26 Jul 1997 05:00:00 GMT
+      Cache-Control:
+      - private, no-cache, no-store, must-revalidate
+      Pragma:
+      - no-cache
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Slack-Req-Id:
+      - fc84abb0be447a5fc26007b53d024c28
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '458'
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Envoy-Upstream-Service-Time:
+      - '142'
+      X-Backend:
+      - main_normal main_bedrock_normal_with_overflow main_canary_with_overflow main_bedrock_canary_with_overflow
+        main_control_with_overflow main_bedrock_control_with_overflow
+      X-Server:
+      - slack-www-hhvm-main-iad-04by
+      X-Slack-Shared-Secret-Outcome:
+      - no-match
+      Via:
+      - envoy-www-iad-xn23, envoy-edge-pdx-ii6n
+      X-Edge-Backend:
+      - envoy-www
+      X-Slack-Edge-Shared-Secret-Outcome:
+      - no-match
+    body:
+      encoding: ASCII-8BIT
+      string: '{"ok":true,"channel":"CJYJTRQ1F","ts":"1654100395.518839","message":{"bot_id":"B019EU2KH2L","type":"message","text":"*Lighthouse
+        Platform Backend Notification*\nDetected an unknown Consumer within Kong Environment:
+        Sandbox\nKong Consumer ID: 3bf465b0-de63-4daf-937a-387dbf3b1e5f","user":"U0193MS7TDF","ts":"1654100395.518839","app_id":"A018X26BWFJ","team":"T9YV7KLUX","bot_profile":{"id":"B019EU2KH2L","app_id":"A018X26BWFJ","name":"Developer
+        Portal","icons":{"image_36":"https:\/\/avatars.slack-edge.com\/2020-08-18\/1300940977462_28330b62ae440412752c_36.png","image_48":"https:\/\/avatars.slack-edge.com\/2020-08-18\/1300940977462_28330b62ae440412752c_48.png","image_72":"https:\/\/avatars.slack-edge.com\/2020-08-18\/1300940977462_28330b62ae440412752c_72.png"},"deleted":false,"updated":1597760321,"team_id":"T9YV7KLUX"}}}'
+  recorded_at: Wed, 01 Jun 2022 16:19:55 GMT
+- request:
+    method: post
+    uri: https://slack.com/api/chat.postMessage
+    body:
+      encoding: UTF-8
+      string: as_user=true&channel=%23vaapi-alerts-testing&text=%2ALighthouse+Platform+Backend+Notification%2A%0ADetected+an+unknown+Consumer+within+Kong+Environment%3A+Sandbox%0AKong+Consumer+ID%3A+8d6b6a52-e61e-4d5e-9319-257f08bdcd98
+    headers:
+      Accept:
+      - application/json; charset=utf-8
+      User-Agent:
+      - Slack Ruby Client/1.0.0
+      Authorization:
+      - Bearer <Slack Token>
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 01 Jun 2022 16:19:55 GMT
+      Server:
+      - Apache
+      X-Powered-By:
+      - HHVM/4.153.1
+      Access-Control-Allow-Origin:
+      - "*"
+      Referrer-Policy:
+      - no-referrer
+      X-Slack-Backend:
+      - r
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Access-Control-Allow-Headers:
+      - slack-route, x-slack-version-ts, x-b3-traceid, x-b3-spanid, x-b3-parentspanid,
+        x-b3-sampled, x-b3-flags
+      Access-Control-Expose-Headers:
+      - x-slack-req-id, retry-after
+      X-Oauth-Scopes:
+      - channels:read,chat:write,groups:read,im:read,mpim:read,users:read,files:read,files:write,links:read,links:write,app_mentions:read,commands,chat:write.customize,chat:write.public,reactions:read,reactions:write,reminders:write
+      X-Accepted-Oauth-Scopes:
+      - chat:write
+      Expires:
+      - Mon, 26 Jul 1997 05:00:00 GMT
+      Cache-Control:
+      - private, no-cache, no-store, must-revalidate
+      Pragma:
+      - no-cache
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Slack-Req-Id:
+      - 0cb57e1f19111b0a95ebc86d21e592de
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '458'
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Envoy-Upstream-Service-Time:
+      - '155'
+      X-Backend:
+      - main_normal main_bedrock_normal_with_overflow main_canary_with_overflow main_bedrock_canary_with_overflow
+        main_control_with_overflow main_bedrock_control_with_overflow
+      X-Server:
+      - slack-www-hhvm-main-iad-2gty
+      X-Slack-Shared-Secret-Outcome:
+      - no-match
+      Via:
+      - envoy-www-iad-yp9t, envoy-edge-pdx-f4z9
+      X-Edge-Backend:
+      - envoy-www
+      X-Slack-Edge-Shared-Secret-Outcome:
+      - no-match
+    body:
+      encoding: ASCII-8BIT
+      string: '{"ok":true,"channel":"CJYJTRQ1F","ts":"1654100395.800409","message":{"bot_id":"B019EU2KH2L","type":"message","text":"*Lighthouse
+        Platform Backend Notification*\nDetected an unknown Consumer within Kong Environment:
+        Sandbox\nKong Consumer ID: 8d6b6a52-e61e-4d5e-9319-257f08bdcd98","user":"U0193MS7TDF","ts":"1654100395.800409","app_id":"A018X26BWFJ","team":"T9YV7KLUX","bot_profile":{"id":"B019EU2KH2L","app_id":"A018X26BWFJ","name":"Developer
+        Portal","icons":{"image_36":"https:\/\/avatars.slack-edge.com\/2020-08-18\/1300940977462_28330b62ae440412752c_36.png","image_48":"https:\/\/avatars.slack-edge.com\/2020-08-18\/1300940977462_28330b62ae440412752c_48.png","image_72":"https:\/\/avatars.slack-edge.com\/2020-08-18\/1300940977462_28330b62ae440412752c_72.png"},"deleted":false,"updated":1597760321,"team_id":"T9YV7KLUX"}}}'
+  recorded_at: Wed, 01 Jun 2022 16:19:55 GMT
+recorded_with: VCR 6.1.0
