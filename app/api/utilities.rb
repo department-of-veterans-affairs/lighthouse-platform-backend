@@ -49,6 +49,11 @@ class Utilities < Base
 
         { success: true }
       end
+
+      desc 'Returns last week signups report'
+      get '/signups-report' do
+        Slack::ReportService.new.query_events
+      end
     end
 
     resource 'apis' do
