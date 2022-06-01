@@ -1,20 +1,29 @@
 # frozen_string_literal: true
 
 require 'simplecov'
+require 'simplecov-csv'
 
 SimpleCov.start 'rails' do
   track_files '**/{app,lib}/**/*.rb'
-  # These need to be removed when they get real logic
+
+  # NOTE: These need to be removed when they get real logic
   add_filter 'app/channels/application_cable/channel.rb'
   add_filter 'app/channels/application_cable/connection.rb'
   add_filter 'app/jobs/application_job.rb'
   add_filter 'app/mailers/application_mailer.rb'
   add_filter 'app/models/application_record.rb'
-  # this is filtered to keep pii out of VCRs
-  add_filter 'app/services/kong_service.rb'
+
+  # services used for development and testing
+  add_filter '/app/services/utility/*.rb'
+  add_filter '/app/services/consumer_import_service.rb'
 
   SimpleCov.minimum_coverage_by_file 90
   SimpleCov.refuse_coverage_drop
+
+  SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
+                                                                    SimpleCov::Formatter::HTMLFormatter,
+                                                                    SimpleCov::Formatter::CSVFormatter
+                                                                  ])
 end
 
 RSpec.configure do |config|
@@ -43,6 +52,12 @@ RSpec.configure do |config|
     Timecop.freeze(Time.zone.parse(example.metadata[:run_at]))
     example.run
     Timecop.return
+  end
+
+  config.before(:suite) do
+    Utility::SeedService.new.seed_services
+  rescue RuntimeError
+    # assume valid state
   end
 
   # This option will default to `:apply_to_host_groups` in RSpec 4 (and will

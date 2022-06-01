@@ -29,12 +29,13 @@ VCR.configure do |c|
   c.cassette_library_dir = 'spec/support/vcr_cassettes'
   c.hook_into :webmock
   c.default_cassette_options = { decode_compressed_response: true }
+  c.ignore_request do |request|
+    URI(request.uri).port.in?([8000, 8001, 9200])
+  end
+  c.ignore_hosts '127.0.0.1', 'localhost'
 end
 
 ActiveRecord::Migration.maintain_test_schema!
-
-require 'sidekiq/testing'
-Sidekiq::Testing.fake!
 
 FactoryBot::SyntaxRunner.class_eval do
   include RSpec::Mocks::ExampleMethods
@@ -55,6 +56,9 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
+
+  # Include devise sign_in helpers for request specs
+  config.include Devise::Test::IntegrationHelpers, type: :request
 
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
@@ -78,7 +82,4 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
-  config.before do
-    Sidekiq::Worker.clear_all
-  end
 end

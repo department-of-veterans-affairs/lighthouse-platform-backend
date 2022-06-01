@@ -1,0 +1,316 @@
+<h2>Verification</h2>
+<ul>
+  <li>
+    <div>
+      <strong>
+        <div>Application is 508 Compliant:</div>
+      </strong>
+      <div><%= @request[:is508Compliant] %></div>
+    </div>
+  </li>
+</ul>
+<h2>Basic Information</h2>
+<ul>
+  <li>
+    <div>
+      <strong><div>Primary Contact:</div></strong>
+      <div>First Name: <%= @request[:primaryContact][:firstName] %></div>
+      <div>Last Name: <%= @request[:primaryContact][:lastName] %></div>
+      <div>Email: <%= @request[:primaryContact][:email] %></div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <strong><div>Secondary Contact:</div></strong>
+      <div>First Name: <%= @request[:secondaryContact][:firstName] %></div>
+      <div>Last Name: <%= @request[:secondaryContact][:lastName] %></div>
+      <div>Email: <%= @request[:secondaryContact][:email] %></div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <strong><div>Organization:</div></strong>
+      <div><%= @request[:organization] %></div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <strong><div>Application Name:</div></strong>
+      <div><%= @request[:appName] %></div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <strong>
+        <div>Application Description:</div>
+      </strong>
+      <div><%= @request[:appDescription] %></div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <strong>
+        <div>Website:</div>
+      </strong>
+      <div><%= @request[:website] %></div>
+    </div>
+  </li>
+  <% if @request[:phoneNumber].present? %>
+    <li>
+      <div>
+        <strong>
+          <div>Phone Number:</div>
+        </strong>
+        <div><%= @request[:phoneNumber] %></div>
+      </div>
+    </li>
+  <% end %>
+  <li>
+    <div>
+      <strong>
+        <div>Status Update Emails:</div>
+      </strong>
+      <% @request[:statusUpdateEmails].map do |email| %>
+        <div><%= email %></div>
+      <% end %>
+    </div>
+  </li>
+  <li>
+    <div>
+      <strong>
+        <div>APIs:</div>
+      </strong>
+      <div><%= @request[:apis] %></div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <strong>
+        <div>Policy Documents:</div>
+      </strong>
+      <% if @request[:policyDocuments].present? %>
+        <% @request[:policyDocuments].map do |doc| %>
+            <div><%= doc %></div>
+        <% end %>
+      <% end %>
+    </div>
+  </li>
+  <li>
+    <div>
+      <strong>
+        <div>Value Provided:</div>
+      </strong>
+      <div><%= @request[:valueProvided] %></div>
+    </div>
+  </li>
+  <% if @request[:businessModel].present? %>
+    <li>
+      <div>
+        <strong>
+          <div>Business Model:</div>
+        </strong>
+        <div><%= @request[:businessModel] %></div>
+      </div>
+    </li>
+  <% end %>
+</ul>
+<h2>Monetization Information</h2>
+<ul>
+  <li>
+    <div>
+      <strong>
+        <div>Application Monitizes Veteran Information:</div>
+      </strong>
+      <div><%= @request[:monitizedVeteranInformation] %></div>
+    </div>
+  </li>
+  <% if @request[:monitizedVeteranInformation].present? %>
+    <li>
+      <div>
+        <strong>
+          <div>Explanation:</div>
+        </strong>
+        <div><%= @request[:monitizationExplanation] %></div>
+      </div>
+    </li>
+    <li>
+      <div>
+        <strong>
+          <div>App is Veteran Facing:</div>
+        </strong>
+        <div><%= @request[:veteranFacing] %></div>
+      </div>
+    </li>
+    <% if @request[:veteranFacing].present? %>
+      <li>
+        <div>
+          <strong>
+            <div>Link to Application's Primary Webpage:</div>
+          </strong>
+          <div><%= @request[:website] %></div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>
+            <div>Link to Application's Signup Page:</div>
+          </strong>
+          <div><%= @request[:signUpLink] %></div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>
+            <div>Link to Application's FAQ/Support Page:</div>
+          </strong>
+          <div><%= @request[:supportLink] %></div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>
+            <div>Available on the Following Platforms:</div>
+          </strong>
+          <div><%= @request[:platforms] %></div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>
+            <div>Veteran Facing Description:</div>
+          </strong>
+          <div><%= @request[:veteranFacingDescription] %></div>
+        </div>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
+<h2>Technical Information</h2>
+<ul>
+  <li>
+    <div>
+      <strong>
+        <div>VASI System Name</div>
+      </strong>
+      <div><%= @request[:vasiSystemName] %></div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <strong>
+        <div>Production Key Credential Storage:</div>
+      </strong>
+      <div><%= @request[:productionKeyCredentialStorage] %></div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <strong>
+        <div>Production/OAuth Key Credential Storage:</div>
+      </strong>
+      <div><%= @request[:productionOrOAuthKeyCredentialStorage] %></div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <strong>
+        <div>Application Stores PII/PHI:</div>
+      </strong>
+      <div><%= @request[:storePIIOrPHI] %></div>
+    </div>
+  </li>
+  <% if @request[:storePIIOrPHI].present? %>
+    <li>
+      <div>
+        <strong>
+          <div>How is PII/PHI Stored?:</div>
+        </strong>
+        <div><%= @request[:piiStorageMethod] %></div>
+      </div>
+    </li>
+    <li>
+      <div>
+        <strong>
+          <div>Safeguards in Place:</div>
+        </strong>
+        <div><%= @request[:multipleReqSafeguards] %></div>
+      </div>
+    </li>
+    <li>
+      <div>
+        <strong>
+          <div>Breach Management Process:</div>
+        </strong>
+        <div><%= @request[:breachManagementProcess] %></div>
+      </div>
+    </li>
+    <li>
+      <div>
+        <strong>
+          <div>Vulnerability Management and Patch Process:</div>
+        </strong>
+        <div><%= @request[:vulnerabilityManagement] %></div>
+      </div>
+    </li>
+    <li>
+      <div>
+        <strong>
+          <div>Application Exposes Veterans’ Health, Claims, Disabilities, or Service History Data to Third Parties:</div>
+        </strong>
+        <div><%= @request[:exposeVeteranInformationToThirdParties] %></div>
+      </div>
+    </li>
+    <% if @request[:exposeVeteranInformationToThirdParties].present? %>
+      <li>
+        <div>
+          <strong>
+            <div>Description:</div>
+          </strong>
+          <div><%= @request[:thirdPartyInfoDescription] %></div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>
+            <div>Scopes Access Requested:</div>
+          </strong>
+          <div><%= @request[:scopesAccessRequested] %></div>
+        </div>
+      </li>
+    <% end %>
+      <li>
+        <div>
+          <strong>
+            <div>Distributing Production API Keys to Customers:</div>
+          </strong>
+          <div><%= @request[:distributingAPIKeysToCustomers] %></div>
+        </div>
+      </li>
+      <% if @request[:distributingAPIKeysToCustomers].present? %>
+        <li>
+          <div>
+            <strong>
+              <div>Naming Convention for Customers:</div>
+            </strong>
+            <div><%= @request[:namingConvention] %></div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>
+              <div>Centralized Backend Log of Customer Submissions:</div>
+            </strong>
+            <div><%= @request[:centralizedBackendLog] %></div>
+          </div>
+        </li>
+      <% end %>
+    <% end %>
+  <li>
+    <div>
+      <strong>
+        <div>Listed on MyHealthApplication.com:</div>
+      </strong>
+      <div><%= @request[:listedOnMyHealthApplication] %></div>
+    </div>
+  </li>
+</ul>

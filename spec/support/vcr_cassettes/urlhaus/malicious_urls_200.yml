@@ -1,0 +1,90 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://urlhaus.abuse.ch/downloads/text/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2261033'
+      Server:
+      - Apache
+      Strict-Transport-Security:
+      - max-age=15768000 ; includeSubDomains
+      Expect-Ct:
+      - enforce, max-age=86400
+      Permissions-Policy:
+      - accelerometer=(), ambient-light-sensor=(), autoplay=(), camera=(), encrypted-media=(),
+        fullscreen=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(),
+        midi=(), payment=(), picture-in-picture=(), speaker=(), usb=(), vr=()
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - 'default-src ''self'' https://fonts.gstatic.com:443 data:; style-src ''self''
+        ''unsafe-inline'' https://www.gstatic.com:443 https://fonts.googleapis.com:443;
+        script-src ''self'' ''unsafe-inline'' ''unsafe-eval'' https://www.gstatic.com:443
+        https://www.google.com/recaptcha/; frame-src https://www.google.com/recaptcha/;
+        img-src ''self'' data: https://syndication.twitter.com:443; object-src ''none'''
+      Cross-Origin-Opener-Policy:
+      - same-origin; report-to="default"
+      Cross-Origin-Resource-Policy:
+      - same-site
+      Last-Modified:
+      - Tue, 15 Mar 2022 15:35:11 GMT
+      Etag:
+      - '"7af652-5da438aecd907-gzip"'
+      Cache-Control:
+      - max-age=300
+      Expires:
+      - Tue, 15 Mar 2022 15:41:29 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - sameorigin
+      X-Xss-Protection:
+      - 1; mode=block
+      Content-Type:
+      - text/plain
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 15 Mar 2022 15:37:33 GMT
+      Age:
+      - '64'
+      X-Served-By:
+      - cache-lhr7371-LHR, cache-mci5938-MCI
+      X-Cache:
+      - HIT, MISS
+      X-Cache-Hits:
+      - 1, 0
+      X-Timer:
+      - S1647358654.730597,VS0,VE98
+      Vary:
+      - Accept-Encoding
+    body:
+      encoding: ASCII-8BIT
+      string: "################################################################\r\n#
+        abuse.ch URLhaus Plain-Text URL List (URLs only)             #\r\n# Last updated:
+        2022-03-15 15:34:20 (UTC)                      #\r\n#                                                              #\r\n#
+        Terms Of Use: https://urlhaus.abuse.ch/api/                  #\r\n# For questions
+        please contact urlhaus [at] abuse.ch           #\r\n################################################################\r\n#\r\n#
+        url\r\nhttp://175.174.93.114:33281/Mozi.m\r\nhttp://221.14.125.87:36280/Mozi.m\r\nhttp://183.7.174.108:36242/Mozi.m\r\n"
+  recorded_at: Tue, 15 Mar 2022 15:37:34 GMT
+recorded_with: VCR 6.0.0

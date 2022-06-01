@@ -1,0 +1,41 @@
+<div>Welcome <%= @request[:firstName] %>,</div><br />
+
+<div>Thank you for your interest in our <%= list_apis(@request[:apis]) %>. We are excited to partner with you to improve the lives of veterans.</div><br />
+
+<% if @kong_consumer.present? && @kong_consumer[:token].present? %>
+  <div>Here's your key for accessing the development environment: <pre><%= @kong_consumer[:token] %></pre></div><br />
+
+  <div>Your client username is: <pre><%= @kong_consumer[:kong_username] %></pre> Please reference this in any support request.</div><br />
+
+  <div>You can use your key by including it as an HTTP request header <pre>apiKey: <%= @kong_consumer[:token] %></pre> in your requests to the API. You can find additional documentation at <a href="https://developer.va.gov">developer.va.gov</a></div><br />
+<% end %>
+
+<% if @okta_consumers.present? %>
+  <% if @okta_consumers.dig(:ccg, :credentials).present? %>
+    <div>Here's your Client Credentials Grant OAuth Client ID: <pre><%= @okta_consumers.dig(:ccg, :credentials, :oauthClient, :client_id) %></pre></div><br />
+  <% end %>
+
+  <% if @okta_consumers.dig(:acg, :credentials).present? %>
+    <div>Here's your Authorization Code Flow OAuth Client ID: <pre><%= @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_id) %></pre></div><br />
+
+    <% if @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_secret).present? %>
+      <div>Here's your OAuth Client Secret: <pre><%= @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_secret) %></pre></div><br />
+    <% end %>
+
+    <% if @okta_consumers.dig(:acg, :settings, :oauthClient, :redirect_uris).present? %>
+      <div>Your redirect URI is: <pre><%= @okta_consumers.dig(:acg, :settings, :oauthClient, :redirect_uris).first %></pre></div><br />
+    <% end %>
+  <% end %>
+
+  <div>Please visit our OAuth documentation for implementation guidelines: <a href="https://developer.va.gov/oauth">developer.va.gov/oauth</a></div><br />
+<% end %>
+
+<div>If you find a bug or would like to make a feature request, please open an issue through our Support page. We are continually working to improve our process and welcome <a href="https://developer.va.gov/support">feedback along your journey</a>.</div><br />
+
+<div>When you're ready to move to a production environment, please follow the steps outlined on our <a href="https://developer.va.gov/go-live">Path to Production</a> page.</div><br />
+
+<div>Thank you again,</div>
+<div>VA API Platform Team</div> <br />
+<div><strong>Read VA API Docs at: </strong><a href="https://developer.va.gov">developer.va.gov</a></div>
+<div><strong>Get support: </strong><a href="https://github.com/department-of-veterans-affairs/vets-api-clients/issues/new/choose">Create Github Issue</a></div>
+<div><strong>Email us at: </strong><a href="mailto:api@va.gov">api@va.gov</a></div>

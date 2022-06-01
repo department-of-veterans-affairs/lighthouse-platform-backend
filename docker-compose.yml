@@ -1,36 +1,25 @@
 version: "3.8"
+
 services:
   app:
     build:
       context: .
+      dockerfile: Dockerfile
       target: ci
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 8080 -b '0.0.0.0'"
-    ports:
-      - "8080:8080"
     depends_on:
       - db
-    networks:
-      - backend
+      - kong
+      - prod-kong
+      - kong-migrations
+      - prod-kong-migrations
+      - kong-database
+      - prod-kong-database
+      - dynamodb
+      - elasticsearch
     environment:
       - DATABASE_HOST=${DATABASE_HOST:-db}
       - DATABASE_USER=${DATABASE_USER:-postgres}
       - DATABASE_PASSWORD=${DATABASE_PASSWORD:-postgres}
       - RAILS_SERVE_STATIC_FILES=true
-  db:
-    image: postgres:13.1
-    expose:
-      - "5432"
-    ports:
-      - "5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    networks:
-      - backend
-networks:
-  backend:
-    driver: bridge
-volumes:
-  db-data:
+      - RAILS_ENV=development

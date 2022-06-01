@@ -4,24 +4,15 @@ require 'rails_helper'
 
 RSpec.describe ConsumerApiAssignment, type: :model do
   subject do
-    ConsumerApiAssignment.new(consumer_id: consumer.id,
-                              api_id: api.id,
-                              first_successful_call_at: current_time)
+    build(:consumer_api_assignment,
+          consumer: consumer,
+          api_environment: api_environment)
   end
 
   let(:current_time) { DateTime.now }
   let(:user) { create(:user) }
   let(:consumer) { create(:consumer, user: user) }
-  let :api do
-    create(:api,
-           name: 'Appeals Status API',
-           auth_method: 'key_auth',
-           environment: 'sandbox',
-           open_api_url: '/services/appeals/docs/v0/api',
-           base_path: '/services/appeals/v0/appeals',
-           service_ref: 's3Rv1c3-r3f',
-           api_ref: 'appeals')
-  end
+  let(:api_environment) { build(:api_environment) }
 
   describe 'creates a valid ConsumerApiAssignment' do
     it 'is valid' do
@@ -32,8 +23,8 @@ RSpec.describe ConsumerApiAssignment, type: :model do
       expect(subject.consumer_id).to eq(consumer.id)
     end
 
-    it 'receives an api_id' do
-      expect(subject.api_id).to eq(api.id)
+    it 'receives an api_environment' do
+      expect(subject.api_environment_id).to eq(api_environment.id)
     end
   end
 
@@ -43,8 +34,8 @@ RSpec.describe ConsumerApiAssignment, type: :model do
       expect(subject).not_to be_valid
     end
 
-    it 'fails without an api_id' do
-      subject.api_id = nil
+    it 'fails without an api_environment' do
+      subject.api_environment = nil
       expect(subject).not_to be_valid
     end
   end

@@ -5,28 +5,44 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.0.0'
 
+gem 'activerecord-import'
 gem 'aws-sdk-dynamodb', '~> 1.62'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'devise'
+gem 'discard'
 gem 'figaro'
-# gem 'health_check'
+gem 'flipper'
+gem 'flipper-active_record'
+gem 'flipper-ui'
+gem 'govdelivery-tms', require: 'govdelivery/tms/mail/delivery_method'
+gem 'grape'
+gem 'grape-entity'
+gem 'grape_logging'
+gem 'grape-swagger'
+gem 'grape-swagger-rails'
+gem 'httparty'
 gem 'jbuilder', '~> 2.7'
-gem 'jsonapi-serializer'
-gem 'oktakit', git: 'https://github.com/charleystran/oktakit', branch: 'add_authorization_servers'
+gem 'lograge'
+gem 'okcomputer'
+gem 'oktakit', git: 'https://github.com/FonzMP/oktakit', branch: 'add_auth_servers'
 gem 'omniauth', '~> 2.0.0'
 gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
+gem 'omniauth-rails_csrf_protection'
 gem 'pg', '~> 1.1'
-gem 'puma', '~> 5.0'
-gem 'rails', '~> 6.1.3', '>= 6.1.3.1'
+gem 'premailer-rails'
+gem 'puma', '~> 5.5'
+gem 'rack-protection', '< 2.2.0'
+gem 'rails'
+gem 'rails_admin', '~> 3.0'
 gem 'rails-healthcheck'
 gem 'rest-client'
+gem 'rufus-scheduler'
 gem 'sass-rails', '>= 6'
 gem 'serviceworker-rails'
-gem 'sidekiq'
 gem 'simple_form'
+gem 'slack-ruby-client'
 gem 'socksify', '~> 1.7'
 gem 'turbolinks', '~> 5'
-gem 'webpacker', '~> 5.0'
 
 group :development, :test do
   gem 'brakeman'
@@ -57,8 +73,10 @@ end
 group :test do
   gem 'capybara', '>= 3.26'
   gem 'selenium-webdriver'
-  gem 'simplecov', '< 0.18', require: false
+  gem 'simplecov', require: false
+  gem 'simplecov-csv', require: false
   gem 'webdrivers'
 end
 
+gem 'sassc-rails'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

@@ -45,6 +45,8 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
+  config.active_job.queue_adapter = :test
+
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
@@ -61,11 +63,28 @@ Rails.application.configure do
   # config.action_view.annotate_rendered_view_with_filenames = true
   ENV['SLACK_WEBHOOK_URL'] = 'https://www.slack.com'
   ENV['GITHUB_EMAIL_DEFAULT_EMAIL_ADDRESS'] = 'testing@example.com'
+  ENV['DSVA_ENVIRONMENT'] = 'Development'
   ENV['DYNAMO_ACCESS_KEY_ID'] = 'iammocked'
   ENV['DYNAMO_SECRET_ACCESS_KEY'] = 'iammocked'
   ENV['DYNAMO_TABLE_NAME'] = 'mocktable'
+  ENV['DYNAMO_ENDPOINT'] = 'http://dynamodb:8000'
   ENV['OKTA_TOKEN'] = 'mocktoken'
+  ENV['PROD_OKTA_TOKEN'] = 'mocktoken'
   ENV['OKTA_API_ENDPOINT'] = 'https://deptva-eval.okta.com/api/v1'
-  ENV['SOCKS_HOST'] = 'http://localhost'
-  ENV['KONG_ELB'] = 'http://api-gateway-dev.vfs.va.gov'
+  ENV['PROD_OKTA_API_ENDPOINT'] = 'https://deptva-eval.okta.com/api/v1'
+  ENV['OKTA_LOGIN_URL'] = 'https://sandbox-api.va.gov/oauth2/redirect/'
+  ENV['PROD_OKTA_LOGIN_URL'] = 'https://api.va.gov/oauth2/redirect/'
+  ENV['OKTA_DEFAULT_POLICY'] = 'Default Policy'
+  ENV['IDME_GROUP_ID'] = '00g31dz5agb5ZzIk05d7'
+  ENV['PROD_IDME_GROUP_ID'] = '00g31dz5agb5ZzIk05d7'
+  ENV['KONG_ELB'] = 'http://kong:8001'
+  ENV['PROD_KONG_ELB'] = 'http://prod-kong:8001'
+  ENV['AWS_REGION'] = 'us-gov-west-1'
+  ENV['AUTHZ_SERVER_DEFAULT'] = 'default'
+  ENV['ES_ENDPOINT'] = 'http://elasticsearch:9200'
+  ENV['SUPPORT_EMAIL'] = 'user_support@the_house_of_light.com'
+  ENV['VA_PROFILE_DISTRIBUTION'] = 'va_profile_support@the_house_of_light.com'
+  ENV['SLACK_API_TOKEN'] = 't4c0s4lyf3'
+  ENV['SLACK_DRIFT_CHANNEL'] = '#test'
+  ENV['SLACK_SIGNUP_CHANNEL'] = '#test'
 end

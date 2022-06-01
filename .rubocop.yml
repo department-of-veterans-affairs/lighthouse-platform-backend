@@ -22,6 +22,7 @@ AllCops:
     - 'script/**/*'
     - 'vendor/**/*'
     - modules/**/db/migrate/*.rb
+  NewCops: enable
 
 # This allows you to use have writers like self.method_name(name) vs self.method_name=(name)
 Style/TrivialAccessors:
@@ -34,6 +35,9 @@ Style/StringLiterals:
   EnforcedStyle: single_quotes
 
 Style/Documentation:
+  Enabled: false
+
+Rails/I18nLocaleTexts:
   Enabled: false
 
 Style/ClassAndModuleChildren:
@@ -77,19 +81,41 @@ Layout/LineLength:
     - 'Gemfile'
     - 'config/initializers/devise.rb'
     - 'config/initializers/simple_form.rb'
+    - 'app/services/slack/report_service.rb'
 Metrics/MethodLength:
   Exclude:
     - 'rakelib/support/shell_command.rb'
     - 'app/controllers/admin/api/v0/apis_controller.rb'
     - 'spec/services/consumer_import_service_spec.rb'
-    - 'spec/services/dynamo_service_spec.rb'
+    - 'app/models/api.rb'
   IgnoredMethods:
     - 'user_params'
+    - 'signup_params'
     - 'bulk_upload'
     - 'construct_import'
     - 'fetch_dynamo_db'
     - 'update_kong_consumers'
     - 'build_user_from_dynamo'
+    - 'apply'
+    - 'consumer_signup'
+    - 'build_new_acg_application_payload'
+    - 'build_new_ccg_application_payload'
+    - 'build_message'
+    - 'add_api_to_consumer'
+    - 'weekly_report_message'
+    - 'dynamo_mock_response'
+    - 'auth_refs'
+Metrics/CyclomaticComplexity:
+  IgnoredMethods:
+    - 'consumer_signup'
+    - 'validate_param!'
+    - 'construct_import'
+    - 'auth_refs'
+Metrics/PerceivedComplexity:
+  IgnoredMethods:
+    - 'consumer_signup'
+    - 'construct_import'
+    - 'auth_refs'
 Rails:
   Enabled: true
 
@@ -98,14 +124,17 @@ Rails/Output:
     - 'lib/tasks/**/*'
 
 Rails/SkipsModelValidations:
-  Exclude: 
-    - 'app/controllers/admin/api/v0/apis_controller.rb'
+  Exclude:
+    - 'app/services/dynamo_import_service.rb'
 
 Metrics/ClassLength:
   Max: 400
 
 Metrics/AbcSize:
   Max: 40
+  IgnoredMethods:
+    - 'consumer_signup'
+    - 'construct_import'
 
 # removing rule because get_session implies HTTP GET, and informs method
 Naming/AccessorMethodName:
@@ -123,6 +152,10 @@ Metrics/BlockLength:
     - 'rakelib/**/*.rake'
     - 'lib/tasks/**/*.rake'
     - 'config/**/*.rb'
+    - 'app/api/v0/*'
+    - 'app/api/utilities.rb'
+  IgnoredMethods:
+    - 'helpers'
 
 # Don't worry about ambiguous blocks in RSpec
 # Official recommendation from rubocop team is to disable this rule for specs.

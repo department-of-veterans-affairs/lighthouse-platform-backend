@@ -8,10 +8,13 @@ RSpec.describe Consumer, type: :model do
                  organization: 'Test User Organization',
                  tos_accepted_at: tos_test_time,
                  tos_version: 1,
-                 sandbox_gateway_ref: auth_info[:sandbox][:gateway],
-                 sandbox_oauth_ref: auth_info[:sandbox][:oauth],
-                 prod_gateway_ref: auth_info[:prod][:gateway],
-                 prod_oauth_ref: auth_info[:prod][:oauth],
+                 consumer_auth_refs_attributes: [
+                   { key: ConsumerAuthRef::KEYS[:sandbox_gateway_ref], value: auth_info[:sandbox][:gateway] },
+                   { key: ConsumerAuthRef::KEYS[:sandbox_acg_oauth_ref], value: auth_info[:sandbox][:acg_oauth] },
+                   { key: ConsumerAuthRef::KEYS[:sandbox_ccg_oauth_ref], value: auth_info[:sandbox][:ccg_oauth] },
+                   { key: ConsumerAuthRef::KEYS[:prod_gateway_ref], value: auth_info[:prod][:gateway] },
+                   { key: ConsumerAuthRef::KEYS[:prod_acg_oauth_ref], value: auth_info[:prod][:acg_oauth] }
+                 ],
                  user_id: parent[:id])
   end
 
@@ -22,16 +25,17 @@ RSpec.describe Consumer, type: :model do
            last_name: 'User')
   end
   let(:test_description) { 'This is an in depth description.' }
-  let(:tos_test_time) { DateTime.now }
+  let(:tos_test_time) { Time.zone.now.change(usec: 0) }
   let(:auth_info) do
     {
       sandbox: {
         gateway: 's4ndb0x-g4t3w4y',
-        oauth: 's4ndb0x-0kt4'
+        acg_oauth: 's4ndb0x-acg-0kt4',
+        ccg_oauth: 's4ndb0x-ccg-0kt4'
       },
       prod: {
         gateway: 'pr0d-g4t3w4y',
-        oauth: 'pr0d-0kt4'
+        acg_oauth: 'pr0d-0kt4'
       }
     }
   end
@@ -54,25 +58,44 @@ RSpec.describe Consumer, type: :model do
     end
 
     it 'receives a sandbox_gateway_ref' do
-      expect(subject[:sandbox_gateway_ref]).to eq(auth_info[:sandbox][:gateway])
+      sandbox_gateway_ref = subject.consumer_auth_refs.detect do |auth_ref|
+        auth_ref[:key] == ConsumerAuthRef::KEYS[:sandbox_gateway_ref]
+      end.value
+      expect(sandbox_gateway_ref).to eq(auth_info[:sandbox][:gateway])
     end
 
-    it 'receives a sandbox_oauth_ref' do
-      expect(subject[:sandbox_oauth_ref]).to eq(auth_info[:sandbox][:oauth])
+    it 'receives a acg sandbox_oauth_ref' do
+      sandbox_acg_oauth_ref = subject.consumer_auth_refs.detect do |auth_ref|
+        auth_ref[:key] == ConsumerAuthRef::KEYS[:sandbox_acg_oauth_ref]
+      end.value
+      expect(sandbox_acg_oauth_ref).to eq(auth_info[:sandbox][:acg_oauth])
+    end
+
+    it 'receives a ccg sandbox_oauth_ref' do
+      sandbox_ccg_oauth_ref = subject.consumer_auth_refs.detect do |auth_ref|
+        auth_ref[:key] == ConsumerAuthRef::KEYS[:sandbox_ccg_oauth_ref]
+      end.value
+      expect(sandbox_ccg_oauth_ref).to eq(auth_info[:sandbox][:ccg_oauth])
     end
 
     it 'receives a prod_gateway_ref' do
-      expect(subject[:prod_gateway_ref]).to eq(auth_info[:prod][:gateway])
+      prod_gateway_ref = subject.consumer_auth_refs.detect do |auth_ref|
+        auth_ref[:key] == ConsumerAuthRef::KEYS[:prod_gateway_ref]
+      end.value
+      expect(prod_gateway_ref).to eq(auth_info[:prod][:gateway])
     end
 
-    it 'receives a prod_oauth_ref' do
-      expect(subject[:prod_oauth_ref]).to eq(auth_info[:prod][:oauth])
+    it 'receives an acg prod_oauth_ref' do
+      prod_acg_oauth_ref = subject.consumer_auth_refs.detect do |auth_ref|
+        auth_ref[:key] == ConsumerAuthRef::KEYS[:prod_acg_oauth_ref]
+      end.value
+      expect(prod_acg_oauth_ref).to eq(auth_info[:prod][:acg_oauth])
     end
   end
 
   describe 'fails on an invalid input' do
-    it 'fails without a description' do
-      subject[:description] = nil
+    it 'fails without an organization' do
+      subject[:organization] = nil
       expect(subject).not_to be_valid
     end
   end

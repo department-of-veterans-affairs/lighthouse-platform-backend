@@ -3,7 +3,98 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  before do
+    user = {
+      first_name: 'John',
+      last_name: 'Smith',
+      email: 'jsmith@email.com'
+    }
+    @user1 = User.create user
+  end
+
   let(:test_email) { 'chuck.norris@texas_rangers_rule.com' }
+
+  describe '.user' do
+    it { expect(@user1).to(be_valid) }
+  end
+
+  auth_hash = OmniAuth::AuthHash.new(
+    {
+      provider: 'github',
+      uid: '1234',
+      info: {
+        email: 'user@example.com',
+        name: 'Gimli son of Gloin'
+      }
+    }
+  )
+
+  updated_auth_hash = OmniAuth::AuthHash.new(
+    {
+      provider: 'github',
+      uid: '1234',
+      info: {
+        email: 'different.email@example.com',
+        name: 'Gimly spelled wrong'
+      }
+    }
+  )
+
+  describe User, '#from_omniauth' do
+    it 'creates an admin user if is_admin=true' do
+      expect(User.count).to eq 1
+      user = User.from_omniauth(auth_hash, true)
+      expect(User.count).to eq 2
+
+      expect(user.uid).to eq '1234'
+      expect(user.email).to eq 'user@example.com'
+      expect(user.first_name).to eq 'Gimli'
+      expect(user.last_name).to eq 'Gloin'
+      expect(user.role).to eq 'admin'
+    end
+
+    it 'retrieves an existing user' do
+      user = User.new(
+        provider: 'github',
+        first_name: 'user',
+        last_name: 'one',
+        uid: '1234',
+        email: 'user@example.com'
+      )
+      user.save
+      omniauth_user = User.from_omniauth(auth_hash, false)
+
+      expect(user).to eq(omniauth_user)
+    end
+
+    it 'creates a new user' do
+      expect(User.count).to eq 1
+      user = User.from_omniauth(auth_hash, false)
+      expect(User.count).to eq 2
+
+      expect(user.uid).to eq '1234'
+      expect(user.email).to eq 'user@example.com'
+      expect(user.first_name).to eq 'Gimli'
+      expect(user.last_name).to eq 'Gloin'
+      expect(user.role).to eq 'user'
+    end
+
+    it 'updates existing users' do
+      expect(User.count).to eq 1
+      User.from_omniauth(auth_hash, false)
+      expect(User.count).to eq 2
+
+      user = User.from_omniauth(updated_auth_hash, false)
+      expect(user.email).to eq 'different.email@example.com'
+      expect(user.first_name).to eq 'Gimly'
+      expect(user.last_name).to eq 'wrong'
+
+      user = User.from_omniauth(auth_hash, false)
+      expect(user.email).to eq 'user@example.com'
+      expect(user.first_name).to eq 'Gimli'
+      expect(user.last_name).to eq 'Gloin'
+    end
+  end
 
   describe 'tests a valid user model' do
     subject do

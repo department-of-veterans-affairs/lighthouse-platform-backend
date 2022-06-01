@@ -1,22 +1,25 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  Healthcheck.routes(self)
-  # everything must scoped under platform-backend for DVP load balancer reqs
-  scope '/platform-backend' do
-    get 'admin/dashboard', to: 'admin/dashboard#index'
-    resources :consumers, only: [:create]
-    resources :github_alerts, only: [:create]
+  root to: redirect('/platform-backend/admin/dashboard'), as: 'rootiest_root'
+
+  scope '/platform-backend' do # everything must be scoped under platform-backend for DVP load balancer reqs
+    root to: 'home#index'
+
+    mount OkComputer::Engine, at: '/health_check'
+    devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
+
+    mount RailsAdmin::Engine => '/admin/database', as: 'rails_admin'
+
+    mount Flipper::UI.app(Flipper) => '/admin/flipper', as: 'flipper'
+
+    mount Base => '/'
+
     namespace :admin do
-      namespace :api do
-        namespace :v0 do
-          resources :apis do
-            collection do
-              post :bulk_upload
-            end
-          end
-        end
-      end
+      root to: redirect('/platform-backend/admin/dashboard')
+      mount GrapeSwaggerRails::Engine => '/dashboard'
     end
+
+    match '*path', to: 'application#not_found', via: :all
   end
 end

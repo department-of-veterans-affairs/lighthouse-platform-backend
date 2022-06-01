@@ -1,8 +1,35 @@
-dynamo_access_key_id:
-dynamo_secret_access_key:
-dynamo_table_name:
-aws_region:
-kong_elb:
+dynamo_endpoint: "http://localhost:4500"
+dynamo_access_key_id: "dummy"
+dynamo_secret_access_key: "dummy"
+dynamo_table_name: "dvp-dev-developer-portal-users"
+aws_region: "us-gov-west-1"
+kong_elb: "http://localhost:4001"
+prod_kong_elb: "http://localhost:4003"
 kong_password:
+prod_kong_password:
+es_endpoint:
 okta_token:
-okta_api_endpoint:
+prod_okta_token:
+okta_api_endpoint: "https://dev-########-admin.okta.com"
+prod_okta_api_endpoint: "https://dev-########-admin.okta.com"
+okta_redirect_url: "https://sandbox-api.va.gov/oauth2/redirect/"
+prod_okta_redirect_url: "https://api.va.gov/oauth2/redirect/"
+okta_login_url: "https://sandbox-api.va.gov/oauth2/redirect/"
+okta_default_policy: "Default Policy"
+idme_group_id:
+prod_idme_group_id:
+dsva_environment: Development
+github_app_id: e2583634c192807ccc28
+github_app_secret:
+github_team_id: "5268420"
+authz_server_default: default
+authz_server_claims: default
+authz_server_communitycare: default
+authz_server_health: default
+authz_server_verification: default
+support_email:
+enable_github_auth:
+va_profile_distribution:
+slack_api_token:
+slack_drift_channel:
+slack_signup_channel:
