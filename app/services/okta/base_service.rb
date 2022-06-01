@@ -13,6 +13,11 @@ module Okta
       resp.map(&:to_h)
     end
 
+    def list_all_applications
+      resp, = @client.list_applications(query: { limit: 200 }, paginate: true)
+      resp.map(&:to_h)
+    end
+
     def consumer_signup(user, options = {})
       acg_application = consumer_signup_per_type(user, 'acg', options)
       ccg_application = consumer_signup_per_type(user, 'ccg', options)
@@ -88,6 +93,8 @@ module Okta
 
     def save_id_to_user(user, type, id)
       auth_ref_key = ConsumerAuthRef::KEYS["#{environment_key}_#{type}_oauth_ref".to_sym]
+      existing_auth_ref = user.consumer.consumer_auth_refs.kept.find_by(key: auth_ref_key)
+      existing_auth_ref.discard if existing_auth_ref.present?
       auth_ref = ConsumerAuthRef.new(consumer: user.consumer, key: auth_ref_key, value: id)
       user.consumer.consumer_auth_refs.push(auth_ref)
       user.save!

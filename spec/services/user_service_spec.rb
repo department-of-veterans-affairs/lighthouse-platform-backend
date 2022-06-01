@@ -9,8 +9,6 @@ RSpec.describe UserService do
   let(:consumer) do
     create(:consumer, user: user)
   end
-  let!(:sgf) { create(:consumer_auth_ref, consumer: consumer, key: 'sandbox_gateway_ref', value: gateway_ref) }
-  let!(:saof) { create(:consumer_auth_ref, consumer: consumer, key: 'sandbox_acg_oauth_ref', value: okta_ref) }
   let(:api_environments) { create_list(:api_environment, 3) }
   let(:api_ref_one) { api_environments.first.api.api_ref.name }
   let(:api_ref_two) { api_environments.second.api.api_ref.name }
@@ -106,6 +104,7 @@ RSpec.describe UserService do
       consumer_params[:user][:consumer_attributes][:consumer_auth_refs_attributes].delete_if do |auth_ref|
         auth_ref[:key] == 'sandbox_gateway_ref'
       end
+      create(:consumer_auth_ref, consumer: consumer, key: 'sandbox_gateway_ref', value: gateway_ref)
       UserService.new.construct_import(consumer_params, 'sandbox')
       reloaded = User.find_by(email: consumer_params[:user][:email])
       expect(reloaded.consumer.consumer_auth_refs.find_by(key: 'sandbox_gateway_ref').value).to eq('l3g1t-1d')
@@ -115,6 +114,7 @@ RSpec.describe UserService do
       consumer_params[:user][:consumer_attributes][:consumer_auth_refs_attributes].delete_if do |auth_ref|
         auth_ref[:key] == 'sandbox_acg_oauth_ref'
       end
+      create(:consumer_auth_ref, consumer: consumer, key: 'sandbox_acg_oauth_ref', value: okta_ref)
       UserService.new.construct_import(consumer_params, 'sandbox')
       reloaded = User.find_by(email: consumer_params[:user][:email])
       expect(reloaded.consumer.consumer_auth_refs.find_by(key: 'sandbox_acg_oauth_ref').value).to eq('0kt4-rul3s')
