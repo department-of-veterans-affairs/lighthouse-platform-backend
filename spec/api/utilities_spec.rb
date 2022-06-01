@@ -54,5 +54,10 @@ describe Utilities, type: :request do
       delete '/platform-backend/utilities/consumers'
       expect(response.status).to eq(200)
     end
+
+    it 'gets weekly signups for consumers' do
+      get '/platform-backend/utilities/consumers/signups-report'
+      expect(response.status).to eq(200)
+    end
   end
 end

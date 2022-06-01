@@ -7,6 +7,10 @@ module Slack
       send_message(Figaro.env.slack_signup_channel, message)
     end
 
+    def query_events
+      ActiveRecord::Base.connection.execute(build_query).first
+    end
+
     private
 
     def ref_builder(ref)
@@ -40,10 +44,6 @@ module Slack
 
     def build_query
       "SELECT #{generate_query.join(' ')} SUM(case WHEN (created_at > '#{1.week.ago}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{1.week.ago}')) then 1 else 0 end) as weekly_count, COUNT(DISTINCT content->'email') as total_count FROM events WHERE event_type='sandbox_signup';"
-    end
-
-    def query_events
-      ActiveRecord::Base.connection.execute(build_query).first
     end
 
     def weekly_report_message(duration, totals)
