@@ -14,7 +14,7 @@ module Okta
     end
 
     def list_all_applications
-      resp, = @client.list_applications(paginate: true)
+      resp, = @client.list_applications(query: { limit: 200 }, paginate: true)
       resp.map(&:to_h)
     end
 
