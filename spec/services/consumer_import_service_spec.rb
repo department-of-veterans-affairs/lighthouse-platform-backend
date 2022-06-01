@@ -15,7 +15,7 @@ RSpec.describe Kong::SandboxService do
     it 'imports the the users' do
       allow_any_instance_of(Kong::SandboxService).to receive(:list_all_consumers).and_return(kong_mock_response)
       allow_any_instance_of(DynamoService).to receive(:fetch_dynamo_db).and_return(dynamo_mock_response)
-      allow_any_instance_of(Okta::SandboxService).to receive(:list_applications).and_return(okta_mock_response)
+      allow_any_instance_of(Okta::SandboxService).to receive(:list_all_applications).and_return(okta_mock_response)
       service = ConsumerImportService.new
       expect do
         service.import
