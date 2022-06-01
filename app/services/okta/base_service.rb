@@ -13,6 +13,11 @@ module Okta
       resp.map(&:to_h)
     end
 
+    def list_all_applications
+      resp, = @client.list_applications(paginate: true)
+      resp.map(&:to_h)
+    end
+
     def consumer_signup(user, options = {})
       acg_application = consumer_signup_per_type(user, 'acg', options)
       ccg_application = consumer_signup_per_type(user, 'ccg', options)
