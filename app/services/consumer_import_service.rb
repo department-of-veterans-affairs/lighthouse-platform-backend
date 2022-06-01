@@ -73,7 +73,7 @@ class ConsumerImportService
       if dyn_consumer['tosAccepted']
         okta_application = @okta_applications.find { |okta_app| okta_app[:id] == dyn_consumer['okta_application_id'] }
         if okta_application
-          user_model = build_user_from_dynamo(dyn_consumer, nil, okta_application['id'])
+          user_model = build_user_from_dynamo(dyn_consumer, nil, okta_application[:id])
 
           UserService.new.construct_import(user_model, 'sandbox')
         end
