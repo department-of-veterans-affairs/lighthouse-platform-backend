@@ -12,7 +12,7 @@ module Kong
       consumers = pull_kong_consumers
       consumers_last_day = filter_last_day(consumers)
       alert_on_list = detect_unknown_entities(consumers_last_day) unless consumers_last_day.empty?
-      alert_on_list.map { |consumer| alert_slack consumer } if alert_on_list.present?
+      alert_on_list.each { |consumer| alert_slack consumer } if alert_on_list.present?
 
       { success: true }
     end
