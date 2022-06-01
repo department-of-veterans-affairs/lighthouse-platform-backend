@@ -59,8 +59,6 @@ http_interactions:
       Expect-Ct:
       - report-uri="https://report.com/reportOnly", max-age=0
       Link:
-      - <https://okta/apps?after=t4c0M4n14&limit=20>;
-        rel="next"
       - <https://okta/apps?limit=20>; rel="self"
       X-Content-Type-Options:
       - nosniff
