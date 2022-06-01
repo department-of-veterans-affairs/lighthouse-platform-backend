@@ -34,7 +34,7 @@ RSpec.describe Kong::DriftService do
 
     describe 'has private methods' do
       it 'filters via last day' do
-        VCR.use_cassette('kong/kong_consumers_list') do
+        VCR.use_cassette('kong/kong_consumers_200') do
           result = subject.send(:filter_last_day, consumers)
           expect(result.length).to eq(2)
         end
