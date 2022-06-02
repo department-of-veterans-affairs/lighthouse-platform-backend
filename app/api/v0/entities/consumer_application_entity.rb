@@ -7,7 +7,7 @@ module V0
         user.consumer.apis_list.map(&:api_ref).map(&:name).join(',')
       end
 
-      expose :clientId, documentation: { type: String } do |_user, options|
+      expose :clientID, documentation: { type: String } do |_user, options|
         options.dig(:okta_consumers, :acg, :credentials, :oauthClient, :client_id)
       end
 
