@@ -8,13 +8,13 @@ module Kong
       @slack_service = Slack::AlertService.new
     end
 
-    def detect_drift
+    def detect_drift(alert: true, filter: true)
       consumers = pull_kong_consumers
-      consumers_last_day = filter_last_day(consumers)
-      alert_on_list = detect_unknown_entities(consumers_last_day) unless consumers_last_day.empty?
-      alert_on_list.each { |consumer| alert_slack consumer } if alert_on_list.present?
+      consumers = filter_last_day(consumers) if filter
+      alert_on_list = detect_unknown_entities(consumers) unless consumers.empty?
+      alert_on_list.each { |consumer| alert_slack consumer } if alert && alert_on_list.present?
 
-      { success: true }
+      alert_on_list || []
     end
 
     private

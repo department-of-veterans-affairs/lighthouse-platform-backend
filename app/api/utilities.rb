@@ -84,6 +84,26 @@ class Utilities < Base
       get '/consumers' do
         Kong::SandboxService.new.list_all_consumers
       end
+
+      desc 'Return list Kong consumers not in LPB'
+      params do
+        requires :environment, type: String, allow_blank: false, values: %w[sandbox production], default: 'sandbox'
+      end
+      get '/environments/:environment/unknown-consumers' do
+        Kong::DriftService.new(params[:environment] == 'production' ? :production : nil).detect_drift(alert: false,
+                                                                                                      filter: false)
+      end
+    end
+
+    resource 'okta' do
+      desc 'Return list Okta applications not in LPB'
+      params do
+        requires :environment, type: String, allow_blank: false, values: %w[sandbox production], default: 'sandbox'
+      end
+      get '/environments/:environment/unknown-applications' do
+        Okta::DriftService.new(params[:environment] == 'production' ? :production : nil).detect_drift(alert: false,
+                                                                                                      filter: false)
+      end
     end
   end
 end
