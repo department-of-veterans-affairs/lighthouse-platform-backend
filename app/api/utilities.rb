@@ -88,10 +88,11 @@ class Utilities < Base
       desc 'Return list Kong consumers not in LPB'
       params do
         requires :environment, type: String, allow_blank: false, values: %w[sandbox production], default: 'sandbox'
+        optional :filterLastDay, type: Boolean, allow_blank: false, values: [true, false], default: false
       end
       get '/environments/:environment/unknown-consumers' do
-        Kong::DriftService.new(params[:environment] == 'production' ? :production : nil).detect_drift(alert: false,
-                                                                                                      filter: false)
+        drift_service_arg = params[:environment] == 'production' ? :production : nil
+        Kong::DriftService.new(drift_service_arg).detect_drift(alert: false, filter: params[:filterLastDay])
       end
     end
 
@@ -99,10 +100,11 @@ class Utilities < Base
       desc 'Return list Okta applications not in LPB'
       params do
         requires :environment, type: String, allow_blank: false, values: %w[sandbox production], default: 'sandbox'
+        optional :filterLastDay, type: Boolean, allow_blank: false, values: [true, false], default: false
       end
       get '/environments/:environment/unknown-applications' do
-        Okta::DriftService.new(params[:environment] == 'production' ? :production : nil).detect_drift(alert: false,
-                                                                                                      filter: false)
+        drift_service_arg = params[:environment] == 'production' ? :production : nil
+        Okta::DriftService.new(drift_service_arg).detect_drift(alert: false, filter: params[:filterLastDay])
       end
     end
   end
