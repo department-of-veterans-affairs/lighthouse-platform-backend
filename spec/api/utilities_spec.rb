@@ -59,5 +59,17 @@ describe Utilities, type: :request do
       get '/platform-backend/utilities/consumers/signups-report'
       expect(response.status).to eq(200)
     end
+
+    it 'gets unknown consumers in kong' do
+      get '/platform-backend/utilities/kong/environments/sandbox/unknown-consumers'
+      expect(response.status).to eq(200)
+    end
+
+    it 'gets unknown applications in okta' do
+      VCR.use_cassette('okta/list_applications_200', match_requests_on: [:method]) do
+        get '/platform-backend/utilities/okta/environments/sandbox/unknown-applications'
+        expect(response.status).to eq(200)
+      end
+    end
   end
 end
