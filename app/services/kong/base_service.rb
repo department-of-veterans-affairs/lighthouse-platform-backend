@@ -109,8 +109,12 @@ module Kong
     end
 
     def generate_consumer_name(organization, last_name)
-      # Prepend LPB- during test phase to define consumers from LPB
-      "LPB-#{"#{organization}#{last_name}".gsub(/\W/, '')}"
+      "#{prepend_value}#{"#{organization}#{last_name}".gsub(/\W/, '')}"
+    end
+
+    # Prepend LPB- during test phase to define consumers from LPB
+    def prepend_value
+      Flipper.enabled?(:denote_lpb) ? 'LPB-' : ''
     end
 
     def get_or_create_consumer(consumer_name)
