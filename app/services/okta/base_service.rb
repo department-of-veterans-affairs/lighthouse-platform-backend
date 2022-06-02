@@ -109,7 +109,11 @@ module Okta
     end
 
     def consumer_name(user)
-      "LPB-#{"#{user.consumer.organization}#{user.last_name}".gsub(/\W/, '')}"
+      "#{prepend_value}#{"#{user.consumer.organization}#{user.last_name}".gsub(/\W/, '')}"
+    end
+
+    def prepend_value
+      Flipper.enabled?(:denote_lpb) ? 'LPB-' : ''
     end
 
     def lower_env?

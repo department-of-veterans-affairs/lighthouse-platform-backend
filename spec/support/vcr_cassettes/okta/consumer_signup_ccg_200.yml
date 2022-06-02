@@ -5,7 +5,7 @@ http_interactions:
     uri: https://dev-87720571-admin.okta.com/api/v1/apps
     body:
       encoding: UTF-8
-      string: '{"name":"oidc_client","label":"LPB-DougFunnie-1653497146","signOnMode":"OPENID_CONNECT","credentials":{"oauthClient":{"autoKeyRotation":true,"token_endpoint_auth_method":"private_key_jwt"}},"settings":{"oauthClient":{"application_type":"service","grant_types":["client_credentials"],"response_types":["token"],"jwks":{"keys":[{"kty":"RSA","n":"key-value-here","e":"AQAB"}]}}}}'
+      string: '{"name":"oidc_client","label":"DougFunnie-1653497146","signOnMode":"OPENID_CONNECT","credentials":{"oauthClient":{"autoKeyRotation":true,"token_endpoint_auth_method":"private_key_jwt"}},"settings":{"oauthClient":{"application_type":"service","grant_types":["client_credentials"],"response_types":["token"],"jwks":{"keys":[{"kty":"RSA","n":"key-value-here","e":"AQAB"}]}}}}'
     headers:
       User-Agent:
       - Oktakit v0.2.0
