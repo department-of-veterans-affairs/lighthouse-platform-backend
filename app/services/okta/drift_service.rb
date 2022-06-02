@@ -8,13 +8,13 @@ module Okta
       @slack_service = Slack::AlertService.new
     end
 
-    def detect_drift
+    def detect_drift(alert: true, filter: true)
       applications = @client.new.list_all_applications
-      apps_last_day = filter_last_day(applications)
-      alert_on_list = detect_unknown_entities(apps_last_day) unless apps_last_day.empty?
-      alert_on_list.map { |consumer| alert_slack consumer } if alert_on_list.present?
+      applications = filter_last_day(applications) if filter
+      alert_on_list = detect_unknown_entities(applications) unless applications.empty?
+      alert_on_list.map { |consumer| alert_slack consumer } if alert && alert_on_list.present?
 
-      { success: true }
+      alert_on_list || []
     end
 
     private

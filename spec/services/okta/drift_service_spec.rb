@@ -24,7 +24,7 @@ RSpec.describe Okta::DriftService do
       VCR.use_cassette('okta/list_applications_200', match_requests_on: [:method]) do
         VCR.use_cassette('slack/alert_200', match_requests_on: [:method]) do
           result = subject.detect_drift
-          expect(result).to eq({ success: true })
+          expect(result.class).to eq(Array)
         end
       end
     end
