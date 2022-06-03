@@ -27,7 +27,7 @@ module V0
       end
       get '/transformations/legacy' do
         categories = {}
-        ApiCategory.kept.map do |category|
+        ApiCategory.kept.each do |category|
           categories[category.key] =
             V0::Entities::Legacy::ApiProviderCategoryEntity.represent(category)
         end

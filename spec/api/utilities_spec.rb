@@ -22,11 +22,6 @@ describe Utilities, type: :request do
       get '/platform-backend/utilities/apis'
       expect(response.status).to eq(200)
     end
-
-    it 'discards all apis' do
-      delete '/platform-backend/utilities/apis'
-      expect(response.status).to eq(200)
-    end
   end
 
   it 'initializes migration of consumers into new structure' do
@@ -47,11 +42,6 @@ describe Utilities, type: :request do
 
     it 'gets all users/consumers' do
       get '/platform-backend/utilities/consumers'
-      expect(response.status).to eq(200)
-    end
-
-    it 'discards all users/consumers' do
-      delete '/platform-backend/utilities/consumers'
       expect(response.status).to eq(200)
     end
 
