@@ -61,14 +61,3 @@ Okta Admin UI > Directory > Groups > Add Group
 Then take the id of this group from the url:
 https://dev-########-admin.okta.com/admin/group/{20-character-id}
 and add it to your application.yml file as the value for 'idme_group_id'
-
-#### Want to run a rake task in a deployed environment?
-Generate a rake task within the given scope
-```
-rails g task data_migrations {rake-task-name-here}
-```
-Once deployed, rake task will show up under the "data-migrations" endpoint on the dashboard
-```
-/platform-backend/admin/dashboard#!/utilities/postUtilitiesDataMigrationsTaskMigrationRequests
-```
-Task can then be executed in that deployed environment by just posting to that endpoint.
