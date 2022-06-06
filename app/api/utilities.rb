@@ -4,6 +4,19 @@ require 'rake'
 
 class Utilities < Base
   resource 'utilities' do
+    resource 'rake-tasks' do
+      desc 'Run data migrations'
+      params do
+        requires :task, type: String, allow_blank: false, values: ['data:migrate']
+      end
+      post '/:task/requests' do
+        Rails.application.load_tasks if Rake.application.tasks.blank?
+        Rake::Task[params[:task]].execute
+
+        { success: true }
+      end
+    end
+
     resource 'database' do
       desc 'Seed database with preset API data'
       post '/seed-requests' do

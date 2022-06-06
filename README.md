@@ -42,7 +42,7 @@ export RAILS_ENV=development
 rake db:create
 rake db:migrate
 rake db:seed
-rake dynamo:seed
+rake data:migrate
 rake kong:seed
 rake elasticsearch:seed
 

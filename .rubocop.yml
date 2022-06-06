@@ -19,6 +19,7 @@ AllCops:
     - db/schema.rb
     - db/seeds.rb
     - db/migrate/*.rb
+    - db/data_migrations/*.rb
     - 'script/**/*'
     - 'vendor/**/*'
     - modules/**/db/migrate/*.rb

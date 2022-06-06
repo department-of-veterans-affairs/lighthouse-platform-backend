@@ -388,6 +388,8 @@ GEM
       activesupport (= 7.0.2.4)
       bundler (>= 1.15.0)
       railties (= 7.0.2.4)
+    rails-data-migrations (1.2.0)
+      rails (>= 4.0.0)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -602,6 +604,7 @@ DEPENDENCIES
   rack-mini-profiler (~> 2.0)
   rack-protection (< 2.2.0)
   rails
+  rails-data-migrations
   rails-healthcheck
   rails_admin (~> 3.0)
   rest-client
