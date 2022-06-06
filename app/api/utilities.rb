@@ -4,23 +4,6 @@ require 'rake'
 
 class Utilities < Base
   resource 'utilities' do
-    resource 'data-migrations' do
-      Rails.application.load_tasks if Rake.application.tasks.blank?
-      data_migration_task_names =
-        Rake.application.tasks.select { |task| task.scope.head == 'data_migrations' }.map(&:name)
-
-      desc 'Run data migration'
-      params do
-        requires :task, type: String, allow_blank: false, values: data_migration_task_names
-      end
-      post '/:task/migration-requests' do
-        Rails.application.load_tasks if Rake.application.tasks.blank?
-        Rake::Task[params[:task]].execute
-
-        { success: true }
-      end
-    end
-
     resource 'consumers' do
       desc 'Returns list of consumers'
       get '/' do
