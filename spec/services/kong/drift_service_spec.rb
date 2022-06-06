@@ -7,10 +7,9 @@ RSpec.describe Kong::DriftService do
 
   describe 'detects drifts' do
     it 'filters and alerts slack if needed' do
-      VCR.use_cassette('slack/kong_alert_200', match_requests_on: [:method]) do
-        result = subject.detect_drift
-        expect(result.class).to eq(Array)
-      end
+      allow_any_instance_of(Slack::Web::Client).to receive(:chat_postMessage)
+      result = subject.detect_drift
+      expect(result.class).to eq(Array)
     end
   end
 end
