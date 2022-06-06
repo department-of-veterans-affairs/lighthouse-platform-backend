@@ -540,7 +540,7 @@ clinical_fhir_api.update(
    }
   },
   api_ref_attributes: {
-   name: 'health'
+   name: 'clinicalHealth'
   },
   api_metadatum_attributes: {
    description: 'Use to develop clinical-facing applications that improve access to and management of patient health data.',
