@@ -34,6 +34,8 @@ RSpec.describe Api, type: :model do
       create(:api)
     end
 
+    let(:category) { create(:api_category) }
+
     it 'undiscards a previously discarded record' do
       subject.discard
       expect(subject.discarded_at).not_to be_nil
@@ -57,6 +59,34 @@ RSpec.describe Api, type: :model do
 
     it 'deprecates an api' do
       subject.deprecate!(deprecation_date: Time.zone.now, deprecation_content: 'content-here')
+    end
+
+    it 'api_environments_attributes=' do
+      subject.api_environments_attributes = {
+        environments_attributes: {
+          name: ['name-here'],
+          metadata_url: 'url/here'
+        }
+      }
+    end
+
+    it 'api_ref_attributes=' do
+      subject.api_ref_attributes = {
+        name: 'name-here'
+      }
+    end
+
+    it 'api_metadatum_attributes=' do
+      subject.api_metadatum_attributes = {
+        api_category_attributes: {
+          id: category.id
+        },
+        description: 'description-here',
+        display_name: 'display-name-here',
+        open_data: false,
+        va_internal_only: false,
+        url_fragment: 'url-fragment-here'
+      }
     end
   end
 end
