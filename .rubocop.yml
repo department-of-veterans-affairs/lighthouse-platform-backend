@@ -82,7 +82,6 @@ Layout/LineLength:
     - 'config/initializers/devise.rb'
     - 'config/initializers/simple_form.rb'
     - 'app/services/slack/report_service.rb'
-    - 'lib/tasks/data_migrations.rake'
 Metrics/MethodLength:
   Exclude:
     - 'rakelib/support/shell_command.rb'
