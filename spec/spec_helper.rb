@@ -17,7 +17,7 @@ SimpleCov.start 'rails' do
   add_filter '/app/services/utility/*.rb'
   add_filter '/app/services/consumer_import_service.rb'
 
-  SimpleCov.minimum_coverage_by_file 90
+  SimpleCov.minimum_coverage_by_file 89
   SimpleCov.refuse_coverage_drop
 
   SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
