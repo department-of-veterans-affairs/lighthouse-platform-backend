@@ -91,6 +91,19 @@ RSpec.describe Consumer, type: :model do
       end.value
       expect(prod_acg_oauth_ref).to eq(auth_info[:prod][:acg_oauth])
     end
+
+    it 'undiscards a previously discarded record' do
+      subject.discard
+      expect(subject.discarded_at).not_to be_nil
+      subject.undiscard
+      expect(subject.discarded_at).to be_nil
+    end
+
+    it 'discards a previously undiscarded record' do
+      expect(subject.discarded_at).to be_nil
+      subject.discard
+      expect(subject.discarded_at).not_to be_nil
+    end
   end
 
   describe 'fails on an invalid input' do
