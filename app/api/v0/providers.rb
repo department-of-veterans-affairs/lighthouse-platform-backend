@@ -12,6 +12,8 @@ module V0
                           allow_blank: true
       end
       get '/' do
+        validate_token
+
         apis = Api
         apis = apis.kept if params[:status] == 'active'
         apis = apis.discarded if params[:status] == 'inactive'
@@ -26,6 +28,8 @@ module V0
                                allow_blank: true
       end
       get '/transformations/legacy' do
+        validate_token
+
         categories = {}
         ApiCategory.kept.each do |category|
           categories[category.key] =
@@ -41,6 +45,8 @@ module V0
           requires :providerName, type: String, allow_blank: false, description: 'Name of provider'
         end
         get '/release-notes' do
+          validate_token
+
           release_notes = Api.find_by!(name: params[:providerName]).api_metadatum.api_release_notes.kept
 
           present release_notes.kept.order(date: :desc), with: V0::Entities::ApiReleaseNoteEntity
@@ -53,6 +59,8 @@ module V0
           requires :content, type: String, allow_blank: false
         end
         post '/release-notes' do
+          validate_token
+
           api_metadatum = Api.kept.find_by!(name: params[:providerName]).api_metadatum
           release_note = ApiReleaseNote.create(api_metadatum_id: api_metadatum.id,
                                                date: params[:date],
