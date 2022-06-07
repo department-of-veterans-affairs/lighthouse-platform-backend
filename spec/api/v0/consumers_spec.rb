@@ -199,6 +199,31 @@ describe V0::Consumers, type: :request do
     end
   end
 
+  describe 'enforces auth for none dev portal routes' do
+    before do
+      Flipper.enable :validate_token
+    end
+
+    after do
+      Flipper.enable :validate_token
+    end
+
+    it 'retrieves consumers with access_token' do
+      VCR.use_cassette('okta/access_token_200', match_requests_on: [:method]) do
+        get '/platform-backend/v0/consumers', params: {}, headers: { Authorization: 'Bearer t0k3n' }
+        first_consumer = JSON.parse(response.body).first
+        expect(response.status).to eq(200)
+        expect(first_consumer['id']).to eq(consumer.id)
+        expect(first_consumer['email']).to eq(consumer.user.email)
+      end
+    end
+
+    it 'receives unauthorized without respective token' do
+      get '/platform-backend/v0/consumers'
+      expect(response.status).to eq(401)
+    end
+  end
+
   describe 'sends emails when prompted for production access' do
     after do
       Flipper.disable :send_emails
