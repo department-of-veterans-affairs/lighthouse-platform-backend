@@ -211,10 +211,7 @@ describe V0::Consumers, type: :request do
     it 'retrieves consumers with access_token' do
       VCR.use_cassette('okta/access_token_200', match_requests_on: [:method]) do
         get '/platform-backend/v0/consumers', params: {}, headers: { Authorization: 'Bearer t0k3n' }
-        first_consumer = JSON.parse(response.body).first
         expect(response.status).to eq(200)
-        expect(first_consumer['id']).to eq(consumer.id)
-        expect(first_consumer['email']).to eq(consumer.user.email)
       end
     end
 
