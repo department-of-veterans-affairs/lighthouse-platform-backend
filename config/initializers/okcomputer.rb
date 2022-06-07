@@ -21,7 +21,7 @@ class BaseCheck < OkComputer::Check
   end
 end
 
-class KongCheck < BaseCheck
+class SandboxKongCheck < BaseCheck
   def check
     Kong::SandboxService.new.list_consumers ? process_success : process_failure
   rescue => e
@@ -31,7 +31,21 @@ class KongCheck < BaseCheck
   protected
 
   def name
-    'Kong'
+    'Kong[sandbox]'
+  end
+end
+
+class ProductionKongCheck < BaseCheck
+  def check
+    Kong::ProductionService.new.list_consumers ? process_success : process_failure
+  rescue => e
+    process_failure(e)
+  end
+
+  protected
+
+  def name
+    'Kong[production]'
   end
 end
 
@@ -49,7 +63,7 @@ class DynamoCheck < BaseCheck
   end
 end
 
-class OktaCheck < BaseCheck
+class SandboxOktaCheck < BaseCheck
   def check
     Okta::SandboxService.new.list_applications ? process_success : process_failure
   rescue => e
@@ -59,7 +73,21 @@ class OktaCheck < BaseCheck
   protected
 
   def name
-    'Okta'
+    'Okta[sandbox]'
+  end
+end
+
+class ProductionOktaCheck < BaseCheck
+  def check
+    Okta::ProductionService.new.list_applications ? process_success : process_failure
+  rescue => e
+    process_failure(e)
+  end
+
+  protected
+
+  def name
+    'Okta[production]'
   end
 end
 
@@ -88,8 +116,10 @@ class GovDeliveryCheck < BaseCheck
   end
 end
 
-OkComputer::Registry.register 'kong', KongCheck.new
-OkComputer::Registry.register 'okta', OktaCheck.new
+OkComputer::Registry.register 'kong-sandbox', SandboxKongCheck.new
+OkComputer::Registry.register 'kong-prod', ProductionKongCheck.new
+OkComputer::Registry.register 'okta-sandbox', SandboxOktaCheck.new
+OkComputer::Registry.register 'okta-prod', ProductionOktaCheck.new
 OkComputer::Registry.register 'dynamodb', DynamoCheck.new
 OkComputer::Registry.register 'elasticsearch', ElasticsearchCheck.new
 OkComputer::Registry.register 'govdelivery', GovDeliveryCheck.new
