@@ -50,7 +50,7 @@ class Base < Grape::API
 
       raise AuthorizationError if headers['Authorization'].blank?
 
-      auth_header = headers['Authorization'].split(' ')
+      auth_header = headers['Authorization'].split
       raise AuthorizationError if auth_header.count < 2
 
       token = auth_header.second
