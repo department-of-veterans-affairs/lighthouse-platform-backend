@@ -20,6 +20,10 @@ class Base < Grape::API
     Rails.logger.warn "??? #{e.message}"
     error!({ errors: ['Access is forbidden'] }, 403)
   end
+  rescue_from AuthorizationError do |e|
+    Rails.logger.warn "??? #{e.message}"
+    error!({ errors: ['Unauthorized'] }, 401)
+  end
   rescue_from ApiValidationError do |e|
     Rails.logger.warn "??? #{e.message}"
     error!({ errors: ['Invalid API list for consumer'] }, 422)
@@ -39,6 +43,20 @@ class Base < Grape::API
       unless cookies['CSRF-TOKEN'] == headers['X-Csrf-Token']
         raise "#{cookies['CSRF-TOKEN']} does not equal #{headers['X-Csrf-Token']}, #{cookies.to_json}"
       end
+    end
+
+    def validate_token
+      return unless Flipper.enabled? :validate_token
+
+      raise AuthorizationError if headers['Authorization'].blank?
+
+      auth_header = headers['Authorization'].split(' ')
+      raise AuthorizationError if auth_header.count < 2
+
+      token = auth_header.second
+      response = Okta::TokenValidationService.new.token_valid?(token)
+
+      raise AuthorizationError unless response['active']
     end
   end
 
