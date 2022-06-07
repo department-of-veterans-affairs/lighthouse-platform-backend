@@ -5,6 +5,6 @@ class KongDriftJob < ApplicationJob
 
   def perform(*_args)
     Kong::DriftService.new.detect_drift if Flipper.enabled?(:alert_drift)
-    Kong::DriftService.new(:production).detect_drift if Flipper.enabled?(:alert_drift)
+    # Kong::DriftService.new(:production).detect_drift if Flipper.enabled?(:alert_drift)
   end
 end
