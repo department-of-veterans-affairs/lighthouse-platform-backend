@@ -29,8 +29,9 @@ class Api < ApplicationRecord
   end
 
   def activate!
-    self.deactivation_info = nil
-    save!
+    metadatum = api_metadatum
+    metadatum.deactivation_info = nil
+    metadatum.save!
 
     undiscard! if discarded?
   end
