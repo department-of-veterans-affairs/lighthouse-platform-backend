@@ -133,56 +133,59 @@
         <div><%= @request[:monitizationExplanation] %></div>
       </div>
     </li>
+  <% end %>
+</ul>
+<h2>Veteran Facing Information</h2>
+<ul>
+  <li>
+    <div>
+      <strong>
+        <div>App is Veteran Facing:</div>
+      </strong>
+      <div><%= @request[:veteranFacing] %></div>
+    </div>
+  </li>
+  <% if @request[:veteranFacing].present? %>
     <li>
       <div>
         <strong>
-          <div>App is Veteran Facing:</div>
+          <div>Link to Application's Primary Webpage:</div>
         </strong>
-        <div><%= @request[:veteranFacing] %></div>
+        <div><%= @request[:website] %></div>
       </div>
     </li>
-    <% if @request[:veteranFacing].present? %>
-      <li>
-        <div>
-          <strong>
-            <div>Link to Application's Primary Webpage:</div>
-          </strong>
-          <div><%= @request[:website] %></div>
-        </div>
-      </li>
-      <li>
-        <div>
-          <strong>
-            <div>Link to Application's Signup Page:</div>
-          </strong>
-          <div><%= @request[:signUpLink] %></div>
-        </div>
-      </li>
-      <li>
-        <div>
-          <strong>
-            <div>Link to Application's FAQ/Support Page:</div>
-          </strong>
-          <div><%= @request[:supportLink] %></div>
-        </div>
-      </li>
-      <li>
-        <div>
-          <strong>
-            <div>Available on the Following Platforms:</div>
-          </strong>
-          <div><%= @request[:platforms] %></div>
-        </div>
-      </li>
-      <li>
-        <div>
-          <strong>
-            <div>Veteran Facing Description:</div>
-          </strong>
-          <div><%= @request[:veteranFacingDescription] %></div>
-        </div>
-      </li>
-    <% end %>
+    <li>
+      <div>
+        <strong>
+          <div>Link to Application's Signup Page:</div>
+        </strong>
+        <div><%= @request[:signUpLink] %></div>
+      </div>
+    </li>
+    <li>
+      <div>
+        <strong>
+          <div>Link to Application's FAQ/Support Page:</div>
+        </strong>
+        <div><%= @request[:supportLink] %></div>
+      </div>
+    </li>
+    <li>
+      <div>
+        <strong>
+          <div>Available on the Following Platforms:</div>
+        </strong>
+        <div><%= @request[:platforms] %></div>
+      </div>
+    </li>
+    <li>
+      <div>
+        <strong>
+          <div>Veteran Facing Description:</div>
+        </strong>
+        <div><%= @request[:veteranFacingDescription] %></div>
+      </div>
+    </li>
   <% end %>
 </ul>
 <h2>Technical Information</h2>
