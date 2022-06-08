@@ -11,7 +11,21 @@ Rails.application.routes.draw do
 
     mount RailsAdmin::Engine => '/admin/database', as: 'rails_admin'
 
-    mount Flipper::UI.app(Flipper) => '/admin/flipper', as: 'flipper'
+    flipper_constraint = lambda do
+      if Figaro.env.enable_github_auth.present?
+        begin
+          warden.authenticate!(scope: :user)
+          true
+        rescue
+          false
+        end
+      else
+        true
+      end
+    end
+    constraints flipper_constraint do
+      mount Flipper::UI.app(Flipper) => '/admin/flipper', as: 'flipper'
+    end
 
     mount Base => '/'
 
