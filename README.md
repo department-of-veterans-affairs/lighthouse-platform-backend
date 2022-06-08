@@ -23,7 +23,7 @@ Deployment repository for this project can be found here: https://github.com/dep
 
 ## Getting Started
 
-Copy `application.yml.sample` to `application.yml` and make any necessary changes.
+Copy `config/application.yml.sample` to `config/application.yml` and make any necessary changes.
 Note: Okta can not be run within a docker container, so additional configuration is required to first set up a developer account and point this application there.
 
 #### Running entirely through docker
