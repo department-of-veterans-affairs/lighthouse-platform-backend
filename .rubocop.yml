@@ -111,6 +111,7 @@ Metrics/CyclomaticComplexity:
     - 'validate_param!'
     - 'construct_import'
     - 'auth_refs'
+    - 'validate_token'
 Metrics/PerceivedComplexity:
   IgnoredMethods:
     - 'consumer_signup'

@@ -48,6 +48,8 @@ class Base < Grape::API
     def validate_token(scope)
       return unless Flipper.enabled? :validate_token
 
+      raise AuthorizationError if headers['Authorization'].nil?
+
       token = headers['Authorization'].match(/^Bearer (.*)$/)&.captures&.first
       raise AuthorizationError if token.nil?
 
