@@ -205,14 +205,7 @@ describe V0::Consumers, type: :request do
     end
 
     after do
-      Flipper.enable :validate_token
-    end
-
-    it 'retrieves consumers with access_token' do
-      VCR.use_cassette('okta/access_token_200', match_requests_on: [:method]) do
-        get '/platform-backend/v0/consumers', params: {}, headers: { Authorization: 'Bearer t0k3n' }
-        expect(response.status).to eq(200)
-      end
+      Flipper.disable :validate_token
     end
 
     it 'receives unauthorized without respective token' do
@@ -224,6 +217,13 @@ describe V0::Consumers, type: :request do
       VCR.use_cassette('okta/access_token_invalid', match_requests_on: [:method]) do
         get '/platform-backend/v0/consumers', params: {}, headers: { Authorization: 'Bearer t0t4l1y-r34l' }
         expect(response.status).to eq(401)
+      end
+    end
+
+    it 'receives forbidden with incorrect scopes' do
+      VCR.use_cassette('okta/access_token_200', match_requests_on: [:method]) do
+        get '/platform-backend/v0/consumers', params: {}, headers: { Authorization: 'Bearer t0k3n' }
+        expect(response.status).to eq(403)
       end
     end
   end
