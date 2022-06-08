@@ -7,12 +7,6 @@ module Okta
     }.freeze
 
     def token_valid?(token)
-      validate_token(token)
-    end
-
-    private
-
-    def validate_token(token)
       auth_server_id = Figaro.env.okta_auth_server
 
       uri = URI.parse("#{Figaro.env.okta_api_endpoint}/oauth2/#{auth_server_id}/v1/introspect")
@@ -20,6 +14,8 @@ module Okta
 
       request(req, uri, token)
     end
+
+    private
 
     def request(req, uri, token)
       client_id = Figaro.env.okta_client_id
