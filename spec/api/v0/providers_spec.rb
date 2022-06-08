@@ -67,8 +67,8 @@ describe V0::Providers, type: :request do
 
     it 'retrieves consumers with access_token' do
       VCR.use_cassette('okta/access_token_200', match_requests_on: [:method]) do
-        get '/platform-backend/v0/providers/transformations/legacy', params: {},
-                                                                     headers: { Authorization: 'Bearer t0k3n' }
+        get '/platform-backend/v0/providers', params: {},
+                                              headers: { Authorization: 'Bearer t0k3n' }
         expect(response.status).to eq(200)
       end
     end

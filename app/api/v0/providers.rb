@@ -28,8 +28,6 @@ module V0
                                allow_blank: true
       end
       get '/transformations/legacy' do
-        validate_token(Scope.provider_read)
-
         categories = {}
         ApiCategory.kept.each do |category|
           categories[category.key] =
