@@ -15,7 +15,7 @@ FactoryBot.define do
     listedOnMyHealthApplication { false }
     medicalDisclaimerImageLink { Faker::Internet.url(path: '/assets/medicalDisclaimer.jpeg') }
     monitizationExplanation { 'n/a' }
-    monitizedVeteranInformation { false }
+    monitizedVeteranInformation { true }
     multipleReqSafeguards { 'golem' }
     namingConvention { 'overly-complicated' }
     organization { 'Sauron.INC' }
@@ -36,7 +36,7 @@ FactoryBot.define do
     thirdPartyInfoDescription { 'n/a' }
     valueProvided { 'n/a' }
     vasiSystemName { Faker::Hipster.word }
-    veteranFacing { false }
+    veteranFacing { true }
     veteranFacingDescription do
       'Now the Elves made many rings; '\
         'but secretly Sauron made One Ring to rule all the others, '\
