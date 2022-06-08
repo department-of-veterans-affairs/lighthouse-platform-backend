@@ -23,11 +23,21 @@ Deployment repository for this project can be found here: https://github.com/dep
 
 ## Getting Started
 
+Copy `config/application.yml.sample` to `config/application.yml` and make any necessary changes.
+Note: Okta can not be run within a docker container, so additional configuration is required to first set up a developer account and point this application there.
+
 #### Running entirely through docker
 ```
 docker-compose -f docker-compose.yml -f docker-compose.ports.yml -f docker-compose.dependencies.yml -f docker-compose.dependencies.ports.yml up -d
 ```
 App should be available on localhost:8080
+
+Note: First run requires database migration and seeding. Exec into the app container and run the following:
+```
+rake db:create
+rake db:migrate
+rake db:seed
+```
 
 #### Running application natively and only dependencies through docker
 ```
