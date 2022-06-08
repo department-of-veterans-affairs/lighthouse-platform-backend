@@ -45,17 +45,16 @@ class Base < Grape::API
       end
     end
 
-    def validate_token
+    def validate_token(scope)
       return unless Flipper.enabled? :validate_token
 
-      raise AuthorizationError if headers['Authorization'].blank?
-      raise AuthorizationError unless headers['Authorization'].match?(/^Bearer (.*)$/)
-
-      token = headers['Authorization'].split.second
+      token = headers['Authorization'].match(/^Bearer (.*)$/)&.captures&.first
+      raise AuthorizationError if token.nil?
 
       response = Okta::TokenValidationService.new.token_valid?(token)
 
       raise AuthorizationError unless response['active']
+      raise ForbiddenError unless response['scope'].include?(scope)
     end
   end
 

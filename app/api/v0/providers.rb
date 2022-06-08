@@ -12,7 +12,7 @@ module V0
                           allow_blank: true
       end
       get '/' do
-        validate_token
+        validate_token(Scope.provider_read)
 
         apis = Api
         apis = apis.kept if params[:status] == 'active'
@@ -28,7 +28,7 @@ module V0
                                allow_blank: true
       end
       get '/transformations/legacy' do
-        validate_token
+        validate_token(Scope.provider_read)
 
         categories = {}
         ApiCategory.kept.each do |category|
@@ -45,7 +45,7 @@ module V0
           requires :providerName, type: String, allow_blank: false, description: 'Name of provider'
         end
         get '/release-notes' do
-          validate_token
+          validate_token(Scope.provider_read)
 
           release_notes = Api.find_by!(name: params[:providerName]).api_metadatum.api_release_notes.kept
 
@@ -59,7 +59,7 @@ module V0
           requires :content, type: String, allow_blank: false
         end
         post '/release-notes' do
-          validate_token
+          validate_token(Scope.provider_write)
 
           api_metadatum = Api.kept.find_by!(name: params[:providerName]).api_metadatum
           release_note = ApiReleaseNote.create(api_metadatum_id: api_metadatum.id,
