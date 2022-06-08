@@ -49,11 +49,10 @@ class Base < Grape::API
       return unless Flipper.enabled? :validate_token
 
       raise AuthorizationError if headers['Authorization'].blank?
+      raise AuthorizationError unless headers['Authorization'].match?(/^Bearer (.*)$/)
 
-      auth_header = headers['Authorization'].split
-      raise AuthorizationError if auth_header.count < 2
+      token = headers['Authorization'].split.second
 
-      token = auth_header.second
       response = Okta::TokenValidationService.new.token_valid?(token)
 
       raise AuthorizationError unless response['active']
