@@ -219,7 +219,7 @@ describe V0::Consumers, type: :request do
       get '/platform-backend/v0/consumers'
       expect(response.status).to eq(401)
     end
-    
+
     it 'receives unauthorized with an invalid token' do
       VCR.use_cassette('okta/access_token_invalid', match_requests_on: [:method]) do
         get '/platform-backend/v0/consumers', params: {}, headers: { Authorization: 'Bearer t0t4l1y-r34l' }
