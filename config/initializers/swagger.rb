@@ -8,5 +8,7 @@ GrapeSwaggerRails.options.hide_api_key_input = true
 GrapeSwaggerRails.options.before_action do |request|
   GrapeSwaggerRails.options.app_url = request.protocol + request.host_with_port
 
-  redirect_to('/platform-backend') if Figaro.env.enable_github_auth.present? && !user_signed_in?
+  if ActiveRecord::Type::Boolean.new.deserialize(Figaro.env.enable_github_auth) && !user_signed_in?
+    redirect_to('/platform-backend/users/sign_in')
+  end
 end

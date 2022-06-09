@@ -31,7 +31,7 @@ authz_server_communitycare: default
 authz_server_health: default
 authz_server_verification: default
 support_email:
-enable_github_auth:
+enable_github_auth: false
 va_profile_distribution:
 slack_api_token:
 slack_drift_channel:

@@ -6,7 +6,7 @@ RailsAdmin.config do |config|
 
   ## == Devise ==
   config.authenticate_with do
-    warden.authenticate!(scope: :user) if Figaro.env.enable_github_auth.present?
+    warden.authenticate!(scope: :user) if ActiveRecord::Type::Boolean.new.deserialize(Figaro.env.enable_github_auth)
   end
   config.current_user_method(&:current_user)
 

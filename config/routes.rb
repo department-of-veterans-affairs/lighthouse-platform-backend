@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     mount RailsAdmin::Engine => '/admin/database', as: 'rails_admin'
 
     flipper_constraint = lambda do |request|
-      if Figaro.env.enable_github_auth.present?
+      if ActiveRecord::Type::Boolean.new.deserialize(Figaro.env.enable_github_auth)
         begin
           request.env['warden'].authenticate!(scope: :user)
           true

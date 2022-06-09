@@ -90,4 +90,5 @@ Rails.application.configure do
   ENV['SLACK_API_TOKEN'] = 't4c0s4lyf3'
   ENV['SLACK_DRIFT_CHANNEL'] = '#test'
   ENV['SLACK_SIGNUP_CHANNEL'] = '#test'
+  ENV['ENABLE_GITHUB_AUTH'] = 'false'
 end
