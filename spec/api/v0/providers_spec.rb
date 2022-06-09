@@ -55,4 +55,22 @@ describe V0::Providers, type: :request do
       expect(response.code).to eq('404')
     end
   end
+
+  describe 'enforces auth for non dev portal routes' do
+    before do
+      Flipper.enable :validate_token
+    end
+
+    after do
+      Flipper.disable :validate_token
+    end
+
+    it 'retrieves consumers with access_token' do
+      VCR.use_cassette('okta/access_token_200', match_requests_on: [:method]) do
+        get '/platform-backend/v0/providers', params: {},
+                                              headers: { Authorization: 'Bearer t0k3n' }
+        expect(response.status).to eq(200)
+      end
+    end
+  end
 end
