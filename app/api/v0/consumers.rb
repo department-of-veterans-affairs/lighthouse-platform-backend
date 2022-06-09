@@ -68,6 +68,8 @@ module V0
     resource 'consumers' do
       desc 'Lists all kept consumers'
       get '/' do
+        validate_token(Scope.consumer_read)
+
         consumers = Consumer.kept
 
         present consumers, with: V0::Entities::ConsumerEntity
@@ -199,6 +201,8 @@ module V0
                               description: 'Consumer ID from Lighthouse Platform Backend'
       end
       get '/:consumerId/statistics' do
+        validate_token(Scope.consumer_read)
+
         consumer = Consumer.find(params[:consumerId])
         first_call = ElasticsearchService.new.first_successful_call consumer
         present first_call, with: V0::Entities::ConsumerStatisticEntity
@@ -219,6 +223,8 @@ module V0
         optional :oAuthPublicKey, type: JSON
       end
       post '/:consumerId/promotion-requests' do
+        validate_token(Scope.consumer_write)
+
         user = Consumer.find(params[:consumerId]).user
         params[:apis].map { |api| user.consumer.promote_to_prod(api.api_ref.name) }
 

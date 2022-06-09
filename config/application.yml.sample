@@ -18,6 +18,9 @@ okta_login_url: "https://sandbox-api.va.gov/oauth2/redirect/"
 okta_default_policy: "Default Policy"
 idme_group_id:
 prod_idme_group_id:
+okta_auth_server:
+okta_client_id:
+okta_client_secret:
 dsva_environment: Development
 github_app_id: e2583634c192807ccc28
 github_app_secret:
