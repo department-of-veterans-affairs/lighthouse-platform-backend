@@ -5,7 +5,13 @@ module V0
     version 'v0'
 
     resource 'providers' do
-      desc 'Return list of API providers'
+      desc 'Return list of API providers', {
+        headers: {
+          'Authorization' => {
+            required: false
+          }
+        }
+      }
       params do
         optional :status, type: String,
                           values: %w[active inactive],
@@ -38,7 +44,13 @@ module V0
       end
 
       resource ':providerName' do
-        desc 'Get list of release notes'
+        desc 'Get list of release notes', {
+          headers: {
+            'Authorization' => {
+              required: false
+            }
+          }
+        }
         params do
           requires :providerName, type: String, allow_blank: false, description: 'Name of provider'
         end
@@ -50,7 +62,13 @@ module V0
           present release_notes.kept.order(date: :desc), with: V0::Entities::ApiReleaseNoteEntity
         end
 
-        desc 'Publish release note to an active API provider'
+        desc 'Publish release note to an active API provider', {
+          headers: {
+            'Authorization' => {
+              required: false
+            }
+          }
+        }
         params do
           requires :providerName, type: String, allow_blank: false, description: 'Name of provider'
           optional :date, type: Date, allow_blank: false, default: Time.zone.now.to_date.strftime('%Y-%m-%d')

@@ -66,7 +66,13 @@ module V0
     end
 
     resource 'consumers' do
-      desc 'Lists all kept consumers'
+      desc 'Lists all kept consumers', {
+        headers: {
+          'Authorization' => {
+            required: false
+          }
+        }
+      }
       get '/' do
         validate_token(Scope.consumer_read)
 
@@ -79,7 +85,7 @@ module V0
         deprecated: true,
         headers: {
           'X-Csrf-Token' => {
-            required: true
+            required: false
           }
         }
       }
@@ -130,7 +136,7 @@ module V0
         deprecated: true,
         headers: {
           'X-Csrf-Token' => {
-            required: true
+            required: false
           }
         }
       }
@@ -195,7 +201,13 @@ module V0
         body false
       end
 
-      desc 'Peruses Elasticsearch for a successful consumer first-call (via oauth and/or key-auth)'
+      desc 'Peruses Elasticsearch for a successful consumer first-call (via oauth and/or key-auth)', {
+        headers: {
+          'Authorization' => {
+            required: false
+          }
+        }
+      }
       params do
         requires :consumerId, type: String, allow_blank: false,
                               description: 'Consumer ID from Lighthouse Platform Backend'
@@ -208,7 +220,13 @@ module V0
         present first_call, with: V0::Entities::ConsumerStatisticEntity
       end
 
-      desc 'Promotes a consumer to the production environment for the provided API(s)'
+      desc 'Promotes a consumer to the production environment for the provided API(s)', {
+        headers: {
+          'Authorization' => {
+            required: false
+          }
+        }
+      }
       params do
         requires :apis, type: Array[Api],
                         allow_blank: false,

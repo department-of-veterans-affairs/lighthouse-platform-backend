@@ -19,7 +19,7 @@ module V0
         deprecated: true,
         headers: {
           'X-Csrf-Token' => {
-            required: true
+            required: false
           }
         }
       }
@@ -45,7 +45,6 @@ module V0
           optional :apiOtherInfo, type: String
         end
       end
-
       post 'contact-us/requests' do
         header 'Access-Control-Allow-Origin', request.host_with_port
         protect_from_forgery
