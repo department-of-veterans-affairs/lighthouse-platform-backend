@@ -9,7 +9,7 @@ module Okta
     def token_valid?(token)
       auth_server_id = Figaro.env.okta_auth_server
 
-      uri = URI.parse("#{Figaro.env.prod_okta_api_endpoint}/oauth2/#{auth_server_id}/v1/introspect")
+      uri = URI.parse("#{Figaro.env.okta_token_validation_endpoint}/oauth2/#{auth_server_id}/v1/introspect")
       req = Net::HTTP::Post.new(uri)
 
       request(req, uri, token)
@@ -28,7 +28,7 @@ module Okta
       end
 
       response.tap { |res| res['ok'] = res.is_a? Net::HTTPSuccess }
-      raise 'Failed to validate token with Okta' unless response['ok']
+      Rails.logger.warn("??? #{response}") && raise('Failed to validate token with Okta') unless response['ok']
 
       JSON.parse(response.body) unless response.body.nil?
     end
