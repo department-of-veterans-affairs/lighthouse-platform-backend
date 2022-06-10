@@ -72,6 +72,7 @@ Rails.application.configure do
   ENV['PROD_OKTA_TOKEN'] = 'mocktoken'
   ENV['OKTA_API_ENDPOINT'] = 'https://deptva-eval.okta.com/api/v1'
   ENV['PROD_OKTA_API_ENDPOINT'] = 'https://deptva-eval.okta.com/api/v1'
+  ENV['OKTA_TOKEN_VALIDATION_ENDPOINT'] = 'https://deptva-eval.okta.com'
   ENV['OKTA_LOGIN_URL'] = 'https://sandbox-api.va.gov/oauth2/redirect/'
   ENV['PROD_OKTA_LOGIN_URL'] = 'https://api.va.gov/oauth2/redirect/'
   ENV['OKTA_DEFAULT_POLICY'] = 'Default Policy'

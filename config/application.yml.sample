@@ -11,6 +11,7 @@ es_endpoint:
 okta_token:
 prod_okta_token:
 okta_api_endpoint: "https://dev-########-admin.okta.com"
+okta_token_validation_endpoint: "https://dev-########-admin.okta.com"
 prod_okta_api_endpoint: "https://dev-########-admin.okta.com"
 okta_redirect_url: "https://sandbox-api.va.gov/oauth2/redirect/"
 prod_okta_redirect_url: "https://api.va.gov/oauth2/redirect/"
