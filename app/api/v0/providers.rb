@@ -35,9 +35,9 @@ module V0
       end
       get '/transformations/legacy' do
         categories = {}
-        ApiCategory.kept.each do |category|
+        ApiCategory.kept.order(:name).each do |category|
           categories[category.key] =
-            V0::Entities::Legacy::ApiProviderCategoryEntity.represent(category)
+            V0::Entities::Legacy::ApiProviderCategoryEntity.represent(category, environment: params[:environment])
         end
 
         categories
