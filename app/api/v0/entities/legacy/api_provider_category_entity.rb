@@ -6,7 +6,9 @@ module V0
       class ApiProviderCategoryEntity < Grape::Entity
         expose :name, documentation: { type: String }
         expose :name, as: :properName, documentation: { type: String }
-        expose :api_metadatum, as: :apis, using: V0::Entities::Legacy::ApiProviderEntity
+        expose :api_metadatum, as: :apis do |entity, options|
+          V0::Entities::Legacy::ApiProviderEntity.represent(entity.api_metadatum, environment: options[:environment])
+        end
         expose :content do |entity|
           response = { consumerDocsLinkText: entity.consumer_docs_link_text,
                        shortDescription: entity.short_description,
