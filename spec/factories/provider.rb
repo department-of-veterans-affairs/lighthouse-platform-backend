@@ -37,7 +37,7 @@ FactoryBot.define do
           }
         },
         api_category_attributes: {
-          id: ApiCategory.first.id || nil,
+          id: ApiCategory.first.id || nil
         }
       }
     end

@@ -55,19 +55,21 @@ describe V0::Providers, type: :request do
       expect(response.code).to eq('404')
     end
   end
-  
+
   describe 'allows posts to create providers' do
-    let(:provider)  { build(:provider) }
+    let(:provider) { build(:provider) }
+
     before do
       create(:api_category)
     end
+
     it 'creates a valid API' do
       expect do
         post '/platform-backend/v0/providers', params: provider
         expect(response.status).to eq(201)
       end.to change(Api, :count).by 1
     end
-    
+
     it 'provides an error when supplied invalid information' do
       provider['name'] = ''
       post '/platform-backend/v0/providers', params: provider
