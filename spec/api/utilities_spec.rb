@@ -12,6 +12,11 @@ describe Utilities, type: :request do
       get '/platform-backend/utilities/apis'
       expect(response.status).to eq(200)
     end
+
+    it 'provides a list of api categories' do
+      get '/platform-backend/utilities/apis/categories'
+      expect(response.status).to eq(200)
+    end
   end
 
   describe 'consumers' do

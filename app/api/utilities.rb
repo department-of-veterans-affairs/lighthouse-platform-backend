@@ -25,6 +25,13 @@ class Utilities < Base
 
         present apis, with: Entities::ApiEntity
       end
+
+      desc 'Returns a list of API categories'
+      get '/categories' do
+        api_categories = ApiCategory.kept
+
+        present api_categories, with: Entities::ApiCategoryEntity
+      end
     end
 
     resource 'kong' do
