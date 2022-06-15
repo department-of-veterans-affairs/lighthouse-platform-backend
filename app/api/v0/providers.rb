@@ -4,6 +4,14 @@ module V0
   class Providers < V0::Base
     version 'v0'
 
+    helpers do
+      def oauth_to_json
+        oauth = params['api_metadatum_attributes']['oauth_info'].to_json
+        params['api_metadatum_attributes']['oauth_info'] = oauth
+        params
+      end
+    end
+
     resource 'providers' do
       desc 'Return list of API providers', {
         headers: {
@@ -25,6 +33,69 @@ module V0
         apis = apis.discarded if params[:status] == 'inactive'
 
         present apis.order(:name), with: V0::Entities::ApiEntity
+      end
+
+      params do
+        requires :name, type: String, allow_blank: false, description: 'Name of API Provider'
+        requires :api_environments_attributes, type: Hash do
+          requires :metadata_url, type: String, allow_blank: false,
+                                  description: 'Metadata URL typically served by Docserver'
+          requires :environments_attributes, type: Hash do
+            requires :name, type: Array[String], allow_blank: false,
+                            description: 'Environments API is available within - comma separated',
+                            values: ->(v) { %w[sandbox production].include?(v) },
+                            coerce_with: ->(v) { v.split(',') }
+          end
+        end
+        optional :acl, type: String, allow_blank: false, description: 'Kong ACL for the API'
+        optional :auth_server_access_key, type: String, allow_blank: false,
+                                          description: 'ID for the associated Okta Auth Server'
+        requires :api_ref_attributes, type: Hash do
+          requires :name, type: String, allow_blank: false,
+                          description: 'Reference name for developer portal'
+        end
+        requires :api_metadatum_attributes, type: Hash do
+          requires :description, type: String, allow_blank: false,
+                                 description: 'Brief description of API'
+          requires :display_name, type: String, allow_blank: false,
+                                  description: 'Displayed Name for the Developer Portal'
+          requires :open_data, type: Boolean, allow_blank: false, default: false
+          requires :va_internal_only, type: Boolean, allow_blank: false, default: false
+          requires :url_fragment, type: String, allow_blank: false,
+                                  description: 'URL fragment'
+          optional :oauth_info, type: Hash do
+            optional :ccgInfo, type: Hash do
+              optional :baseAuthPath, type: String, allow_blank: false
+              optional :productionAud, type: String, allow_blank: true
+              optional :sandboxAud, type: String, allow_blank: true
+              optional :scopes, type: Array[String], allow_blank: false,
+                                description: 'Scopes available - comma separated',
+                                coerce_with: lambda { |v|
+                                               v.split(',')
+                                             }
+            end
+            optional :acgInfo, type: Hash do
+              optional :baseAuthPath, type: String, allow_blank: false
+              optional :scopes, type: Array[String], allow_blank: false,
+                                description: 'Scopes available - comma separated',
+                                coerce_with: lambda { |v|
+                                  v.split(',')
+                                }
+            end
+          end
+          requires :api_category_attributes, type: Hash do
+            requires :id, type: Integer, values: ->(v) { ApiCategory.kept.map(&:id).include?(v) }
+          end
+        end
+      end
+      post '/' do
+        validate_token(Scope.provider_write)
+
+        api = Api.create(name: params.delete(:name))
+        oauth_to_json if params[:api_metadatum_attributes][:oauth_info].present?
+        api.update(params)
+
+        present api, with: V0::Entities::ApiEntity
       end
 
       desc 'Provide list of apis within categories as developer-portal expects', deprecated: true
