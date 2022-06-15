@@ -431,6 +431,38 @@ veteran_confirmation_api.update(
   }
 )
 
+veteran_letter_generator_api = Api.create(name: 'veteran-letters')
+veteran_letter_generator_api.update(
+  auth_server_access_key: 'TBD',
+  api_environments_attributes: {
+    metadata_url: 'https://api.va.gov/internal/docs/veteran-letters/metadata.json',
+    environments_attributes: {
+      name: ['sandbox', 'production']
+    }
+  },
+  api_ref_attributes: {
+   name: 'vaLetterGenerator'
+  },
+  api_metadatum_attributes: {
+   description: 'Generate documents and letters for proof of existing VA benefits and status.',
+   display_name: 'VA Letter Generator API',
+   open_data: false,
+   va_internal_only: true,
+   url_fragment: 'va_letter_generator',
+   oauth_info: {
+      ccgInfo: {
+        baseAuthPath: '/oauth2/veteran-letters/system/v1',
+        productionAud: 'TBD',
+        sandboxAud: 'TBD',
+        scopes: ['letters.read'],
+      },
+    }.to_json,
+   api_category_attributes: {
+     id: veteran_verification_category.id
+   }
+  }
+)
+
 veteran_verification_api = Api.create(name: 'veteran-verification')
 veteran_verification_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_VERIFICATION',
