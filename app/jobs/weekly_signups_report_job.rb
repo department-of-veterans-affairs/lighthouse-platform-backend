@@ -5,8 +5,8 @@ class WeeklySignupsReportJob < ApplicationJob
 
   def perform(*_args)
     if Flipper.enabled?(:alert_signups_report)
-      Slack::ReportService.new.send_weekly_report
-      Event.create(event_type: Event::EVENT_TYPES[:weekly_report], content: Slack::ReportService.new.query_events)
+      signup_data = Slack::ReportService.new.send_weekly_report
+      Event.create(event_type: Event::EVENT_TYPES[:weekly_report], content: signup_data)
     end
   end
 end
