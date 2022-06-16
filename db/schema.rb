@@ -102,7 +102,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_175924) do
     t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["date"], name: "index_background_job_enforcers_on_date", unique: true
+    t.index ["job_type", "date"], name: "index_background_job_enforcers_on_job_type_and_date", unique: true
   end
 
   create_table "consumer_api_assignments", force: :cascade do |t|

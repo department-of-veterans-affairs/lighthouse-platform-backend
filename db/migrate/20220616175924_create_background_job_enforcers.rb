@@ -6,6 +6,6 @@ class CreateBackgroundJobEnforcers < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
-    add_index :background_job_enforcers, :date, unique: true
+    add_index :background_job_enforcers, [:job_type, :date], unique: true
   end
 end
