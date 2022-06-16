@@ -9,6 +9,9 @@ s.cron '0 2 * * *' do
   KongDriftJob.perform_now
 end
 
-s.cron '0 7 * * 1' do
+s.cron '0 11 * * 1' do
+  BackgroundJobEnforcer.create(job_type: Event::EVENT_TYPES[:weekly_report], date: Time.zone.today)
   WeeklySignupsReportJob.perform_now
+rescue ActiveRecord::RecordNotUnique
+  # ignore, its already being handled
 end

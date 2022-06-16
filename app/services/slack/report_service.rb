@@ -3,8 +3,10 @@
 module Slack
   class ReportService < AlertService
     def send_weekly_report
-      message = weekly_report_message('week', query_events)
+      signup_data = query_events
+      message = weekly_report_message('week', signup_data)
       send_message(Figaro.env.slack_signup_channel, message)
+      signup_data
     end
 
     def query_events

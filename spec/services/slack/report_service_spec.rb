@@ -13,7 +13,7 @@ RSpec.describe Slack::ReportService do
     it 'sends a valid report' do
       VCR.use_cassette('slack/report_200', match_requests_on: [:method]) do
         result = subject.send_weekly_report
-        expect(result.ok).to be(true)
+        expect(result.class).to be(Hash)
       end
     end
   end
