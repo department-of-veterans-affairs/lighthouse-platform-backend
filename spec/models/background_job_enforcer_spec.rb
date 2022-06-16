@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe BackgroundJobEnforcer, type: :model do
@@ -22,12 +24,16 @@ RSpec.describe BackgroundJobEnforcer, type: :model do
   end
 
   describe 'with duplicate dates' do
+    subject do
+      BackgroundJobEnforcer.create(job_type: 'any', date: Time.zone.today)
+    end
+
     before do
       create(:background_job_enforcer)
     end
-    let(:subject) { BackgroundJobEnforcer.create(job_type: 'any', date: Time.zone.today) }
+
     it 'fails to create the latter' do
-      expect{ subject }.to raise_error(ActiveRecord::RecordNotUnique)
+      expect { subject }.to raise_error(ActiveRecord::RecordNotUnique)
     end
   end
 end
