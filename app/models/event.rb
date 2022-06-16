@@ -4,5 +4,5 @@ class Event < ApplicationRecord
   validates :event_type, presence: true
   validates :content, presence: true
 
-  EVENT_TYPES = { sandbox_signup: 'sandbox_signup' }.freeze
+  EVENT_TYPES = { sandbox_signup: 'sandbox_signup', weekly_report: 'weekly_signups_report' }.freeze
 end

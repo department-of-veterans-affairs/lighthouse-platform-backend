@@ -10,7 +10,7 @@ s.cron '0 2 * * *' do
 end
 
 s.cron '0 11 * * 1' do
-  BackgroundJobEnforcer.create(job_type: 'weekly_signups_report', date: Time.zone.today)
+  BackgroundJobEnforcer.create(job_type: Event::EVENT_TYPES[:weekly_report], date: Time.zone.today)
   WeeklySignupsReportJob.perform_now
 rescue ActiveRecord::RecordNotUnique
   # ignore, its already being handled
