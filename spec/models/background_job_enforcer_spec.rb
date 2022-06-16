@@ -24,10 +24,11 @@ RSpec.describe BackgroundJobEnforcer, type: :model do
   end
 
   describe 'with duplicate dates' do
-    let(:bot_create) { create(:background_job_enforcer) }
     subject do
       BackgroundJobEnforcer.create(job_type: bot_create[:job_type], date: Time.zone.today)
     end
+
+    let(:bot_create) { create(:background_job_enforcer) }
 
     before do
       bot_create
