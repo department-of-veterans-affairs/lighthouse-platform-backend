@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :api_ref do
-    name { Faker::Hipster.unique.word }
+    name { Faker::Space.planet }
   end
 end

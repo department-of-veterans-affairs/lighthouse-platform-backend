@@ -3,12 +3,12 @@
 FactoryBot.define do
   factory :sandbox_signup_request, class: Hash do
     apis { '' }
-    description { Faker::Hipster.word }
+    description { Faker::Team.creature }
     email { Faker::Internet.safe_email }
     firstName { Faker::Name.first_name }
     lastName { Faker::Name.last_name }
     internalApiInfo { association :internal_sandbox_request }
-    organization { Faker::Hipster.word }
+    organization { Faker::Team.creature }
 
     trait :generate_apis_after_parse do
       after(:build) do |signup, _|
