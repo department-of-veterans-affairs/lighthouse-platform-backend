@@ -47,6 +47,31 @@ describe V0::Consumers, type: :request do
       expect(first_consumer['id']).to eq(consumer.id)
       expect(first_consumer['email']).to eq(consumer.user.email)
     end
+
+    context 'accepts an optional subscribe param' do
+      it 'filters when blank' do
+        get '/platform-backend/v0/consumers?subscribed'
+        expect(response.status).to eq(200)
+        expect(JSON.parse(response.body).length).to eq(0)
+      end
+
+      it 'filters when provided =true' do
+        get '/platform-backend/v0/consumers?subscribed=true'
+        expect(response.status).to eq(200)
+        expect(JSON.parse(response.body).length).to eq(0)
+      end
+
+      it 'does not filter when provided =false' do
+        get '/platform-backend/v0/consumers?subscribed=false'
+        expect(response.status).to eq(200)
+        expect(JSON.parse(response.body).length).to eq(1)
+      end
+
+      it 'returns 400 when provided unsuitable value' do
+        get '/platform-backend/v0/consumers?subscribed=tacos'
+        expect(response.status).to eq(400)
+      end
+    end
   end
 
   describe 'accepts signups from dev portal' do
