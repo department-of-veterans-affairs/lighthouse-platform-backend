@@ -63,6 +63,10 @@ module V0
 
         content
       end
+
+      def subscribed?
+        (declared(params, include_missing: false).key?(:subscribed) && params[:subscribed].nil?) || params[:subscribed]
+      end
     end
 
     resource 'consumers' do
@@ -73,10 +77,15 @@ module V0
           }
         }
       }
+      params do
+        optional :subscribed, type: Boolean
+      end
       get '/' do
         validate_token(Scope.consumer_read)
 
         consumers = Consumer.kept
+
+        consumers = consumers.filter{ |c| !c.unsubscribe } if subscribed?
 
         present consumers, with: V0::Entities::ConsumerEntity
       end
