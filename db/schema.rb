@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_03_214439) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_16_185554) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,7 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_03_214439) do
     t.string "description"
     t.string "display_name"
     t.boolean "open_data"
-    t.boolean "va_internal_only"
+    t.integer "va_internal_only"
     t.jsonb "oauth_info"
     t.bigint "api_category_id"
     t.datetime "discarded_at", precision: nil

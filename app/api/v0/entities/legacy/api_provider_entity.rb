@@ -46,7 +46,7 @@ module V0
           end.join("\n\n---\n\n")
         end
         expose :url_fragment, as: :urlFragment
-        expose :va_internal_only, as: :vaInternalOnly
+        expose :va_internal_only_before_type_cast, as: :vaInternalOnly
         expose :oAuth do |entity|
           entity.oauth_info.present?
         end
