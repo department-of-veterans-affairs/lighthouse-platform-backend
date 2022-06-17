@@ -85,7 +85,7 @@ module V0
 
         consumers = Consumer.kept
 
-        consumers = consumers.filter{ |c| !c.unsubscribe } if subscribed?
+        consumers = consumers.filter { |c| !c.unsubscribe } if subscribed?
 
         present consumers, with: V0::Entities::ConsumerEntity
       end
