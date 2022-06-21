@@ -30,9 +30,9 @@ module V0
           true
         end
         expose :lastProdAccessStep do |entity|
-          if entity.open_data && !entity.va_internal_only
+          if entity.open_data && entity.va_internal_only.blank?
             2
-          elsif !entity.open_data && entity.va_internal_only
+          elsif !entity.open_data && entity.va_internal_only.present?
             3
           else
             4
@@ -46,7 +46,7 @@ module V0
           end.join("\n\n---\n\n")
         end
         expose :url_fragment, as: :urlFragment
-        expose :va_internal_only_before_type_cast, as: :vaInternalOnly
+        expose :va_internal_only, as: :vaInternalOnly, if: lambda { |instance, _options| instance.va_internal_only.present? }
         expose :oAuth do |entity|
           entity.oauth_info.present?
         end

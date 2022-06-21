@@ -5,7 +5,7 @@ FactoryBot.define do
     description { Faker::Lorem.sentence }
     display_name { "#{Faker::JapaneseMedia::Naruto.character} API" }
     open_data { Faker::Boolean.boolean }
-    va_internal_only { Faker::Boolean.boolean }
+    va_internal_only { [nil, 'StrictlyInternal', 'AdditionalDetails', 'FlagOnly'].sample }
     url_fragment { Faker::Lorem.word }
     oauth_info do
       {

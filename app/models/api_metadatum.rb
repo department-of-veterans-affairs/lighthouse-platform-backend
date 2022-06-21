@@ -4,9 +4,9 @@ class ApiMetadatum < ApplicationRecord
   include Discard::Model
 
   enum va_internal_only: {
-    StrictlyInternal: 1,
-    AdditionalDetails: 2,
-    FlagOnly: 3
+    StrictlyInternal: 'StrictlyInternal',
+    AdditionalDetails: 'AdditionalDetails',
+    FlagOnly: 'FlagOnly'
   }
 
   belongs_to :api
