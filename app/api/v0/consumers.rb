@@ -90,6 +90,24 @@ module V0
         present consumers, with: V0::Entities::ConsumerEntity
       end
 
+      desc 'Allows the updating of a consumer'
+      params do
+        requires :subscribed, type: Boolean, allow_blank: false
+        requires :id, type: Integer, allow_blank: false
+      end
+      post '/:id' do
+        status 200
+        validate_token(Scope.consumer_write)
+
+        consumer = Consumer.find(params[:id])
+        raise 'Consumer not found' if consumer.nil?
+
+        consumer.unsubscribe = !params[:subscribed]
+        consumer.save!
+
+        present consumer, with: V0::Entities::ConsumerEntity
+      end
+
       desc 'Accept form submission from developer-portal', {
         deprecated: true,
         headers: {
