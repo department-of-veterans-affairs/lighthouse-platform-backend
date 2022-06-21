@@ -96,7 +96,6 @@ module V0
         requires :id, type: Integer, allow_blank: false
       end
       put '/:id' do
-        status 200
         validate_token(Scope.consumer_write)
 
         consumer = Consumer.find(params[:id])
