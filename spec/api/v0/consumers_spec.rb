@@ -77,7 +77,7 @@ describe V0::Consumers, type: :request do
     end
 
     it 'updates a consumers unsubscribe field' do
-      post "/platform-backend/v0/consumers/#{consumer[:id]}", params: { subscribed: false }
+      put "/platform-backend/v0/consumers/#{consumer[:id]}", params: { subscribed: false }
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)).to have_key('subscribed')
       expect(JSON.parse(response.body)['subscribed']).to be(false)
