@@ -49,13 +49,7 @@ describe V0::Consumers, type: :request do
     end
 
     context 'accepts an optional subscribe param' do
-      it 'filters when blank' do
-        get '/platform-backend/v0/consumers?subscribed'
-        expect(response.status).to eq(200)
-        expect(JSON.parse(response.body).length).to eq(0)
-      end
-
-      it 'filters when provided =true' do
+      it 'filters when provided subscribed' do
         get '/platform-backend/v0/consumers?subscribed=true'
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body).length).to eq(0)

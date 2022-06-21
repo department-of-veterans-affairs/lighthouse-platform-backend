@@ -64,8 +64,8 @@ module V0
         content
       end
 
-      def subscribed?
-        (declared(params, include_missing: false).key?(:subscribed) && params[:subscribed].nil?) || params[:subscribed]
+      def subscribed?(consumers)
+        consumers.filter { |c| c.unsubscribe != params[:subscribed] }
       end
     end
 
@@ -85,7 +85,7 @@ module V0
 
         consumers = Consumer.kept
 
-        consumers = consumers.filter { |c| !c.unsubscribe } if subscribed?
+        consumers = subscribed?(consumers) unless params[:subscribed].nil?
 
         present consumers, with: V0::Entities::ConsumerEntity
       end
