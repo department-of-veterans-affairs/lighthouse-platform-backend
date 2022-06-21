@@ -68,6 +68,22 @@ describe V0::Consumers, type: :request do
     end
   end
 
+  describe 'post consumers' do
+    let(:user) { create(:user) }
+    let(:consumer) { create(:consumer, user_id: user.id) }
+
+    before do
+      consumer
+    end
+
+    it 'updates a consumers unsubscribe field' do
+      put "/platform-backend/v0/consumers/#{consumer[:id]}", params: { subscribed: false }
+      expect(response.status).to eq(200)
+      expect(JSON.parse(response.body)).to have_key('subscribed')
+      expect(JSON.parse(response.body)['subscribed']).to be(false)
+    end
+  end
+
   describe 'accepts signups from dev portal' do
     context 'when signup is successful' do
       it 'creates the respective user, consumer and apis via the apply page' do
