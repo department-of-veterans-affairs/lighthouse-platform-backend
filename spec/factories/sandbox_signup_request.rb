@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
+  sequence(:unique_organization_name) do |instance|
+    "#{Faker::Team.creature}#{instance}"
+  end
+
   factory :sandbox_signup_request, class: Hash do
     apis { '' }
     description { Faker::Team.creature }
@@ -8,7 +12,7 @@ FactoryBot.define do
     firstName { Faker::Name.first_name }
     lastName { Faker::Name.last_name }
     internalApiInfo { association :internal_sandbox_request }
-    organization { Faker::Team.creature }
+    organization { generate(:unique_organization_name) }
 
     trait :generate_apis_after_parse do
       after(:build) do |signup, _|
