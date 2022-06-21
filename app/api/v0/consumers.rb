@@ -99,8 +99,6 @@ module V0
         validate_token(Scope.consumer_write)
 
         consumer = Consumer.find(params[:id])
-        raise 'Consumer not found' if consumer.nil?
-
         consumer.unsubscribe = !params[:subscribed]
         consumer.save!
 
