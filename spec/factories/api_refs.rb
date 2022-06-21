@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  sequence(:unique_category_key) do |instance|
+  sequence(:unique_ref_name) do |instance|
     "#{Faker::Space.planet}#{instance}"
   end
 
   factory :api_ref do
-    name { generate(:unique_category_key) }
+    name { generate(:unique_ref_name) }
   end
 end
