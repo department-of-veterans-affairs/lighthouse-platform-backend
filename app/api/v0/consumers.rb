@@ -95,7 +95,7 @@ module V0
         requires :subscribed, type: Boolean, allow_blank: false
         requires :id, type: Integer, allow_blank: false
       end
-      post '/:id' do
+      put '/:id' do
         status 200
         validate_token(Scope.consumer_write)
 
