@@ -54,6 +54,20 @@ describe V0::Providers, type: :request do
            params: { content: 'release-note content here' }
       expect(response.code).to eq('404')
     end
+
+    it 'discards existing release note and appends new release note' do
+      original = ApiReleaseNote.create(api_metadatum_id: api_environments.first.api.api_metadatum.id,
+                                       date: Time.zone.now.to_date.strftime('%Y-%m-%d'),
+                                       content: 'release-note content here')
+
+      expect do
+        post "/platform-backend/v0/providers/#{api_environments.first.api.name}/release-notes",
+             params: { content: 'release-note content *fix* here' }
+        expect(response.code).to eq('201')
+      end.to change(ApiReleaseNote, :count).by(1)
+
+      expect(ApiReleaseNote.find(original.id).discarded_at.present?).to be(true)
+    end
   end
 
   describe 'allows posts to create providers' do
