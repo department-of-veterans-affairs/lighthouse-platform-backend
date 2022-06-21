@@ -41,7 +41,7 @@ module V0
         expose :display_name, as: :name, documentation: { type: String }
         expose :open_data, as: :openData
         expose :releaseNotes do |entity|
-          entity.api_release_notes.order(date: :desc).map do |release_note|
+          entity.api_release_notes.kept.order(date: :desc).map do |release_note|
             "### #{release_note.date.strftime('%B %d, %Y')}\n\n#{release_note.content}"
           end.join("\n\n---\n\n")
         end
