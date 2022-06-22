@@ -3,14 +3,14 @@
 module Slack
   class ReportService < AlertService
     def send_report(span, start_date)
-      signup_data = query_events(start_date)
-      message = weekly_report_message(span, signup_data)
+      signup_data = query_events(span, start_date)
+      message = report_message(span, signup_data)
       send_message(Figaro.env.slack_signup_channel, message)
       signup_data
     end
 
-    def query_events(start_date)
-      ActiveRecord::Base.connection.execute(build_query(start_date)).first
+    def query_events(span, start_date)
+      ActiveRecord::Base.connection.execute(build_query(span, start_date)).first
     end
 
     private
@@ -44,17 +44,18 @@ module Slack
       "COUNT(DISTINCT (case when #{like_query(ref)} then content->'email' end)) as \"#{ref_builder(ref)[:all]}\","
     end
 
-    def build_query(start_date)
-      "SELECT #{generate_query(start_date).join(' ')} COUNT(DISTINCT(case WHEN (created_at > '#{start_date}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{start_date}')) then content->'email' end)) as weekly_count, COUNT(DISTINCT content->'email') as total_count FROM events WHERE event_type='sandbox_signup';"
+    def build_query(span, start_date)
+      "SELECT #{generate_query(start_date).join(' ')} COUNT(DISTINCT(case WHEN (created_at > '#{start_date}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{start_date}')) then content->'email' end)) as #{span}ly_count, COUNT(DISTINCT content->'email') as total_count FROM events WHERE event_type='sandbox_signup';"
     end
 
-    def weekly_report_message(duration, totals)
+    def report_message(span, totals)
+      extract_count = "#{span}ly_count"
       end_date = DateTime.now.strftime('%m/%d/%Y')
       message = {
         blocks: [
           {
             text: {
-              text: "*#{duration.capitalize}ly Sign-ups and Access Requests* for #{duration.capitalize} Ending #{end_date}",
+              text: "*#{span.capitalize}ly Sign-ups and Access Requests* for #{span.capitalize} Ending #{end_date}",
               type: 'mrkdwn'
             },
             type: 'section'
@@ -79,7 +80,7 @@ module Slack
           {
             fields: [
               {
-                text: "_This week:_ #{totals['weekly_count']} new users",
+                text: "_This #{span}:_ #{totals[extract_count]} new users",
                 type: 'mrkdwn'
               },
               {
@@ -107,10 +108,10 @@ module Slack
         ten_at_a_time = refs.slice(0, 10)
         fields = [].tap do |f|
           ten_at_a_time.map do |api|
-            weekly = totals[ref_builder(api)[:new]]
+            new_signups = totals[ref_builder(api)[:new]]
             all_time = totals[ref_builder(api)[:all]]
             f << {
-              text: "_#{api}_: #{weekly} new requests (#{all_time} all-time)",
+              text: "_#{api}_: #{new_signups} new requests (#{all_time} all-time)",
               type: 'mrkdwn'
             }
           end

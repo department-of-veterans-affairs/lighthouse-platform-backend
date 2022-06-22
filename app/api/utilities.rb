@@ -15,10 +15,10 @@ class Utilities < Base
       desc 'Returns last week signups report'
       namespace '/signups-report' do
         get '/week' do
-          Slack::ReportService.new.query_events(1.week.ago)
+          Slack::ReportService.new.query_events('week', 1.week.ago)
         end
         get '/month' do
-          Slack::ReportService.new.query_events(1.month.ago)
+          Slack::ReportService.new.query_events('month', 1.month.ago)
         end
       end
     end
