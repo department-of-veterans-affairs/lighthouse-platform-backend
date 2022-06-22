@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     root to: 'home#index'
 
     mount OkComputer::Engine, at: '/health_check'
+    mount OkComputer::Engine, at: '/healthcheck', as: 'healthcheckiest_healthcheck'
     devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
 
     mount RailsAdmin::Engine => '/admin/database', as: 'rails_admin'
@@ -28,6 +29,10 @@ Rails.application.routes.draw do
     end
 
     mount Base => '/'
+
+    namespace :v0 do
+      mount OkComputer::Engine, at: '/healthcheck'
+    end
 
     namespace :admin do
       root to: redirect('/platform-backend/admin/dashboard')
