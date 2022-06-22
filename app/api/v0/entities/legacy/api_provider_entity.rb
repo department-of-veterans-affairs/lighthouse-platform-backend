@@ -19,10 +19,7 @@ module V0
 
           api_environments.map do |api_environment|
             {
-              metadataUrl: api_environment.metadata_url,
-              key: api_environment.key,
-              label: api_environment.label,
-              apiIntro: api_environment.api_intro
+              metadataUrl: api_environment.metadata_url
             }
           end
         end
@@ -60,6 +57,8 @@ module V0
             oauth_information = JSON.parse(entity.oauth_info)
             types.push('AuthorizationCodeGrant') if oauth_information['acgInfo'].present?
             types.push('ClientCredentialsGrant') if oauth_information['ccgInfo'].present?
+
+            types
           end
         end
         expose :veteranRedirect do |entity|
@@ -71,7 +70,6 @@ module V0
             }
           end
         end
-        expose :multi_open_api_intro, as: :multiOpenAPIIntro
         expose :deactivation_info, if: ->(entity) { entity.deactivation_info.present? },
                                    as: :deactivationInfo do |entity|
           JSON.parse(entity.deactivation_info)

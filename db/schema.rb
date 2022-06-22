@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_17_202731) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_22_205854) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -38,9 +38,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_17_202731) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "discarded_at", precision: nil
-    t.string "key"
-    t.string "label"
-    t.string "api_intro"
     t.index ["api_id"], name: "index_api_environments_on_api_id"
     t.index ["discarded_at"], name: "index_api_environments_on_discarded_at"
     t.index ["environment_id"], name: "index_api_environments_on_environment_id"
@@ -56,7 +53,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_17_202731) do
     t.datetime "discarded_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "multi_open_api_intro"
     t.string "url_fragment"
     t.jsonb "deactivation_info"
     t.string "va_internal_only"
