@@ -102,7 +102,7 @@ Metrics/MethodLength:
     - 'build_new_ccg_application_payload'
     - 'build_message'
     - 'add_api_to_consumer'
-    - 'weekly_report_message'
+    - 'report_message'
     - 'dynamo_mock_response'
     - 'auth_refs'
 Metrics/CyclomaticComplexity:
