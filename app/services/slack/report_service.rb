@@ -2,15 +2,15 @@
 
 module Slack
   class ReportService < AlertService
-    def send_weekly_report
-      signup_data = query_events
-      message = weekly_report_message('week', signup_data)
+    def send_report(span, start_date)
+      signup_data = query_events(start_date)
+      message = weekly_report_message(span, signup_data)
       send_message(Figaro.env.slack_signup_channel, message)
       signup_data
     end
 
-    def query_events
-      ActiveRecord::Base.connection.execute(build_query).first
+    def query_events(start_date)
+      ActiveRecord::Base.connection.execute(build_query(start_date)).first
     end
 
     private
@@ -26,9 +26,9 @@ module Slack
       ApiRef.all.map(&:name).uniq.sort
     end
 
-    def generate_query
+    def generate_query(start_date)
       sort_refs.map do |ref|
-        "#{new_query(ref)} #{all_time_query(ref)}"
+        "#{new_query(ref, start_date)} #{all_time_query(ref)}"
       end
     end
 
@@ -36,16 +36,16 @@ module Slack
       "(content->>'apis' like '#{ref}' or content->>'apis' like '%,#{ref}' or content->>'apis' like '#{ref},%' or content->>'apis' like '%,#{ref},%')"
     end
 
-    def new_query(ref)
-      "COUNT(DISTINCT (case WHEN (created_at > '#{1.week.ago}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{1.week.ago}' AND #{like_query(ref)}) AND #{like_query(ref)}) then content->'email' end)) as \"#{ref_builder(ref)[:new]}\","
+    def new_query(ref, start_date)
+      "COUNT(DISTINCT (case WHEN (created_at > '#{start_date}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{start_date}' AND #{like_query(ref)}) AND #{like_query(ref)}) then content->'email' end)) as \"#{ref_builder(ref)[:new]}\","
     end
 
     def all_time_query(ref)
       "COUNT(DISTINCT (case when #{like_query(ref)} then content->'email' end)) as \"#{ref_builder(ref)[:all]}\","
     end
 
-    def build_query
-      "SELECT #{generate_query.join(' ')} COUNT(DISTINCT(case WHEN (created_at > '#{1.week.ago}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{1.week.ago}')) then content->'email' end)) as weekly_count, COUNT(DISTINCT content->'email') as total_count FROM events WHERE event_type='sandbox_signup';"
+    def build_query(start_date)
+      "SELECT #{generate_query(start_date).join(' ')} COUNT(DISTINCT(case WHEN (created_at > '#{start_date}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{start_date}')) then content->'email' end)) as weekly_count, COUNT(DISTINCT content->'email') as total_count FROM events WHERE event_type='sandbox_signup';"
     end
 
     def weekly_report_message(duration, totals)

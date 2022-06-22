@@ -37,7 +37,7 @@ RSpec.describe WeeklySignupsReportJob, type: :job do
   end
 
   it 'executes perform' do
-    allow(Slack::ReportService).to receive(:new).and_return(Struct.new(:send_weekly_report).new(nil))
+    allow(Slack::ReportService).to receive(:new).and_return(Struct.new(:send_report).new(nil))
     perform_enqueued_jobs { job }
   end
 end
