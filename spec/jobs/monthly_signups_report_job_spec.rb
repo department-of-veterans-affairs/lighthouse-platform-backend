@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe WeeklySignupsReportJob, type: :job do
+RSpec.describe MonthlySignupsReportJob, type: :job do
   include ActiveJob::TestHelper
 
-  subject(:job) { WeeklySignupsReportJob.perform_later }
+  subject(:job) { MonthlySignupsReportJob.perform_later }
 
   after do
     clear_enqueued_jobs
@@ -18,7 +18,7 @@ RSpec.describe WeeklySignupsReportJob, type: :job do
   end
 
   context 'creates an event when flippered' do
-    subject(:job) { WeeklySignupsReportJob.perform_now }
+    subject(:job) { MonthlySignupsReportJob.perform_now }
 
     before do
       Flipper.enable(:alert_signups_report)

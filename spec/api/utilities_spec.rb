@@ -31,7 +31,12 @@ describe Utilities, type: :request do
     end
 
     it 'gets weekly signups for consumers' do
-      get '/platform-backend/utilities/consumers/signups-report'
+      get '/platform-backend/utilities/consumers/signups-report/week'
+      expect(response.status).to eq(200)
+    end
+
+    it 'gets monthly signups for consumers' do
+      get '/platform-backend/utilities/consumers/signups-report/month'
       expect(response.status).to eq(200)
     end
 
