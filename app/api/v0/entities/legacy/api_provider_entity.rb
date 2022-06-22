@@ -46,7 +46,8 @@ module V0
           end.join("\n\n---\n\n")
         end
         expose :url_fragment, as: :urlFragment
-        expose :va_internal_only, as: :vaInternalOnly, if: lambda { |instance, _options| instance.va_internal_only.present? }
+        expose :va_internal_only, as: :vaInternalOnly,
+                                  if: ->(instance, _options) { instance.va_internal_only.present? }
         expose :oAuth do |entity|
           entity.oauth_info.present?
         end

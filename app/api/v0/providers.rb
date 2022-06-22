@@ -60,7 +60,9 @@ module V0
           requires :display_name, type: String, allow_blank: false,
                                   description: 'Displayed Name for the Developer Portal'
           requires :open_data, type: Boolean, allow_blank: false, default: false
-          requires :va_internal_only, type: String, values: ['StrictlyInternal', 'AdditionalDetails', 'FlagOnly'], allow_blank: true
+          requires :va_internal_only, type: String,
+                                      values: %w[StrictlyInternal AdditionalDetails FlagOnly],
+                                      allow_blank: true
           requires :url_fragment, type: String, allow_blank: false,
                                   description: 'URL fragment'
           optional :oauth_info, type: Hash do
