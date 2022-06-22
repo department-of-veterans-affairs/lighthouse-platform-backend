@@ -17,6 +17,25 @@ RSpec.describe WeeklySignupsReportJob, type: :job do
       .to change(ActiveJob::Base.queue_adapter.enqueued_jobs, :size).by(1)
   end
 
+  context 'creates an event when flippered' do
+    subject(:job) { WeeklySignupsReportJob.perform_now }
+
+    before do
+      Flipper.enable(:alert_signups_report)
+    end
+
+    after do
+      Flipper.disable(:alert_signups_report)
+    end
+
+    it 'with relevant data' do
+      VCR.use_cassette('slack/report_200', match_requests_on: [:method]) do
+        expect { job }
+          .to change(Event, :count).by(1)
+      end
+    end
+  end
+
   it 'executes perform' do
     allow(Slack::ReportService).to receive(:new).and_return(Struct.new(:send_weekly_report).new(nil))
     perform_enqueued_jobs { job }

@@ -63,6 +63,10 @@ module V0
 
         content
       end
+
+      def subscribed?(consumers)
+        consumers.filter { |c| c.unsubscribe != params[:subscribed] }
+      end
     end
 
     resource 'consumers' do
@@ -73,12 +77,32 @@ module V0
           }
         }
       }
+      params do
+        optional :subscribed, type: Boolean
+      end
       get '/' do
         validate_token(Scope.consumer_read)
 
         consumers = Consumer.kept
 
+        consumers = subscribed?(consumers) unless params[:subscribed].nil?
+
         present consumers, with: V0::Entities::ConsumerEntity
+      end
+
+      desc 'Allows the updating of a consumer'
+      params do
+        requires :subscribed, type: Boolean, allow_blank: false
+        requires :id, type: Integer, allow_blank: false
+      end
+      put '/:id' do
+        validate_token(Scope.consumer_write)
+
+        consumer = Consumer.find(params[:id])
+        consumer.unsubscribe = !params[:subscribed]
+        consumer.save!
+
+        present consumer, with: V0::Entities::ConsumerEntity
       end
 
       desc 'Accept form submission from developer-portal', {

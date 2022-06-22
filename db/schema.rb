@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_16_185554) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_17_202731) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -97,6 +97,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_185554) do
     t.index ["name"], name: "index_apis_on_name", unique: true
   end
 
+  create_table "background_job_enforcers", force: :cascade do |t|
+    t.string "job_type"
+    t.date "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_type", "date"], name: "index_background_job_enforcers_on_job_type_and_date", unique: true
+  end
+
   create_table "consumer_api_assignments", force: :cascade do |t|
     t.bigint "consumer_id", null: false
     t.datetime "first_successful_call_at", precision: nil
@@ -129,6 +137,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_185554) do
     t.bigint "user_id", null: false
     t.string "organization"
     t.datetime "discarded_at", precision: nil
+    t.boolean "unsubscribe", default: false
     t.index ["discarded_at"], name: "index_consumers_on_discarded_at"
     t.index ["user_id"], name: "index_consumers_on_user_id"
   end

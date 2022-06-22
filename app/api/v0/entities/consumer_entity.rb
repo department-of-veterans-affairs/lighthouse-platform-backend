@@ -4,6 +4,9 @@ module V0
   module Entities
     class ConsumerEntity < Grape::Entity
       expose :id
+      expose :subscribed do |consumer, _options|
+        !consumer.unsubscribe
+      end
       expose :email do |consumer, _options|
         consumer.user.email
       end

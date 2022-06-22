@@ -135,12 +135,13 @@ module V0
           present release_notes.kept.order(date: :desc), with: V0::Entities::ApiReleaseNoteEntity
         end
 
-        desc 'Publish release note to an active API provider', {
+        desc 'Publish release note to an active API provider **', {
           headers: {
             'Authorization' => {
               required: false
             }
-          }
+          },
+          detail: 'NOTE: Will discard existing release notes for provider and date'
         }
         params do
           requires :providerName, type: String, allow_blank: false, description: 'Name of provider'
@@ -151,6 +152,8 @@ module V0
           validate_token(Scope.provider_write)
 
           api_metadatum = Api.kept.find_by!(name: params[:providerName]).api_metadatum
+          existing_release_notes = ApiReleaseNote.where(api_metadatum_id: api_metadatum.id, date: params[:date]).kept
+          existing_release_notes.discard_all if existing_release_notes.present?
           release_note = ApiReleaseNote.create(api_metadatum_id: api_metadatum.id,
                                                date: params[:date],
                                                content: CGI.unescape(params[:content]))
