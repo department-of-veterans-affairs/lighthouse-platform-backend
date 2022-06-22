@@ -22,7 +22,7 @@ FactoryBot.define do
         description: Faker::Lorem.sentence(word_count: 12),
         display_name: Faker::Lorem.sentence(word_count: 4),
         open_data: Faker::Boolean.boolean,
-        va_internal_only: Faker::Boolean.boolean,
+        va_internal_only: [nil, 'StrictlyInternal', 'AdditionalDetails', 'FlagOnly'].sample,
         url_fragment: Faker::Lorem.word,
         oauth_info: {
           ccgInfo: {

@@ -51,7 +51,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_17_202731) do
     t.string "description"
     t.string "display_name"
     t.boolean "open_data"
-    t.boolean "va_internal_only"
     t.jsonb "oauth_info"
     t.bigint "api_category_id"
     t.datetime "discarded_at", precision: nil
@@ -60,6 +59,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_17_202731) do
     t.string "multi_open_api_intro"
     t.string "url_fragment"
     t.jsonb "deactivation_info"
+    t.string "va_internal_only"
     t.index ["api_category_id"], name: "index_api_metadata_on_api_category_id"
     t.index ["api_id"], name: "index_api_metadata_on_api_id"
     t.index ["discarded_at"], name: "index_api_metadata_on_discarded_at"

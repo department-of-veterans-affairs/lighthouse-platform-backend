@@ -164,7 +164,7 @@ appeals_status_api.update(
    description: 'Allows retrieval of all decision review request statuses (both legacy and AMA). Statuses are read only.',
    display_name: 'Appeals Status API',
    open_data: false,
-   va_internal_only: true,
+   va_internal_only: 'StrictlyInternal',
    url_fragment: 'appeals',
    api_category_attributes: {
      id: appeals_category.id
@@ -188,7 +188,7 @@ decision_reviews_api.update(
    description: 'Allows submission, management, and retrieval of decision review requests and details such as statuses in accordance with the AMA.',
    display_name: 'Decision Reviews API',
    open_data: false,
-   va_internal_only: true,
+   va_internal_only: 'StrictlyInternal',
    url_fragment: 'decision_reviews',
    api_category_attributes: {
      id: appeals_category.id
@@ -211,7 +211,6 @@ claims_api.update(  auth_server_access_key: 'AUTHZ_SERVER_CLAIMS',
    description: 'Submit and track claims',
    display_name: 'Benefits Claims API',
    open_data: false,
-   va_internal_only: false,
    url_fragment: 'claims',
    oauth_info: {
      acgInfo: {
@@ -247,7 +246,6 @@ benefits_intake_api.update(
    description: 'Submit PDF claims',
    display_name: 'Benefits Intake API',
    open_data: false,
-   va_internal_only: false,
    url_fragment: 'benefits',
    api_category_attributes: {
      id: benefits_category.id
@@ -271,7 +269,6 @@ benefits_reference_api.update(
    description: 'Look up data and codes for VA benefits claims',
    display_name: 'Benefits Reference Data API',
    open_data: true,
-   va_internal_only: false,
    url_fragment: 'benefits_reference_data',
    api_category_attributes: {
      id: benefits_category.id
@@ -295,7 +292,6 @@ facilities_api.update(
    description: 'VA Facilities',
    display_name: 'VA Facilities API',
    open_data: true,
-   va_internal_only: false,
    url_fragment: 'facilities',
    api_category_attributes: {
      id: facilities_category.id
@@ -319,7 +315,7 @@ loan_guaranty_api.update(
    description: 'Use the Loan Guaranty API to Manage VA Home Loans.',
    display_name: 'Loan Guaranty API',
    open_data: false,
-   va_internal_only: true,
+   va_internal_only: 'StrictlyInternal',
    url_fragment: 'loan_guaranty',
    api_category_attributes: {
      id: loan_guaranty_category.id
@@ -343,7 +339,6 @@ lgy_guaranty_remittance_api.update(
    description: 'Lets lenders automate parts of the mortgage post-closing process.',
    display_name: 'Guaranty Remittance API',
    open_data: false,
-   va_internal_only: false,
    url_fragment: 'lgy_guaranty_remittance',
    oauth_info: {
     ccgInfo: {
@@ -375,7 +370,6 @@ forms_api.update(
    description: 'Look up VA forms and check for new versions.',
    display_name: 'VA Forms API',
    open_data: true,
-   va_internal_only: false,
    url_fragment: 'vaForms',
    api_category_attributes: {
      id: forms_category.id
@@ -399,7 +393,7 @@ address_validation_api.update(
    description: 'Provides methods to standardize and validate addresses.',
    display_name: 'Address Validation API',
    open_data: false,
-   va_internal_only: true,
+   va_internal_only: 'AdditionalDetails',
    url_fragment: 'address_validation',
    api_category_attributes: {
      id: veteran_verification_category.id
@@ -423,7 +417,6 @@ veteran_confirmation_api.update(
    description: 'Confirm Veteran status for a given person with an API key.',
    display_name: 'Veteran Confirmation API',
    open_data: false,
-   va_internal_only: false,
    url_fragment: 'veteran_confirmation',
    api_category_attributes: {
      id: veteran_verification_category.id
@@ -447,7 +440,7 @@ veteran_letter_generator_api.update(
    description: 'Generate documents and letters for proof of existing VA benefits and status.',
    display_name: 'VA Letter Generator API',
    open_data: false,
-   va_internal_only: true,
+   va_internal_only: 'FlagOnly',
    url_fragment: 'va_letter_generator',
    oauth_info: {
       ccgInfo: {
@@ -479,7 +472,6 @@ veteran_verification_api.update(
    description: 'Confirm Veteran status for a given person, or get a Veteran’s service history or disability rating.',
    display_name: 'Veteran Verification API',
    open_data: false,
-   va_internal_only: false,
    url_fragment: 'veteran_verification',
    oauth_info: {
     acgInfo: {
@@ -516,7 +508,6 @@ community_care_api.update(
    description: "VA's Community Care Eligibility API utilizes VA's Facility API, VA's Enrollment & Eligibility system and others to satisfy requirements found in the VA's MISSION Act of 2018.",
    display_name: 'Community Care Eligibility API',
    open_data: false,
-   va_internal_only: false,
    url_fragment: 'community_care',
    oauth_info: {
     acgInfo: {
@@ -542,7 +533,6 @@ urgent_care_api.update(
    description: "The VA's Health Urgent Care Eligibility API supports industry standards (e.g., Fast Healthcare Interoperability Resources [FHIR]) and provides access to a Veteran's urgent care eligibility status.",
    display_name: 'Urgent Care Eligibility API (FHIR)',
    open_data: false,
-   va_internal_only: false,
    url_fragment: 'urgent_care',
    api_category_attributes: {
      id: health_category.id
@@ -578,7 +568,7 @@ clinical_fhir_api.update(
    description: 'Use to develop clinical-facing applications that improve access to and management of patient health data.',
    display_name: 'Clinical Health API (FHIR)',
    open_data: false,
-   va_internal_only: true,
+   va_internal_only: 'StrictlyInternal',
    url_fragment: 'clinical_health',
    oauth_info: {
     acgInfo: {
@@ -612,7 +602,6 @@ fhir_health_api.update(
    description: 'Use the OpenID Connect and SMART on FHIR standards to allow Veterans to authorize third-party applications to access data on their behalf.',
    display_name: 'Veterans Health API (FHIR)',
    open_data: false,
-   va_internal_only: false,
    url_fragment: 'fhir',
    oauth_info: {
       acgInfo: {
