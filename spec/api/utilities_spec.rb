@@ -5,7 +5,7 @@ require 'rails_helper'
 describe Utilities, type: :request do
   describe 'APIs' do
     before do
-      create(:api, name: 'Claims API')
+      create(:api, :with_api_environment)
     end
 
     it 'gets all apis' do
