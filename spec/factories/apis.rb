@@ -9,7 +9,7 @@ FactoryBot.define do
     api_metadatum { association :api_metadatum, api: instance }
 
     trait :with_api_environment do
-      api_environments { create_list(:api_environment, 1, api: instance) }
+      api_environments { build_list(:api_environment, 1, api: instance) }
     end
   end
 end
