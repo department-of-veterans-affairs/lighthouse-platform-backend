@@ -85,16 +85,16 @@ health_category = ApiCategory.create(
 
     You will receive an email from the VA API team notifying you of your approval, and it will include a new Client ID and Secret for your application. The base URI for the Health API endpoints are:
 
-     * `https://api.va.gov/services/fhir/v0/argonaut/data-query/`
-     * `https://api.va.gov/services/fhir/v0/dstu2/`
-     * `https://api.va.gov/services/fhir/v0/r4/`
-     * `https://api.va.gov/services/community-care/v0/eligibility`
+     * `https://dev-api.va.gov/services/fhir/v0/argonaut/data-query/`
+     * `https://dev-api.va.gov/services/fhir/v0/dstu2/`
+     * `https://dev-api.va.gov/services/fhir/v0/r4/`
+     * `https://dev-api.va.gov/services/community-care/v0/eligibility`
 
     Accordingly, the FHIR conformance statements can be retrieved from:
 
-     * `https://api.va.gov/services/fhir/v0/argonaut/data-query/metadata`
-     * `https://api.va.gov/services/fhir/v0/dstu2/metadata`
-     * `https://api.va.gov/services/fhir/v0/r4/metadata`
+     * `https://dev-api.va.gov/services/fhir/v0/argonaut/data-query/metadata`
+     * `https://dev-api.va.gov/services/fhir/v0/dstu2/metadata`
+     * `https://dev-api.va.gov/services/fhir/v0/r4/metadata`
 
     You will also be provided with a set of test accounts to use that will allow you to access specific synthetic data patient records.
 
@@ -152,7 +152,7 @@ appeals_status_api = Api.create(name: 'appeals')
 appeals_status_api.update(
   acl: 'appeals',
   api_environments_attributes: {
-   metadata_url: 'https://api.va.gov/internal/docs/appeals-status/metadata.json',
+   metadata_url: 'https://dev-api.va.gov/internal/docs/appeals-status/metadata.json',
    environments_attributes: {
      name: ['sandbox', 'production']
    }
@@ -176,7 +176,7 @@ decision_reviews_api = Api.create(name: 'decision-reviews')
 decision_reviews_api.update(
   acl: 'hlr',
   api_environments_attributes: {
-   metadata_url: 'https://api.va.gov/internal/docs/appeals-decision-reviews/metadata.json',
+   metadata_url: 'https://dev-api.va.gov/internal/docs/appeals-decision-reviews/metadata.json',
    environments_attributes: {
      name: ['sandbox', 'production']
    }
@@ -199,7 +199,7 @@ decision_reviews_api.update(
 claims_api = Api.create(name: 'claims')
 claims_api.update(  auth_server_access_key: 'AUTHZ_SERVER_CLAIMS',
   api_environments_attributes: {
-   metadata_url: 'https://api.va.gov/internal/docs/benefits-claims/metadata.json',
+   metadata_url: 'https://dev-api.va.gov/internal/docs/benefits-claims/metadata.json',
    environments_attributes: {
      name: ['sandbox', 'production']
    }
@@ -234,7 +234,7 @@ benefits_intake_api = Api.create(name: 'benefits-intake')
 benefits_intake_api.update(
   acl: 'vba_documents',
   api_environments_attributes: {
-   metadata_url: 'https://api.va.gov/internal/docs/benefits-intake/metadata.json',
+   metadata_url: 'https://dev-api.va.gov/internal/docs/benefits-intake/metadata.json',
    environments_attributes: {
      name: ['sandbox', 'production']
    }
@@ -257,7 +257,7 @@ benefits_reference_api = Api.create(name: 'benefits-reference-data')
 benefits_reference_api.update(
   acl: 'benefits-reference-data',
   api_environments_attributes: {
-   metadata_url: 'https://api.va.gov/internal/docs/benefits-reference-data/metadata.json',
+   metadata_url: 'https://dev-api.va.gov/internal/docs/benefits-reference-data/metadata.json',
    environments_attributes: {
      name: ['sandbox', 'production']
    }
@@ -280,7 +280,7 @@ facilities_api = Api.create(name: 'va-facilities')
 facilities_api.update(
   acl: 'va_facilities',
   api_environments_attributes: {
-   metadata_url: 'https://api.va.gov/internal/docs/facilities/metadata.json',
+   metadata_url: 'https://dev-api.va.gov/internal/docs/facilities/metadata.json',
    environments_attributes: {
      name: ['sandbox', 'production']
    }
@@ -303,7 +303,7 @@ loan_guaranty_api = Api.create(name: 'loan-guaranty')
 loan_guaranty_api.update(
   acl: 'loan_guaranty',
   api_environments_attributes: {
-   metadata_url: 'https://api.va.gov/internal/docs/loan_guaranty_property/metadata.json',
+   metadata_url: 'https://dev-api.va.gov/internal/docs/loan_guaranty_property/metadata.json',
    environments_attributes: {
      name: ['sandbox', 'production']
    }
@@ -327,7 +327,7 @@ lgy_guaranty_remittance_api = Api.create(name: 'lgy-guaranty-remittance')
 lgy_guaranty_remittance_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_LOAN_GUARANTY',
   api_environments_attributes: {
-   metadata_url: 'https://api.va.gov/internal/docs/lgy-remittance/metadata.json',
+   metadata_url: 'https://dev-api.va.gov/internal/docs/lgy-remittance/metadata.json',
    environments_attributes: {
      name: ['sandbox', 'production']
    }
@@ -358,7 +358,7 @@ forms_api = Api.create(name: 'va-forms')
 forms_api.update(
   acl: 'va_forms',
   api_environments_attributes: {
-   metadata_url: 'https://api.va.gov/internal/docs/forms/metadata.json',
+   metadata_url: 'https://dev-api.va.gov/internal/docs/forms/metadata.json',
    environments_attributes: {
      name: ['sandbox', 'production']
    }
@@ -381,7 +381,7 @@ address_validation_api = Api.create(name: 'address-validation')
 address_validation_api.update(
   acl: 'internal-va:address_validation',
   api_environments_attributes: {
-   metadata_url: 'https://api.va.gov/internal/docs/address-validation/metadata.json',
+   metadata_url: 'https://dev-api.va.gov/internal/docs/address-validation/metadata.json',
    environments_attributes: {
      name: ['sandbox', 'production']
    }
@@ -405,7 +405,7 @@ veteran_confirmation_api = Api.create(name: 'veteran-confirmation')
 veteran_confirmation_api.update(
   acl: 'veteran_confirmation',
   api_environments_attributes: {
-   metadata_url: 'https://api.va.gov/internal/docs/veteran-confirmation/metadata.json',
+   metadata_url: 'https://dev-api.va.gov/internal/docs/veteran-confirmation/metadata.json',
    environments_attributes: {
      name: ['sandbox', 'production']
    }
@@ -428,7 +428,7 @@ veteran_letter_generator_api = Api.create(name: 'veteran-letters')
 veteran_letter_generator_api.update(
   auth_server_access_key: 'TBD',
   api_environments_attributes: {
-    metadata_url: 'https://api.va.gov/internal/docs/veteran-letters/metadata.json',
+    metadata_url: 'https://dev-api.va.gov/internal/docs/veteran-letters/metadata.json',
     environments_attributes: {
       name: ['sandbox', 'production']
     }
@@ -460,7 +460,7 @@ veteran_verification_api = Api.create(name: 'veteran-verification')
 veteran_verification_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_VERIFICATION',
   api_environments_attributes: {
-   metadata_url: 'https://api.va.gov/internal/docs/veteran-verification/metadata.json',
+   metadata_url: 'https://dev-api.va.gov/internal/docs/veteran-verification/metadata.json',
    environments_attributes: {
      name: ['sandbox', 'production']
    }
@@ -492,11 +492,70 @@ veteran_verification_api.update(
   }
 )
 
+provider_directory_api = Api.create(name: 'provider-directory')
+provider_directory_api.update(
+  api_environments_attributes: {
+   metadata_url: 'https://dev-api.va.gov/internal/docs/provider-directory-r4/v0/openapi.json',
+   environments_attributes: {
+     name: ['sandbox', 'production']
+   }
+  },
+  api_ref_attributes: {
+   name: 'providerDirectory'
+  },
+  api_metadatum_attributes: {
+   description: "Use this API to return lists of VA providers and their information, such as locations, specialties, office hours, and more.",
+   display_name: 'Provider Directory API',
+   open_data: false,
+   url_fragment: 'provider_directory',
+   api_category_attributes: {
+     id: health_category.id
+   }
+  }
+)
+
+pgd_api = Api.create(name: 'pgd')
+pgd_api.update(
+  auth_server_access_key: 'AUTHZ_SERVER_COMMUNITYCARE',
+  api_ref_attributes: {
+   name: 'pgd'
+  },
+  api_metadatum_attributes: {
+   display_name: 'PGD API (FHIR)',
+   open_data: false,
+   va_internal_only: 'StrictlyInternal',
+   url_fragment: 'pgd',
+   oauth_info: {
+    ccgInfo: {
+      baseAuthPath: '/oauth2/pgd/system/v1',
+      productionAud: 'aus8ew475sXlNGpbp297',
+      sandboxAud: 'aus8x27nv4g4BS01v2p7',
+      scopes: [
+        'launch',
+        'patient/Observation.read',
+        'patient/Observation.write',
+        'patient/Patient.read',
+        'patient/Patient.write',
+        'patient/Questionnaire.read',
+        'patient/Questionnaire.write',
+        'patient/QuestionnaireResponse.read',
+        'patient/QuestionnaireResponse.write',
+        'system/Questionnaire.read',
+        'system/Questionnaire.write',
+      ],
+    },
+  }.to_json,
+   api_category_attributes: {
+     id: health_category.id
+   }
+  }
+)
+
 community_care_api = Api.create(name: 'internal-community-care')
 community_care_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_COMMUNITYCARE',
   api_environments_attributes: {
-   metadata_url: 'https://api.va.gov/internal/docs/community-care-eligibility/metadata.json',
+   metadata_url: 'https://dev-api.va.gov/internal/docs/community-care-eligibility/metadata.json',
    environments_attributes: {
      name: ['sandbox', 'production']
    }
@@ -556,7 +615,7 @@ clinical_fhir_api = Api.create(name: 'clinical-fhir-api')
 clinical_fhir_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_HEALTH',
   api_environments_attributes: {
-   metadata_url: 'https://api.va.gov/internal/docs/fhir-clinical-health/metadata.json',
+   metadata_url: 'https://dev-api.va.gov/internal/docs/fhir-clinical-health/metadata.json',
    environments_attributes: {
      name: ['sandbox', 'production']
    }
@@ -595,12 +654,18 @@ clinical_fhir_api.update(
 fhir_health_api = Api.create(name: 'fhir-health')
 fhir_health_api.update(
   auth_server_access_key: 'AUTHZ_SERVER_HEALTH',
+  api_environments_attributes: {
+   metadata_url: 'https://api.va.gov/internal/docs/fhir/metadata.json',
+   environments_attributes: {
+     name: ['sandbox', 'production']
+   }
+  },
   api_ref_attributes: {
    name: 'health'
   },
   api_metadatum_attributes: {
    description: 'Use the OpenID Connect and SMART on FHIR standards to allow Veterans to authorize third-party applications to access data on their behalf.',
-   display_name: 'Veterans Health API (FHIR)',
+   display_name: 'Patient Health API (FHIR)',
    open_data: false,
    url_fragment: 'fhir',
    oauth_info: {
@@ -654,50 +719,9 @@ fhir_health_api.update(
     }.to_json,
    api_category_attributes: {
      id: health_category.id
-   },
-   multi_open_api_intro: <<~MARKDOWN
-    The VA's FHIR Health APIs allow consumers to develop applications using Veteran data. Please see the tabs below for the specific FHIR implementations. Data entered through the production environment Veterans Health API is held in the original data source for 36 hours before it is visible elsewhere, including in any patient-facing applications. This holding period exists to allow health care providers time to discuss health data, such as sensitive diagnoses, before the patient sees this data elsewhere.
-
-    The following Veteran data is excluded from the 36 hour hold:
-    * COVID lab tests
-    * All immunizations
-
-    > **NOTICE**: Lighthouse encourages using the R4 specification to conform with the [21st Century Cures Act](https://www.federalregister.gov/documents/2020/05/01/2020-07419/21st-century-cures-act-interoperability-information-blocking-and-the-onc-health-it-certification#h-13), which requires adoption of R4 by December 31, 2022.
-   MARKDOWN
+   }
   }
 )
-ApiEnvironment.find_or_create_by(metadata_url: 'https://api.va.gov/internal/docs/fhir-r4/metadata.json',
-                                 api: fhir_health_api,
-                                 environment: Environment.find_or_create_by(name: 'sandbox'),
-                                 key: 'r4',
-                                 label: 'R4')
-ApiEnvironment.find_or_create_by(metadata_url: 'https://api.va.gov/internal/docs/fhir-argonaut/metadata.json',
-                                 api: fhir_health_api,
-                                 environment: Environment.find_or_create_by(name: 'sandbox'),
-                                 key: 'argonaut',
-                                 label: 'Argonaut',
-                                 api_intro: <<~MARKDOWN
-                                  ## Argonaut Data Query
-
-                                  The Argonaut Project is a joint project of major US EHR vendors to advance industry adoption of modern, open interoperability standards. VA’s FHIR Argonaut Data Query API is based upon the FHIR DSTU-2 specification, particularly the [Argonaut Data Query Implementation Guide](http://www.fhir.org/guides/argonaut/r2/index.html). As noted in the implementation guide, the resources and requirements supported by Argonaut are a subset of those profiles included in DSTU-2.
-
-                                  The profiles included in VA’s Argonaut Data Query API are compliant with the FHIR Argonaut Data Query Implementation Guide and satisfy the following two following use cases:
-
-                                   * Patient uses provider-approved web application to access health data
-                                   * Patient uses provider-approved mobile app to access health data 
-                                 MARKDOWN
-                                )
-ApiEnvironment.find_or_create_by(metadata_url: 'https://api.va.gov/internal/docs/fhir-dstu2/metadata.json',
-                                 api: fhir_health_api,
-                                 environment: Environment.find_or_create_by(name: 'sandbox'),
-                                 key: 'dstu2',
-                                 label: 'DSTU2',
-                                 api_intro: <<~MARKDOWN
-                                  ## DSTU2
-
-                                  VA's FHIR DSTU-2 API is an industry accepted standard and consists of resources that represent granular clinical concepts, including health, administrative, and financial resources. The following describes the VA's implementation of HL7's FHIR DSTU-2 standard.
-                                 MARKDOWN
-                                )
 
 ApiReleaseNote.create(api_metadatum_id: urgent_care_api.api_metadatum.id,
                       date: Date.strptime('July 21, 2020', '%B %d, %Y'),
@@ -751,6 +775,32 @@ ApiReleaseNote.create(api_metadatum_id: appeals_status_api.api_metadatum.id,
                       date: Date.strptime('May 23, 2018', '%B %d, %Y'),
                       content: <<~MARKDOWN
                         Add appeals service API [#1961](https://github.com/department-of-veterans-affairs/vets-api/pull/1961)
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: decision_reviews_api.api_metadatum.id,
+                      date: Date.strptime('June 17, 2022', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        We recently deprecated the higher_level_reviews endpoint for the [Decision Reviews API V1](https://developer.va.gov/explore/appeals/docs/decision_reviews?version=1.0.0). This endpoint is now removed, and its documentation is no longer available.
+                        Consumers who were using this endpoint may instead use the following 2 new endpoints in the [Decision Reviews API V2](https://developer.va.gov/explore/appeals/docs/decision_reviews?version=current):
+                         - Higher_level_reviews
+                         - Legacy_appeals
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: decision_reviews_api.api_metadatum.id,
+                      date: Date.strptime('April 20, 2022', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        We added functionality to our Higher-Level Review (HLR) POST endpoint to support submissions by non-Veteran claimants. This allows HLRs to be submitted by dependents of a Veteran.
+
+                        To learn more, read the [Decision Reviews API documentation](https://developer.va.gov/explore/appeals/docs/decision_reviews?version=current). 
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: decision_reviews_api.api_metadatum.id,
+                      date: Date.strptime('April 18, 2022', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        We added 5 new endpoints to the Decision Reviews API. These endpoints allow you to: 
+
+                        Submit a Supplemental Claim (VA Form 20-0995). Structured data is submitted to the API which generates the most recent version of the PDF claim. 
+                        Upload supporting evidence documents in PDF form with the Supplemental Claim. 
                       MARKDOWN
                      )
 ApiReleaseNote.create(api_metadatum_id: decision_reviews_api.api_metadatum.id,
@@ -1092,6 +1142,29 @@ ApiReleaseNote.create(api_metadatum_id: benefits_reference_api.api_metadatum.id,
                       MARKDOWN
                      )
 ApiReleaseNote.create(api_metadatum_id: claims_api.api_metadatum.id,
+                      date: Date.strptime('May 16, 2022', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        - We corrected our validation logic for the `title10ActivationDate` in our POST "/forms/526" endpoint. The `title10ActivationDate` cannot be in the future and must be after the earliest `servicePeriod.activeDutyBeginDate`. [These changes were made in PR #9851](https://github.com/department-of-veterans-affairs/vets-api/pull/9851).
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: claims_api.api_metadatum.id,
+                      date: Date.strptime('May 10, 2022', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        - We added a new optional request parameter to the POST "/forms/0966" endpoint, `claimant_ssn`, which is now used to include the SSN for a non-Veteran claimant.  [These changes were made in PR #9810](https://github.com/department-of-veterans-affairs/vets-api/pull/9810)
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: claims_api.api_metadatum.id,
+                      date: Date.strptime('February 15, 2022', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        - Updated the v1 validation endpoints to validate in the same way as their respective submission endpoints. These endpoints are:
+                          - POST "forms/526" and "forms/526/validate"
+                          - POST "forms/0966" and "forms/0966/validate"
+                          - POST "forms/2122" and "forms/2122/validate"
+
+                        - [#9112](https://github.com/department-of-veterans-affairs/vets-api/pull/9112)
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: claims_api.api_metadatum.id,
                       date: Date.strptime('February 10, 2022', '%B %d, %Y'),
                       content: <<~MARKDOWN
                         - Updated test user representative Tamara Ellis' individual POA code to `067`. [#320](https://github.com/department-of-veterans-affairs/vets-api-clients/pull/320)
@@ -1411,6 +1484,24 @@ ApiReleaseNote.create(api_metadatum_id: claims_api.api_metadatum.id,
                       MARKDOWN
                      )
 ApiReleaseNote.create(api_metadatum_id: facilities_api.api_metadatum.id,
+                      date: Date.strptime('May 17, 2022', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        * `health_connect` field added onto API response as an entry within the current phone structure.
+
+                        [View the code change(s)](https://github.com/department-of-veterans-affairs/lighthouse-facilities/pull/341)
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: facilities_api.api_metadatum.id,
+                      date: Date.strptime('May 11, 2022', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        You can now see Health facilities' supplemental statuses within the pre-exisiting operating status structure.
+                        - Added `supplemental_status` data within the `operating_status` structure 
+                        - Every `supplemental_status` will contain both a unique `id` as well as a `label` that provides textual insight.
+
+                        [View the code change(s)](https://github.com/department-of-veterans-affairs/lighthouse-facilities/pull/340)
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: facilities_api.api_metadatum.id,
                       date: Date.strptime('January 11, 2022', '%B %d, %Y'),
                       content: <<~MARKDOWN
                         We added a new Radius field to lat/long searches.
@@ -1642,6 +1733,14 @@ ApiReleaseNote.create(api_metadatum_id: facilities_api.api_metadatum.id,
                       MARKDOWN
                      )
 ApiReleaseNote.create(api_metadatum_id: clinical_fhir_api.api_metadatum.id,
+                      date: Date.strptime('August 20, 2021', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        We added 2 new FHIR R4 resources that support READ and SEARCH functionality. These resources are:
+                        * [MedicationDispense](https://www.hl7.org/fhir/medicationdispense.html)
+                        * [MedicationRequest](https://www.hl7.org/fhir/medicationrequest.html)
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: clinical_fhir_api.api_metadatum.id,
                       date: Date.strptime('August 16, 2021', '%B %d, %Y'),
                       content: <<~MARKDOWN
                         Launch of the Clinical Health API
@@ -1808,6 +1907,59 @@ ApiReleaseNote.create(api_metadatum_id: veteran_verification_api.api_metadatum.i
                       content: <<~MARKDOWN
                         Launched the Service History endpoint
                         - `/service_history`: Given an authenticated user, this created an endpoint that returns a Veteran's service history from VA
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
+                      date: Date.strptime('June 21, 2022', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        The Veteran's Health API (FHIR) has been renamed to the Patient Health API (FHIR). We've also updated the layout of this API's documentation, which replaces the FHIR specification tabs with a dropdown. These changes will help our consumers more easily identify the use cases of this and our other health APIs. 
+
+                        There are no other changes to functionality, requests/responses, or data.
+
+                        We have also enabled an additional FHIR _sort parameter for the R4 AllergyIntolerance and DiagnosticReport resources. The _sort parameter lets you specify the arrangement of responses in ascending or descending order by certain other parameters.
+                         - 'AllergyIntolerance' can now be sorted by _lastUpdated.
+                         - 'DiagnosticReport' can now be sorted by _lastUpdated.
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
+                      date: Date.strptime('May 24, 2022', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        We have enabled the FHIR _sort parameter for the R4 'Condition', 'DiagnosticReport', and 'Location' resources. The _sort parameter lets you specify the arrangement of responses in ascending or descending order by certain other parameters.
+                         - 'Condition' can be sorted by category and clinical-status.
+                         - 'DiagnosticReport' can be sorted by date.
+                         - 'Location' can be sorted by address, address-city, address-state, address-postalcode, and name.
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
+                      date: Date.strptime('May 17, 2022', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        To better meet the FHIR specification for the Veterans and Clinical Health APIs, we've made some changes to the Organization.type properties for DSTU2 and R4.
+                         - We will now return the type property for only insurance companies, government agencies, and VA facilities.
+                         - We are now using [FHIR-standard Organization type codes](https://www.hl7.org/fhir/codesystem-organization-type.html) in the organization.type field to communicate the government and insurance organization types.
+                         - There are no changes to how the organization type is returned for VA facilities. 
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
+                      date: Date.strptime('May 3, 2022', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        We added a new FHIR R4 resource to the [Veterans Health API (FHIR)](https://developer.va.gov/explore/health/docs/fhir?version=current), [DeviceRequest](http://www.hl7.org/Fhir/devicerequest.html), which supports READ and SEARCH functionality. This resource includes only CPAP and BiPAP data.
+
+                        We also enabled the FHIR _sort parameter for the R4 'Observation', 'Encounter', and 'Appointment' resources. The _sort parameter lets you specify the arrangement of responses in ascending or descending order by certain other parameters. 
+                         - 'Observation' can be sorted by category, code, date, and _lastUpdated.
+                         - 'Encounter' can be sorted by date and _lastUpdated.
+                         - 'Appointment' can be sorted by date and _lastUpdated.
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
+                      date: Date.strptime('April 12, 2022', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        We have made backend changes to the Veterans Health API that optimize performance, promote stability, and reduce maintenance efforts for the R4 and DSTU2 AllergyIntolerance and Procedure resources. As a result, AllergyIntolerance and Procedure identifiers have changed. The identifier changes do not impact consumers as all cross-resource references remain valid and old identifiers are honored for read operations. 
+                      MARKDOWN
+                     )
+ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
+                      date: Date.strptime('February 24, 2022', '%B %d, %Y'),
+                      content: <<~MARKDOWN
+                        To better meet the R4 FHIR specification for both the Veterans Health and Clinical Health APIs, we will replace the full US state name with the [USPS Two Letter Abbreviation](http://www.hl7.org/fhir/us/core/ValueSet-us-core-usps-state.html) in the R4 Patient resource. For example, `Texas` will be listed as `TX` and `Massachusetts` will be listed as `MA`. Consumers currently using DSTU2 will not be impacted by this change.
                       MARKDOWN
                      )
 ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,

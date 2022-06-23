@@ -12,7 +12,7 @@ module V0
         expose :content do |entity|
           response = { consumerDocsLinkText: entity.consumer_docs_link_text,
                        shortDescription: entity.short_description,
-                       quickstart: entity.quickstart,
+                       quickstart: entity.quickstart&.gsub("\\n", "\n"), # rubocop:disable Style/StringLiterals
                        veteranRedirect: {
                          linkUrl: entity.veteran_redirect_link_url,
                          linkText: entity.veteran_redirect_link_text,
