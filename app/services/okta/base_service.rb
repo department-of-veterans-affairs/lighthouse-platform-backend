@@ -84,6 +84,7 @@ module Okta
       raise policies[:errorSummary] unless status_code == 200
 
       default_policy = policies.detect { |policy| policy.name == Figaro.env.okta_default_policy }
+      default_policy = policies.detect { |policy| policy.name == '*/* (all scopes)' } if default_policy.blank?
       raise "No default policy for clientId: #{client_id}, authServerId: #{auth_server_id}" if default_policy.blank?
 
       default_policy.conditions.clients.include.push(client_id)
