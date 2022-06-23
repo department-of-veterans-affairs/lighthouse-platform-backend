@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
+  sequence(:unique_event_type) do |instance|
+    "#{Faker::Lorem.word}#{instance}"
+  end
+
   factory :event do
-    event_type { Faker::Lorem.unique.word }
+    event_type { generate(:unique_event_type) }
     content { 'MyText' }
 
     trait :sandbox_signup do
