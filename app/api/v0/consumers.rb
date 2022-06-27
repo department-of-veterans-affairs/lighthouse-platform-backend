@@ -127,7 +127,7 @@ module V0
                                     allow_blank: true,
                                     regexp: %r{^(https?://.+|)$},
                                     malicious_url_protection: true,
-                                    coerce_with: ->(value) { value.nil? ? value : value.strip }
+                                    coerce_with: ->(value) { value&.strip }
         optional :oAuthPublicKey, type: JSON
         requires :organization, type: String
         requires :termsOfService, type: Boolean, allow_blank: false, values: [true]
