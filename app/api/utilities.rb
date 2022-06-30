@@ -3,6 +3,30 @@
 require 'rake'
 
 class Utilities < Base
+  helpers do
+    def user_from_signup_params
+      user = User.find_or_initialize_by(email: params[:email])
+
+      user.first_name = params[:firstName]
+      user.last_name = params[:lastName]
+      user.consumer = Consumer.new if user.consumer.blank?
+      user.consumer.description = params[:description]
+      user.consumer.organization = params[:organization]
+      user.consumer.apis_list = ApiService.parse('ccg/lpb')
+      user.consumer.tos_accepted = params[:termsOfService]
+
+      user
+    end
+
+    def okta_signup_options
+      {
+        application_type: params[:oAuthApplicationType],
+        redirect_uri: params[:oAuthRedirectURI],
+        application_public_key: params[:oAuthPublicKey]
+      }
+    end
+  end
+
   resource 'utilities' do
     resource 'consumers' do
       desc 'Returns list of consumers'
@@ -65,6 +89,28 @@ class Utilities < Base
       get '/environments/:environment/unknown-applications' do
         drift_service_arg = params[:environment] == 'production' ? :production : nil
         Okta::DriftService.new(drift_service_arg).detect_drift(alert: false, filter: params[:filterLastDay])
+      end
+
+      namespace 'lpb' do
+        params do
+          requires :environment, type: Symbol, values: [:production], allow_blank: false
+          optional :description, type: String
+          requires :email, type: String, allow_blank: false, regexp: /.+@.+/
+          requires :firstName, type: String
+          requires :lastName, type: String
+          optional :oAuthPublicKey, type: JSON
+          requires :organization, type: String
+          requires :termsOfService, type: Boolean, allow_blank: false, values: [true]
+        end
+        post 'applications' do
+          user = user_from_signup_params
+
+          okta_consumers = Okta::ServiceFactory.service(params[:environment]).consumer_signup(user, okta_signup_options)
+          Event.create(event_type: Event::EVENT_TYPES[:lpb_signup], content: { user: user, okta: okta_consumers })
+
+          present user, with: V0::Entities::ConsumerApplicationEntity,
+                        okta_consumers: okta_consumers
+        end
       end
     end
   end
