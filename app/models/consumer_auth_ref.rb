@@ -8,7 +8,8 @@ class ConsumerAuthRef < ApplicationRecord
     sandbox_acg_oauth_ref: 'sandbox_acg_oauth_ref',
     sandbox_ccg_oauth_ref: 'sandbox_ccg_oauth_ref',
     prod_gateway_ref: 'prod_gateway_ref',
-    prod_acg_oauth_ref: 'prod_acg_oauth_ref'
+    prod_acg_oauth_ref: 'prod_acg_oauth_ref',
+    prod_ccg_oauth_ref: 'prod_ccg_oauth_ref'
   }.freeze
 
   belongs_to :consumer
