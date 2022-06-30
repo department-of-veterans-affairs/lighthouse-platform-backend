@@ -12,7 +12,7 @@ class Utilities < Base
       user.consumer = Consumer.new if user.consumer.blank?
       user.consumer.description = params[:description]
       user.consumer.organization = params[:organization]
-      user.consumer.apis_list = ApiService.parse('ccg/lpb', false)
+      user.consumer.apis_list = ApiService.parse('ccg/lpb', filter_lpb: false)
       user.consumer.tos_accepted = params[:termsOfService]
 
       user

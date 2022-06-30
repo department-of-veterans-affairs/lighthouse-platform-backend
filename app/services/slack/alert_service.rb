@@ -37,7 +37,7 @@ module Slack
     end
 
     def slack_email_list(options)
-      "Contact Email: #{options[:email]}"\
+      "Contact Email: #{options[:email]}" \
         "#{include_va_email?(options) ? " | VA Email: #{options[:internal_api_info][:va_email]}" : ''}"
     end
 
