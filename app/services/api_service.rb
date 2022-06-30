@@ -3,7 +3,7 @@
 class ApiService
   AUTH_TYPES = %w[acg ccg apikey].freeze
 
-  def self.parse(api_list_str)
+  def self.parse(api_list_str, filter_lpb = true)
     api_list = api_list_str.strip.split(',')
     api_list.map do |api|
       api_parts = api.strip.split('/')
@@ -11,6 +11,7 @@ class ApiService
 
       api_ref = ApiRef.kept.find_by(name: api_parts.last)
       raise invalid_api_exception(api) if api_ref.blank?
+      raise invalid_api_exception(api) if api_ref.name.eql?('lpb') && filter_lpb
 
       api = api_ref.api
       api.auth_type = api_parts.count > 1 ? validate_auth_type(api_parts.first) : default_auth_type(api)
