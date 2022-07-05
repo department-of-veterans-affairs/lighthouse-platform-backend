@@ -10,7 +10,7 @@ class ApiService
       raise invalid_api_exception(api) if api_parts.blank? || api_parts.count > 2
 
       api_ref = ApiRef.kept.find_by(name: api_parts.last)
-      raise invalid_api_exception(api) if api_ref.blank? || (api_ref.name.eql?('lpb') && filter_lpb)
+      raise invalid_api_exception(api) if api_ref.blank? || (filter_lpb && api_ref.name.eql?('lpb'))
 
       api = api_ref.api
       api.auth_type = api_parts.count > 1 ? validate_auth_type(api_parts.first) : default_auth_type(api)
