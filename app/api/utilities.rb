@@ -17,6 +17,10 @@ class Utilities < Base
 
       user
     end
+
+    def okta_signup_options
+      { application_public_key: params[:oAuthPublicKey] }
+    end
   end
 
   resource 'utilities' do
@@ -98,8 +102,7 @@ class Utilities < Base
           user = user_from_signup_params
 
           okta_service = Okta::ServiceFactory.service(params[:environment])
-          okta_consumers = okta_service.consumer_signup(user,
-                                                        { application_public_key: params[:oAuthPublicKey] })
+          okta_consumers = okta_service.consumer_signup(user, okta_signup_options)
           Event.create(event_type: Event::EVENT_TYPES[:lpb_signup], content: { user: user, okta: okta_consumers })
 
           present user, with: V0::Entities::ConsumerApplicationEntity,
