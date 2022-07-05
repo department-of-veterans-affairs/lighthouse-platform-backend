@@ -52,4 +52,23 @@ describe Utilities, type: :request do
       end
     end
   end
+
+  describe 'lpb signups' do
+    let(:signup_params) do
+      build(:sandbox_signup_request, apis: 'ccg/lpb', environment: 'production', termsOfService: true,
+                                     oAuthPublicKey: { yep: 'th1s-15-r34l' })
+    end
+
+    before do
+      create(:api, :with_lpb_ref)
+    end
+
+    it 'allows signup access via utilities' do
+      VCR.use_cassette('okta/consumer_signup_ccg_200', match_requests_on: [:method]) do
+        post '/platform-backend/utilities/okta/lpb/applications', params: signup_params
+        expect(response.status).to eq(201)
+        expect(JSON.parse(response.body)['apis']).to eq('lpb')
+      end
+    end
+  end
 end

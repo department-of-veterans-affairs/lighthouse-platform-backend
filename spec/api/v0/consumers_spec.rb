@@ -195,6 +195,14 @@ describe V0::Consumers, type: :request do
       end
     end
 
+    context 'when lpb is provided via the developer portal' do
+      it 'responds with a bad request' do
+        signup_params[:apis] = 'ccg/lpb'
+        post apply_base, params: signup_params
+        expect(response.code).to eq('400')
+      end
+    end
+
     context 'when invalid auth_type is passed' do
       it 'responds with bad request' do
         signup_params[:apis] = "invalid-auth-type/#{api_ref_one}"

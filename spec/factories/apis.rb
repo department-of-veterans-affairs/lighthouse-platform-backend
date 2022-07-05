@@ -14,5 +14,10 @@ FactoryBot.define do
     trait :with_api_environment do
       api_environments { build_list(:api_environment, 1, api: instance) }
     end
+
+    trait :with_lpb_ref do
+      api_ref { build(:api_ref, name: 'lpb') }
+      auth_server_access_key { 'AUTHZ_SERVER_LPB' }
+    end
   end
 end

@@ -116,7 +116,7 @@ module V0
       params do
         requires :apis, type: Array[Api],
                         allow_blank: false,
-                        coerce_with: ->(value) { ApiService.parse(value) },
+                        coerce_with: ->(value) { ApiService.parse(value, filter_lpb: true) },
                         provided_oauth_params: true
         optional :description, type: String
         requires :email, type: String, allow_blank: false, regexp: /.+@.+/
@@ -187,7 +187,7 @@ module V0
                             [2-9]\d{2}[- .]?\d{4}((\ )?(\()
                             ?(ext|x|extension)([- .:])?\d{1,6}(\))?)?$
                           /x,
-                           message: '"phoneNumber" failed custom validation because phone number format invalid. '\
+                           message: '"phoneNumber" failed custom validation because phone number format invalid. ' \
                                     'Valid format examples: 222-333-4444, (222) 333-4444, 2223334444' }
         optional :piiStorageMethod, type: String
         optional :platforms, type: String
@@ -257,7 +257,7 @@ module V0
                         allow_blank: false,
                         description: 'Comma separated values of API Refs for promotion to production',
                         consumer_has_sandbox_api: true,
-                        coerce_with: ->(value) { ApiService.parse(value) }
+                        coerce_with: ->(value) { ApiService.parse(value, filter_lpb: false) }
         optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: false
         optional :oAuthRedirectURI, type: String,
                                     allow_blank: false,

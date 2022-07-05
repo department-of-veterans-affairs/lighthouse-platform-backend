@@ -112,6 +112,7 @@ Metrics/CyclomaticComplexity:
     - 'construct_import'
     - 'auth_refs'
     - 'validate_token'
+    - 'parse'
 Metrics/PerceivedComplexity:
   IgnoredMethods:
     - 'consumer_signup'
@@ -293,7 +294,7 @@ Style/SlicingWithRange:
 # Added in v0.84
 Lint/DeprecatedOpenSSLConstant:
   Enabled: true
-Gemspec/DateAssignment: # (new in 1.10)
+Gemspec/DeprecatedAttributeAssignment: # (new in 1.10)
   Enabled: true
 Layout/SpaceBeforeBrackets: # (new in 1.7)
   Enabled: true

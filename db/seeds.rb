@@ -14,7 +14,7 @@ appeals_category = ApiCategory.create(
   short_description: 'Enables managing benefit decision appeals on behalf of a Veteran.',
   consumer_docs_link_text: 'Read the consumer onboarding guide for getting production access',
   overview: <<~MARKDOWN
-    ## Allows internal VA users to manage Veterans’ decision review requests per the [Appeals Modernization Act (AMA)](https://benefits.va.gov/benefits/appeals.asp) or the legacy benefits appeals process. 
+    ## Allows internal VA users to manage Veterans’ decision review requests per the [Appeals Modernization Act (AMA)](https://benefits.va.gov/benefits/appeals.asp) or the legacy benefits appeals process.
 
     Allows you to submit, manage, or check the status of decision reviews (appeals) related to VA benefits claims. [Review the latest release notes](/release-notes/appeals).
   MARKDOWN
@@ -42,7 +42,7 @@ facilities_category = ApiCategory.create(
   veteran_redirect_link_text: "Find the facility that's right for you",
   veteran_redirect_message: 'Are you a Veteran?',
   overview: <<~MARKDOWN
-    ## Use the VA Facilities API to find information about a specific VA facility. 
+    ## Use the VA Facilities API to find information about a specific VA facility.
 
     This API uses open data to return contact information, location, hours of operation and available services for VA facilities. For medical facilities only, we provide data on appointment wait times and patient satisfaction. [Review the latest release notes](/release-notes/facilities).
   MARKDOWN
@@ -53,9 +53,9 @@ health_category = ApiCategory.create(
   short_description: 'Use our APIs to build tools that help Veterans manage their health.',
   consumer_docs_link_text: 'Read the consumer onboarding guide for getting production access',
   overview: (<<~MARKDOWN
-    ## Use our Health APIs to build tools that help Veterans manage their health, view their VA medical records, share their health information, and determine potential eligibility for community care. While these APIs allow greater access to health data, they do not currently allow submission of medical claims. 
+    ## Use our Health APIs to build tools that help Veterans manage their health, view their VA medical records, share their health information, and determine potential eligibility for community care. While these APIs allow greater access to health data, they do not currently allow submission of medical claims.
 
-    VA’s Health APIs use [HL7’s Fast Healthcare Interoperability Resources (FHIR) framework](https://www.hl7.org/fhir/overview.html) for providing healthcare data in a standardized format. FHIR solutions are built from a set of modular components, called resources, which can be easily assembled into working systems that solve real world clinical and administrative problems. 
+    VA’s Health APIs use [HL7’s Fast Healthcare Interoperability Resources (FHIR) framework](https://www.hl7.org/fhir/overview.html) for providing healthcare data in a standardized format. FHIR solutions are built from a set of modular components, called resources, which can be easily assembled into working systems that solve real world clinical and administrative problems.
 
     When you register for access to the Health APIs, you will be granted access to a synthetic set of data (provided by the MITRE Corporation) that mimics real Veteran demographics. The associated clinical resources include data generated from disease models covering up to a dozen of the most common Veteran afflictions. [Review the latest release notes](/release-notes/health).
 
@@ -142,7 +142,7 @@ veteran_verification_category = ApiCategory.create(
   short_description: 'Empowering Veterans to take control of their data and put it to work.',
   consumer_docs_link_text: 'Read the consumer onboarding guide for getting production access',
   overview: <<~MARKDOWN
-    ## These APIs allow verification of Veteran status and data. They return service history, confirm Veteran status, and validate address information. 
+    ## These APIs allow verification of Veteran status and data. They return service history, confirm Veteran status, and validate address information.
 
     We’re giving Veterans better control of and access to their information – including their service history, Veteran status, discharge information, and more by working with government agencies and industry partners to help Veterans put their information to work. [Review the latest release notes](/release-notes/verification).
   MARKDOWN
@@ -600,13 +600,13 @@ urgent_care_api.update(
 )
 urgent_care_api.deprecate!(deprecation_date: Time.parse('13 Jul 2020 00:00 EDT'),
                            deprecation_content: (<<~MARKDOWN
-                              This API is deprecated and scheduled for deactivation in the 3rd quarter of 2020. 
+                              This API is deprecated and scheduled for deactivation in the 3rd quarter of 2020.
                             MARKDOWN
                             ))
 urgent_care_api.deactivate!(deactivation_date: Time.parse('20 Jul 2020 00:00 EDT'),
                             deactivation_content: (<<~MARKDOWN
-                                Our Urgent Care Eligibility API was deactivated on July 20, 2020. The API and related 
-                                documentation is no longer accessible. For more information, [contact us](/support/contact-us) 
+                                Our Urgent Care Eligibility API was deactivated on July 20, 2020. The API and related
+                                documentation is no longer accessible. For more information, [contact us](/support/contact-us)
                                 or visit our [Google Developer Forum](https://groups.google.com/forum/m/#!forum/va-lighthouse).
                               MARKDOWN
                               ))
@@ -723,6 +723,13 @@ fhir_health_api.update(
   }
 )
 
+lpb_api = Api.create(name: 'lighthouse-platform-backend')
+lpb_api.update(
+  auth_server_access_key: 'AUTHZ_SERVER_LPB',
+  api_ref_attributes: {
+   name: 'lpb'
+  }
+)
 ApiReleaseNote.create(api_metadatum_id: urgent_care_api.api_metadatum.id,
                       date: Date.strptime('July 21, 2020', '%B %d, %Y'),
                       content: <<~MARKDOWN
@@ -791,16 +798,16 @@ ApiReleaseNote.create(api_metadatum_id: decision_reviews_api.api_metadatum.id,
                       content: <<~MARKDOWN
                         We added functionality to our Higher-Level Review (HLR) POST endpoint to support submissions by non-Veteran claimants. This allows HLRs to be submitted by dependents of a Veteran.
 
-                        To learn more, read the [Decision Reviews API documentation](https://developer.va.gov/explore/appeals/docs/decision_reviews?version=current). 
+                        To learn more, read the [Decision Reviews API documentation](https://developer.va.gov/explore/appeals/docs/decision_reviews?version=current).
                       MARKDOWN
                      )
 ApiReleaseNote.create(api_metadatum_id: decision_reviews_api.api_metadatum.id,
                       date: Date.strptime('April 18, 2022', '%B %d, %Y'),
                       content: <<~MARKDOWN
-                        We added 5 new endpoints to the Decision Reviews API. These endpoints allow you to: 
+                        We added 5 new endpoints to the Decision Reviews API. These endpoints allow you to:
 
-                        Submit a Supplemental Claim (VA Form 20-0995). Structured data is submitted to the API which generates the most recent version of the PDF claim. 
-                        Upload supporting evidence documents in PDF form with the Supplemental Claim. 
+                        Submit a Supplemental Claim (VA Form 20-0995). Structured data is submitted to the API which generates the most recent version of the PDF claim.
+                        Upload supporting evidence documents in PDF form with the Supplemental Claim.
                       MARKDOWN
                      )
 ApiReleaseNote.create(api_metadatum_id: decision_reviews_api.api_metadatum.id,
@@ -808,11 +815,11 @@ ApiReleaseNote.create(api_metadatum_id: decision_reviews_api.api_metadatum.id,
                       content: <<~MARKDOWN
                         Release Notes for new Contestable Issues standalone endpoint
 
-                        We added a new endpoint (`GET /contestable_issues/{decision_review_type}`) to the Decision Reviews API. This endpoint returns contestable issues for a specific Veteran. Using this endpoint lets you tailor your appeal submission flow based on the Veteran’s issues. 
+                        We added a new endpoint (`GET /contestable_issues/{decision_review_type}`) to the Decision Reviews API. This endpoint returns contestable issues for a specific Veteran. Using this endpoint lets you tailor your appeal submission flow based on the Veteran’s issues.
 
                         This endpoint returns contestable issues for a single Veteran based on the Veteran’s social security number.
-                        You can search for contestable issues based on these appeal types: higher_level_reviews, notice_of_disagreements, and supplemental_claims. 
-                        The endpoint returns only issues that have been decided as of the receiptDate. 
+                        You can search for contestable issues based on these appeal types: higher_level_reviews, notice_of_disagreements, and supplemental_claims.
+                        The endpoint returns only issues that have been decided as of the receiptDate.
                         Read the Decision Review API documentation to learn more.
                       MARKDOWN
                      )
@@ -856,9 +863,9 @@ ApiReleaseNote.create(api_metadatum_id: benefits_intake_api.api_metadatum.id,
 ApiReleaseNote.create(api_metadatum_id: benefits_intake_api.api_metadatum.id,
                       date: Date.strptime('May 20, 2021', '%B %d, %Y'),
                       content: <<~MARKDOWN
-                        (v1) On May 17, we made changes to Veteran First and Last name field validations for the Benefits Intake API, which are described in a release note below. 
+                        (v1) On May 17, we made changes to Veteran First and Last name field validations for the Benefits Intake API, which are described in a release note below.
 
-                        Based on the high number of errors being received, we are temporarily turning off these changes and reverting back to previous field requirements. We are working on updating the new validations to allow spaces and reduce the number of errors returned. 
+                        Based on the high number of errors being received, we are temporarily turning off these changes and reverting back to previous field requirements. We are working on updating the new validations to allow spaces and reduce the number of errors returned.
 
                         When those changes are made, we will turn on the new validations, post an updated release note, and send a notification to all consumers.
                       MARKDOWN
@@ -866,7 +873,7 @@ ApiReleaseNote.create(api_metadatum_id: benefits_intake_api.api_metadatum.id,
 ApiReleaseNote.create(api_metadatum_id: benefits_intake_api.api_metadatum.id,
                       date: Date.strptime('May 17, 2021', '%B %d, %Y'),
                       content: <<~MARKDOWN
-                        (v1) In order to further automate matches of submitted documents with Veterans downstream, the required Veteran First and Last name metadata fields now only allow alpha characters, dashes -, and forward slashes /. Additionally, these fields must be less than or equal to 50 characters. No numbers or other special characters may be submitted in these fields. 
+                        (v1) In order to further automate matches of submitted documents with Veterans downstream, the required Veteran First and Last name metadata fields now only allow alpha characters, dashes -, and forward slashes /. Additionally, these fields must be less than or equal to 50 characters. No numbers or other special characters may be submitted in these fields.
 
                         Submissions with invalid characters will receive Error Status DOC102  "Invalid Veteran name (e.g. empty, invalid characters, or too long). Names must match the regular expression /^[a-zA-Z\-\/]{1,50}$/"
 
@@ -1495,7 +1502,7 @@ ApiReleaseNote.create(api_metadatum_id: facilities_api.api_metadatum.id,
                       date: Date.strptime('May 11, 2022', '%B %d, %Y'),
                       content: <<~MARKDOWN
                         You can now see Health facilities' supplemental statuses within the pre-exisiting operating status structure.
-                        - Added `supplemental_status` data within the `operating_status` structure 
+                        - Added `supplemental_status` data within the `operating_status` structure
                         - Every `supplemental_status` will contain both a unique `id` as well as a `label` that provides textual insight.
 
                         [View the code change(s)](https://github.com/department-of-veterans-affairs/lighthouse-facilities/pull/340)
@@ -1514,8 +1521,8 @@ ApiReleaseNote.create(api_metadatum_id: facilities_api.api_metadatum.id,
 ApiReleaseNote.create(api_metadatum_id: facilities_api.api_metadatum.id,
                       date: Date.strptime('July 6, 2021', '%B %d, %Y'),
                       content: <<~MARKDOWN
-                        Time zone data has now been added to API repsonse   
-                        * `time_zone` represents the corresponding IANA format time zone for the facility returned 
+                        Time zone data has now been added to API repsonse
+                        * `time_zone` represents the corresponding IANA format time zone for the facility returned
                         * Example value for Orlando VA Medical Center: "America/New_York"
 
                         [View the code change(s)](https://github.com/department-of-veterans-affairs/lighthouse-facilities/pull/226)
@@ -1610,7 +1617,7 @@ ApiReleaseNote.create(api_metadatum_id: facilities_api.api_metadatum.id,
                         - `active_status` is deprecated and replaced with `operating_status`. It will be removed in version 1.
 
                          [View code change(s)](https://github.com/department-of-veterans-affairs/lighthouse-facilities/pull/58)
-                         
+
                          Note: the Facilities API codebase was refactored and separated from the vets-api repository.
                       MARKDOWN
                      )
@@ -1750,7 +1757,7 @@ ApiReleaseNote.create(api_metadatum_id: community_care_api.api_metadatum.id,
                       date: Date.strptime('July 23, 2021', '%B %d, %Y'),
                       content: <<~MARKDOWN
                         The CCE API now presents and accounts for a veteran's PACT status (Patient Aligned Care Team) when calculating eligibility.
-                        - PACT status is only consulted for PrimaryCare requests. A veteran with an active PACT is ineligible for community care for Primary Care appointments.  
+                        - PACT status is only consulted for PrimaryCare requests. A veteran with an active PACT is ineligible for community care for Primary Care appointments.
                         - The new field 'pactStatus' has been added to the API response when it has been used in the eligibility determination.
 
                         [View code changes(s)](https://github.com/department-of-veterans-affairs/health-apis-community-care-eligibility/pull/131)
@@ -1780,7 +1787,7 @@ ApiReleaseNote.create(api_metadatum_id: loan_guaranty_api.api_metadatum.id,
 ApiReleaseNote.create(api_metadatum_id: forms_api.api_metadatum.id,
                       date: Date.strptime('July 6, 2021', '%B %d, %Y'),
                       content: <<~MARKDOWN
-                        (v0) We added a new searching algorithm that applies spell checking, full text search, and ranking based on popularity. These features allow users to more quickly find the forms they need. 
+                        (v0) We added a new searching algorithm that applies spell checking, full text search, and ranking based on popularity. These features allow users to more quickly find the forms they need.
                         * [#7108](https://github.com/department-of-veterans-affairs/vets-api/pull/7108)
                       MARKDOWN
                      )
@@ -1843,7 +1850,7 @@ ApiReleaseNote.create(api_metadatum_id: veteran_confirmation_api.api_metadatum.i
 ApiReleaseNote.create(api_metadatum_id: veteran_verification_api.api_metadatum.id,
                       date: Date.strptime('Sep 22, 2021', '%B %d, %Y'),
                       content: <<~MARKDOWN
-                        The Veteran Verification API v1.0.0 was updated to include a change to the /disability_rating endpoint response. The DisabilityRatingAttributes will now show date (2018-03-27) rather than datetime (2018-03-27T21:00:41.000+0000). 
+                        The Veteran Verification API v1.0.0 was updated to include a change to the /disability_rating endpoint response. The DisabilityRatingAttributes will now show date (2018-03-27) rather than datetime (2018-03-27T21:00:41.000+0000).
 
                         This was introduced as a versioned change to allow API consumers to upgrade at their convenience. We encourage all consumers to migrate to the new version as v0.0.0 will be removed on December 1, 2021.
                         [View code changes(s)](https://github.com/department-of-veterans-affairs/vets-api/pull/7546)
@@ -1912,7 +1919,7 @@ ApiReleaseNote.create(api_metadatum_id: veteran_verification_api.api_metadatum.i
 ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
                       date: Date.strptime('June 21, 2022', '%B %d, %Y'),
                       content: <<~MARKDOWN
-                        The Veteran's Health API (FHIR) has been renamed to the Patient Health API (FHIR). We've also updated the layout of this API's documentation, which replaces the FHIR specification tabs with a dropdown. These changes will help our consumers more easily identify the use cases of this and our other health APIs. 
+                        The Veteran's Health API (FHIR) has been renamed to the Patient Health API (FHIR). We've also updated the layout of this API's documentation, which replaces the FHIR specification tabs with a dropdown. These changes will help our consumers more easily identify the use cases of this and our other health APIs.
 
                         There are no other changes to functionality, requests/responses, or data.
 
@@ -1936,7 +1943,7 @@ ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
                         To better meet the FHIR specification for the Veterans and Clinical Health APIs, we've made some changes to the Organization.type properties for DSTU2 and R4.
                          - We will now return the type property for only insurance companies, government agencies, and VA facilities.
                          - We are now using [FHIR-standard Organization type codes](https://www.hl7.org/fhir/codesystem-organization-type.html) in the organization.type field to communicate the government and insurance organization types.
-                         - There are no changes to how the organization type is returned for VA facilities. 
+                         - There are no changes to how the organization type is returned for VA facilities.
                       MARKDOWN
                      )
 ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
@@ -1944,7 +1951,7 @@ ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
                       content: <<~MARKDOWN
                         We added a new FHIR R4 resource to the [Veterans Health API (FHIR)](https://developer.va.gov/explore/health/docs/fhir?version=current), [DeviceRequest](http://www.hl7.org/Fhir/devicerequest.html), which supports READ and SEARCH functionality. This resource includes only CPAP and BiPAP data.
 
-                        We also enabled the FHIR _sort parameter for the R4 'Observation', 'Encounter', and 'Appointment' resources. The _sort parameter lets you specify the arrangement of responses in ascending or descending order by certain other parameters. 
+                        We also enabled the FHIR _sort parameter for the R4 'Observation', 'Encounter', and 'Appointment' resources. The _sort parameter lets you specify the arrangement of responses in ascending or descending order by certain other parameters.
                          - 'Observation' can be sorted by category, code, date, and _lastUpdated.
                          - 'Encounter' can be sorted by date and _lastUpdated.
                          - 'Appointment' can be sorted by date and _lastUpdated.
@@ -1953,7 +1960,7 @@ ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
 ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
                       date: Date.strptime('April 12, 2022', '%B %d, %Y'),
                       content: <<~MARKDOWN
-                        We have made backend changes to the Veterans Health API that optimize performance, promote stability, and reduce maintenance efforts for the R4 and DSTU2 AllergyIntolerance and Procedure resources. As a result, AllergyIntolerance and Procedure identifiers have changed. The identifier changes do not impact consumers as all cross-resource references remain valid and old identifiers are honored for read operations. 
+                        We have made backend changes to the Veterans Health API that optimize performance, promote stability, and reduce maintenance efforts for the R4 and DSTU2 AllergyIntolerance and Procedure resources. As a result, AllergyIntolerance and Procedure identifiers have changed. The identifier changes do not impact consumers as all cross-resource references remain valid and old identifiers are honored for read operations.
                       MARKDOWN
                      )
 ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
@@ -2012,12 +2019,12 @@ ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
 ApiReleaseNote.create(api_metadatum_id: fhir_health_api.api_metadatum.id,
                       date: Date.strptime('September 21, 2021', '%B %d, %Y'),
                       content: <<~MARKDOWN
-                        We added new elements and values to the R4 `Condition` FHIR mapping. 
+                        We added new elements and values to the R4 `Condition` FHIR mapping.
                           -  The `clinicalStatus` element now supports the value `inactive`.
                           -  The `verificationStatus` element now returns these additional values:`provisional`, `differential`, `confirmed`, and `refuted`. Previously, this element always returned  `unconfirmed`.
                           -  The `recorder` element is now added.
 
-                        The R4 `AllergyIntolerance` FHIR mapping now includes both `clincalStatus` and `verificationStatus`.  Previously, only one was populated based on value. 
+                        The R4 `AllergyIntolerance` FHIR mapping now includes both `clincalStatus` and `verificationStatus`.  Previously, only one was populated based on value.
 
                         The `primarySource` for the R4 `Immunization` FHIR mapping now supports Boolean values. Previously, it was always `true`.
                       MARKDOWN
