@@ -15,7 +15,13 @@ describe V0::Consumers, type: :request do
       lastName: 'Funnie',
       oAuthApplicationType: 'web',
       oAuthRedirectURI: 'http://localhost:3000/callback',
-      oAuthPublicKey: { kty: 'RSA', n: 'key-value-here', e: 'AQAB' }.to_json,
+      oAuthPublicKey: {
+        kid: nil,
+        kty: 'RSA',
+        e: 'AQAB',
+        use: nil,
+        n: '2Fb4_D4-RSjvl11txu-0s9bThk8hTo2SJauTRrS9N7piFlpGi6PBql3KzLmEu_T36YMbmTjDRPyybEEBD_XkEDuNdWSQph5Da7atfFM04IW5WH3MGPuvmaH6WpZB4Li5qESTFaMk0677uCDvOLcJmfa8bzunvbtlB4U-1WLjtDBODWiVpLlGEUofNQdX2MvTF9shtm-QqPk7K-a2Z36LrZpgcQBB1U8QtqexdaLrMgaoxmEbSgXGAc-uDkmQx1VOAsREozYZ9f1tASmOKGlxfVyBHcf6dePxq1cewpmrUfRTezky5A4K6v17uBYSpEols4ritWDRDymb7rFlUwxBjqdCjmtV18HiLIrgBNPQ2-5Jlnt-BCJg3lP_UG0r6cMO2DEtTkAkDcy4HzNuMQCrXn5ZL4kSUITrf9Mixny3vFn3aVcSNsCqLUSAfnpfRIz9oUUz5xI-FD9QsJJ1vneC8mfo-1lNaVRLNhn2t9VWY0kqhNNzS2HIktkZGzGv7gsB'
+      }.to_json,
       organization: 'Doug',
       termsOfService: true
     }
@@ -180,10 +186,20 @@ describe V0::Consumers, type: :request do
     end
 
     context 'when oauth arguments are invalid' do
-      it 'responds with bad request' do
-        signup_params[:oAuthApplicationType] = 'invalid-value'
-        post apply_base, params: signup_params
-        expect(response.code).to eq('400')
+      context 'when oauth application type is invalid' do
+        it 'responds with bad request' do
+          signup_params[:oAuthApplicationType] = 'invalid-value'
+          post apply_base, params: signup_params
+          expect(response.code).to eq('400')
+        end
+      end
+
+      context 'when oauth public key is invalid' do
+        it 'responds with bad request' do
+          signup_params[:oAuthPublicKey] = { kty: 'RSA', n: 'key-value-here', e: 'AQAB' }.to_json
+          post apply_base, params: signup_params
+          expect(response.code).to eq('400')
+        end
       end
     end
 

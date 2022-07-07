@@ -597,6 +597,7 @@ DEPENDENCIES
   grape_logging
   httparty
   jbuilder (~> 2.7)
+  jwt
   listen (~> 3.3)
   lograge
   okcomputer
