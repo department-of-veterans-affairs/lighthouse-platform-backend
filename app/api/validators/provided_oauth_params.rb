@@ -25,10 +25,23 @@ module Validators
     end
 
     def validate_ccg_oauth_params!(params)
-      return if params[:oAuthPublicKey].present?
+      if params[:oAuthPublicKey].blank?
+        raise Grape::Exceptions::Validation.new(params: %w[oAuthPublicKey],
+                                                message: 'missing required oAuth value')
+      end
 
-      raise Grape::Exceptions::Validation.new(params: %w[oAuthPublicKey],
-                                              message: 'missing required oAuth value')
+      begin
+        jwk = JSON.parse(params[:oAuthPublicKey])
+      rescue JSON::ParserError
+        return # this will get caught and responded to by grape's built-in validator
+      end
+
+      begin
+        JWT::JWK.import(jwk)
+      rescue ArgumentError
+        raise Grape::Exceptions::Validation.new(params: %w[oAuthPublicKey],
+                                                message: 'invalid OAuth public key')
+      end
     end
   end
 end
