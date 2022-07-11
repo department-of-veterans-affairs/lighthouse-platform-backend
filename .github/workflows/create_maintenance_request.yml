@@ -5,10 +5,28 @@ on:
     workflows: [Snapshot Update]
     types: [completed]
 
+env:
+  release_tag: ${{ github.event.release.tag_name }}
+  commits: ${{ github.event.commits }}
+
 jobs:
   create-maintenance-request:
     name: Create Request
     runs-on: ubuntu-latest
     steps:
       - name: Build Request
+        id: starting-release-build
         run: echo 'Generating MR...'
+
+      - name: Display Release Tag
+        id: display-release-tag
+        run: echo 'release tag - ${{ env.release_tag }}'
+
+      - name: Display commit messages
+        id: display-commit-messages
+        run: |
+          for commit in ${{ env.commits }}; do
+            if [ ${{ commit.author.name }} != 'libertybot' ]; do
+              echo 'Messages - ${{ commit.message }}'
+            fi
+          done
