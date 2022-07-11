@@ -11,12 +11,6 @@ jobs:
     name: Check Snapshot
     runs-on: ubuntu-latest
     steps:
-      - name: Snapshot Commit Message
-        id: commit-message
-        run: |
-          echo ${{ github.event.head_commit.message }}
-          echo ${{ env.commit_message }}
-
-      - name: Deploy MR
+      - name: Determine MR Deployment
         if: startsWith(env.commit_message, 'Test Snap')
         run: echo 'Test snapshot - deploying'
