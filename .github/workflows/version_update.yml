@@ -3,6 +3,9 @@ name: Version Update
 # switch to only master for merge
 on: push
 
+env:
+  commit_message: ${{ github.event.head_commit.message }}
+
 jobs:
   verify-version-update:
     name: Check Snapshot
@@ -11,9 +14,9 @@ jobs:
       - name: Snapshot Commit Message
         id: commit-message
         run: |
-          echo "::set-output name=commit_message::${{ github.event.head_commit.message }}"
           echo ${{ github.event.head_commit.message }}
+          echo ${{ env.commit_message }}
 
       - name: Deploy MR
-        if: startsWith(commit_message, 'Test Snap')
+        if: startsWith(env.commit_message, 'Test Snap')
         run: echo 'Test snapshot - deploying'
