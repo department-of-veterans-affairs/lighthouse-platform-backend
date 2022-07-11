@@ -1,6 +1,7 @@
 name: Verify Version Updated
 
-on: push
+on:
+  push:
 
 jobs:
   verify-version-update:
