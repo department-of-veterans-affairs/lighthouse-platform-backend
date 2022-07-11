@@ -1,0 +1,14 @@
+name: Create Maintenance Request
+
+on:
+  workflow_run:
+    workflows: [Snapshot Update]
+    types: [completed]
+
+jobs:
+  create-maintenance-request:
+    name: Create Request
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Request
+        run: echo 'Generating MR...'
