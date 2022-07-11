@@ -15,10 +15,7 @@ jobs:
 
       - name: Version Changed
         id: version-changed
-        if: contains(steps.changed-files.outputs.modified_files, 'VERSION')
-        run: echo 'Version Changed'
-
-      - name: Version Did Not Change
-        id: version-did-not-change
-        if: contains(steps.changed-files.outputs.modified_files, '.env.sample')
-        run: echo 'Version Did Not Change'
+        run: |
+          for file in ${{ steps.changed-files.outputs.modified_files }}; do
+            echo "$file was added"
+          done
