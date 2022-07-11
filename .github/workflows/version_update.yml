@@ -15,7 +15,9 @@ jobs:
 
       - name: Version Changed
         id: version-changed
+        if: contains(steps.changed-files.output.modified_files, '.env.sample')
         run: |
           for file in ${{ steps.changed-files.outputs.modified_files }}; do
-            echo "$file was added"
+            echo "$file"
           done
+          echo ".env.sample was changed"
