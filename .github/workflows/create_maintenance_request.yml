@@ -9,7 +9,6 @@ on:
 
 env:
   release_tag: ${{ github.event.release.tag_name }}
-  commits: ${{ github.event.commits }}
 
 jobs:
   create-maintenance-request:
@@ -27,8 +26,8 @@ jobs:
       - name: Display Commits
         id: display-commits
         run: |
-          echo 'commit - ${{ env.commits[0] }}'
-          echo 'commit - ${{ env.commits[1] }}'
+          echo 'commit - ${{ github.event.commits[0].message }}'
+          echo 'commit - ${{ github.event.commits[1].message }}'
 
       # - name: Display commit messages
       #   id: display-commit-messages
