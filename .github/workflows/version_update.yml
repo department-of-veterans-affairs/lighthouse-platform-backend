@@ -5,6 +5,7 @@ on: push
 
 env:
   commit_message: ${{ github.event.head_commit.message }}
+  snapshot_commit: 'Test Snapshot'
 
 jobs:
   verify-version-update:
@@ -12,5 +13,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Determine MR Deployment
-        if: startsWith(env.commit_message, 'Test Snap')
+        if: startsWith(env.commit_message, env.snapshot_commit)
         run: echo 'Test snapshot - deploying'
