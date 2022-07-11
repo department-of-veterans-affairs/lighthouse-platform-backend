@@ -24,11 +24,17 @@ jobs:
         id: display-release-tag
         run: echo 'release tag - ${{ env.release_tag }}'
 
-      - name: Display commit messages
-        id: display-commit-messages
+      - name: Display Commits
+        id: display-commits
         run: |
-          for commit in ${{ env.commits }}; do
-            if [ ${{ commit.author.name }} != 'libertybot' ]; do
-              echo 'Messages - ${{ commit.message }}'
-            fi
-          done
+          echo 'commit - ${{ env.commits[0] }}'
+          echo 'commit - ${{ env.commits[1] }}'
+
+      # - name: Display commit messages
+      #   id: display-commit-messages
+      #   run: |
+      #     for commit in ${{ env.commits }}; do
+      #       if [ ${{ commit.author.name }} != 'libertybot' ]; do
+      #         echo 'Messages - ${{ commit.message }}'
+      #       fi
+      #     done
