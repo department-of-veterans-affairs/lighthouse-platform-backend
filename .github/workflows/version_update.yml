@@ -1,25 +1,9 @@
-name: Verify Version Updated
+name: Version Update
 
-on:
-  push:
+on: push
 
 jobs:
-  verify-version-update:
+  print:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Verify Changed files
-        uses: tj-actions/verify-changed-files@v10
-        id: verify-changed-files
-        with:
-          files: VERSION
-
-      - name: Version Changed
-        id: version-changed
-        if: steps.verify-changed-files.outputs.files_changed == 'true'
-        run: echo 'Version Changed'
-
-      - name: Version Did Not Change
-        id: version-did-not-change
-        if: steps.verify-changed-files.outputs.files_changed == 'false'
-        run: echo 'Version Did Not Change'
+      - run: echo "Running!"
