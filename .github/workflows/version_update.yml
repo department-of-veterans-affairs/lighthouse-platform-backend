@@ -10,8 +10,10 @@ jobs:
     steps:
       - name: Snapshot Commit Message
         id: commit-message
-        run: echo ${{ github.event.head_commit.message }}
+        run: |
+          echo "::set-output name=commit_message::${{ github.event.head_commit.message }}"
+          echo ${{ github.event.head_commit.message }}
 
-      - name: Github Event
-        id: github-event
-        run: echo ${{ toJSON(github) }}
+      - name: Deploy MR
+        if: startsWith(commit_message, 'Test Snap')
+        run: echo 'Test snapshot - deploying'
