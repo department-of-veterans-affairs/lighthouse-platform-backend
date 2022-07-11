@@ -11,3 +11,7 @@ jobs:
       - name: Snapshot Commit Message
         id: commit-message
         run: echo ${{ github.event.head_commit.message }}
+
+      - name: Github Event
+        id: github-event
+        run: echo ${{ github.event }}
