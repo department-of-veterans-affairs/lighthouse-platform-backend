@@ -1,9 +1,11 @@
 name: Create Maintenance Request
 
+# set to published releases from libertybot
+# on:
+#   release:
+#     types: [published]
 on:
-  workflow_run:
-    workflows: [Snapshot Update]
-    types: [completed]
+  push:
 
 env:
   release_tag: ${{ github.event.release.tag_name }}
