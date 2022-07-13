@@ -19,6 +19,7 @@ okta_default_policy: "Default Policy"
 idme_group_id:
 prod_idme_group_id:
 okta_audience:
+validate_token_apikey:
 okta_auth_server:
 dsva_environment: Development
 github_app_id: e2583634c192807ccc28
