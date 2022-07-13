@@ -2,14 +2,8 @@
 
 module Okta
   class TokenValidationService
-    KEYS = {
-      alg: 'RS256'
-    }.freeze
-
     def token_valid?(token)
-      auth_server_id = Figaro.env.okta_auth_server
-
-      uri = URI.parse("#{Figaro.env.okta_token_validation_endpoint}/oauth2/#{auth_server_id}/v1/introspect")
+      uri = URI.parse("#{Figaro.env.prod_kong_elb}/internal/auth/v2/validation")
       req = Net::HTTP::Post.new(uri)
 
       request(req, uri, token)
@@ -18,18 +12,16 @@ module Okta
     private
 
     def request(req, uri, token)
-      client_id = Figaro.env.okta_client_id
-      client_secret = Figaro.env.okta_client_secret
-      req.basic_auth(client_id, client_secret)
+      req['Authorization'] = "Bearer #{token}"
+      req['apikey'] = Figaro.env.validate_token_apikey
+      req.set_form_data({ aud: Figaro.env.okta_audience })
 
       response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.to_s.start_with?('https')) do |http|
-        post_data = URI.encode_www_form({ token: token, token_type_hint: 'access_token' })
-        http.request(req, post_data)
+        http.request(req)
       end
 
       response.tap { |res| res['ok'] = res.is_a? Net::HTTPSuccess }
       Rails.logger.warn("??? #{response}") && raise('Failed to validate token with Okta') unless response['ok']
-
       JSON.parse(response.body) unless response.body.nil?
     end
   end
