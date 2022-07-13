@@ -2,10 +2,10 @@
 http_interactions:
 - request:
     method: post
-    uri: https://example.okta.com/oauth2/4uth-53rv3r/v1/introspect
+    uri: https://sample-gateway.com/internal/auth/v2/validation
     body:
       encoding: US-ASCII
-      string: token=t0k3n&token_type_hint=access_token
+      string: aud=https%3A%2F%2Fsandbox-api.va.gov%2Ftest%2Fconsumer
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -14,71 +14,80 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - example.okta.com
+      - dev-api.va.gov
       Authorization:
-      - Basic <auth>
+      - Bearer t0k3n
+      Apikey:
+      - t0t4l1y-r34l
+      Content-Type:
+      - application/x-www-form-urlencoded
   response:
     status:
       code: 200
       message: OK
     headers:
       Date:
-      - Mon, 06 Jun 2022 22:41:13 GMT
+      - Wed, 13 Jul 2022 16:48:13 GMT
       Content-Type:
-      - application/json
-      Transfer-Encoding:
-      - chunked
+      - application/json; charset=utf-8
       Connection:
       - keep-alive
-      Server:
-      - nginx
-      Public-Key-Pins-Report-Only:
-      - pin-sha256="r5EfzZxQVvQpKo3AgYRaT7X2bDO/kj3ACwmxfdT2zt8="; pin-sha256="MaqlcUgk2mvY/RFSGeSwBRkI+rZ6/dxe/DuQfBT/vnQ=";
-        pin-sha256="72G5IEvDEWn+EThf3qjR7/bQSWaS2ZSLqolhnO6iyJI="; pin-sha256="rrV6CLCCvqnk89gWibYT0JO6fNQ8cCit7GGoiVTjCOg=";
-        max-age=60; report-uri="https://okta.report-uri.com/r/default/hpkp/reportOnly"
-      X-Okta-Request-Id:
-      - Yp6CiJqeos4vIKvx8cB4EQAABvM
+      X-Ratelimit-Remaining-Minute:
+      - '59'
+      X-Ratelimit-Limit-Minute:
+      - '60'
+      Ratelimit-Remaining:
+      - '59'
+      Ratelimit-Limit:
+      - '60'
+      Ratelimit-Reset:
+      - '48'
+      Etag:
+      - W/"ad0130453d23be3327b03d59dbecb537"
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Vary:
+      - Origin
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Git-Sha:
+      - a4a1bff98d7b2914175dfae4aa3ed3bc420c303b
+      X-Github-Repository:
+      - https://github.com/department-of-veterans-affairs/vets-api
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - 81c961c4-8ce9-447e-bd34-e9eb1b63e79f
+      X-Runtime:
+      - '0.785172'
       X-Xss-Protection:
-      - '0'
-      P3p:
-      - CP="HONK"
-      X-Rate-Limit-Limit:
-      - '300'
-      X-Rate-Limit-Remaining:
-      - '299'
-      X-Rate-Limit-Reset:
-      - '1654555332'
+      - 1; mode=block
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Kong-Upstream-Latency:
+      - '789'
+      X-Kong-Proxy-Latency:
+      - '2'
+      Via:
+      - kong/2.3.2
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
       Cache-Control:
       - no-cache, no-store
       Pragma:
       - no-cache
-      Expires:
-      - '0'
-      Content-Security-Policy:
-      - 'default-src ''self'' example.okta.com *.oktacdn.com; connect-src ''self''
-        example.okta.com example-admin.okta.com *.oktacdn.com *.mixpanel.com
-        *.mapbox.com app.pendo.io data.pendo.io pendo-static-5634101834153984.storage.googleapis.com
-        https://oinmanager.okta.com data:; script-src ''unsafe-inline'' ''unsafe-eval''
-        ''self'' example.okta.com *.oktacdn.com; style-src ''unsafe-inline''
-        ''self'' example.okta.com *.oktacdn.com app.pendo.io cdn.pendo.io pendo-static-5634101834153984.storage.googleapis.com;
-        frame-src ''self'' example.okta.com example-admin.okta.com login.okta.com;
-        img-src ''self'' example.okta.com *.oktacdn.com *.tiles.mapbox.com *.mapbox.com
-        app.pendo.io data.pendo.io cdn.pendo.io pendo-static-5634101834153984.storage.googleapis.com
-        data: blob:; font-src ''self'' example.okta.com data: *.oktacdn.com fonts.gstatic.com'
-      Expect-Ct:
-      - report-uri="https://oktaexpectct.report-uri.com/r/t/ct/reportOnly", max-age=0
-      X-Content-Type-Options:
-      - nosniff
-      Strict-Transport-Security:
-      - max-age=315360000; includeSubDomains
-      X-Robots-Tag:
-      - noindex,nofollow
       Set-Cookie:
-      - JSESSIONID=646784C4AA93AD690542641E5F269729; Path=/; Secure; HttpOnly
-      - autolaunch_triggered=""; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/
-      - sid=""; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/
+      - TS01de8f7b=01c8917e487a5b6b43a8f5937d77dff96bf2f805f890f211ce48f612ac347e4b105fde66ff17fcfd461a59fb3629e6acee59d46afa;
+        Max-Age=900; Path=/
+      Transfer-Encoding:
+      - chunked
     body:
-      encoding: UTF-8
-      string: '{"active":true,"scope":"provider.read provider.write","exp":1654558090,"iat":1654554490,"sub":"cl13nt_1d","aud":"https://test.com/not-a-portal-to-another-dimension","iss":"https://example.okta.com/oauth2/4uth-53rv3r","jti":"AT.Oo6hmA0UW5Il98BpIGJCXHbVgs6AbVmggZ1ztLx6R9o","token_type":"Bearer","client_id":"cl13nt_1d"}'
-  recorded_at: Mon, 06 Jun 2022 22:41:12 GMT
+      encoding: ASCII-8BIT
+      string: '{"data":{"id":"AT.0ieTqbf8_KX9-r-PWLsOKyLjZVnhfCCUiEX6X7saL3s","type":"validated_token","attributes":{"ver":1,"jti":"AT.0ieTqbf8_KX9-r-PWLsOKyLjZVnhfCCUiEX6X7saL3s","iss":"https://sample.okta.com/oauth2/r4nd0m","aud":"https://sandbox-api.va.gov/test/consumer","iat":1657730674,"exp":1657730974,"cid":"c1d-g03sh3r3","uid":null,"scp":["provider.read","provider.write"],"sub":"c1d-g03sh3r3","act":{"icn":null,"npi":null,"sec_id":null,"vista_id":null,"type":"system"},"launch":{}}}}'
+  recorded_at: Wed, 13 Jul 2022 16:48:13 GMT
 recorded_with: VCR 6.1.0
