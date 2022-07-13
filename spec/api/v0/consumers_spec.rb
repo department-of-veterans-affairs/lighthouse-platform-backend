@@ -49,7 +49,7 @@ describe V0::Consumers, type: :request do
     it 'that are kept' do
       get '/platform-backend/v0/consumers'
       first_consumer = JSON.parse(response.body).first
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
       expect(first_consumer['id']).to eq(consumer.id)
       expect(first_consumer['email']).to eq(consumer.user.email)
     end
@@ -57,19 +57,19 @@ describe V0::Consumers, type: :request do
     context 'accepts an optional subscribe param' do
       it 'filters when provided subscribed' do
         get '/platform-backend/v0/consumers?subscribed=true'
-        expect(response.status).to eq(200)
+        expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body).length).to eq(0)
       end
 
       it 'does not filter when provided =false' do
         get '/platform-backend/v0/consumers?subscribed=false'
-        expect(response.status).to eq(200)
+        expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body).length).to eq(1)
       end
 
       it 'returns 400 when provided unsuitable value' do
         get '/platform-backend/v0/consumers?subscribed=tacos'
-        expect(response.status).to eq(400)
+        expect(response).to have_http_status(:bad_request)
       end
     end
   end
@@ -84,7 +84,7 @@ describe V0::Consumers, type: :request do
 
     it 'updates a consumers unsubscribe field' do
       put "/platform-backend/v0/consumers/#{consumer[:id]}", params: { subscribed: false }
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)).to have_key('subscribed')
       expect(JSON.parse(response.body)['subscribed']).to be(false)
     end
@@ -269,20 +269,20 @@ describe V0::Consumers, type: :request do
 
     it 'receives unauthorized without respective token' do
       get '/platform-backend/v0/consumers'
-      expect(response.status).to eq(401)
+      expect(response).to have_http_status(:unauthorized)
     end
 
     it 'receives unauthorized with an invalid token' do
       VCR.use_cassette('okta/access_token_invalid', match_requests_on: [:method]) do
         get '/platform-backend/v0/consumers', params: {}, headers: { Authorization: 'Bearer t0t4l1y-r34l' }
-        expect(response.status).to eq(401)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
     it 'receives forbidden with incorrect scopes' do
       VCR.use_cassette('okta/access_token_200', match_requests_on: [:method]) do
         get '/platform-backend/v0/consumers', params: {}, headers: { Authorization: 'Bearer t0k3n' }
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
@@ -372,14 +372,14 @@ describe V0::Consumers, type: :request do
     it 'promotes a consumer if given the appropriate sandbox APIs' do
       post "/platform-backend/v0/consumers/#{consumer[:id]}/promotion-requests", params: params
 
-      expect(response.status).to eq(201)
+      expect(response).to have_http_status(:created)
       expect(consumer.api_environments.count).to eq(3)
     end
 
     it 'fails to promote if a consumer does not have sandbox access' do
       post "/platform-backend/v0/consumers/#{consumer[:id]}/promotion-requests", params: bad_params
 
-      expect(response.status).to eq(422)
+      expect(response).to have_http_status(:unprocessable_entity)
       expect(JSON.parse(response.body)['errors']).to include('Invalid API list for consumer')
     end
   end

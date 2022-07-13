@@ -80,14 +80,14 @@ describe V0::Providers, type: :request do
     it 'creates a valid API' do
       expect do
         post '/platform-backend/v0/providers', params: provider
-        expect(response.status).to eq(201)
+        expect(response).to have_http_status(:created)
       end.to change(Api, :count).by 1
     end
 
     it 'provides an error when supplied invalid information' do
       provider['name'] = ''
       post '/platform-backend/v0/providers', params: provider
-      expect(response.status).to eq(400)
+      expect(response).to have_http_status(:bad_request)
       expect(JSON.parse(response.body)['errors'].length).to eq(1)
     end
   end
@@ -105,7 +105,7 @@ describe V0::Providers, type: :request do
       VCR.use_cassette('okta/access_token_200', match_requests_on: [:method]) do
         get '/platform-backend/v0/providers', params: {},
                                               headers: { Authorization: 'Bearer t0k3n' }
-        expect(response.status).to eq(200)
+        expect(response).to have_http_status(:ok)
       end
     end
   end
