@@ -76,6 +76,7 @@ Rails.application.configure do
   ENV['PROD_OKTA_LOGIN_URL'] = 'https://api.va.gov/oauth2/redirect/'
   ENV['OKTA_DEFAULT_POLICY'] = 'Default Policy'
   ENV['OKTA_AUTH_SERVER'] = 't35t1d'
+  ENV['OKTA_AUDIENCE'] = 'https://sandbox-api.va.gov/test/consumer'
   ENV['IDME_GROUP_ID'] = '00g31dz5agb5ZzIk05d7'
   ENV['PROD_IDME_GROUP_ID'] = '00g31dz5agb5ZzIk05d7'
   ENV['KONG_ELB'] = 'http://kong:8001'
