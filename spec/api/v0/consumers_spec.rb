@@ -273,14 +273,14 @@ describe V0::Consumers, type: :request do
     end
 
     it 'receives unauthorized with an invalid token' do
-      VCR.use_cassette('okta/access_token_invalid', match_requests_on: [:method]) do
+      VCR.use_cassette('kong/access_token_invalid', match_requests_on: [:method]) do
         get '/platform-backend/v0/consumers', params: {}, headers: { Authorization: 'Bearer t0t4l1y-r34l' }
         expect(response).to have_http_status(:unauthorized)
       end
     end
 
     it 'receives forbidden with incorrect scopes' do
-      VCR.use_cassette('okta/access_token_200', match_requests_on: [:method]) do
+      VCR.use_cassette('kong/access_token_200', match_requests_on: [:method]) do
         get '/platform-backend/v0/consumers', params: {}, headers: { Authorization: 'Bearer t0k3n' }
         expect(response).to have_http_status(:forbidden)
       end

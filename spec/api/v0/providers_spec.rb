@@ -102,7 +102,7 @@ describe V0::Providers, type: :request do
     end
 
     it 'retrieves consumers with access_token' do
-      VCR.use_cassette('okta/access_token_200', match_requests_on: [:method]) do
+      VCR.use_cassette('kong/access_token_200', match_requests_on: [:method]) do
         get '/platform-backend/v0/providers', params: {},
                                               headers: { Authorization: 'Bearer t0k3n' }
         expect(response).to have_http_status(:ok)
