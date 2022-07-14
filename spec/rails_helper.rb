@@ -30,9 +30,9 @@ VCR.configure do |c|
   c.hook_into :webmock
   c.default_cassette_options = { decode_compressed_response: true }
   c.ignore_request do |request|
-    URI(request.uri).port.in?([8000, 8001, 9200]) && !URI(request.uri).path.in?(['/internal/auth/v2/validation'])
+    URI(request.uri).port.in?([4001, 4003, 4500, 8000, 8001,
+                               9200]) && !URI(request.uri).path.in?(['/internal/auth/v2/validation'])
   end
-  c.ignore_localhost = true
 end
 
 ActiveRecord::Migration.maintain_test_schema!
