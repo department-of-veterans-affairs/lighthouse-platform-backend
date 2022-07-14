@@ -81,7 +81,6 @@ Rails.application.configure do
   ENV['PROD_IDME_GROUP_ID'] = '00g31dz5agb5ZzIk05d7'
   ENV['KONG_ELB'] = 'http://kong:8001'
   ENV['PROD_KONG_ELB'] = 'http://prod-kong:8001'
-  ENV['PROD_KONG_TOKEN_VALIDATION'] = 'http://doesntmatter.com'
   ENV['AWS_REGION'] = 'us-gov-west-1'
   ENV['AUTHZ_SERVER_DEFAULT'] = 'default'
   ENV['ES_ENDPOINT'] = 'http://elasticsearch:9200'
