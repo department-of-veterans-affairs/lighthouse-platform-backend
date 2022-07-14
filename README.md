@@ -1,4 +1,4 @@
-# Lighthouse Platform Backend (LPB) 
+# Lighthouse Platform Backend (LPB)
 
 ## About
 
@@ -9,7 +9,7 @@ These internal systems can then manage Lighthouse consumers, such as promoting a
 ## Deployment
 
 Service lives within the DVP environment and can be found here in production: https://blue.production.lighthouse.va.gov/platform-backend
-within the VA network. 
+within the VA network.
 
 Deploying to production requires a Maintenance Request (MR)
 An MR can be created here: https://github.com/department-of-veterans-affairs/lighthouse-devops-support/issues/new/choose
@@ -71,3 +71,9 @@ Okta Admin UI > Directory > Groups > Add Group
 Then take the id of this group from the url:
 https://dev-########-admin.okta.com/admin/group/{20-character-id}
 and add it to your application.yml file as the value for 'idme_group_id'
+
+## Testing
+LPB uses [RSpec](https://rspec.info/documentation/) alongside [VCR](https://github.com/vcr/vcr) to execute the test suite. VCR uses what they call '[cassettes](https://relishapp.com/vcr/vcr/v/6-1-0/docs/cassettes)' which record requests and replay the response when rerunning the test suite, preventing calls to an external service (if applicable). To best utilize VCR, any external requests should be recorded and later used for testing purposes to prevent said calls. The resulting cassettes can be matched on various request methods.
+
+In it's current state, LPB containers are pre-seeded using the [seed_service](app/services/utility/seed_service.rb) to best simulate a 'live' environment. Due to the aforementioned, VCR is configured to ignore any requests to '127.0.0.1' and 'localhost'.
+For any test using a local container, update the seeds with needed data and use the connected container to test against.
