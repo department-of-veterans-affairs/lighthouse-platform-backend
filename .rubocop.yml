@@ -120,6 +120,7 @@ Metrics/PerceivedComplexity:
     - 'consumer_signup'
     - 'construct_import'
     - 'auth_refs'
+    - 'validate_token'
 Rails:
   Enabled: true
 

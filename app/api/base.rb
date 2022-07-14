@@ -55,7 +55,7 @@ class Base < Grape::API
 
       response = Okta::TokenValidationService.new.token_valid?(token)
 
-      raise AuthorizationError unless response['errors'].nil?
+      raise AuthorizationError if response['errors'].present?
       raise ForbiddenError unless response['data']['attributes']['scp'].include?(scope)
     end
   end
