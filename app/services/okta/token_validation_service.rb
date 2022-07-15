@@ -21,7 +21,7 @@ module Okta
         http.request(req)
       end
 
-      unless response['data'].present? || response['error'].present?
+      unless response.body['data'].present? || response.body['error'].present?
         Rails.logger.warn("??? #{response}") && raise('Failed to validate token')
       end
 
