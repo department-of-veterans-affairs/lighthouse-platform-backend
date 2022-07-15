@@ -22,6 +22,7 @@ module Okta
       end
 
       response.tap { |res| res['ok'] = res.is_a? Net::HTTPSuccess }
+      Rails.logger.warn("??? #{response}") && raise('Failed to validate token') unless response['ok']
 
       JSON.parse(response.body) unless response.body.nil?
     end
