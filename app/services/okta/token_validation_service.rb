@@ -21,9 +21,8 @@ module Okta
         http.request(req)
       end
 
-      unless response.body['data'].present? || response.body['error'].present?
-        Rails.logger.warn("??? #{response}") && raise('Failed to validate token')
-      end
+      response.tap { |res| res['server_error'] = res.is_a? Net::HTTPServerError }
+      Rails.logger.warn("??? #{response}") && raise('Failed to validate token') if response['server_error']
 
       JSON.parse(response.body) unless response.body.nil?
     end
