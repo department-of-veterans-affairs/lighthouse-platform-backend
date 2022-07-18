@@ -738,6 +738,7 @@ va_auth_api.update(
    name: 'va_auth'
   }
 )
+
 ApiReleaseNote.create(api_metadatum_id: urgent_care_api.api_metadatum.id,
                       date: Date.strptime('July 21, 2020', '%B %d, %Y'),
                       content: <<~MARKDOWN
