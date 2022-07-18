@@ -30,7 +30,7 @@ VCR.configure do |c|
   c.hook_into :webmock
   c.default_cassette_options = { decode_compressed_response: true }
   c.ignore_request do |request|
-    URI(request.uri).port.in?([4001, 4003, 4500, 8000, 8001,
+    URI(request.uri).port.in?([4001, 4003, 4500, 8000, 8001, 8003,
                                9200]) && !URI(request.uri).path.in?(['/internal/auth/v2/validation'])
   end
 end
