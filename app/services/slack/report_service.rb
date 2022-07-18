@@ -27,8 +27,8 @@ module Slack
     end
 
     def sort_refs
-      refs = ApiRef.all.map(&:name).uniq.sort
-      refs.filter{ |ref| excluded_api_list.exclude?(ref) }
+      refs = ApiRef.all.map(&:name).uniq
+      refs.filter{ |ref| excluded_api_list.exclude?(ref) }.sort
     end
 
     def generate_query(start_date)
