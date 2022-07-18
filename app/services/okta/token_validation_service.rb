@@ -2,7 +2,7 @@
 
 module Okta
   class TokenValidationService
-    def token_valid?(token)
+    def validate_token(token)
       # this path is an exception in the VCR config to allow the cassette to be used
       uri = URI.parse("#{Figaro.env.prod_kong_gateway}/internal/auth/v2/validation")
       req = Net::HTTP::Post.new(uri)
