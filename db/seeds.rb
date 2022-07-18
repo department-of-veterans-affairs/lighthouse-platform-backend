@@ -730,6 +730,14 @@ lpb_api.update(
    name: 'lpb'
   }
 )
+
+va_auth_api = Api.create(name: 'internal-validation-auth')
+va_auth_api.update(
+  acl: 'openid_auth',
+  api_ref_attributes: {
+   name: 'va_auth'
+  }
+)
 ApiReleaseNote.create(api_metadatum_id: urgent_care_api.api_metadatum.id,
                       date: Date.strptime('July 21, 2020', '%B %d, %Y'),
                       content: <<~MARKDOWN
