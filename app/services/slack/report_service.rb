@@ -37,7 +37,7 @@ module Slack
     end
 
     def new_query(ref, start_date)
-      "COUNT(DISTINCT (case WHEN (created_at > '#{start_date}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{start_date}' AND #{like_query(ref)}) AND #{like_query(ref)}) then content->'email' end)) as \"#{ref_builder(ref)[:new]}\","
+      "COUNT(DISTINCT (case WHEN (created_at > '#{start_date}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{start_date}' and event_type='sandbox_signup' AND #{like_query(ref)}) AND #{like_query(ref)}) then content->'email' end)) as \"#{ref_builder(ref)[:new]}\","
     end
 
     def all_time_query(ref)
@@ -45,7 +45,7 @@ module Slack
     end
 
     def build_query(span, start_date)
-      "SELECT #{generate_query(start_date).join(' ')} COUNT(DISTINCT(case WHEN (created_at > '#{start_date}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{start_date}')) then content->'email' end)) as #{span}ly_count, COUNT(DISTINCT content->'email') as total_count FROM events WHERE event_type='sandbox_signup';"
+      "SELECT #{generate_query(start_date).join(' ')} COUNT(DISTINCT(case WHEN (created_at > '#{start_date}' AND content->'email' NOT IN (SELECT DISTINCT(content->'email') FROM events WHERE created_at < '#{start_date}' and event_type='sandbox_signup')) then content->'email' end)) as #{span}ly_count, COUNT(DISTINCT content->'email') as total_count FROM events WHERE event_type='sandbox_signup';"
     end
 
     def report_message(span, totals)
