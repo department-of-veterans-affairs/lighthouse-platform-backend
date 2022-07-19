@@ -23,7 +23,7 @@ module Slack
     end
 
     def sort_refs
-      ApiRef.all.map(&:name).uniq.sort
+      ApiRef.select { |ref| ref unless ref.api.api_metadatum.nil? }.map(&:name).uniq.sort
     end
 
     def generate_query(start_date)
