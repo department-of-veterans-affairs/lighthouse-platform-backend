@@ -7,5 +7,6 @@ class Event < ApplicationRecord
   EVENT_TYPES = { sandbox_signup: 'sandbox_signup',
                   weekly_report: 'weekly_signups_report',
                   monthly_report: 'monthly_signups_report',
-                  lpb_signup: 'lpb_signup' }.freeze
+                  lpb_signup: 'lpb_signup',
+                  drift_job: 'drift_job' }.freeze
 end
