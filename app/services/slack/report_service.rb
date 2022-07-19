@@ -15,10 +15,6 @@ module Slack
 
     private
 
-    def excluded_api_list
-      %w[lpb va_auth].freeze
-    end
-
     def ref_builder(ref)
       {
         all: "#{ref.downcase}_all_count",
@@ -27,8 +23,7 @@ module Slack
     end
 
     def sort_refs
-      refs = ApiRef.all.map(&:name).uniq
-      refs.filter{ |ref| excluded_api_list.exclude?(ref) }.sort
+      ApiRef.select { |ref| ref unless ref.api.api_metadatum.nil? }.map(&:name).uniq.sort
     end
 
     def generate_query(start_date)
