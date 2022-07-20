@@ -1,0 +1,93 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sample-gateway.com/internal/auth/v2/validation
+    body:
+      encoding: US-ASCII
+      string: aud=https%3A%2F%2Fsandbox-api.va.gov%2Ftest%2Fconsumer
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - dev-api.va.gov
+      Authorization:
+      - Bearer t0k3n
+      Apikey:
+      - t0t4l1y-r34l
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 13 Jul 2022 16:48:13 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Connection:
+      - keep-alive
+      X-Ratelimit-Remaining-Minute:
+      - '59'
+      X-Ratelimit-Limit-Minute:
+      - '60'
+      Ratelimit-Remaining:
+      - '59'
+      Ratelimit-Limit:
+      - '60'
+      Ratelimit-Reset:
+      - '48'
+      Etag:
+      - W/"ad0130453d23be3327b03d59dbecb537"
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Vary:
+      - Origin
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Git-Sha:
+      - a4a1bff98d7b2914175dfae4aa3ed3bc420c303b
+      X-Github-Repository:
+      - https://github.com/department-of-veterans-affairs/vets-api
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - 81c961c4-8ce9-447e-bd34-e9eb1b63e79f
+      X-Runtime:
+      - '0.785172'
+      X-Xss-Protection:
+      - 1; mode=block
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Kong-Upstream-Latency:
+      - '789'
+      X-Kong-Proxy-Latency:
+      - '2'
+      Via:
+      - kong/2.3.2
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cache-Control:
+      - no-cache, no-store
+      Pragma:
+      - no-cache
+      Set-Cookie:
+      - TS01de8f7b=01c8917e487a5b6b43a8f5937d77dff96bf2f805f890f211ce48f612ac347e4b105fde66ff17fcfd461a59fb3629e6acee59d46afa;
+        Max-Age=900; Path=/
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"id":"AT.0ieTqbf8_KX9-r-PWLsOKyLjZVnhfCCUiEX6X7saL3s","type":"validated_token","attributes":{"ver":1,"jti":"AT.0ieTqbf8_KX9-r-PWLsOKyLjZVnhfCCUiEX6X7saL3s","iss":"https://sample.okta.com/oauth2/r4nd0m","aud":"https://sandbox-api.va.gov/test/consumer","iat":1657730674,"exp":1657730974,"cid":"c1d-g03sh3r3","uid":null,"scp":["provider.read","provider.write"],"sub":"c1d-g03sh3r3","act":{"icn":null,"npi":null,"sec_id":null,"vista_id":null,"type":"system"},"launch":{}}}}'
+  recorded_at: Wed, 13 Jul 2022 16:48:13 GMT
+recorded_with: VCR 6.1.0

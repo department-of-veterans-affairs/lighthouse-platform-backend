@@ -1,0 +1,87 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sample-gateway.com/internal/auth/v2/validation
+    body:
+      encoding: US-ASCII
+      string: aud=https%3A%2F%2Fsandbox-api.va.gov%2Ftest%2Fconsumer
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - dev-api.va.gov
+      Authorization:
+      - Bearer t0t4l1y-r34l
+      Apikey:
+      - t0t4l1y-r34l
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Date:
+      - Wed, 13 Jul 2022 16:47:24 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '100'
+      Connection:
+      - keep-alive
+      X-Ratelimit-Remaining-Minute:
+      - '59'
+      X-Ratelimit-Limit-Minute:
+      - '60'
+      Ratelimit-Remaining:
+      - '59'
+      Ratelimit-Limit:
+      - '60'
+      Ratelimit-Reset:
+      - '36'
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Vary:
+      - Origin
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Git-Sha:
+      - a4a1bff98d7b2914175dfae4aa3ed3bc420c303b
+      X-Github-Repository:
+      - https://github.com/department-of-veterans-affairs/vets-api
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - fd9eb2ed-3408-4848-bc7e-eb01c9c0a3fc
+      X-Runtime:
+      - '0.277299'
+      X-Xss-Protection:
+      - 1; mode=block
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Kong-Upstream-Latency:
+      - '280'
+      X-Kong-Proxy-Latency:
+      - '33'
+      Via:
+      - kong/2.3.2
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Set-Cookie:
+      - TS01de8f7b=0119a2687f4c8d6fe25712b186bb917a1fbe7e0a776a3bf717e97e2beb67e76524ad01e66a664bfbae779ef92858726db4cc1f73e4;
+        Max-Age=900; Path=/
+    body:
+      encoding: UTF-8
+      string: '{"errors":[{"title":"Token Validation Error","detail":"Invalid token","code":"401","status":"401"}]}'
+  recorded_at: Wed, 13 Jul 2022 16:47:24 GMT
+recorded_with: VCR 6.1.0
