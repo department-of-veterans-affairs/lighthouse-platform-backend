@@ -32,7 +32,7 @@ module V0
         apis = apis.kept if params[:status] == 'active'
         apis = apis.discarded if params[:status] == 'inactive'
 
-        present apis.order(:name), with: V0::Entities::ApiEntity
+        present apis.joins(:api_metadatum).order(:name), with: V0::Entities::ApiEntity
       end
 
       params do
