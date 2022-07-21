@@ -10,6 +10,13 @@ module V0
         params['api_metadatum_attributes']['oauth_info'] = oauth
         params
       end
+
+      def fetch_auth_types(auth_type, apis)
+        auth_types = { apikey: 'acl', oauth: 'auth_server_access_key' }
+        split_auth = auth_type.split('/')
+        fetch_key = auth_types[split_auth.first.to_sym]
+        apis.where("#{fetch_key} IS NOT NULL")
+      end
     end
 
     resource 'providers' do
@@ -24,6 +31,7 @@ module V0
         optional :status, type: String,
                           values: %w[active inactive],
                           allow_blank: true
+        optional :auth_type, type: String, values: %w[apikey oauth oauth/acg oauth/ccg]
       end
       get '/' do
         validate_token(Scope.provider_read)
@@ -31,8 +39,10 @@ module V0
         apis = Api
         apis = apis.kept if params[:status] == 'active'
         apis = apis.discarded if params[:status] == 'inactive'
+        apis = fetch_auth_types(params[:auth_type], apis) if params[:auth_type].present?
+        apis = apis.joins(:api_metadatum)
 
-        present apis.joins(:api_metadatum).order(:name), with: V0::Entities::ApiEntity
+        present apis.order(:name), with: V0::Entities::ApiEntity
       end
 
       params do
