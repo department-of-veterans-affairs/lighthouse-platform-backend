@@ -17,13 +17,17 @@ module V0
         fetch_key = auth_types[split_auth.first.to_sym]
         apis = apis.where("#{fetch_key} IS NOT NULL")
         if split_auth.length > 1
-          apis = apis.select do |api|
-            check_env = ["#{api.auth_server_access_key}_#{split_auth.last}"]
-            check_env << api.auth_server_access_key if split_auth.second == 'acg'
-            check_env&.any? { |env_var| Figaro.env.send(env_var).present? }
-          end
+          apis = filter_oauth_type(apis, split_auth.last)
         end
         apis
+      end
+
+      def filter_oauth_type(apis, auth_type)
+        apis.select do |api|
+          check_env = ["#{api.auth_server_access_key}_#{auth_type}"]
+          check_env << api.auth_server_access_key if auth_type == 'acg'
+          check_env.any? { |env_var| Figaro.env.send(env_var).present? }
+        end
       end
     end
 
