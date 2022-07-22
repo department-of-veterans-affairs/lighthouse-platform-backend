@@ -16,9 +16,7 @@ module V0
         split_auth = auth_type.split('/')
         fetch_key = auth_types[split_auth.first.to_sym]
         apis = apis.where("#{fetch_key} IS NOT NULL")
-        if split_auth.length > 1
-          apis = filter_oauth_type(apis, split_auth.last)
-        end
+        apis = filter_oauth_type(apis, split_auth.last) if split_auth.length > 1
         apis
       end
 
