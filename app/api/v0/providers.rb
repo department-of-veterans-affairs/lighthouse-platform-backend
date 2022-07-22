@@ -15,7 +15,18 @@ module V0
         auth_types = { apikey: 'acl', oauth: 'auth_server_access_key' }
         split_auth = auth_type.split('/')
         fetch_key = auth_types[split_auth.first.to_sym]
-        apis.where("#{fetch_key} IS NOT NULL")
+        apis = apis.where("#{fetch_key} IS NOT NULL")
+        if split_auth.length > 1
+          if split_auth.second == 'ccg'
+            apis = apis.select{ |api| Figaro.env.send("#{api.auth_server_access_key}_#{split_auth.last}").present? }
+          else
+            apis = apis.select do |api|
+                     Figaro.env.send("#{api.auth_server_access_key}_#{split_auth.last}").present? ||
+                     Figaro.env.send("#{api.auth_server_access_key}").present?
+                   end
+          end
+        end
+        apis
       end
     end
 
@@ -39,10 +50,11 @@ module V0
         apis = Api
         apis = apis.kept if params[:status] == 'active'
         apis = apis.discarded if params[:status] == 'inactive'
-        apis = fetch_auth_types(params[:auth_type], apis) if params[:auth_type].present?
         apis = apis.joins(:api_metadatum)
+        apis = apis.order(:name)
+        apis = fetch_auth_types(params[:auth_type], apis) if params[:auth_type].present?
 
-        present apis.order(:name), with: V0::Entities::ApiEntity
+        present apis, with: V0::Entities::ApiEntity
       end
 
       params do
