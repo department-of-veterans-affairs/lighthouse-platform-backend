@@ -17,13 +17,10 @@ module V0
         fetch_key = auth_types[split_auth.first.to_sym]
         apis = apis.where("#{fetch_key} IS NOT NULL")
         if split_auth.length > 1
-          if split_auth.second == 'ccg'
-            apis = apis.select{ |api| Figaro.env.send("#{api.auth_server_access_key}_#{split_auth.last}").present? }
-          else
-            apis = apis.select do |api|
-                     Figaro.env.send("#{api.auth_server_access_key}_#{split_auth.last}").present? ||
-                     Figaro.env.send("#{api.auth_server_access_key}").present?
-                   end
+          apis = apis.select do |api|
+            check_env = ["#{api.auth_server_access_key}_#{split_auth.last}"]
+            check_env << api.auth_server_access_key if split_auth.second == 'acg'
+            check_env&.any? { |env_var| Figaro.env.send(env_var).present? }
           end
         end
         apis
