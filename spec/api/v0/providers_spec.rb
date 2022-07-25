@@ -24,6 +24,24 @@ describe V0::Providers, type: :request do
 
       expect(JSON.parse(response.body).count).to eq(3)
     end
+
+    context 'filters when passed an auth_type' do
+      before do
+        create(:api_environment, :auth_server_access_key_specific)
+      end
+
+      it 'works with oauth specific' do
+        get '/platform-backend/v0/providers?auth_type=oauth/acg'
+
+        expect(JSON.parse(response.body).count).to eq(1)
+      end
+
+      it 'works with apikeys' do
+        get '/platform-backend/v0/providers?auth_type=apikey'
+
+        expect(JSON.parse(response.body).count).to eq(3)
+      end
+    end
   end
 
   describe 'returns list of api provider release notes' do
