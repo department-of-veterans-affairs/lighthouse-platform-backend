@@ -11,15 +11,6 @@ module V0
         params
       end
 
-      def fetch_auth_types(auth_type, apis)
-        auth_types = { apikey: 'acl', oauth: 'auth_server_access_key' }
-        split_auth = auth_type.split('/')
-        fetch_key = auth_types[split_auth.first.to_sym]
-        apis = apis.where("#{fetch_key} IS NOT NULL")
-        apis = filter_oauth_type(apis, split_auth.last) if split_auth.length > 1
-        apis
-      end
-
       def filter_oauth_type(apis, auth_type)
         apis.select do |api|
           check_env = ["#{api.auth_server_access_key}_#{auth_type}"]
@@ -46,12 +37,14 @@ module V0
       get '/' do
         validate_token(Scope.provider_read)
 
-        apis = Api
+        auth_types = params[:auth_type].split('/') if params[:auth_type].present?
+
+        apis = params[:auth_type].present? ? Api.auth_type(auth_types.first) : Api
         apis = apis.kept if params[:status] == 'active'
         apis = apis.discarded if params[:status] == 'inactive'
         apis = apis.displayable
         apis = apis.order(:name)
-        apis = fetch_auth_types(params[:auth_type], apis) if params[:auth_type].present?
+        apis = filter_oauth_type(apis, auth_types.second) if auth_types.length > 1
 
         present apis, with: V0::Entities::ApiEntity
       end

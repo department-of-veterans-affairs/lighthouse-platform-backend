@@ -13,6 +13,11 @@ class Api < ApplicationRecord
   has_one :api_metadatum, dependent: :destroy
 
   scope :displayable, -> { joins(:api_metadatum) }
+  scope :auth_type, lambda { |auth_type|
+    auth_types = { apikey: 'acl', oauth: 'auth_server_access_key' }
+    fetch_key = auth_types[auth_type.to_sym]
+    where("#{fetch_key} IS NOT NULL")
+  }
 
   after_discard do
     api_ref.discard if api_ref.present?
