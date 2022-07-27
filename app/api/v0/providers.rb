@@ -10,14 +10,6 @@ module V0
         params['api_metadatum_attributes']['oauth_info'] = oauth
         params
       end
-
-      def filter_oauth_type(apis, auth_type)
-        apis.select do |api|
-          check_env = ["#{api.auth_server_access_key}_#{auth_type}"]
-          check_env << api.auth_server_access_key if auth_type == 'acg'
-          check_env.any? { |env_var| Figaro.env.send(env_var).present? }
-        end
-      end
     end
 
     resource 'providers' do
@@ -48,7 +40,7 @@ module V0
         apis = apis.discarded if params[:status] == 'inactive'
         apis = apis.displayable
         apis = apis.order(:name)
-        apis = filter_oauth_type(apis, auth_types.second) if params[:auth_type].present? && auth_types.length > 1
+        apis = apis.filter{ |api| api.locate_auth_types.include?(params[:auth_type]) } if params[:auth_type].present? && auth_types.length > 1
 
         present apis, with: V0::Entities::ApiEntity
       end
