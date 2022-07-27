@@ -37,14 +37,18 @@ module V0
       get '/' do
         validate_token(Scope.provider_read)
 
-        auth_types = params[:auth_type].split('/') if params[:auth_type].present?
+        apis = Api
 
-        apis = params[:auth_type].present? ? Api.auth_type(auth_types.first) : Api
+        if params[:auth_type].present?
+          auth_types = params[:auth_type].split('/')
+          apis = Api.auth_type(auth_types.first)
+        end
+
         apis = apis.kept if params[:status] == 'active'
         apis = apis.discarded if params[:status] == 'inactive'
         apis = apis.displayable
         apis = apis.order(:name)
-        apis = filter_oauth_type(apis, auth_types.second) if auth_types.length > 1
+        apis = filter_oauth_type(apis, auth_types.second) if params[:auth_type].present? && auth_types.length > 1
 
         present apis, with: V0::Entities::ApiEntity
       end
