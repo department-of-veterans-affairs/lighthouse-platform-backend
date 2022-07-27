@@ -49,7 +49,7 @@ module V0
         apis = Api
         apis = apis.kept if params[:status] == 'active'
         apis = apis.discarded if params[:status] == 'inactive'
-        apis = apis.joins(:api_metadatum)
+        apis = apis.displayable
         apis = apis.order(:name)
         apis = fetch_auth_types(params[:auth_type], apis) if params[:auth_type].present?
 
