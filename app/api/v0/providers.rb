@@ -40,7 +40,11 @@ module V0
         apis = apis.discarded if params[:status] == 'inactive'
         apis = apis.displayable
         apis = apis.order(:name)
-        apis = apis.filter{ |api| api.locate_auth_types.include?(params[:auth_type]) } if params[:auth_type].present? && auth_types.length > 1
+        if params[:auth_type].present? && auth_types.length > 1
+          apis = apis.filter do |api|
+            api.locate_auth_types.include?(params[:auth_type])
+          end
+        end
 
         present apis, with: V0::Entities::ApiEntity
       end

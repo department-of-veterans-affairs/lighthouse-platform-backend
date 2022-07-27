@@ -7,7 +7,7 @@ class Api < ApplicationRecord
     apikey: 'apikey',
     acg: 'oauth/acg',
     ccg: 'oauth/ccg'
-  }
+  }.freeze
 
   attr_accessor :auth_type
 
@@ -26,7 +26,6 @@ class Api < ApplicationRecord
   }
 
   def locate_auth_types
-    auth_types = {  }
     types = []
     types << AUTH_TYPES[:apikey] if acl.present?
     if auth_server_access_key.present?
