@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/FonzMP/oktakit
-  revision: ffbce1aa80f6abd2846bbd94e4b9f775e38ec811
-  branch: add_auth_servers
+  revision: 72e86790005df82e5503d2a8801bc179335bc7ea
+  branch: auth_servers_and_secrets
   specs:
     oktakit (0.3.1)
       sawyer (~> 0.8.1)
