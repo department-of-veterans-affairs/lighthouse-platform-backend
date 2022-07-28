@@ -25,6 +25,21 @@ module Okta
       { acg: acg_application, ccg: ccg_application }
     end
 
+    def list_authorization_servers
+      resp, = @client.list_authorization_servers
+      resp.map(&:to_h)
+    end
+
+    def list_authorization_server_policies(id)
+      resp, = @client.list_authorization_server_policies(id)
+      resp.map(&:to_h)
+    end
+
+    def list_secret_credentials_for_application(id)
+      resp, = @client.list_secret_credentials_for_application(id)
+      resp.map(&:to_h)
+    end
+
     protected
 
     def idme_group

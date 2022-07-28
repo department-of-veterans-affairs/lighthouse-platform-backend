@@ -63,6 +63,18 @@ module Kong
       request(req, uri)
     end
 
+    def get_all_acls
+      uri = URI.parse("#{@kong_elb}/acls")
+      req = Net::HTTP::Get.new(uri)
+      request(req, uri)
+    end
+
+    def get_all_keys
+      uri = URI.parse("#{@kong_elb}/key-auths")
+      req = Net::HTTP::Get.new(uri)
+      request(req, uri)
+    end
+
     def create_key(consumer)
       uri = URI.parse("#{@kong_elb}/consumers/#{consumer}/key-auth")
       req = Net::HTTP::Post.new(uri)
