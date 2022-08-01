@@ -134,7 +134,7 @@ module Okta
       app = application.to_h
       summary = app[:errorSummary]
       cause = app[:errorCauses]&.first&.dig(:errorSummary)
-      response_cause = " - #{cause}" unless cause.nil?
+      response_cause = " - #{cause}" unless cause.blank?
       summary + (response_cause || '')
     end
 
