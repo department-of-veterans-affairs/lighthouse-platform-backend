@@ -1,9 +1,13 @@
 apiVersion: backstage.io/v1alpha1
-kind: Component
+kind: API
 metadata:
-  name: Lighthouse Platform Backend
+  name: lighthouse-platform-backend
   annotations:
     github.com/project-slug: department-of-veterans-affairs/lighthouse-platform-backend
+  title: Lighthouse Platform Backend
+  tags:
+  - lighthouse
+  - internal
 spec:
   type: openapi
   lifecycle: production
