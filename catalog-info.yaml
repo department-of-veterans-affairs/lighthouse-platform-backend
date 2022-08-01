@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: Lighthouse Platform Backend
+  annotations:
+    github.com/project-slug: department-of-veterans-affairs/lighthouse-platform-backend
+spec:
+  type: other
+  lifecycle: unknown
+  owner: lighthouse-okapi
