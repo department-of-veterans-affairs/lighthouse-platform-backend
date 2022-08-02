@@ -3,6 +3,14 @@
 require 'rails_helper'
 
 describe Utilities, type: :request do
+  before do
+    Flipper.enable :enable_utilities
+  end
+
+  after do
+    Flipper.disable :enable_utilities
+  end
+
   describe 'APIs' do
     before do
       create(:api, :with_api_environment)
