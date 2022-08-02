@@ -70,7 +70,8 @@ module Okta
     def create_application(user, type, options)
       new_application_request = build_new_application_payload(user, type, options)
       application, status_code = @client.add_application(new_application_request)
-      raise application[:errorSummary] unless status_code == 200
+
+      raise handle_okta_error(application) unless status_code == 200
 
       assign_response, status_code = @client.assign_group_to_application(application.id, idme_group)
       raise assign_response[:errorSummary] unless status_code == 200
@@ -81,7 +82,8 @@ module Okta
     def append_default_policy(client_id, type, api)
       auth_server_id = auth_server_id(api, type)
       policies, status_code = @client.list_authorization_server_policies(auth_server_id)
-      raise policies[:errorSummary] unless status_code == 200
+
+      raise handle_okta_error(policies) unless status_code == 200
 
       default_policy = policies.detect { |policy| policy.name == Figaro.env.okta_default_policy }
       default_policy = policies.detect { |policy| policy.name == '*/* (all scopes)' } if default_policy.blank?
@@ -126,6 +128,14 @@ module Okta
       return build_new_acg_application_payload(user, options) if type == 'acg'
 
       raise 'Invalid supplied arguments'
+    end
+
+    def handle_okta_error(application)
+      app = application.to_h
+      summary = app[:errorSummary]
+      cause = app[:errorCauses]&.first&.dig(:errorSummary)
+      response_cause = " - #{cause}" unless cause.blank?
+      summary + (response_cause || '')
     end
 
     def build_new_acg_application_payload(user, options)
