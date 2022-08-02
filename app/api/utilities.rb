@@ -23,20 +23,25 @@ class Utilities < Base
     end
   end
 
+  before do
+    error!({ errors: ['Not Found'] }, 404) unless Flipper.enabled?(:enable_utilities)
+  end
+
   resource 'utilities' do
     resource 'consumers' do
-      desc 'Returns list of consumers'
+      desc 'Returns list of consumers', hidden: -> { !Flipper.enabled?(:enable_utilities) }
       get '/' do
         users = User.kept.select { |user| user.consumer.present? }
 
         present users, with: Entities::UserEntity
       end
 
-      desc 'Returns last week signups report'
       namespace '/signups-report' do
+        desc 'Returns last week signups report', hidden: -> { !Flipper.enabled?(:enable_utilities) }
         get '/week' do
           Slack::ReportService.new.query_events('week', 1.week.ago)
         end
+        desc 'Returns last month signups report', hidden: -> { !Flipper.enabled?(:enable_utilities) }
         get '/month' do
           Slack::ReportService.new.query_events('month', 1.month.ago)
         end
@@ -44,14 +49,14 @@ class Utilities < Base
     end
 
     resource 'apis' do
-      desc 'Return list of APIs'
+      desc 'Return list of APIs', hidden: -> { !Flipper.enabled?(:enable_utilities) }
       get '/' do
         apis = Api.left_joins(:api_ref).kept
 
         present apis, with: Entities::ApiEntity
       end
 
-      desc 'Returns a list of API categories'
+      desc 'Returns a list of API categories', hidden: -> { !Flipper.enabled?(:enable_utilities) }
       get '/categories' do
         api_categories = ApiCategory.kept
 
@@ -60,12 +65,12 @@ class Utilities < Base
     end
 
     resource 'kong' do
-      desc 'Return list Kong consumers'
+      desc 'Return list Kong consumers', hidden: -> { !Flipper.enabled?(:enable_utilities) }
       get '/consumers' do
         Kong::SandboxService.new.list_all_consumers
       end
 
-      desc 'Return list Kong consumers not in LPB'
+      desc 'Return list Kong consumers not in LPB', hidden: -> { !Flipper.enabled?(:enable_utilities) }
       params do
         requires :environment, type: String, allow_blank: false, values: %w[sandbox production], default: 'sandbox'
         optional :filterLastDay, type: Boolean, allow_blank: false, values: [true, false], default: true
@@ -77,7 +82,7 @@ class Utilities < Base
     end
 
     resource 'okta' do
-      desc 'Return list Okta applications not in LPB'
+      desc 'Return list Okta applications not in LPB', hidden: -> { !Flipper.enabled?(:enable_utilities) }
       params do
         requires :environment, type: String, allow_blank: false, values: %w[sandbox production], default: 'sandbox'
         optional :filterLastDay, type: Boolean, allow_blank: false, values: [true, false], default: true
@@ -88,6 +93,7 @@ class Utilities < Base
       end
 
       namespace 'lpb' do
+        desc 'Signup for access to LPB', hidden: -> { !Flipper.enabled?(:enable_utilities) }
         params do
           requires :environment, type: Symbol, values: [:production], allow_blank: false
           optional :description, type: String
