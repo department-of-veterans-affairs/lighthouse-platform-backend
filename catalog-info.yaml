@@ -13,4 +13,4 @@ spec:
   lifecycle: production
   owner: lighthouse-okapi
   definition:
-    $text: https://blue.production.lighthouse.va.gov/platform-backend/openapi.json
+    $text: https://blue.production.lighthouse.va.gov/platform-backend/v0/openapi.json
