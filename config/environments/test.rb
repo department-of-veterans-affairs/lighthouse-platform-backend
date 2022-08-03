@@ -84,6 +84,7 @@ Rails.application.configure do
   ENV['PROD_KONG_GATEWAY'] = 'http://prod-kong:8001'
   ENV['AWS_REGION'] = 'us-gov-west-1'
   ENV['AUTHZ_SERVER_DEFAULT'] = 'default'
+  ENV['AUTHZ_SERVER_TEST_ACG'] = 'r34l-4uth_s3rv3r_1d'
   ENV['ES_ENDPOINT'] = 'http://elasticsearch:9200'
   ENV['SUPPORT_EMAIL'] = 'user_support@the_house_of_light.com'
   ENV['VA_PROFILE_DISTRIBUTION'] = 'va_profile_support@the_house_of_light.com'
