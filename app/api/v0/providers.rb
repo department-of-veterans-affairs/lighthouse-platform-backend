@@ -160,7 +160,11 @@ module V0
         params do
           requires :providerName, type: String, allow_blank: false, description: 'Name of provider'
           optional :date, type: Date, allow_blank: false, default: Time.zone.now.to_date.strftime('%Y-%m-%d')
-          requires :content, type: String, allow_blank: false
+          requires :content, type: String,
+                             allow_blank: false,
+                             coerce_with: lambda { |value|
+                               value.start_with?('base64:') ? Base64.decode64(value.gsub(/^base64:/, '')) : value
+                             }
         end
         post '/release-notes' do
           validate_token(Scope.provider_write)
@@ -170,7 +174,7 @@ module V0
           existing_release_notes.discard_all if existing_release_notes.present?
           release_note = ApiReleaseNote.create(api_metadatum_id: api_metadatum.id,
                                                date: params[:date],
-                                               content: CGI.unescape(params[:content]))
+                                               content: params[:content])
 
           present release_note, with: V0::Entities::ApiReleaseNoteEntity, base_url: request.base_url
         end
