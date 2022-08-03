@@ -107,6 +107,7 @@ Metrics/MethodLength:
     - 'dynamo_mock_response'
     - 'auth_refs'
     - 'validate_ccg_oauth_params!'
+    - 'generate_export_list'
 Metrics/CyclomaticComplexity:
   IgnoredMethods:
     - 'consumer_signup'
@@ -114,11 +115,13 @@ Metrics/CyclomaticComplexity:
     - 'construct_import'
     - 'auth_refs'
     - 'parse'
+    - 'generate_export_list'
 Metrics/PerceivedComplexity:
   IgnoredMethods:
     - 'consumer_signup'
     - 'construct_import'
     - 'auth_refs'
+    - 'generate_export_list'
 Rails:
   Enabled: true
 
