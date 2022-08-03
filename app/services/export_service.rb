@@ -10,19 +10,22 @@ class ExportService
     @kong_service = Kong::ServiceFactory.service(environment)
   end
 
-  def kong_key_access_list
+  def kong_consumer_key_list
     consumer_list = @kong_service.list_all_consumers
     env_acls = @kong_service.get_all_acls['data']
     kong_keys = @kong_service.get_all_keys['data']
 
+    build_kong_consumer_list(consumer_list, env_acls, kong_keys)
+  end
+
+  def build_kong_consumer_list(consumer_list, env_acls, kong_keys)
     [].tap do |a|
       consumer_list.each do |consumer|
         consumer_acls = env_acls.filter { |acl| acl['consumer']['id'] == consumer['id'] }
-        api_products = filter_acls(consumer_acls)
         keys = kong_keys.select { |key| key['consumer']['id'] == consumer['id'] }
         if keys.length.positive?
           a << { id: consumer['id'], username: consumer['username'], key: keys.map { |key| key['key'] },
-                 apiProducts: api_products }
+                 apiProducts: filter_acls(consumer_acls) }
         end
       end
     end
@@ -35,25 +38,43 @@ class ExportService
     end
   end
 
-  def construct_okta_list(okta_consumers, okta_auth_servers)
+  def construct_okta_consumer_list(okta_consumers, okta_auth_servers)
     [].tap do |o|
       okta_consumers.each do |consumer|
-        servers = okta_auth_servers.filter { |auth_server| auth_server[:include].include?(consumer[:id]) }
-        if servers.present?
-          auth_type = consumer.dig(:credentials, :oauthClient, :token_endpoint_auth_method)
-          if auth_type.present? && auth_type == OKTA_AUTH_TYPES[:client_secret]
-            app_secrets = @okta_service.list_secret_credentials_for_application(consumer[:id])
-          end
-          per_id = { clientId: consumer[:id], apiProducts: [], label: consumer[:label] }
-          per_id[:clientSecret] = app_secrets.first[:client_secret] if app_secrets.present?
-          servers.each do |server|
-            api = Api.find_by(auth_server_access_key: server[:api])
-            unless api.nil?
-              per_id[:apiProducts] << api.name
-              o << per_id
-            end
-          end
-        end
+        manage_okta_consumer(consumer, okta_auth_servers, o)
+      end
+    end
+  end
+
+  def manage_okta_consumer(consumer, auth_servers, list)
+    servers = auth_servers.filter { |auth_server| auth_server[:include].include?(consumer[:id]) }
+    if servers.present?
+      app_secrets = request_secrets(consumer)
+      okta_consumer = okta_consumer_data(consumer, app_secrets)
+      add_api_products(servers, okta_consumer, list)
+    end
+  end
+
+  def okta_consumer_data(consumer, app_secrets)
+    okta_consumer = { clientId: consumer[:id], apiProducts: [], label: consumer[:label] }
+    okta_consumer[:clientSecret] = app_secrets.first[:client_secret] unless app_secrets.nil?
+    okta_consumer
+  end
+
+  def request_secrets(consumer)
+    auth_type = consumer.dig(:credentials, :oauthClient, :token_endpoint_auth_method)
+    if auth_type.present? && auth_type == OKTA_AUTH_TYPES[:client_secret]
+      app_secrets = @okta_service.list_secret_credentials_for_application(consumer[:id])
+    end
+    app_secrets
+  end
+
+  def add_api_products(servers, consumer, list)
+    servers.each do |server|
+      api = Api.find_by(auth_server_access_key: server[:api])
+      unless api.nil?
+        consumer[:apiProducts] << api.name
+        list << consumer
       end
     end
   end
@@ -67,7 +88,7 @@ class ExportService
     current_auth_servers = active_auth_servers(auth_servers, api_list)
     okta_auth_servers = fetch_included_consumers(current_auth_servers, api_list)
 
-    construct_okta_list(okta_consumers, okta_auth_servers)
+    construct_okta_consumer_list(okta_consumers, okta_auth_servers)
   end
 
   def filter_acls(consumer_acls)
@@ -104,18 +125,20 @@ class ExportService
     end
   end
 
-  def randomize_excess_data(data, _idx)
-    first_name = Faker::Name.first_name
-    last_name = Faker::Name.last_name
-    user = {
+  def build_random_user(data)
+    {
       developer: {
         email: Faker::Internet.email(name: 'Unknown', domain: 'example'),
-        firstName: "LPB#{first_name}",
-        lastName: "LPB#{last_name}",
+        firstName: "LPB#{Faker::Name.first_name}",
+        lastName: "LPB#{Faker::Name.last_name}",
         username: data[:username] || data[:label]
       },
       keys: []
     }
+  end
+
+  def randomize_excess_data(data)
+    user = build_random_user(data)
     user[:keys] << if data[:key].present?
                      { apiKey: { key: data[:key], apiProducts: data[:apiProducts] } }
                    else

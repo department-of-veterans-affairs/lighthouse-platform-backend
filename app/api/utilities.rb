@@ -32,7 +32,7 @@ class Utilities < Base
       api_keys.present? ? api_keys&.first&.dig(:username) : okta_keys&.first&.dig(:label)
     end
 
-    def build_import_user(user)
+    def build_export_user(user)
       {
         developer: {
           email: user.email,
@@ -57,10 +57,10 @@ class Utilities < Base
       end
     end
 
-    def generate_import_list
-      [].tap do |import|
+    def generate_export_list
+      [].tap do |list|
         User.all.each do |u|
-          user = build_import_user(u)
+          user = build_export_user(u)
 
           api_keys, @apikeys = locate_keys(u, @apikeys, :id) if @apikeys.present?
           okta_keys, @oauth_servers = locate_keys(u, @oauth_servers, :clientId) if @oauth_servers.present?
@@ -70,7 +70,7 @@ class Utilities < Base
           okta_list = structure_okta_credentials(okta_keys) unless okta_keys.nil?
 
           user[:keys] = (api_list || []).concat((okta_list || []))
-          import << user if user[:keys].present?
+          list << user if user[:keys].present?
         end
       end
     end
@@ -170,13 +170,13 @@ class Utilities < Base
       end
       get 'export' do
         export_service = ExportService.new(params[:environment])
-        @apikeys = export_service.kong_key_access_list
+        @apikeys = export_service.kong_consumer_key_list
 
         @oauth_servers = export_service.okta_consumer_list
 
-        import_list = generate_import_list
-        @apikeys.concat(@oauth_servers).each_with_index do |consumer, index|
-          import_list << export_service.randomize_excess_data(consumer, index)
+        import_list = generate_export_list
+        @apikeys.concat(@oauth_servers).each do |consumer|
+          import_list << export_service.randomize_excess_data(consumer)
         end
 
         response = { list: import_list }
