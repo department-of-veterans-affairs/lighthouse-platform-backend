@@ -30,6 +30,20 @@ describe Utilities, type: :request do
       expect(response).to have_http_status(:ok)
     end
 
+    context 'allows exporting consumers' do
+      before do
+        create(:api, :with_r34l_auth_server)
+      end
+
+      it 'and builds an export list' do
+        VCR.use_cassette('utilities/export_200', match_requests_on: [:method]) do
+          get '/platform-backend/utilities/consumers/export?environment=sandbox'
+          expect(response).to have_http_status(:ok)
+          expect(JSON.parse(response.body)['list'].length).to eq(3)
+        end
+      end
+    end
+
     it 'gets weekly signups for consumers' do
       get '/platform-backend/utilities/consumers/signups-report/week'
       expect(response).to have_http_status(:ok)

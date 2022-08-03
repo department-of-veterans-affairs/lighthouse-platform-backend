@@ -34,7 +34,9 @@ class ExportService
   def gather_active_okta_apis
     apis = Api.all.map(&:auth_server_access_key).uniq.compact
     {}.tap do |a|
-      apis.map { |api| a[api] = [Figaro.env.send(api), Figaro.env.send("#{api}_ccg"), Figaro.env.send("#{api}_acg")].compact }
+      apis.map do |api|
+        a[api] = [Figaro.env.send(api), Figaro.env.send("#{api}_ccg"), Figaro.env.send("#{api}_acg")].compact
+      end
     end
   end
 
