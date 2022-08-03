@@ -21,6 +21,59 @@ class Utilities < Base
     def okta_signup_options
       { application_public_key: params[:oAuthPublicKey] }
     end
+
+    def locate_keys(user, keys, search)
+      keys.partition do |item|
+        user.consumer.consumer_auth_refs.map(&:value).include?(item[search])
+      end
+    end
+
+    def allocate_username(api_keys, okta_keys)
+      api_keys.present? ? api_keys&.first&.dig(:username) : okta_keys&.first&.dig(:label)
+    end
+
+    def build_import_user(user)
+      {
+        developer: {
+          email: user.email,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          username: nil
+        }
+      }
+    end
+
+    def structure_api_keys(api_keys)
+      api_keys.map { |key| { apiKey: { key: key[:key], apiProducts: key[:apiProducts] } } }
+    end
+
+    def structure_okta_credentials(okta_keys)
+      okta_keys.map do |client|
+        type = client[:clientSecret].blank? ? 'oAuthCcg' : 'oAuthAcg'
+        key = { type => { clientId: client[:clientId] } }
+        key[type][:clientSecret] = client[:clientSecret] if client[:clientSecret].present?
+        key[type][:apiProducts] = client[:apiProducts]
+        key
+      end
+    end
+
+    def generate_import_list
+      [].tap do |import|
+        User.all.each do |u|
+          user = build_import_user(u)
+
+          api_keys, @apikeys = locate_keys(u, @apikeys, :id) if @apikeys.present?
+          okta_keys, @oauth_servers = locate_keys(u, @oauth_servers, :clientId) if @oauth_servers.present?
+
+          user[:developer][:username] = allocate_username(api_keys, okta_keys)
+          api_list = structure_api_keys(api_keys) unless api_keys.nil?
+          okta_list = structure_okta_credentials(okta_keys) unless okta_keys.nil?
+
+          user[:keys] = (api_list || []).concat((okta_list || []))
+          import << user if user[:keys].present?
+        end
+      end
+    end
   end
 
   resource 'utilities' do
@@ -108,6 +161,26 @@ class Utilities < Base
           present user, with: V0::Entities::ConsumerApplicationEntity,
                         okta_consumers: okta_consumers
         end
+      end
+    end
+
+    resource 'apigee' do
+      params do
+        requires :environment, type: Symbol, values: %i[sandbox production], allow_blank: false, default: :sandbox
+      end
+      get 'export' do
+        export_service = ExportService.new(params[:environment])
+        @apikeys = export_service.kong_key_access_list
+
+        @oauth_servers = export_service.okta_consumer_list
+
+        import_list = generate_import_list
+        @apikeys.concat(@oauth_servers).each_with_index do |consumer, index|
+          import_list << export_service.randomize_excess_data(consumer, index)
+        end
+
+        response = { list: import_list }
+        present response
       end
     end
   end
