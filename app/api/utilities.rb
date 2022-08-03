@@ -94,6 +94,25 @@ class Utilities < Base
           Slack::ReportService.new.query_events('month', 1.month.ago)
         end
       end
+
+      desc 'Generates an export list from Okta and Kong'
+      params do
+        requires :environment, type: Symbol, values: %i[sandbox production], allow_blank: false, default: :sandbox
+      end
+      get 'export' do
+        export_service = ExportService.new(params[:environment])
+        @apikeys = export_service.kong_consumer_key_list
+
+        @oauth_servers = export_service.okta_consumer_list
+
+        import_list = generate_export_list
+        @apikeys.concat(@oauth_servers).each do |consumer|
+          import_list << export_service.randomize_excess_data(consumer)
+        end
+
+        response = { list: import_list }
+        present response
+      end
     end
 
     resource 'apis' do
@@ -161,26 +180,6 @@ class Utilities < Base
           present user, with: V0::Entities::ConsumerApplicationEntity,
                         okta_consumers: okta_consumers
         end
-      end
-    end
-
-    resource 'apigee' do
-      params do
-        requires :environment, type: Symbol, values: %i[sandbox production], allow_blank: false, default: :sandbox
-      end
-      get 'export' do
-        export_service = ExportService.new(params[:environment])
-        @apikeys = export_service.kong_consumer_key_list
-
-        @oauth_servers = export_service.okta_consumer_list
-
-        import_list = generate_export_list
-        @apikeys.concat(@oauth_servers).each do |consumer|
-          import_list << export_service.randomize_excess_data(consumer)
-        end
-
-        response = { list: import_list }
-        present response
       end
     end
   end
