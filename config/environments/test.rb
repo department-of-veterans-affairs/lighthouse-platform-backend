@@ -93,4 +93,5 @@ Rails.application.configure do
   ENV['SLACK_DRIFT_CHANNEL'] = '#test'
   ENV['SLACK_SIGNUP_CHANNEL'] = '#test'
   ENV['ENABLE_GITHUB_AUTH'] = 'false'
+  ENV['AUTHZ_SERVER_TEST'] = 't3st_4uthz'
 end

@@ -105,6 +105,23 @@ describe V0::Consumers, type: :request do
         end
       end
 
+      context 'when okta fails to receive proper data' do
+        it 'returns the formatted Okta error' do
+          signup_params[:oAuthPublicKey] = {
+            kid: nil,
+            kty: 'RSA',
+            e: 'AQAB',
+            use: nil,
+            n: 'r34l-jw1'
+          }.to_json
+          VCR.use_cassette('okta/invalid_jwt', match_requests_on: [:method]) do
+            post apply_base, params: signup_params
+            expect(response.code).to eq('500')
+            expect(response.body).to include('Api validation failed: Public Client App - RSA key')
+          end
+        end
+      end
+
       context 'with send_emails flag enabled' do
         before do
           Flipper.enable :send_emails

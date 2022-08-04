@@ -11,7 +11,8 @@ module V0
 
     helpers do
       def user_from_signup_params
-        user = User.find_or_initialize_by(email: params[:email])
+        users = User.where('LOWER(email) = ?', params[:email].downcase.strip)
+        user = users.present? ? users.first : User.new(email: params[:email].strip)
 
         user.first_name = params[:firstName]
         user.last_name = params[:lastName]
