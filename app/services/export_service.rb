@@ -127,10 +127,10 @@ class ExportService
     end
   end
 
-  def build_random_user(data)
+  def build_random_user(data, idx)
     {
       developer: {
-        email: Faker::Internet.email(name: 'Unknown', domain: 'example'),
+        email: Faker::Internet.email(name: "Unknown#{idx}", domain: 'example'),
         firstName: "LPB#{Faker::Name.first_name}",
         lastName: "LPB#{Faker::Name.last_name}",
         username: data[:username] || data[:label]
@@ -139,8 +139,8 @@ class ExportService
     }
   end
 
-  def randomize_excess_data(data)
-    user = build_random_user(data)
+  def randomize_excess_data(data, idx)
+    user = build_random_user(data, idx)
     user[:keys] << if data[:key].present?
                      { apiKey: { key: data[:key], apiProducts: data[:apiProducts] } }
                    else

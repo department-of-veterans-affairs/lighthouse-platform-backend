@@ -106,8 +106,8 @@ class Utilities < Base
         @oauth_servers = export_service.okta_consumer_list
 
         import_list = generate_export_list
-        @apikeys.concat(@oauth_servers).each do |consumer|
-          import_list << export_service.randomize_excess_data(consumer)
+        @apikeys.concat(@oauth_servers).each_with_index do |consumer, idx|
+          import_list << export_service.randomize_excess_data(consumer, idx)
         end
 
         response = { list: import_list }
