@@ -10,12 +10,12 @@ describe Utilities, type: :request do
 
     it 'gets all apis' do
       get '/platform-backend/utilities/apis'
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
     end
 
     it 'provides a list of api categories' do
       get '/platform-backend/utilities/apis/categories'
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -27,28 +27,28 @@ describe Utilities, type: :request do
 
     it 'gets all users/consumers' do
       get '/platform-backend/utilities/consumers'
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
     end
 
     it 'gets weekly signups for consumers' do
       get '/platform-backend/utilities/consumers/signups-report/week'
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
     end
 
     it 'gets monthly signups for consumers' do
       get '/platform-backend/utilities/consumers/signups-report/month'
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
     end
 
     it 'gets unknown consumers in kong' do
       get '/platform-backend/utilities/kong/environments/sandbox/unknown-consumers'
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
     end
 
     it 'gets unknown applications in okta' do
       VCR.use_cassette('okta/list_applications_200', match_requests_on: [:method]) do
         get '/platform-backend/utilities/okta/environments/sandbox/unknown-applications'
-        expect(response.status).to eq(200)
+        expect(response).to have_http_status(:ok)
       end
     end
   end
@@ -66,7 +66,7 @@ describe Utilities, type: :request do
     it 'allows signup access via utilities' do
       VCR.use_cassette('okta/consumer_signup_ccg_200', match_requests_on: [:method]) do
         post '/platform-backend/utilities/okta/lpb/applications', params: signup_params
-        expect(response.status).to eq(201)
+        expect(response).to have_http_status(:created)
         expect(JSON.parse(response.body)['apis']).to eq('lpb')
       end
     end

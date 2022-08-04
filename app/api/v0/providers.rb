@@ -24,15 +24,29 @@ module V0
         optional :status, type: String,
                           values: %w[active inactive],
                           allow_blank: true
+        optional :auth_type, type: String, values: %w[apikey oauth oauth/acg oauth/ccg]
       end
       get '/' do
         validate_token(Scope.provider_read)
 
         apis = Api
+
+        if params[:auth_type].present?
+          auth_types = params[:auth_type].split('/')
+          apis = Api.auth_type(auth_types.first)
+        end
+
         apis = apis.kept if params[:status] == 'active'
         apis = apis.discarded if params[:status] == 'inactive'
+        apis = apis.displayable
+        apis = apis.order(:name)
+        if params[:auth_type].present? && auth_types.length > 1
+          apis = apis.filter do |api|
+            api.locate_auth_types.include?(params[:auth_type])
+          end
+        end
 
-        present apis.order(:name), with: V0::Entities::ApiEntity
+        present apis, with: V0::Entities::ApiEntity
       end
 
       params do
@@ -146,7 +160,11 @@ module V0
         params do
           requires :providerName, type: String, allow_blank: false, description: 'Name of provider'
           optional :date, type: Date, allow_blank: false, default: Time.zone.now.to_date.strftime('%Y-%m-%d')
-          requires :content, type: String, allow_blank: false
+          requires :content, type: String,
+                             allow_blank: false,
+                             coerce_with: lambda { |value|
+                               value.start_with?('base64:') ? Base64.decode64(value.gsub(/^base64:/, '')) : value
+                             }
         end
         post '/release-notes' do
           validate_token(Scope.provider_write)
@@ -156,7 +174,7 @@ module V0
           existing_release_notes.discard_all if existing_release_notes.present?
           release_note = ApiReleaseNote.create(api_metadatum_id: api_metadatum.id,
                                                date: params[:date],
-                                               content: CGI.unescape(params[:content]))
+                                               content: params[:content])
 
           present release_note, with: V0::Entities::ApiReleaseNoteEntity, base_url: request.base_url
         end

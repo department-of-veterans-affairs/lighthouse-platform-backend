@@ -82,6 +82,7 @@ Layout/LineLength:
     - 'config/initializers/devise.rb'
     - 'config/initializers/simple_form.rb'
     - 'app/services/slack/report_service.rb'
+    - 'spec/api/v0/consumers_spec.rb'
 Metrics/MethodLength:
   Exclude:
     - 'rakelib/support/shell_command.rb'
@@ -105,13 +106,13 @@ Metrics/MethodLength:
     - 'report_message'
     - 'dynamo_mock_response'
     - 'auth_refs'
+    - 'validate_ccg_oauth_params!'
 Metrics/CyclomaticComplexity:
   IgnoredMethods:
     - 'consumer_signup'
     - 'validate_param!'
     - 'construct_import'
     - 'auth_refs'
-    - 'validate_token'
     - 'parse'
 Metrics/PerceivedComplexity:
   IgnoredMethods:

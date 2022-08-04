@@ -24,6 +24,24 @@ describe V0::Providers, type: :request do
 
       expect(JSON.parse(response.body).count).to eq(3)
     end
+
+    context 'filters when passed an auth_type' do
+      before do
+        create(:api_environment, :auth_server_access_key_specific)
+      end
+
+      it 'works with oauth specific' do
+        get '/platform-backend/v0/providers?auth_type=oauth/acg'
+
+        expect(JSON.parse(response.body).count).to eq(1)
+      end
+
+      it 'works with apikeys' do
+        get '/platform-backend/v0/providers?auth_type=apikey'
+
+        expect(JSON.parse(response.body).count).to eq(3)
+      end
+    end
   end
 
   describe 'returns list of api provider release notes' do
@@ -80,14 +98,14 @@ describe V0::Providers, type: :request do
     it 'creates a valid API' do
       expect do
         post '/platform-backend/v0/providers', params: provider
-        expect(response.status).to eq(201)
+        expect(response).to have_http_status(:created)
       end.to change(Api, :count).by 1
     end
 
     it 'provides an error when supplied invalid information' do
       provider['name'] = ''
       post '/platform-backend/v0/providers', params: provider
-      expect(response.status).to eq(400)
+      expect(response).to have_http_status(:bad_request)
       expect(JSON.parse(response.body)['errors'].length).to eq(1)
     end
   end
@@ -102,10 +120,10 @@ describe V0::Providers, type: :request do
     end
 
     it 'retrieves consumers with access_token' do
-      VCR.use_cassette('okta/access_token_200', match_requests_on: [:method]) do
+      VCR.use_cassette('kong/access_token_200', match_requests_on: [:method]) do
         get '/platform-backend/v0/providers', params: {},
                                               headers: { Authorization: 'Bearer t0k3n' }
-        expect(response.status).to eq(200)
+        expect(response).to have_http_status(:ok)
       end
     end
   end

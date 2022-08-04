@@ -3,6 +3,12 @@
 class Api < ApplicationRecord
   include Discard::Model
 
+  AUTH_TYPES = {
+    apikey: 'apikey',
+    acg: 'oauth/acg',
+    ccg: 'oauth/ccg'
+  }.freeze
+
   attr_accessor :auth_type
 
   validates :name, presence: true
@@ -13,6 +19,22 @@ class Api < ApplicationRecord
   has_one :api_metadatum, dependent: :destroy
 
   scope :displayable, -> { joins(:api_metadatum) }
+  scope :auth_type, lambda { |auth_type|
+    auth_types = { apikey: 'acl', oauth: 'auth_server_access_key' }
+    fetch_key = auth_types[auth_type.to_sym]
+    where("#{fetch_key} IS NOT NULL")
+  }
+
+  def locate_auth_types
+    types = []
+    types << AUTH_TYPES[:apikey] if acl.present?
+    if auth_server_access_key.present?
+      types << AUTH_TYPES[:acg] if Figaro.env.send(auth_server_access_key).present?
+      types << AUTH_TYPES[:acg] if Figaro.env.send("#{auth_server_access_key}_acg").present?
+      types << AUTH_TYPES[:ccg] if Figaro.env.send("#{auth_server_access_key}_ccg").present?
+    end
+    types.uniq
+  end
 
   after_discard do
     api_ref.discard if api_ref.present?

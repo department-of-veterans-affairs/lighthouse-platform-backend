@@ -7,11 +7,11 @@ kong_elb: "http://localhost:4001"
 prod_kong_elb: "http://localhost:4003"
 kong_password:
 prod_kong_password:
+prod_kong_gateway:
 es_endpoint:
 okta_token:
 prod_okta_token:
 okta_api_endpoint: "https://dev-########-admin.okta.com"
-okta_token_validation_endpoint: "https://dev-########-admin.okta.com"
 prod_okta_api_endpoint: "https://dev-########-admin.okta.com"
 okta_redirect_url: "https://sandbox-api.va.gov/oauth2/redirect/"
 prod_okta_redirect_url: "https://api.va.gov/oauth2/redirect/"
@@ -19,9 +19,9 @@ okta_login_url: "https://sandbox-api.va.gov/oauth2/redirect/"
 okta_default_policy: "Default Policy"
 idme_group_id:
 prod_idme_group_id:
+okta_audience:
+validate_token_apikey:
 okta_auth_server:
-okta_client_id:
-okta_client_secret:
 dsva_environment: Development
 github_app_id: e2583634c192807ccc28
 github_app_secret:

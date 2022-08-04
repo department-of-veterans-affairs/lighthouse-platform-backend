@@ -5,8 +5,11 @@ require 'rufus-scheduler'
 s = Rufus::Scheduler.singleton
 
 s.cron '0 2 * * *' do
+  BackgroundJobEnforcer.create(job_type: Event::EVENT_TYPES[:drift_job], date: Time.zone.today)
   OktaDriftJob.perform_now
   KongDriftJob.perform_now
+rescue ActiveRecord::RecordNotUnique
+  # ignore, its already being handled
 end
 
 s.cron '0 11 * * 1' do

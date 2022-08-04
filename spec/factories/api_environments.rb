@@ -14,5 +14,14 @@ FactoryBot.define do
         api.save!
       end
     end
+
+    trait :auth_server_access_key_specific do
+      after(:create) do |api_env, _|
+        api = api_env.api
+        api[:acl] = nil
+        api[:auth_server_access_key] = 'AUTHZ_SERVER_TEST'
+        api.save!
+      end
+    end
   end
 end

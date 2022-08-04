@@ -7,6 +7,9 @@ module V0
       expose :status
       expose :created_at, as: :createdAt
       expose :updated_at, as: :updatedAt
+      expose :auth_type do |api, _options|
+        api.locate_auth_types
+      end
     end
   end
 end

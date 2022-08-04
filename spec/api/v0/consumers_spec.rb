@@ -15,7 +15,13 @@ describe V0::Consumers, type: :request do
       lastName: 'Funnie',
       oAuthApplicationType: 'web',
       oAuthRedirectURI: 'http://localhost:3000/callback',
-      oAuthPublicKey: { kty: 'RSA', n: 'key-value-here', e: 'AQAB' }.to_json,
+      oAuthPublicKey: {
+        kid: nil,
+        kty: 'RSA',
+        e: 'AQAB',
+        use: nil,
+        n: '2Fb4_D4-RSjvl11txu-0s9bThk8hTo2SJauTRrS9N7piFlpGi6PBql3KzLmEu_T36YMbmTjDRPyybEEBD_XkEDuNdWSQph5Da7atfFM04IW5WH3MGPuvmaH6WpZB4Li5qESTFaMk0677uCDvOLcJmfa8bzunvbtlB4U-1WLjtDBODWiVpLlGEUofNQdX2MvTF9shtm-QqPk7K-a2Z36LrZpgcQBB1U8QtqexdaLrMgaoxmEbSgXGAc-uDkmQx1VOAsREozYZ9f1tASmOKGlxfVyBHcf6dePxq1cewpmrUfRTezky5A4K6v17uBYSpEols4ritWDRDymb7rFlUwxBjqdCjmtV18HiLIrgBNPQ2-5Jlnt-BCJg3lP_UG0r6cMO2DEtTkAkDcy4HzNuMQCrXn5ZL4kSUITrf9Mixny3vFn3aVcSNsCqLUSAfnpfRIz9oUUz5xI-FD9QsJJ1vneC8mfo-1lNaVRLNhn2t9VWY0kqhNNzS2HIktkZGzGv7gsB'
+      }.to_json,
       organization: 'Doug',
       termsOfService: true
     }
@@ -43,7 +49,7 @@ describe V0::Consumers, type: :request do
     it 'that are kept' do
       get '/platform-backend/v0/consumers'
       first_consumer = JSON.parse(response.body).first
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
       expect(first_consumer['id']).to eq(consumer.id)
       expect(first_consumer['email']).to eq(consumer.user.email)
     end
@@ -51,19 +57,19 @@ describe V0::Consumers, type: :request do
     context 'accepts an optional subscribe param' do
       it 'filters when provided subscribed' do
         get '/platform-backend/v0/consumers?subscribed=true'
-        expect(response.status).to eq(200)
+        expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body).length).to eq(0)
       end
 
       it 'does not filter when provided =false' do
         get '/platform-backend/v0/consumers?subscribed=false'
-        expect(response.status).to eq(200)
+        expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body).length).to eq(1)
       end
 
       it 'returns 400 when provided unsuitable value' do
         get '/platform-backend/v0/consumers?subscribed=tacos'
-        expect(response.status).to eq(400)
+        expect(response).to have_http_status(:bad_request)
       end
     end
   end
@@ -78,7 +84,7 @@ describe V0::Consumers, type: :request do
 
     it 'updates a consumers unsubscribe field' do
       put "/platform-backend/v0/consumers/#{consumer[:id]}", params: { subscribed: false }
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)).to have_key('subscribed')
       expect(JSON.parse(response.body)['subscribed']).to be(false)
     end
@@ -95,6 +101,23 @@ describe V0::Consumers, type: :request do
             expect(User.count).to eq(1)
             expect(Consumer.count).to eq(1)
             expect(User.last.consumer.apis.count).to eq(3)
+          end
+        end
+      end
+
+      context 'when okta fails to receive proper data' do
+        it 'returns the formatted Okta error' do
+          signup_params[:oAuthPublicKey] = {
+            kid: nil,
+            kty: 'RSA',
+            e: 'AQAB',
+            use: nil,
+            n: 'r34l-jw1'
+          }.to_json
+          VCR.use_cassette('okta/invalid_jwt', match_requests_on: [:method]) do
+            post apply_base, params: signup_params
+            expect(response.code).to eq('500')
+            expect(response.body).to include('Api validation failed: Public Client App - RSA key')
           end
         end
       end
@@ -180,10 +203,20 @@ describe V0::Consumers, type: :request do
     end
 
     context 'when oauth arguments are invalid' do
-      it 'responds with bad request' do
-        signup_params[:oAuthApplicationType] = 'invalid-value'
-        post apply_base, params: signup_params
-        expect(response.code).to eq('400')
+      context 'when oauth application type is invalid' do
+        it 'responds with bad request' do
+          signup_params[:oAuthApplicationType] = 'invalid-value'
+          post apply_base, params: signup_params
+          expect(response.code).to eq('400')
+        end
+      end
+
+      context 'when oauth public key is invalid' do
+        it 'responds with bad request' do
+          signup_params[:oAuthPublicKey] = { kty: 'RSA', n: 'key-value-here', e: 'AQAB' }.to_json
+          post apply_base, params: signup_params
+          expect(response.code).to eq('400')
+        end
       end
     end
 
@@ -253,20 +286,20 @@ describe V0::Consumers, type: :request do
 
     it 'receives unauthorized without respective token' do
       get '/platform-backend/v0/consumers'
-      expect(response.status).to eq(401)
+      expect(response).to have_http_status(:unauthorized)
     end
 
     it 'receives unauthorized with an invalid token' do
-      VCR.use_cassette('okta/access_token_invalid', match_requests_on: [:method]) do
+      VCR.use_cassette('kong/access_token_invalid', match_requests_on: [:method]) do
         get '/platform-backend/v0/consumers', params: {}, headers: { Authorization: 'Bearer t0t4l1y-r34l' }
-        expect(response.status).to eq(401)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
     it 'receives forbidden with incorrect scopes' do
-      VCR.use_cassette('okta/access_token_200', match_requests_on: [:method]) do
+      VCR.use_cassette('kong/access_token_200', match_requests_on: [:method]) do
         get '/platform-backend/v0/consumers', params: {}, headers: { Authorization: 'Bearer t0k3n' }
-        expect(response.status).to eq(403)
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
@@ -356,14 +389,14 @@ describe V0::Consumers, type: :request do
     it 'promotes a consumer if given the appropriate sandbox APIs' do
       post "/platform-backend/v0/consumers/#{consumer[:id]}/promotion-requests", params: params
 
-      expect(response.status).to eq(201)
+      expect(response).to have_http_status(:created)
       expect(consumer.api_environments.count).to eq(3)
     end
 
     it 'fails to promote if a consumer does not have sandbox access' do
       post "/platform-backend/v0/consumers/#{consumer[:id]}/promotion-requests", params: bad_params
 
-      expect(response.status).to eq(422)
+      expect(response).to have_http_status(:unprocessable_entity)
       expect(JSON.parse(response.body)['errors']).to include('Invalid API list for consumer')
     end
   end
