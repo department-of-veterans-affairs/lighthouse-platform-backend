@@ -52,14 +52,6 @@ module Utility
         request(req, uri, :kong)
       end
     end
-
-    def consumer_acl_for_export_test
-      acl = Api.first.acl
-      uri = URI.parse("#{@kong_elb}/consumers/lighthouse-consumer/acls")
-      req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
-      req.body = { group: acl }.to_json
-      request(req, uri, :kong)
-    end
     # end Kong seeds
 
     def seed_elasticsearch
