@@ -1,0 +1,107 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://example.okta.com/api/v1/apps
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Oktakit v0.3.1
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 03 Aug 2022 22:14:04 GMT
+      Content-Type:
+      - application/json
+    body:
+      encoding: ASCII-8BIT
+      string: '[{"id":"r34l_c0nsum3r_1d","name":"oidc_client","label":"real_app","status":"ACTIVE","lastUpdated":"2022-08-02T20:24:36.000Z","created":"2022-08-02T20:24:36.000Z","accessibility":{"selfService":false,"errorRedirectUrl":null,"loginRedirectUrl":null},"visibility":{"autoLaunch":false,"autoSubmitToolbar":false,"hide":{"iOS":true,"web":true},"appLinks":{"oidc_client_link":true}},"features":[],"signOnMode":"OPENID_CONNECT","credentials":{"userNameTemplate":{"template":"${source.login}","type":"BUILT_IN"},"signing":{"kid":"JvDEMxDS60S8mnhyd6z532F1Nk4eLaedsEspWCDfx7k"},"oauthClient":{"autoKeyRotation":true,"client_id":"r34l_c0nsum3r_1d","token_endpoint_auth_method":"client_secret_basic"}},"settings":{"app":{},"notifications":{"vpn":{"network":{"connection":"DISABLED"},"message":null,"helpUrl":null}},"implicitAssignment":true,"notes":{"admin":null,"enduser":null},"oauthClient":{"client_uri":null,"logo_uri":null,"redirect_uris":["http://localhost:8080/authorization-code/callback"],"post_logout_redirect_uris":["http://localhost:8080"],"response_types":["code"],"grant_types":["authorization_code"],"application_type":"web","consent_method":"REQUIRED","issuer_mode":"DYNAMIC","idp_initiated_login":{"mode":"DISABLED","default_scope":[]},"wildcard_redirect":"DISABLED"}},"_links":{"uploadLogo":{"href":"https://example.okta.com/api/v1/apps/r34l_c0nsum3r_1d/logo","hints":{"allow":["POST"]}},"appLinks":[{"name":"oidc_client_link","href":"https://example.okta.com/home/oidc_client/r34l_c0nsum3r_1d/aln177a159h7Zf52X0g8","type":"text/html"}],"groups":{"href":"https://example.okta.com/api/v1/apps/r34l_c0nsum3r_1d/groups"},"logo":[{"name":"medium","href":"https://ok12static.oktacdn.com/assets/img/logos/default.6770228fb0dab49a1695ef440a5279bb.png","type":"image/png"}],"clientCredentials":[{"name":"secrets","href":"https://example.okta.com/api/v1/apps/r34l_c0nsum3r_1d/credentials/secrets"}],"users":{"href":"https://example.okta.com/api/v1/apps/r34l_c0nsum3r_1d/users"},"deactivate":{"href":"https://example.okta.com/api/v1/apps/r34l_c0nsum3r_1d/lifecycle/deactivate"}}}]'
+  recorded_at: Wed, 03 Aug 2022 22:14:04 GMT
+- request:
+    method: get
+    uri: https://example.okta.com/api/v1/authorizationServers
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Oktakit v0.3.1
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 03 Aug 2022 22:14:05 GMT
+      Content-Type:
+      - application/json
+    body:
+      encoding: ASCII-8BIT
+      string: '[{"id": "r34l-4uth_s3rv3r_1d","name": "AUTHZ_SERVER_HEALTH","description":"Mock for ACG","audiences":["All"],"issuer":"https://example.okta.com/oauth2/r34l-4uth_s3rv3r_1d","issuerMode":"DYNAMIC","status":"ACTIVE","created":"2022-08-01T15:29:07.000Z","lastUpdated":"2022-08-01T15:44:48.000Z","credentials":{"signing":{"kid":"si5r62sPgj7lcwidaqkj5wWiRd0Zi2MGHxFSWgGmB3A","rotationMode":"AUTO","lastRotated":"2022-08-01T15:29:07.000Z","nextRotation":"2022-10-30T15:29:07.000Z"}},"_links":{"rotateKey":{"href":"https://example.okta.com/api/v1/authorizationServers/r34l-4uth_s3rv3r_1d/credentials/lifecycle/keyRotate","hints":{"allow":["POST"]}},"metadata":[{"name":"oauth-authorization-server","href":"https://example.okta.com/oauth2/r34l-4uth_s3rv3r_1d/.well-known/oauth-authorization-server","hints":{"allow":["GET"]}},{"name":"openid-configuration","href":"https://example.okta.com/oauth2/r34l-4uth_s3rv3r_1d/.well-known/openid-configuration","hints":{"allow":["GET"]}}],"keys":{"href":"https://example.okta.com/api/v1/authorizationServers/r34l-4uth_s3rv3r_1d/credentials/keys","hints":{"allow":["GET"]}},"claims":{"href":"https://example.okta.com/api/v1/authorizationServers/r34l-4uth_s3rv3r_1d/claims","hints":{"allow":["GET","POST"]}},"policies":{"href":"https://example.okta.com/api/v1/authorizationServers/r34l-4uth_s3rv3r_1d/policies","hints":{"allow":["GET","POST"]}},"self":{"href":"https://example.okta.com/api/v1/authorizationServers/r34l-4uth_s3rv3r_1d","hints":{"allow":["GET","DELETE","PUT"]}},"scopes":{"href":"https://example.okta.com/api/v1/authorizationServers/r34l-4uth_s3rv3r_1d/scopes","hints":{"allow":["GET","POST"]}},"deactivate":{"href":"https://example.okta.com/api/v1/authorizationServers/r34l-4uth_s3rv3r_1d/lifecycle/deactivate","hints":{"allow":["POST"]}}}}]'
+  recorded_at: Wed, 03 Aug 2022 22:14:04 GMT
+- request:
+    method: get
+    uri: https://example.okta.com/api/v1/authorizationServers/r34l-4uth_s3rv3r_1d/policies
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Oktakit v0.3.1
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 03 Aug 2022 22:14:05 GMT
+      Content-Type:
+      - application/json
+    body:
+      encoding: ASCII-8BIT
+      string: '[{"id":"4uth_53rv3r_p01ici3s","status":"ACTIVE","name":"Default Policy","description":"default","priority":1,"system":false,"conditions":{"clients":{"include":["r34l_c0nsum3r_1d"]}},"created":"2022-06-01T20:40:35.000Z","lastUpdated":"2022-08-02T20:25:40.000Z","_links":{"self":{"href":"https://example.okta.com/api/v1/authorizationServers/r34l-4uth_s3rv3r_1d/policies/4uth_53rv3r_p01ici3s","hints":{"allow":["GET","PUT","DELETE"]}},"rules":{"href":"https://example.okta.com/api/v1/authorizationServers/r34l-4uth_s3rv3r_1d/policies/4uth_53rv3r_p01ici3s/rules","hints":{"allow":["GET"]}},"deactivate":{"href":"https://example.okta.com/api/v1/authorizationServers/r34l-4uth_s3rv3r_1d/policies/4uth_53rv3r_p01ici3s/lifecycle/deactivate","hints":{"allow":["POST"]}}},"type":"OAUTH_AUTHORIZATION_POLICY"}]'
+  recorded_at: Wed, 03 Aug 2022 22:14:05 GMT
+- request:
+    method: get
+    uri: https://example.okta.com/api/v1/apps/r34l_c0nsum3r_1d/credentials/secrets
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Oktakit v0.3.1
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 03 Aug 2022 22:14:09 GMT
+      Content-Type:
+      - application/json
+    body:
+      encoding: ASCII-8BIT
+      string: '[{"id":"r4nd0m1d","created":"2022-08-02T20:24:36.000Z","lastUpdated":"2022-08-02T20:24:36.000Z","status":"ACTIVE","client_secret":"R34L_S3CR3T_5TUFF","secret_hash":"tru3_h4sh","_links":{"deactivate":{"href":"https://example.okta.com/api/v1/apps/r34l_c0nsum3r_1d/credentials/secrets/r4nd0m1d/lifecycle/deactivate","hints":{"allow":["POST"]}}}}]'
+  recorded_at: Wed, 03 Aug 2022 22:14:08 GMT
+recorded_with: VCR 6.1.0
