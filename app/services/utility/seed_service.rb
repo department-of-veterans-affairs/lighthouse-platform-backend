@@ -11,6 +11,7 @@ module Utility
       @kong_elb = Figaro.env.kong_elb || 'http://localhost:4001'
       @es_base = Figaro.env.es_endpoint || 'http://localhost:9200'
       @dynamo = Aws::DynamoDB::Client.new(dynamo_client_options)
+      @prod_kong_elb = Figaro.env.prod_kong_gateway || 'http://localhost:4003'
     end
 
     def seed_services
@@ -51,6 +52,19 @@ module Utility
         req.body = { username: consumer }.to_json
         request(req, uri, :kong)
       end
+    end
+
+    def consumer_acl_for_export_test
+      consumer_name = construct_consumer_list.first
+      acl = Api.first.acl
+      uri = URI.parse("#{@prod_kong_elb}/consumers")
+      req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
+      req.body = { username: consumer_name }.to_json
+      request(req, uri, :kong)
+      uri = URI.parse("#{@prod_kong_elb}/consumers/#{consumer_name}/acls")
+      req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
+      req.body = { group: acl }.to_json
+      request(req, uri, :kong)
     end
     # end Kong seeds
 
