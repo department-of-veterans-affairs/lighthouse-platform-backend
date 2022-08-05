@@ -44,17 +44,11 @@ class Utilities < Base
     end
 
     def structure_api_keys(api_keys)
-      api_keys.map { |key| { apiKey: { key: key[:key], apiProducts: key[:apiProducts] } } }
+      api_keys.map { |key| @export_service.structure_key_auth(key) }
     end
 
     def structure_okta_credentials(okta_keys)
-      okta_keys.map do |client|
-        type = client[:clientSecret].blank? ? 'oAuthCcg' : 'oAuthAcg'
-        key = { type => { clientId: client[:clientId] } }
-        key[type][:clientSecret] = client[:clientSecret] if client[:clientSecret].present?
-        key[type][:apiProducts] = client[:apiProducts]
-        key
-      end
+      okta_keys.map { |client| @export_service.structure_oauth(client) }
     end
 
     def generate_export_list
@@ -100,18 +94,17 @@ class Utilities < Base
         requires :environment, type: Symbol, values: %i[sandbox production], allow_blank: false, default: :sandbox
       end
       get 'export' do
-        export_service = ExportService.new(params[:environment])
-        @apikeys = export_service.kong_consumer_key_list
+        @export_service = ExportService.new(params[:environment])
+        @apikeys = @export_service.kong_consumer_key_list
 
-        @oauth_servers = export_service.okta_consumer_list
+        @oauth_servers = @export_service.okta_consumer_list
 
         import_list = generate_export_list
         @apikeys.concat(@oauth_servers).each_with_index do |consumer, idx|
-          import_list << export_service.randomize_excess_data(consumer, idx)
+          import_list << @export_service.randomize_excess_data(consumer, idx)
         end
 
-        response = { list: import_list }
-        present response
+        present import_list, with: Entities::ExportEntity
       end
     end
 
