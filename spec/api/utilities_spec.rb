@@ -33,7 +33,7 @@ describe Utilities, type: :request do
     context 'allows exporting consumers' do
       before do
         create(:api, :with_r34l_auth_server)
-        Utility::SeedService.new.consumer_acl_for_export_test
+        Utility::SeedService.new.create_export_consumer
       end
 
       it 'and builds an export list' do
