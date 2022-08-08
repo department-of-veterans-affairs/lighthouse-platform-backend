@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class ExportService
-  OKTA_AUTH_TYPES = {
-    client_secret: 'client_secret_basic',
-    client_credentials: 'private_key_jwk'
-  }.freeze
   def initialize(environment)
     @okta_service = Okta::ServiceFactory.service(environment)
     @kong_service = Kong::ServiceFactory.service(environment)
@@ -65,7 +61,7 @@ class ExportService
 
   def request_secrets(consumer)
     auth_type = consumer.dig(:credentials, :oauthClient, :token_endpoint_auth_method)
-    if auth_type.present? && auth_type == OKTA_AUTH_TYPES[:client_secret]
+    if auth_type.present? && auth_type == 'client_secret_basic'
       app_secrets = @okta_service.list_secret_credentials_for_application(consumer[:id])
     end
     app_secrets
@@ -95,7 +91,7 @@ class ExportService
 
   def filter_acls(consumer_acls)
     [].tap do |api_product|
-      consumer_acls.map do |acl|
+      consumer_acls.each do |acl|
         api = Api.find_by(acl: acl['group'])
         api_product << api.name unless api.nil?
       end
