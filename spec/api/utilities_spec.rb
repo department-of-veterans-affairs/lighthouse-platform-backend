@@ -40,7 +40,7 @@ describe Utilities, type: :request do
         VCR.use_cassette('utilities/export_200', match_requests_on: [:method]) do
           get '/platform-backend/utilities/consumers/export?environment=production'
           expect(response).to have_http_status(:ok)
-          expect(JSON.parse(response.body)['list'].length).to eq(2)
+          expect(JSON.parse(response.body).length).to eq(2)
         end
       end
     end
