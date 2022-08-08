@@ -155,6 +155,6 @@ class ExportService
   end
 
   def structure_key_auth(data)
-    { apiKey: { key: data[:key], apiProducts: data[:apiProducts] } }
+    { apiKey: { keys: data[:key], apiProducts: data[:apiProducts] } }
   end
 end

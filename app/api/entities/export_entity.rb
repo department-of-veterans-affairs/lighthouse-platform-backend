@@ -3,6 +3,6 @@
 module Entities
   class ExportEntity < Grape::Entity
     expose :developer, with: Entities::DeveloperEntity
-    expose :keys, with: Entities::OauthKeyEntity
+    expose :keys, with: Entities::KeysEntity
   end
 end
