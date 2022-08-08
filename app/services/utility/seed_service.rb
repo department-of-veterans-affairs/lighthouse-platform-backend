@@ -55,7 +55,9 @@ module Utility
 
     def create_consumer_for_export
       acl = Api.first.acl
-      Kong::SandboxService.new.add_acl(lighthouse_consumer, acl)
+      sandbox_service = Kong::SandboxService.new
+      sandbox_service.add_acl(lighthouse_consumer, acl)
+      sandbox_service.create_key(lighthouse_consumer)
     end
 
     def lighthouse_consumer
