@@ -137,24 +137,16 @@ class ExportService
 
   def randomize_excess_data(data, idx)
     user = build_random_user(data, idx)
-    key = if data[:key].present?
-            structure_key_auth(data)
-          else
-            structure_oauth(data)
-          end
-    user[:keys] << key
+    user[:keys] << build_key(data)
     user
   end
 
-  def structure_oauth(data)
-    type = data[:clientSecret].blank? ? 'oAuthCcg' : 'oAuthAcg'
+  def build_key(data)
     key = {}
-    key[type.to_sym] = { clientId: data[:clientId], apiProducts: data[:apiProducts] }
-    key[type.to_sym][:clientSecret] = data[:clientSecret] if data[:clientSecret].present?
+    key[:key] = data.dig(:key)
+    key[:clientId] = data.dig(:clientId)
+    key[:clientSecret] = data.dig(:clientSecret)
+    key[:apiProducts] = data.dig(:apiProducts)
     key
-  end
-
-  def structure_key_auth(data)
-    { apiKey: { keys: data[:key], apiProducts: data[:apiProducts] } }
   end
 end

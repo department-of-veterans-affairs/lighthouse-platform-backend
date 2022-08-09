@@ -43,12 +43,8 @@ class Utilities < Base
       }
     end
 
-    def structure_api_keys(api_keys)
-      api_keys.map { |key| @export_service.structure_key_auth(key) }
-    end
-
-    def structure_okta_credentials(okta_keys)
-      okta_keys.map { |client| @export_service.structure_oauth(client) }
+    def build_key_list(keys)
+      keys.map { |key| @export_service.build_key(key) }
     end
 
     def generate_export_list
@@ -60,8 +56,8 @@ class Utilities < Base
           okta_keys, @oauth_servers = locate_keys(u, @oauth_servers, :clientId) if @oauth_servers.present?
 
           user[:developer][:username] = allocate_username(api_keys, okta_keys)
-          api_list = structure_api_keys(api_keys) unless api_keys.nil?
-          okta_list = structure_okta_credentials(okta_keys) unless okta_keys.nil?
+          api_list = build_key_list(api_keys) unless api_keys.blank?
+          okta_list = build_key_list(okta_keys) unless okta_keys.blank?
 
           user[:keys] = (api_list || []).concat((okta_list || []))
           list << user if user[:keys].present?
