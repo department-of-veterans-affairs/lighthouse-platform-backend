@@ -19,13 +19,15 @@ class ExportService
       consumer_list.each do |consumer|
         consumer_acls = env_acls.filter { |acl| acl['consumer']['id'] == consumer['id'] }
         keys = kong_keys.select { |key| key['consumer']['id'] == consumer['id'] }
-        if keys.length.positive?
-          keys.each do |key|
-            a << { id: consumer['id'], username: consumer['username'], key: key['key'],
-                   apiProducts: filter_acls(consumer_acls) }
-          end
-        end
+        a << build_kong_key(keys, consumer_acls) if keys.length.positive?
       end
+    end
+  end
+
+  def build_kong_key(keys, consumer_acls)
+    keys.map do |key|
+      { id: consumer['id'], username: consumer['username'], key: key['key'],
+        apiProducts: filter_acls(consumer_acls) }
     end
   end
 
@@ -145,10 +147,10 @@ class ExportService
 
   def build_key(data)
     key = {}
-    key[:key] = data.dig(:key)
-    key[:clientId] = data.dig(:clientId)
-    key[:clientSecret] = data.dig(:clientSecret)
-    key[:apiProducts] = data.dig(:apiProducts)
+    key[:key] = data[:key]
+    key[:clientId] = data[:clientId]
+    key[:clientSecret] = data[:clientSecret]
+    key[:apiProducts] = data[:apiProducts]
     key
   end
 end

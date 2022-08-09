@@ -56,8 +56,8 @@ class Utilities < Base
           okta_keys, @oauth_servers = locate_keys(u, @oauth_servers, :clientId) if @oauth_servers.present?
 
           user[:developer][:username] = allocate_username(api_keys, okta_keys)
-          api_list = build_key_list(api_keys) unless api_keys.blank?
-          okta_list = build_key_list(okta_keys) unless okta_keys.blank?
+          api_list = build_key_list(api_keys) if api_keys.present?
+          okta_list = build_key_list(okta_keys) if okta_keys.present?
 
           user[:keys] = (api_list || []).concat((okta_list || []))
           list << user if user[:keys].present?
