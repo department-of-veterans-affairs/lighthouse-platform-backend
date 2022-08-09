@@ -52,17 +52,6 @@ module Utility
         request(req, uri, :kong)
       end
     end
-
-    def create_consumer_for_export
-      acl = Api.first.acl
-      sandbox_service = Kong::SandboxService.new
-      sandbox_service.add_acl(lighthouse_consumer, acl)
-      sandbox_service.create_key(lighthouse_consumer)
-    end
-
-    def lighthouse_consumer
-      construct_consumer_list.first
-    end
     # end Kong seeds
 
     def seed_elasticsearch
