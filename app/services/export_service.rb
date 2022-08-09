@@ -20,8 +20,10 @@ class ExportService
         consumer_acls = env_acls.filter { |acl| acl['consumer']['id'] == consumer['id'] }
         keys = kong_keys.select { |key| key['consumer']['id'] == consumer['id'] }
         if keys.length.positive?
-          a << { id: consumer['id'], username: consumer['username'], key: keys.map { |key| key['key'] },
-                 apiProducts: filter_acls(consumer_acls) }
+          keys.each do |key|
+            a << { id: consumer['id'], username: consumer['username'], key: key['key'],
+                   apiProducts: filter_acls(consumer_acls) }
+          end
         end
       end
     end
