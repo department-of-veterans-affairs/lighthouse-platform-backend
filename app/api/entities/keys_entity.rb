@@ -2,9 +2,9 @@
 
 module Entities
   class KeysEntity < Grape::Entity
-    expose :key
     expose :clientId
     expose :clientSecret
+    expose :key
     expose :apiProducts
   end
 end
