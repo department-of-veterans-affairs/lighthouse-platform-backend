@@ -27,7 +27,7 @@ class ExportService
   def build_kong_key(keys, consumer, consumer_acls, list)
     keys.each do |key|
       list << { id: consumer['id'], username: consumer['username'], key: key['key'],
-        apiProducts: filter_acls(consumer_acls) }
+                apiProducts: filter_acls(consumer_acls) }
     end
   end
 
