@@ -1,0 +1,45 @@
+name: Create Auto Deploy Maintenance Request
+
+on:
+  workflow_run:
+    workflows: [Detect Snapshot]
+    types:
+      - completed
+
+jobs:
+  pre_mr_checks_and_create:
+    runs-on: ubuntu-latest
+    outputs: # necessary?
+      mr_number: ${{ steps.get_mr_number.outputs.mr_number }}
+      time_string: ${{ steps.get_time_string.outputs.time_string }}
+    steps:
+      - name: Set timezone to Eastern
+        uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: 'America/New_York'
+      - id: check_for_existing_mr
+        name: Check for existing MRs
+        continue-on-error: true
+        run: |
+          echo ${{secrets.GIT_AUTO_DEPLOY_TOKEN}} | gh auth login --with-token
+          gh issue list \
+            -R 'department-of-veterans-affairs/lighthouse-platform-backend' \
+            -l 'repo: lighthouse-platform-backend' \
+            --limit 1 \
+            --json id,number,state,labels,title \
+            > issue.json
+          cat issue.json
+          if [ "[]" == "$(cat issue.json)" ]; then
+            :
+          else
+            # issue.json isn't an empty json array and there is currently an open MR tagged "repo: lighthouse-platform-backend"
+            # Any open MR should cancel the creation of a new MR
+            echo 'An MR is currently open so no new MR can be created'
+            exit 1;
+          fi
+      - id: get_proposed_release_tag
+        name: Get the tag name of the latest release
+        run: |
+          PROPOSED_RELEASE_TAG=`gh api /repos/department-of-veterans-affairs/lighthouse-platform-backend/releases/latest | jq -r ".tag_name"`
+          echo $PROPOSED_RELEASE_TAG
+          echo "::set-output name=proposed_release_tag::$PROPOSED_RELEASE_TAG"
