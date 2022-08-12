@@ -5,7 +5,7 @@ on:
 
 env:
   commit_message: ${{ github.event.head_commit.message }}
-  snapshot_commit: 'Mock Snapshot'
+  snapshot_commit: 'Test Snapshot'
 
 jobs:
   verify-version-update:
@@ -52,9 +52,85 @@ jobs:
             echo 'An MR is currently open so no new MR can be created'
             exit 1;
           fi
+
+  create_mr:
+    runs-on: ubuntu-latest
+    needs: pre_mr_checks_and_create
+    steps:
       - id: get_proposed_release_tag
         name: Get the tag name of the latest release
         run: |
           PROPOSED_RELEASE_TAG=`gh api /repos/department-of-veterans-affairs/lighthouse-platform-backend/releases/latest | jq -r ".tag_name"`
           echo $PROPOSED_RELEASE_TAG
           echo "::set-output name=proposed_release_tag::$PROPOSED_RELEASE_TAG"
+      - id: create_mr
+        name: Generate the MR body text and create MR
+        env:
+          proposed-release-tag: ${{ steps.get_proposed_release_tag.outputs.proposed_release_tag }}
+        run: |
+          wget https://raw.githubusercontent.com/department-of-veterans-affairs/lighthouse-platform-backend/API-14772_auto_deploy/.github/workflows/assets/maintenance-request.md
+          TEMPLATE_ISSUE_LABEL=`grep labels maintenance-request.md | cut -f2 -d " "`
+          TEMPLATE_ASSIGNEE=`grep assignees maintenance-request.md | cut -f2 -d " "`
+          sed -i -e '1,8d' maintenance-request.md
+          # Set MR template variables
+          DAY_OF_THE_WEEK=`date +%A`
+          if [ "Friday" == "$DAY_OF_THE_WEEK" ]; then
+            PROPOSED_WINDOW_OPENING=`date --date="10:00 next Monday" +"%Y/%m/%d %H:%M %Z"`
+            PROPOSED_WINDOW_CLOSING=`date --date="10:30 next Monday" +"%Y/%m/%d %H:%M %Z"`
+          else
+            PROPOSED_WINDOW_OPENING=`date --date="10:00 tomorrow" +"%Y/%m/%d %H:%M %Z"`
+            PROPOSED_WINDOW_CLOSING=`date --date="10:30 tomorrow" +"%Y/%m/%d %H:%M %Z"`
+          fi
+
+          # Get the releases
+          echo "Get the releases"
+          gh api /repos/department-of-veterans-affairs/lighthouse-platform-backend/releases > releases.json
+          CURRENT_RELEASE_ID=`jq ".[] | select(.tag_name == \"${{ env.current-release-tag }}\") | .id" releases.json`
+          PROPOSED_RELEASE_PRS=`jq -r ".[] | select(.id > $CURRENT_RELEASE_ID ) | \"- \" + .name + \"\"" releases.json | sed -E 's/(.*)\#([0-9]{1,})\)/\2/'`
+          echo '```' > maintainer-notes.txt
+          echo "Release tag: ${{ env.proposed-release-tag }}" >> maintainer-notes.txt
+          echo '```' > maintainer-notes.txt
+          touch user-notes.txt
+          for pr in `echo $PROPOSED_RELEASE_PRS`; do
+            echo "Get individual PR info"
+            echo $pr
+            gh api /repos/department-of-veterans-affairs/lighthouse-platform-backend/pulls/$pr > pr-$pr.json
+            if [ "impact: maintainers" == "`jq -r '.labels[] | select(.name == \"impact: maintainers\") .name' pr-$pr.json`" ]; then
+              echo "- " `jq -r '.title' pr-$pr.json` "[#$pr](https://github.com/department-of-veterans-affairs/lighthouse-platform-backend/pull/$pr)" >> maintainer-notes.txt
+            fi
+            if [ "impact: users" == "`jq -r '.labels[] | select(.name == \"impact: users\") .name' pr-$pr.json`" ]; then
+              echo "- " `jq -r '.title' pr-$pr.json` "[#$pr](https://github.com/department-of-veterans-affairs/lighthouse-platform-backend/pull/$pr)" >> user-notes.txt
+            fi
+          done
+          ISSUE_TITLE="Deploy lighthouse-platform-backend to production ($PROPOSED_WINDOW_OPENING)"
+
+
+          # Replace values in issue template
+          echo $PROPOSED_WINDOW_OPENING
+          sed -i "s|__proposed_start_date_time__|$PROPOSED_WINDOW_OPENING|g" maintenance-request.md
+          echo $PROPOSED_WINDOW_CLOSING
+          sed -i "s|__proposed_end_date_time__|$PROPOSED_WINDOW_CLOSING|g" maintenance-request.md
+          # File splicing for maintainer notes
+          cat maintainer-notes.txt
+          sed -n '1,/^MAINTAINER_NOTES$/p' maintenance-request.md | sed \$d > temp-notes.md
+          cat maintainer-notes.txt >> temp-notes.md
+          sed '1,/^MAINTAINER_NOTES$/d' maintenance-request.md >> temp-notes.md
+          mv temp-notes.md maintenance-request.md
+
+          # File splicing for user notes
+          cat user-notes.txt
+          sed -n '1,/^USER_NOTES$/p' maintenance-request.md | sed \$d > temp-notes.md
+          cat user-notes.txt >> temp-notes.md
+          sed '1,/^USER_NOTES$/d' maintenance-request.md >> temp-notes.md
+          mv temp-notes.md maintenance-request.md
+
+          cat maintenance-request.md
+
+          echo "Create issue"
+          gh issue create \
+            -R 'department-of-veterans-affairs/lighthouse-platform-backend' \
+            --title "$ISSUE_TITLE" \
+            --assignee "$TEMPLATE_ASSIGNEE" \
+            --label "$TEMPLATE_ISSUE_LABEL" \
+            --label "repo: lighthouse-platform-backend" \
+            --body-file maintenance-request.md
