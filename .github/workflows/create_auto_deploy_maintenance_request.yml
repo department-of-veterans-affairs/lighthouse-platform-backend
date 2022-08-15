@@ -86,7 +86,8 @@ jobs:
           # Get the releases
           echo "Get the releases"
           gh api /repos/department-of-veterans-affairs/lighthouse-platform-backend/releases > releases.json
-          CURRENT_RELEASE_ID=`jq ".[] | select(.tag_name == \"${{ env.current-release-tag }}\") | .id" releases.json`
+          CURRENT_RELEASE_ID=`jq -r ".tag_name" releases.json`
+          echo $CURRENT_RELEASE_ID
           PROPOSED_RELEASE_PRS=`jq -r ".[] | select(.id > $CURRENT_RELEASE_ID ) | \"- \" + .name + \"\"" releases.json | sed -E 's/(.*)\#([0-9]{1,})\)/\2/'`
           echo '```' > maintainer-notes.txt
           echo "Release tag: ${{ env.proposed-release-tag }}" >> maintainer-notes.txt
@@ -116,7 +117,6 @@ jobs:
           cat maintainer-notes.txt >> temp-notes.md
           sed '1,/^MAINTAINER_NOTES$/d' maintenance-request.md >> temp-notes.md
           mv temp-notes.md maintenance-request.md
-
           # File splicing for user notes
           cat user-notes.txt
           sed -n '1,/^USER_NOTES$/p' maintenance-request.md | sed \$d > temp-notes.md
@@ -126,12 +126,11 @@ jobs:
 
           cat maintenance-request.md
 
-
-          echo "Create issue"
-          gh issue create \
-            -R 'department-of-veterans-affairs/lighthouse-platform-backend' \
-            --title "$ISSUE_TITLE" \
-            --assignee "$TEMPLATE_ASSIGNEE" \
-            --label "$TEMPLATE_ISSUE_LABEL" \
-            --label "repo: lighthouse-platform-backend" \
-            --body-file maintenance-request.md
+          # echo "Create issue"
+          # gh issue create \
+          #   -R 'department-of-veterans-affairs/lighthouse-platform-backend' \
+          #   --title "$ISSUE_TITLE" \
+          #   --assignee "$TEMPLATE_ASSIGNEE" \
+          #   --label "$TEMPLATE_ISSUE_LABEL" \
+          #   --label "repo: lighthouse-platform-backend" \
+          #   --body-file maintenance-request.md
