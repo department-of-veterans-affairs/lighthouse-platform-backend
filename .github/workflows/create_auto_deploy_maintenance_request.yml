@@ -126,6 +126,7 @@ jobs:
 
           cat maintenance-request.md
 
+
           echo "Create issue"
           gh issue create \
             -R 'department-of-veterans-affairs/lighthouse-platform-backend' \
