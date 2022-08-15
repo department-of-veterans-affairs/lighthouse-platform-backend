@@ -105,7 +105,6 @@ jobs:
           done
           ISSUE_TITLE="Deploy lighthouse-platform-backend to production ($PROPOSED_WINDOW_OPENING)"
 
-
           # Replace values in issue template
           echo $PROPOSED_WINDOW_OPENING
           sed -i "s|__proposed_start_date_time__|$PROPOSED_WINDOW_OPENING|g" maintenance-request.md
