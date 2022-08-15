@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_22_205854) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_15_213849) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,11 +21,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_205854) do
     t.datetime "updated_at", null: false
     t.string "consumer_docs_link_text"
     t.string "short_description"
-    t.string "quickstart"
+    t.text "quickstart"
     t.string "veteran_redirect_link_url"
     t.string "veteran_redirect_link_text"
     t.string "veteran_redirect_message"
-    t.string "overview"
+    t.text "overview"
     t.string "key"
     t.index ["discarded_at"], name: "index_api_categories_on_discarded_at"
     t.index ["key"], name: "index_api_categories_on_key", unique: true
@@ -74,7 +74,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_22_205854) do
   create_table "api_release_notes", force: :cascade do |t|
     t.bigint "api_metadatum_id"
     t.datetime "date", precision: nil
-    t.string "content"
+    t.text "content"
     t.datetime "discarded_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
