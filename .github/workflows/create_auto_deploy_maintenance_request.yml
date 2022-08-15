@@ -85,7 +85,7 @@ jobs:
           echo $CURRENT_RELEASE_ID
           PROPOSED_RELEASE_PRS=`jq -r ".[] | select(.id > $CURRENT_RELEASE_ID ) | \"- \" + .name + \"\"" releases.json | sed -E 's/(.*)\#([0-9]{1,})\)/\2/'`
           echo '```' > maintainer-notes.txt
-          echo "Release tag: ${{ PROPOSED_RELEASE_TAG }}" >> maintainer-notes.txt
+          echo "Release tag: $PROPOSED_RELEASE_TAG" >> maintainer-notes.txt
           echo '```' > maintainer-notes.txt
           touch user-notes.txt
           for pr in `echo $PROPOSED_RELEASE_PRS`; do
