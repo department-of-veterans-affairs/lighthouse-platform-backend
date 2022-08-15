@@ -22,7 +22,7 @@ jobs:
   #         exit 1;
 
   pre_mr_checks_and_create:
-    needs: verify-version-update
+    # needs: verify-version-update
     runs-on: ubuntu-latest
     outputs:
       mr_number: ${{ steps.get_mr_number.outputs.mr_number }}
