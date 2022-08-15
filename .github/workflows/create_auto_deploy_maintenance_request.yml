@@ -82,6 +82,7 @@ jobs:
           PROPOSED_RELEASE_TAG=`jq -r '.[0].tag_name' releases.json`
           CURRENT_RELEASE_ID=`jq -r '.[1].id' releases.json`
           PROPOSED_RELEASE_PRS=`jq -r ".[] | select(.id > $CURRENT_RELEASE_ID ) | \"- \" + .name + \"\"" releases.json | sed -E 's/(.*)\#([0-9]{1,})\)/\2/'`
+          echo $PROPOSED_RELEASE_PRS
           echo '```' > maintainer-notes.txt
           echo "Release tag: $PROPOSED_RELEASE_TAG" >> maintainer-notes.txt
           echo '```' > maintainer-notes.txt
