@@ -169,7 +169,7 @@ module V0
         post '/release-notes' do
           validate_token(Scope.provider_write)
 
-          api_metadatum = Api.kept.find_by!(name: params[:providerName]).api_metadatum
+          api_metadatum = Api.find_by!(name: params[:providerName]).api_metadatum
           existing_release_notes = ApiReleaseNote.where(api_metadatum_id: api_metadatum.id, date: params[:date]).kept
           existing_release_notes.discard_all if existing_release_notes.present?
           release_note = ApiReleaseNote.create(api_metadatum_id: api_metadatum.id,
