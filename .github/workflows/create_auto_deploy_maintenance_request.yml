@@ -25,14 +25,6 @@ jobs:
     needs: verify-version-update
     runs-on: ubuntu-latest
     steps:
-      - name: Set timezone to Eastern
-        uses: szenius/set-timezone@v1.0
-        with:
-          timezoneLinux: 'America/New_York'
-      - name: View Time
-        run: |
-          echo "Displaying timezone on set"
-          echo `date +"%Y/%m/%d %H:%M %Z"`
       - id: check_for_existing_mr
         name: Check for existing MRs
         continue-on-error: true
@@ -58,6 +50,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: pre_mr_checks_and_create
     steps:
+      - name: Set timezone to Eastern
+        uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: 'America/New_York'
       - id: create_mr
         name: Generate the MR body text and create MR
         env:
@@ -72,17 +68,14 @@ jobs:
           # Set MR template variables
           DAY_OF_THE_WEEK=`date +%A`
           if [ "Friday" == "$DAY_OF_THE_WEEK" ]; then
-            PROPOSED_WINDOW_OPENING=`gdate -d "10:00 next Monday" +"%Y/%m/%d %H:%M %Z"`
-            PROPOSED_WINDOW_CLOSING=`gdate -d "10:30 next Monday" +"%Y/%m/%d %H:%M %Z"`
+            PROPOSED_WINDOW_OPENING=`date --date="10:00 next Monday" +"%Y/%m/%d %H:%M %Z"`
+            PROPOSED_WINDOW_CLOSING=`date --date="10:30 next Monday" +"%Y/%m/%d %H:%M %Z"`
           else
-            PROPOSED_WINDOW_OPENING=`gdate -d "10:00 tomorrow" +"%Y/%m/%d %H:%M %Z"`
-            PROPOSED_WINDOW_CLOSING=`gdate -d "10:30 tomorrow" +"%Y/%m/%d %H:%M %Z"`
+            PROPOSED_WINDOW_OPENING=`date --date="10:00 tomorrow" +"%Y/%m/%d %H:%M %Z"`
+            PROPOSED_WINDOW_CLOSING=`date --date="10:30 tomorrow" +"%Y/%m/%d %H:%M %Z"`
           fi
 
           # Get the releases
-          echo "Proposed Times"
-          echo $PROPOSED_WINDOW_OPENING
-          echo $PROPOSED_WINDOW_CLOSING
           echo "Get the releases"
           gh api /repos/department-of-veterans-affairs/lighthouse-platform-backend/releases > releases.json
           PROPOSED_RELEASE_TAG=`jq -r '.[0].tag_name' releases.json`
