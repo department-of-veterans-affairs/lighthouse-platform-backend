@@ -56,6 +56,7 @@ jobs:
     steps:
       - id: create_mr
         name: Generate the MR body text and create MR
+        env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           wget https://raw.githubusercontent.com/department-of-veterans-affairs/lighthouse-platform-backend/API-14772_auto_deploy/.github/workflows/assets/maintenance-request.md
