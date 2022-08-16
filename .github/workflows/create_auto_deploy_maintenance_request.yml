@@ -79,24 +79,13 @@ jobs:
           echo "Get the releases"
           gh api /repos/department-of-veterans-affairs/lighthouse-platform-backend/releases > releases.json
           PROPOSED_RELEASE_TAG=`jq -r '.[0].tag_name' releases.json`
-          CURRENT_RELEASE_ID=`jq -r '.[1].id' releases.json`
-          PROPOSED_RELEASE_PRS=`jq -r ".[] | select(.id > $CURRENT_RELEASE_ID ) | \"- \" + .name + \"\"" releases.json | sed -E 's/(.*)\#([0-9]{1,})\)/\2/'`
-          echo $PROPOSED_RELEASE_PRS
+          MERGE_NOTE=`jq -r '.[0].body' releases.json`
           echo '```' > maintainer-notes.txt
           echo "Release tag: $PROPOSED_RELEASE_TAG" >> maintainer-notes.txt
+          echo ${MERGE_NOTE##*-} >> maintainer-notes.txt
           echo '```' > maintainer-notes.txt
           touch user-notes.txt
-          for pr in `echo $PROPOSED_RELEASE_PRS`; do
-            echo "Get individual PR info"
-            echo $pr
-            gh api /repos/department-of-veterans-affairs/lighthouse-platform-backend/pulls/$pr > pr-$pr.json
-            if [ "impact: maintainers" == "`jq -r '.labels[] | select(.name == \"impact: maintainers\") .name' pr-$pr.json`" ]; then
-              echo "- " `jq -r '.title' pr-$pr.json` "[#$pr](https://github.com/department-of-veterans-affairs/lighthouse-platform-backend/pull/$pr)" >> maintainer-notes.txt
-            fi
-            if [ "impact: users" == "`jq -r '.labels[] | select(.name == \"impact: users\") .name' pr-$pr.json`" ]; then
-              echo "- " `jq -r '.title' pr-$pr.json` "[#$pr](https://github.com/department-of-veterans-affairs/lighthouse-platform-backend/pull/$pr)" >> user-notes.txt
-            fi
-          done
+
           ISSUE_TITLE="Deploy lighthouse-platform-backend to production ($PROPOSED_WINDOW_OPENING)"
 
           # Replace values in issue template
