@@ -32,6 +32,12 @@ jobs:
         uses: szenius/set-timezone@v1.0
         with:
           timezoneLinux: 'America/New_York'
+      - id: get_time_string
+        name: Get time string for MR search
+        run: |
+          TIME_STRING=`date +"%Y/%m/%d %H:%M %Z" | sed -E 's/\:([03]{1}|[14]{1})[0-9]{1}/:\10/g' | sed 's/\:1/:0/' | sed 's/\:4/:3/'`
+          echo $TIME_STRING
+          echo "::set-output name=time_string::$TIME_STRING"
       - id: check_for_existing_mr
         name: Check for existing MRs
         continue-on-error: true
@@ -59,8 +65,6 @@ jobs:
     steps:
       - id: create_mr
         name: Generate the MR body text and create MR
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           wget https://raw.githubusercontent.com/department-of-veterans-affairs/lighthouse-platform-backend/API-14772_auto_deploy/.github/workflows/assets/maintenance-request.md
           TEMPLATE_ISSUE_LABEL=`grep labels maintenance-request.md | cut -f2 -d " "`
@@ -78,7 +82,7 @@ jobs:
 
           # Get the releases
           echo "Get the releases"
-          gh api /repos/department-of-veterans-affairs/lighthouse-platform-backend/releases > releases.json
+          echo ${{secrets.GITHUB_TOKEN}} | gh api /repos/department-of-veterans-affairs/lighthouse-platform-backend/releases > releases.json
           PROPOSED_RELEASE_TAG=`jq -r '.[0].tag_name' releases.json`
           CURRENT_RELEASE_ID=`jq -r '.[1].id' releases.json`
           PROPOSED_RELEASE_PRS=`jq -r ".[] | select(.id > $CURRENT_RELEASE_ID ) | \"- \" + .name + \"\"" releases.json | sed -E 's/(.*)\#([0-9]{1,})\)/\2/'`
