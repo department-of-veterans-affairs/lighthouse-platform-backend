@@ -24,15 +24,15 @@ module V0
         optional :status, type: String,
                           values: %w[active inactive],
                           allow_blank: true
-        optional :auth_type, type: String, values: %w[apikey oauth oauth/acg oauth/ccg]
+        optional :authType, type: String, values: %w[apikey oauth oauth/acg oauth/ccg]
       end
       get '/' do
         validate_token(Scope.provider_read)
 
         apis = Api
 
-        if params[:auth_type].present?
-          auth_types = params[:auth_type].split('/')
+        if params[:authType].present?
+          auth_types = params[:authType].split('/')
           apis = Api.auth_type(auth_types.first)
         end
 
@@ -40,9 +40,9 @@ module V0
         apis = apis.discarded if params[:status] == 'inactive'
         apis = apis.displayable
         apis = apis.order(:name)
-        if params[:auth_type].present? && auth_types.length > 1
+        if params[:authType].present? && auth_types.length > 1
           apis = apis.filter do |api|
-            api.locate_auth_types.include?(params[:auth_type])
+            api.locate_auth_types.include?(params[:authType])
           end
         end
 

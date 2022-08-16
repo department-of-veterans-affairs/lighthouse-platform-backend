@@ -5,11 +5,11 @@ module V0
     class ApiEntity < Grape::Entity
       expose :name
       expose :status
-      expose :created_at, as: :createdAt
-      expose :updated_at, as: :updatedAt
-      expose :auth_type do |api, _options|
+      expose :authTypes do |api, _options|
         api.locate_auth_types
       end
+      expose :created_at, as: :createdAt
+      expose :updated_at, as: :updatedAt
     end
   end
 end

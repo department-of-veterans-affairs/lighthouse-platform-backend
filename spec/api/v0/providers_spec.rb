@@ -31,13 +31,13 @@ describe V0::Providers, type: :request do
       end
 
       it 'works with oauth specific' do
-        get '/platform-backend/v0/providers?auth_type=oauth/acg'
+        get '/platform-backend/v0/providers?authType=oauth/acg'
 
         expect(JSON.parse(response.body).count).to eq(1)
       end
 
       it 'works with apikeys' do
-        get '/platform-backend/v0/providers?auth_type=apikey'
+        get '/platform-backend/v0/providers?authType=apikey'
 
         expect(JSON.parse(response.body).count).to eq(3)
       end
