@@ -24,7 +24,7 @@ module V0
         optional :status, type: String,
                           values: %w[active inactive],
                           allow_blank: true
-        optional :auth_type, type: String, values: %w[apikey oauth oauth/acg oauth/ccg]
+        optional :authType, type: String, values: %w[apikey oauth oauth/acg oauth/ccg]
       end
       get '/' do
         validate_token(Scope.provider_read)
