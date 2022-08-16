@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_15_213849) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_16_194252) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -73,7 +73,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_15_213849) do
 
   create_table "api_release_notes", force: :cascade do |t|
     t.bigint "api_metadatum_id"
-    t.datetime "date", precision: nil
+    t.date "date"
     t.text "content"
     t.datetime "discarded_at", precision: nil
     t.datetime "created_at", null: false
