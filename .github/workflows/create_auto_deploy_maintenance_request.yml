@@ -29,10 +29,10 @@ jobs:
         uses: szenius/set-timezone@v1.0
         with:
           timezoneLinux: 'America/New_York'
+      - name: View Time
         run: |
           echo "Displaying timezone on set"
           echo `date +"%Y/%m/%d %H:%M %Z"`
-
       - id: check_for_existing_mr
         name: Check for existing MRs
         continue-on-error: true
