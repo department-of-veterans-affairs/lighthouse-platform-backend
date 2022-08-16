@@ -18,7 +18,7 @@ jobs:
       - name: MR Deployment Abandoned
         if: ${{ !startsWith(env.commit_message, env.snapshot_commit) }}
         run: |
-          echo  Failed to locate MR initializer. Exiting...
+          echo "Failed to locate MR initializer. Exiting..."
           exit 1;
 
   pre_mr_checks_and_create:
@@ -29,6 +29,10 @@ jobs:
         uses: szenius/set-timezone@v1.0
         with:
           timezoneLinux: 'America/New_York'
+        run: |
+          echo "Displaying timezone on set"
+          echo `date +"%Y/%m/%d %H:%M %Z"`
+
       - id: check_for_existing_mr
         name: Check for existing MRs
         continue-on-error: true
