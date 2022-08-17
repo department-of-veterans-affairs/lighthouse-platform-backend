@@ -90,7 +90,7 @@ jobs:
           echo $PROPOSED_WINDOW_CLOSING
           sed -i "s|__proposed_end_date_time__|$PROPOSED_WINDOW_CLOSING|g" maintenance-request.md
           # File splicing for maintainer notes
-          sed 'MAINTAINER_NOTES maintainer-notes.txt' maintenance-request.md
+          sed -i -e '/MAINTAINER_NOTES/r maintainer-notes.txt' maintenance-request.md
 
           cat maintenance-request.md
 
