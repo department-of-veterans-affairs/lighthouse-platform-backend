@@ -33,7 +33,7 @@ MAINTAINER_NOTES
 
 <!-- Describe how this maintenance will impact end-users of the product. -->
 
-USER_NOTES
+- N/A
 
 **DEPLOYMENT PROCEDURE**
 

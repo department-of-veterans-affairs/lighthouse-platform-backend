@@ -45,7 +45,6 @@ jobs:
             echo 'An MR is currently open so no new MR can be created'
             exit 1;
           fi
-
   create_mr:
     runs-on: ubuntu-latest
     needs: pre_mr_checks_and_create
@@ -83,7 +82,7 @@ jobs:
           echo '```' > maintainer-notes.txt
           echo "Release tag: $PROPOSED_RELEASE_TAG" >> maintainer-notes.txt
           echo ${MERGE_NOTE##*-} >> maintainer-notes.txt
-          echo '```' > maintainer-notes.txt
+          echo '```' >> maintainer-notes.txt
           touch user-notes.txt
 
           ISSUE_TITLE="Deploy lighthouse-platform-backend to production ($PROPOSED_WINDOW_OPENING)"
