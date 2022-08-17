@@ -77,9 +77,9 @@ jobs:
           gh api /repos/department-of-veterans-affairs/lighthouse-platform-backend/releases > releases.json
           PROPOSED_RELEASE_TAG=`jq -r '.[0].tag_name' releases.json`
           MERGE_NOTE=`jq -r '.[0].body' releases.json`
-          echo '```\n' > maintainer-notes.txt
-          echo "Release tag: $PROPOSED_RELEASE_TAG\n" >> maintainer-notes.txt
-          echo ${MERGE_NOTE##*-}\n >> maintainer-notes.txt
+          echo '```\\n' > maintainer-notes.txt
+          echo "Release tag: $PROPOSED_RELEASE_TAG\\n" >> maintainer-notes.txt
+          echo ${MERGE_NOTE##*-}\\n >> maintainer-notes.txt
           echo '```' >> maintainer-notes.txt
 
           ISSUE_TITLE="Deploy lighthouse-platform-backend to production ($PROPOSED_WINDOW_OPENING)"
@@ -90,7 +90,7 @@ jobs:
           echo $PROPOSED_WINDOW_CLOSING
           sed -i "s|__proposed_end_date_time__|$PROPOSED_WINDOW_CLOSING|g" maintenance-request.md
           # File splicing for maintainer notes
-          sed -i -e '/MAINTAINER_NOTES/r maintainer-notes.txt' maintenance-request.md
+          sed -i -e 's/MAINTAINER_NOTES/ maintainer-notes.txt' maintenance-request.md
 
           cat maintenance-request.md
 
