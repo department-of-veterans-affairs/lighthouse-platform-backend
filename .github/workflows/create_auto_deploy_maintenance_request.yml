@@ -92,7 +92,7 @@ jobs:
           # File splicing for maintainer notes
           MAINTAINER_NOTE=`cat maintainer-notes.txt`
           echo $MAINTAINER_NOTE
-          sed 's/MAINTAINER_NOTES/$MAINTAINER_NOTE/g' maintenance-request.md
+          sed -i "s|MAINTAINER_NOTES|$MAINTAINER_NOTE|g" maintenance-request.md
 
           cat maintenance-request.md
 
