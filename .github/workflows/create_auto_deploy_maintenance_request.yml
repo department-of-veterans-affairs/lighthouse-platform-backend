@@ -61,7 +61,7 @@ jobs:
           echo ${{ env.GH_TOKEN }} | gh auth login --with-token
           gh issue list \
             -R 'department-of-veterans-affairs/lighthouse-platform-backend' \
-            -l 'repo: platform-backend' \
+            -l 'repo: lighthouse-platform-backend' \
             --limit 1 \
             --json id,number,state,labels,title \
             > issue.json
@@ -69,7 +69,7 @@ jobs:
           if [ "[]" == "$(cat issue.json)" ]; then
             :
           else
-            # issue.json isn't an empty json array and there is currently an open MR tagged "repo: platform-backend"
+            # issue.json isn't an empty json array and there is currently an open MR tagged "repo: lighthouse-platform-backend"
             # Any open MR should cancel the creation of a new MR
             echo 'An MR is currently open so no new MR can be created'
             exit 1;
