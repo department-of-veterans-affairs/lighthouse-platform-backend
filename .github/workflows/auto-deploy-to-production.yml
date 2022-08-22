@@ -53,5 +53,5 @@ jobs: # to enable
       - name: Disable Workflow till next MR is created
         # if: steps.deploy_to_production.outcome == 'success'
         run: |
-          gh workflow disable 'Auto Deploy master to Production'
+          # gh workflow disable 'Auto Deploy master to Production'
           exit 1;
