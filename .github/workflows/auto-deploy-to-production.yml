@@ -1,10 +1,9 @@
 name: Auto Deploy master to Production
 
 on:
-  # workflow_dispatch:
-  # schedule:
-  #   - cron: '*/30 13,14,15,16,17,18,19,20,21,22,23 * * 1,2,3,4,5'
-  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/30 13,14,15,16,17,18,19,20,21,22,23 * * 1,2,3,4,5'
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
