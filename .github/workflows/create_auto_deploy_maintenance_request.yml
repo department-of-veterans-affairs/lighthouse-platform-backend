@@ -21,7 +21,7 @@ jobs:
           echo "Failed to locate MR initializer. Exiting..."
           exit 1;
 
-  pre_mr_checks_and_create:
+  create_mr:
     needs: verify-version-update
     runs-on: ubuntu-latest
     steps:
@@ -45,10 +45,6 @@ jobs:
             echo 'An MR is currently open so no new MR can be created'
             exit 1;
           fi
-  create_mr:
-    runs-on: ubuntu-latest
-    needs: pre_mr_checks_and_create
-    steps:
       - name: Set timezone to Eastern
         uses: szenius/set-timezone@v1.0
         with:
