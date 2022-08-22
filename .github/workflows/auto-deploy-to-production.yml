@@ -50,6 +50,8 @@ jobs:
           # If this errors, the MR isn't labeled "status: approved" at the time of it's scheduled deployment
           jq ".labels" issue.json | jq -e ".[] | select(.name==\"status: approved\")"
           echo "::set-output name=mr_number::$MR_NUMBER"
+      - uses: actions/checkout@v2
+        # if: steps.deploy_to_production.outcome == 'success'
       - name: Disable Workflow till next MR is created
         # if: steps.deploy_to_production.outcome == 'success'
         run: |

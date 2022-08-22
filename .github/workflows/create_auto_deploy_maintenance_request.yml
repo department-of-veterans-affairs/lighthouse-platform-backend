@@ -106,3 +106,9 @@ jobs:
             --label "$TEMPLATE_ISSUE_LABEL" \
             --label "repo: lighthouse-platform-backend" \
             --body-file maintenance-request.md
+      - uses: actions/checkout@v2
+        if: steps.create_mr.outcome == 'success'
+      - name: Enable Auto Deploy Workflow
+        if: steps.create_mr.outcome == 'success'
+        continue-on-error: true
+        run: gh workflow enable 'Auto Deploy master to Production'
