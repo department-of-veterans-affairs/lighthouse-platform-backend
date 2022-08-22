@@ -6,7 +6,6 @@ on:
 env:
   commit_message: ${{ github.event.head_commit.message }}
   snapshot_commit: 'Test Snapshot'
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   verify-version-update:
@@ -30,7 +29,7 @@ jobs:
         name: Check for existing MRs
         continue-on-error: true
         run: |
-          echo ${{ env.GH_TOKEN }} | gh auth login --with-token
+          echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
           gh issue list \
             -R 'department-of-veterans-affairs/lighthouse-platform-backend' \
             -l 'repo: lighthouse-platform-backend' \
@@ -54,28 +53,10 @@ jobs:
         uses: szenius/set-timezone@v1.0
         with:
           timezoneLinux: 'America/New_York'
-      - id: check_for_existing_mr
-        name: Check for existing MRs
-        continue-on-error: true
-        run: |
-          echo ${{ env.GH_TOKEN }} | gh auth login --with-token
-          gh issue list \
-            -R 'department-of-veterans-affairs/lighthouse-platform-backend' \
-            -l 'repo: lighthouse-platform-backend' \
-            --limit 1 \
-            --json id,number,state,labels,title \
-            > issue.json
-          cat issue.json
-          if [ "[]" == "$(cat issue.json)" ]; then
-            :
-          else
-            # issue.json isn't an empty json array and there is currently an open MR tagged "repo: lighthouse-platform-backend"
-            # Any open MR should cancel the creation of a new MR
-            echo 'An MR is currently open so no new MR can be created'
-            exit 1;
-          fi
       - id: create_mr
         name: Generate the MR body text and create MR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           wget https://raw.githubusercontent.com/department-of-veterans-affairs/lighthouse-platform-backend/API-14772_auto_deploy/.github/workflows/assets/maintenance-request.md
           TEMPLATE_ISSUE_LABEL=`grep labels maintenance-request.md | cut -f2 -d " "`
@@ -128,6 +109,8 @@ jobs:
       - uses: actions/checkout@v2
         if: steps.create_mr.outcome == 'success'
       - name: Enable Auto Deploy Workflow
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: steps.create_mr.outcome == 'success'
         continue-on-error: true
         run: gh workflow enable 'Auto Deploy master to Production'
