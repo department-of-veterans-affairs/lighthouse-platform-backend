@@ -51,6 +51,7 @@ jobs:
           timezoneLinux: 'America/New_York'
       - id: create_mr
         name: Generate the MR body text and create MR
+        if: steps.check_for_existing_mr.outcome == 'success'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
