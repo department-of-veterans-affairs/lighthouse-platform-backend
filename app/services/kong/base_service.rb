@@ -82,6 +82,16 @@ module Kong
       { kong_id: kong_id, kong_username: kong_consumer_name, token: kong_api_key }
     end
 
+    def third_party_signup(user, api)
+      consumer_name = user.first_name + user.last_name + DateTime.now.to_time.to_i.to_s
+
+      kong_id, kong_api_key = handle_third_party_auth_flow(consumer_name, api)
+
+      save_id_to_user(user, kong_id)
+
+      { kong_id: kong_id, token: kong_api_key }
+    end
+
     protected
 
     def kong_elb
@@ -130,6 +140,14 @@ module Kong
       end
       kong_api_key = create_key(kong_id)['key']
       [kong_id, kong_consumer_name, kong_api_key]
+    end
+
+    def handle_third_party_auth_flow(consumer_name, api)
+      kong_id = create_consumer(consumer_name)['id']
+      kong_api_key = create_key(consumer_name)['key']
+      add_acl(kong_id, api.acl)
+
+      [kong_id, kong_api_key]
     end
 
     def request(req, uri)

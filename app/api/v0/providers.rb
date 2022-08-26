@@ -10,6 +10,12 @@ module V0
         params['api_metadatum_attributes']['oauth_info'] = oauth
         params
       end
+
+      def create_internal_consumer(user)
+        user.assign_attributes(first_name: params[:firstName], last_name: params[:lastName])
+        user.save
+        user.consumer = Consumer.create(description: 'Internal User', organization: 'Lighthouse')
+      end
     end
 
     resource 'providers' do
@@ -177,6 +183,72 @@ module V0
                                                content: params[:content])
 
           present release_note, with: V0::Entities::ApiReleaseNoteEntity, base_url: request.base_url
+        end
+
+        namespace 'auth-types' do
+          namespace 'apikey' do
+            params do
+              requires :providerName, values: Api.kept.filter { |a|
+                                                a.acl.present? && a.api_metadatum
+                                              }.map(&:name).uniq.sort
+              requires :firstName, type: String, allow_blank: false
+              requires :lastName, type: String, allow_blank: false
+              requires :email, type: String, allow_blank: false, regexp: /.+@.+/
+              requires :termsOfService, type: Boolean, allow_blank: false, values: [true]
+            end
+            post '/consumers' do
+              validate_token(Scope.consumer_write)
+
+              api = Api.find_by(name: params[:providerName])
+              user = User.find_or_initialize_by(email: params[:email])
+              create_internal_consumer(user) unless user.persisted?
+              kong_consumer = Kong::ServiceFactory.service(:sandbox).third_party_signup(user, api)
+              present user, with: V0::Entities::InternalConsumerEntity,
+                            kong_consumer: kong_consumer,
+                            api_name: api.name
+            end
+          end
+
+          namespace 'oauth' do
+            resource ':grantType' do
+              params do
+                requires :providerName, values: Api.kept.filter { |a|
+                                                  a.auth_server_access_key.present? && a.api_metadatum
+                                                }.map(&:name).uniq.sort
+                requires :grantType, type: String, values: %w[acg ccg]
+                requires :firstName, type: String, allow_blank: false
+                requires :lastName, type: String, allow_blank: false
+                requires :email, type: String, allow_blank: false, regexp: /.+@.+/
+                requires :termsOfService, type: Boolean, allow_blank: false, values: [true]
+                given grantType: ->(val) { val == 'acg' } do
+                  requires :oAuthApplicationType, as: :application_type, type: String, values: %w[web native],
+                                                  allow_blank: true
+                  requires :oAuthRedirectURI, as: :redirect_uri, type: String,
+                                              allow_blank: true,
+                                              regexp: %r{^(https?://.+|)$},
+                                              malicious_url_protection: true,
+                                              coerce_with: ->(value) { value&.strip }
+                end
+                given grantType: ->(val) { val == 'ccg' } do
+                  requires :oAuthPublicKey, as: :application_public_key, type: JSON
+                end
+              end
+              post '/consumers' do
+                validate_token(Scope.consumer_write)
+
+                api = Api.find_by(name: params[:providerName])
+                raise 'Invalid Grant Type' unless api.locate_auth_types.include?("oauth/#{params[:grantType]}")
+
+                user = User.find_or_initialize_by(email: params[:email])
+                create_internal_consumer(user) unless user.persisted?
+                okta_consumer = Okta::ServiceFactory.service(:sandbox).internal_consumer_signup(user,
+                                                                                                params[:grantType], api, declared(params))
+                present user, with: V0::Entities::InternalConsumerEntity,
+                              okta_consumer: okta_consumer,
+                              api_name: api.name
+              end
+            end
+          end
         end
       end
     end

@@ -25,6 +25,17 @@ module Okta
       { acg: acg_application, ccg: ccg_application }
     end
 
+    def internal_consumer_signup(user, type, api, options)
+      application = create_application(user, type, options)
+
+      client_id = application.credentials.oauthClient.client_id
+      append_default_policy(client_id, type, api)
+
+      save_id_to_user(user, type, application.to_h[:id])
+
+      { type.to_sym => application.to_h }
+    end
+
     protected
 
     def idme_group
