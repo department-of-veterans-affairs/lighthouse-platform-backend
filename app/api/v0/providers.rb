@@ -56,6 +56,14 @@ module V0
       end
 
       params do
+        requires :providerName, type: String, allow_blank: false, values: Api.kept.filter{ |a| a.api_metadatum.present? }.map(&:name)
+      end
+      get '/:providerName' do
+        api = Api.find_by(name: params[:providerName])
+        present api, with: V0::Entities::ApiEntity
+      end
+
+      params do
         requires :name, type: String, allow_blank: false, description: 'Name of API Provider'
         requires :api_environments_attributes, type: Hash do
           requires :metadata_url, type: String, allow_blank: false,
