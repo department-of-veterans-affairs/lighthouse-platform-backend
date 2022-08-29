@@ -19,5 +19,10 @@ FactoryBot.define do
       api_ref { build(:api_ref, name: 'lpb') }
       auth_server_access_key { 'AUTHZ_SERVER_LPB' }
     end
+
+    trait :with_auth_server do
+      acl { nil }
+      auth_server_access_key { 'PROVIDER' }
+    end
   end
 end
