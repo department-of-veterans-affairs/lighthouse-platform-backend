@@ -16,6 +16,10 @@ module V0
         user.save
         user.consumer = Consumer.create(description: 'Internal User', organization: 'Lighthouse')
       end
+
+      def active_api?(api_name)
+        Api.kept.filter { |a| a.api_metadatum.present? }.map(&:name).uniq.include?(api_name)
+      end
     end
 
     resource 'providers' do
@@ -56,9 +60,11 @@ module V0
       end
 
       params do
-        requires :providerName, type: String, allow_blank: false, values: Api.kept.filter{ |a| a.api_metadatum.present? }.map(&:name)
+        requires :providerName, type: String, allow_blank: false
       end
       get '/:providerName' do
+        raise 'Invalid API' unless active_api?(params[:providerName])
+
         api = Api.find_by(name: params[:providerName])
         present api, with: V0::Entities::ApiEntity
       end
@@ -196,9 +202,7 @@ module V0
         namespace 'auth-types' do
           namespace 'apikey' do
             params do
-              requires :providerName, values: Api.kept.filter { |a|
-                                                a.acl.present? && a.api_metadatum
-                                              }.map(&:name).uniq.sort
+              requires :providerName, type: String, allow_blank: false
               requires :firstName, type: String, allow_blank: false
               requires :lastName, type: String, allow_blank: false
               requires :email, type: String, allow_blank: false, regexp: /.+@.+/
@@ -206,6 +210,8 @@ module V0
             end
             post '/consumers' do
               validate_token(Scope.consumer_write)
+
+              raise 'Invalid API' unless active_api?(params[:providerName])
 
               api = Api.find_by(name: params[:providerName])
               user = User.find_or_initialize_by(email: params[:email])
@@ -220,9 +226,7 @@ module V0
           namespace 'oauth' do
             resource ':grantType' do
               params do
-                requires :providerName, values: Api.kept.filter { |a|
-                                                  a.auth_server_access_key.present? && a.api_metadatum
-                                                }.map(&:name).uniq.sort
+                requires :providerName, type: String, allow_blank: false
                 requires :grantType, type: String, values: %w[acg ccg]
                 requires :firstName, type: String, allow_blank: false
                 requires :lastName, type: String, allow_blank: false
@@ -243,6 +247,8 @@ module V0
               end
               post '/consumers' do
                 validate_token(Scope.consumer_write)
+
+                raise 'Invalid API' unless active_api?(params[:providerName])
 
                 api = Api.find_by(name: params[:providerName])
                 raise 'Invalid Grant Type' unless api.locate_auth_types.include?("oauth/#{params[:grantType]}")
