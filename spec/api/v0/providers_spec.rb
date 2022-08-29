@@ -51,7 +51,7 @@ describe V0::Providers, type: :request do
 
       it 'retrieves the respective API details' do
         get "/platform-backend/v0/providers/#{provider_api.name}"
-        expect(JSON.parse(response.body).first['authTypes']).to include('apikey')
+        expect(JSON.parse(response.body)['authTypes']).to match_array(['apikey'])
       end
     end
   end
