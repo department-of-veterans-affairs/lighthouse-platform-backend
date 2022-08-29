@@ -11,6 +11,12 @@ module V0
         params
       end
 
+      def initialize_user
+        user = User.find_or_initialize_by(email: params[:email])
+        create_internal_consumer(user) unless user.persisted?
+        user
+      end
+
       def create_internal_consumer(user)
         user.assign_attributes(first_name: params[:firstName], last_name: params[:lastName])
         user.save
@@ -214,8 +220,7 @@ module V0
               raise 'Invalid API' unless active_api?(params[:providerName])
 
               api = Api.find_by(name: params[:providerName])
-              user = User.find_or_initialize_by(email: params[:email])
-              create_internal_consumer(user) unless user.persisted?
+              user = initialize_user
               kong_consumer = Kong::ServiceFactory.service(:sandbox).third_party_signup(user, api)
               present user, with: V0::Entities::InternalConsumerEntity,
                             kong_consumer: kong_consumer,
@@ -253,8 +258,7 @@ module V0
                 api = Api.find_by(name: params[:providerName])
                 raise 'Invalid Grant Type' unless api.locate_auth_types.include?("oauth/#{params[:grantType]}")
 
-                user = User.find_or_initialize_by(email: params[:email])
-                create_internal_consumer(user) unless user.persisted?
+                user = initialize_user
                 okta_consumer = Okta::ServiceFactory.service(:sandbox)
                                                     .internal_consumer_signup(
                                                       user,
