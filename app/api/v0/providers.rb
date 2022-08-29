@@ -255,8 +255,11 @@ module V0
 
                 user = User.find_or_initialize_by(email: params[:email])
                 create_internal_consumer(user) unless user.persisted?
-                okta_consumer = Okta::ServiceFactory.service(:sandbox).internal_consumer_signup(user,
-                                                                                                params[:grantType], api, declared(params))
+                okta_consumer = Okta::ServiceFactory.service(:sandbox)
+                                                    .internal_consumer_signup(
+                                                      user,
+                                                      params[:grantType], api, declared(params)
+                                                    )
                 present user, with: V0::Entities::InternalConsumerEntity,
                               okta_consumer: okta_consumer,
                               api_name: api.name
