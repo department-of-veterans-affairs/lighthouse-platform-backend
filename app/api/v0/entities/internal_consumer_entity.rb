@@ -7,10 +7,6 @@ module V0
         options[:api_name]
       end
 
-      expose :kongId, documentation: { type: String } do |_user, options|
-        options.dig(:kong_consumer, :kong_id)
-      end
-
       expose :apiKey, documentation: { type: String } do |_user, options|
         options.dig(:kong_consumer, :token)
       end
