@@ -4,6 +4,7 @@ require 'rails_helper'
 
 describe V0::Providers, type: :request do
   let!(:api_environments) { create_list(:api_environment, 3) }
+  let(:provider_api) { create(:api) }
 
   describe 'returns list of api providers' do
     it 'returns all apis in a form the developer-portal knows how to deal with' do
@@ -40,6 +41,17 @@ describe V0::Providers, type: :request do
         get '/platform-backend/v0/providers?authType=apikey'
 
         expect(JSON.parse(response.body).count).to eq(3)
+      end
+    end
+
+    context 'can be specified for a provider' do
+      before do
+        provider_api
+      end
+
+      it 'retrieves the respective API details' do
+        get "/platform-backend/v0/providers/#{provider_api.name}"
+        expect(JSON.parse(response.body).first['authTypes']).to include('apikey')
       end
     end
   end
