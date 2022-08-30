@@ -22,10 +22,6 @@ module V0
         user.save
         user.consumer = Consumer.create(description: 'Internal User', organization: 'Lighthouse')
       end
-
-      def active_api?(api_name)
-        Api.kept.filter { |a| a.api_metadatum.present? }.map(&:name).uniq.include?(api_name)
-      end
     end
 
     resource 'providers' do
@@ -69,9 +65,11 @@ module V0
         requires :providerName, type: String, allow_blank: false
       end
       get '/:providerName' do
-        raise 'Invalid API' unless active_api?(params[:providerName])
+        validate_token(Scope.consumer_read)
 
         api = Api.find_by(name: params[:providerName])
+        raise 'Invalid API' unless api.kept?
+
         present api, with: V0::Entities::ApiEntity
       end
 
@@ -217,9 +215,9 @@ module V0
             post '/consumers' do
               validate_token(Scope.consumer_write)
 
-              raise 'Invalid API' unless active_api?(params[:providerName])
-
               api = Api.find_by(name: params[:providerName])
+              raise 'Invalid API' unless api.kept?
+
               user = initialize_user
               kong_consumer = Kong::ServiceFactory.service(:sandbox).third_party_signup(user, api)
               present user, with: V0::Entities::InternalConsumerEntity,
@@ -253,9 +251,9 @@ module V0
               post '/consumers' do
                 validate_token(Scope.consumer_write)
 
-                raise 'Invalid API' unless active_api?(params[:providerName])
-
                 api = Api.find_by(name: params[:providerName])
+                raise 'Invalid API' unless api.kept?
+
                 raise 'Invalid Grant Type' unless api.locate_auth_types.include?("oauth/#{params[:grantType]}")
 
                 user = initialize_user
