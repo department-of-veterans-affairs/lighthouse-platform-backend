@@ -158,7 +158,7 @@ describe V0::Providers, type: :request do
       let(:api) { create(:api, :with_auth_server) }
       let(:params) do
         { email: 'test@example.com', firstName: 'Bon', lastName: 'Jovi', termsOfService: true, oAuthApplicationType: 'web',
-          oAuthRedirectURI: 'http://localhost:3000/callback',
+          oAuthRedirectUri: 'http://localhost:3000/callback',
           oAuthPublicKey: {
             kid: nil,
             kty: 'RSA',
