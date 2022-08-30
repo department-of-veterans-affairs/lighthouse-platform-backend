@@ -220,33 +220,27 @@ module V0
 
               user = initialize_user
               kong_consumer = Kong::ServiceFactory.service(:sandbox).third_party_signup(user, api)
-              present user, with: V0::Entities::InternalConsumerEntity,
+              present user, with: V0::Entities::ApiKeyEntity,
                             kong_consumer: kong_consumer,
-                            api_name: api.name
+                            provider_name: api.name
             end
           end
 
           namespace 'oauth' do
-            resource ':grantType' do
+            namespace 'acg' do
               params do
                 requires :providerName, type: String, allow_blank: false
-                requires :grantType, type: String, values: %w[acg ccg]
                 requires :firstName, type: String, allow_blank: false
                 requires :lastName, type: String, allow_blank: false
                 requires :email, type: String, allow_blank: false, regexp: /.+@.+/
                 requires :termsOfService, type: Boolean, allow_blank: false, values: [true]
-                given grantType: ->(val) { val == 'acg' } do
-                  requires :oAuthApplicationType, as: :application_type, type: String, values: %w[web native],
-                                                  allow_blank: true
-                  requires :oAuthRedirectURI, as: :redirect_uri, type: String,
-                                              allow_blank: true,
-                                              regexp: %r{^(https?://.+|)$},
-                                              malicious_url_protection: true,
-                                              coerce_with: ->(value) { value&.strip }
-                end
-                given grantType: ->(val) { val == 'ccg' } do
-                  requires :oAuthPublicKey, as: :application_public_key, type: JSON
-                end
+                requires :oAuthApplicationType, as: :application_type, type: String, values: %w[web native],
+                                                allow_blank: true
+                requires :oAuthRedirectUri, as: :redirect_uri, type: String,
+                                            allow_blank: true,
+                                            regexp: %r{^(https?://.+|)$},
+                                            malicious_url_protection: true,
+                                            coerce_with: ->(value) { value&.strip }
               end
               post '/consumers' do
                 validate_token(Scope.consumer_write)
@@ -254,17 +248,47 @@ module V0
                 api = Api.find_by(name: params[:providerName])
                 raise 'Invalid API' unless api.kept?
 
-                raise 'Invalid Grant Type' unless api.locate_auth_types.include?("oauth/#{params[:grantType]}")
+                raise 'Invalid Grant Type' unless api.locate_auth_types.include?('oauth/acg')
 
                 user = initialize_user
                 okta_consumer = Okta::ServiceFactory.service(:sandbox)
                                                     .internal_consumer_signup(
                                                       user,
-                                                      params[:grantType], api, declared(params)
+                                                      'acg', api, declared(params)
                                                     )
-                present user, with: V0::Entities::InternalConsumerEntity,
+                present user, with: V0::Entities::AcgClientEntity,
                               okta_consumer: okta_consumer,
-                              api_name: api.name
+                              provider_name: api.name,
+                              params: params
+              end
+            end
+            namespace 'ccg' do
+              params do
+                requires :providerName, type: String, allow_blank: false
+                requires :firstName, type: String, allow_blank: false
+                requires :lastName, type: String, allow_blank: false
+                requires :email, type: String, allow_blank: false, regexp: /.+@.+/
+                requires :termsOfService, type: Boolean, allow_blank: false, values: [true]
+                requires :oAuthPublicKey, as: :application_public_key, type: JSON
+              end
+              post '/consumers' do
+                validate_token(Scope.consumer_write)
+
+                api = Api.find_by(name: params[:providerName])
+                raise 'Invalid API' unless api.kept?
+
+                raise 'Invalid Grant Type' unless api.locate_auth_types.include?('oauth/ccg')
+
+                user = initialize_user
+                okta_consumer = Okta::ServiceFactory.service(:sandbox)
+                                                    .internal_consumer_signup(
+                                                      user,
+                                                      'ccg', api, declared(params)
+                                                    )
+                present user, with: V0::Entities::CcgClientEntity,
+                              okta_consumer: okta_consumer,
+                              provider_name: api.name,
+                              params: params
               end
             end
           end
