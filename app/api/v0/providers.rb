@@ -215,8 +215,7 @@ module V0
             post '/consumers' do
               validate_token(Scope.consumer_write)
 
-              api = Api.find_by(name: params[:providerName])
-              raise 'Invalid API' unless api.kept?
+              api = Api.kept.find_by!(name: params[:providerName])
 
               user = initialize_user
               kong_consumer = Kong::ServiceFactory.service(:sandbox).third_party_signup(user, api)
@@ -245,8 +244,7 @@ module V0
               post '/consumers' do
                 validate_token(Scope.consumer_write)
 
-                api = Api.find_by(name: params[:providerName])
-                raise 'Invalid API' unless api.kept?
+                api = Api.kept.find_by!(name: params[:providerName])
 
                 raise 'Invalid Grant Type' unless api.locate_auth_types.include?('oauth/acg')
 
@@ -274,8 +272,7 @@ module V0
               post '/consumers' do
                 validate_token(Scope.consumer_write)
 
-                api = Api.find_by(name: params[:providerName])
-                raise 'Invalid API' unless api.kept?
+                api = Api.kept.find_by!(name: params[:providerName])
 
                 raise 'Invalid Grant Type' unless api.locate_auth_types.include?('oauth/ccg')
 
