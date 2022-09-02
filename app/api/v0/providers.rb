@@ -12,7 +12,8 @@ module V0
       end
 
       def initialize_user
-        user = User.find_or_initialize_by(email: params[:email].downcase.strip)
+        users = User.where('LOWER(email) = ?', params[:email].downcase.strip)
+        user = users.present? ? users.first : User.new(email: params[:email].downcase.strip)
         create_internal_consumer(user) unless user.persisted?
         user
       end
