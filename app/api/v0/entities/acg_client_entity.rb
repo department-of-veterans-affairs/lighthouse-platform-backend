@@ -15,7 +15,7 @@ module V0
         options.dig(:params, :oAuthApplicationType)
       end
 
-      expose :oAuthRedirectURI, documentation: { type: String } do |_user, options|
+      expose :oAuthRedirectUri, documentation: { type: String } do |_user, options|
         options.dig(:params, :oAuthRedirectUri)
       end
     end
