@@ -2,8 +2,8 @@
 
 module V0
   module Entities
-    class ApiKeyEntity < ProviderNameEntity
-      expose :apiKey, documentation: { type: String } do |_user, options|
+    class ApikeyEntity < ProviderNameEntity
+      expose :apikey, documentation: { type: String } do |_user, options|
         options.dig(:kong_consumer, :token)
       end
     end

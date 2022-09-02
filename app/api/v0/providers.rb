@@ -219,7 +219,7 @@ module V0
 
               user = initialize_user
               kong_consumer = Kong::ServiceFactory.service(:sandbox).third_party_signup(user, api)
-              present user, with: V0::Entities::ApiKeyEntity,
+              present user, with: V0::Entities::ApikeyEntity,
                             kong_consumer: kong_consumer,
                             provider_name: api.name
             end
