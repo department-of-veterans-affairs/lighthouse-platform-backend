@@ -83,6 +83,7 @@ Layout/LineLength:
     - 'config/initializers/simple_form.rb'
     - 'app/services/slack/report_service.rb'
     - 'spec/api/v0/consumers_spec.rb'
+    - 'spec/api/v0/providers_spec.rb'
 Metrics/MethodLength:
   Exclude:
     - 'rakelib/support/shell_command.rb'

@@ -10,6 +10,19 @@ module V0
         params['api_metadatum_attributes']['oauth_info'] = oauth
         params
       end
+
+      def initialize_user
+        users = User.where('LOWER(email) = ?', params[:email].downcase.strip)
+        user = users.present? ? users.first : User.new(email: params[:email].downcase.strip)
+        create_internal_consumer(user) unless user.persisted?
+        user
+      end
+
+      def create_internal_consumer(user)
+        user.assign_attributes(first_name: params[:firstName], last_name: params[:lastName])
+        user.save
+        user.consumer = Consumer.create(description: 'Internal User', organization: 'Lighthouse')
+      end
     end
 
     resource 'providers' do
@@ -24,15 +37,15 @@ module V0
         optional :status, type: String,
                           values: %w[active inactive],
                           allow_blank: true
-        optional :auth_type, type: String, values: %w[apikey oauth oauth/acg oauth/ccg]
+        optional :authType, type: String, values: %w[apikey oauth oauth/acg oauth/ccg]
       end
       get '/' do
         validate_token(Scope.provider_read)
 
         apis = Api
 
-        if params[:auth_type].present?
-          auth_types = params[:auth_type].split('/')
+        if params[:authType].present?
+          auth_types = params[:authType].split('/')
           apis = Api.auth_type(auth_types.first)
         end
 
@@ -40,13 +53,25 @@ module V0
         apis = apis.discarded if params[:status] == 'inactive'
         apis = apis.displayable
         apis = apis.order(:name)
-        if params[:auth_type].present? && auth_types.length > 1
+        if params[:authType].present? && auth_types.length > 1
           apis = apis.filter do |api|
-            api.locate_auth_types.include?(params[:auth_type])
+            api.locate_auth_types.include?(params[:authType])
           end
         end
 
         present apis, with: V0::Entities::ApiEntity
+      end
+
+      params do
+        requires :providerName, type: String, allow_blank: false
+      end
+      get '/:providerName' do
+        validate_token(Scope.consumer_read)
+
+        api = Api.find_by(name: params[:providerName])
+        raise 'Invalid API' unless api.kept?
+
+        present api, with: V0::Entities::ApiEntity
       end
 
       params do
@@ -169,7 +194,7 @@ module V0
         post '/release-notes' do
           validate_token(Scope.provider_write)
 
-          api_metadatum = Api.kept.find_by!(name: params[:providerName]).api_metadatum
+          api_metadatum = Api.find_by!(name: params[:providerName]).api_metadatum
           existing_release_notes = ApiReleaseNote.where(api_metadatum_id: api_metadatum.id, date: params[:date]).kept
           existing_release_notes.discard_all if existing_release_notes.present?
           release_note = ApiReleaseNote.create(api_metadatum_id: api_metadatum.id,
@@ -177,6 +202,94 @@ module V0
                                                content: params[:content])
 
           present release_note, with: V0::Entities::ApiReleaseNoteEntity, base_url: request.base_url
+        end
+
+        namespace 'auth-types' do
+          namespace 'apikey' do
+            params do
+              requires :providerName, type: String, allow_blank: false
+              requires :firstName, type: String, allow_blank: false
+              requires :lastName, type: String, allow_blank: false
+              requires :email, type: String, allow_blank: false, regexp: /.+@.+/
+              requires :termsOfService, type: Boolean, allow_blank: false, values: [true]
+            end
+            post '/consumers' do
+              validate_token(Scope.consumer_write)
+
+              api = Api.kept.find_by!(name: params[:providerName])
+
+              user = initialize_user
+              kong_consumer = Kong::ServiceFactory.service(:sandbox).third_party_signup(user, api)
+              present user, with: V0::Entities::ApikeyEntity,
+                            kong_consumer: kong_consumer,
+                            provider_name: api.name
+            end
+          end
+
+          namespace 'oauth' do
+            namespace 'acg' do
+              params do
+                requires :providerName, type: String, allow_blank: false
+                requires :firstName, type: String, allow_blank: false
+                requires :lastName, type: String, allow_blank: false
+                requires :email, type: String, allow_blank: false, regexp: /.+@.+/
+                requires :termsOfService, type: Boolean, allow_blank: false, values: [true]
+                requires :oAuthApplicationType, as: :application_type, type: String, values: %w[web native],
+                                                allow_blank: true
+                requires :oAuthRedirectUri, as: :redirect_uri, type: String,
+                                            allow_blank: true,
+                                            regexp: %r{^(https?://.+|)$},
+                                            malicious_url_protection: true,
+                                            coerce_with: ->(value) { value&.strip }
+              end
+              post '/consumers' do
+                validate_token(Scope.consumer_write)
+
+                api = Api.kept.find_by!(name: params[:providerName])
+
+                raise 'Invalid Grant Type' unless api.locate_auth_types.include?('oauth/acg')
+
+                user = initialize_user
+                okta_consumer = Okta::ServiceFactory.service(:sandbox)
+                                                    .internal_consumer_signup(
+                                                      user,
+                                                      'acg', api, declared(params)
+                                                    )
+                present user, with: V0::Entities::AcgClientEntity,
+                              okta_consumer: okta_consumer,
+                              provider_name: api.name,
+                              params: params
+              end
+            end
+            namespace 'ccg' do
+              params do
+                requires :providerName, type: String, allow_blank: false
+                requires :firstName, type: String, allow_blank: false
+                requires :lastName, type: String, allow_blank: false
+                requires :email, type: String, allow_blank: false, regexp: /.+@.+/
+                requires :termsOfService, type: Boolean, allow_blank: false, values: [true]
+                requires :oAuthPublicKey, as: :application_public_key, type: JSON
+              end
+              post '/consumers' do
+                validate_token(Scope.consumer_write)
+
+                api = Api.kept.find_by!(name: params[:providerName])
+
+                raise 'Invalid Grant Type' unless api.locate_auth_types.include?('oauth/ccg')
+
+                user = initialize_user
+                okta_consumer = Okta::ServiceFactory.service(:sandbox)
+                                                    .internal_consumer_signup(
+                                                      user,
+                                                      'ccg', api, declared(params)
+                                                    )
+                present user, with: V0::Entities::CcgClientEntity,
+                              okta_consumer: okta_consumer,
+                              provider_name: api.name,
+                              params: params
+              end
+            end
+          end
         end
       end
     end

@@ -4,6 +4,7 @@ require 'rails_helper'
 
 describe V0::Providers, type: :request do
   let!(:api_environments) { create_list(:api_environment, 3) }
+  let(:provider_api) { create(:api) }
 
   describe 'returns list of api providers' do
     it 'returns all apis in a form the developer-portal knows how to deal with' do
@@ -31,15 +32,26 @@ describe V0::Providers, type: :request do
       end
 
       it 'works with oauth specific' do
-        get '/platform-backend/v0/providers?auth_type=oauth/acg'
+        get '/platform-backend/v0/providers?authType=oauth/acg'
 
         expect(JSON.parse(response.body).count).to eq(1)
       end
 
       it 'works with apikeys' do
-        get '/platform-backend/v0/providers?auth_type=apikey'
+        get '/platform-backend/v0/providers?authType=apikey'
 
         expect(JSON.parse(response.body).count).to eq(3)
+      end
+    end
+
+    context 'can be specified for a provider' do
+      before do
+        provider_api
+      end
+
+      it 'retrieves the respective API details' do
+        get "/platform-backend/v0/providers/#{provider_api.name}"
+        expect(JSON.parse(response.body)['authTypes']).to match_array(['apikey'])
       end
     end
   end
@@ -124,6 +136,56 @@ describe V0::Providers, type: :request do
         get '/platform-backend/v0/providers', params: {},
                                               headers: { Authorization: 'Bearer t0k3n' }
         expect(response).to have_http_status(:ok)
+      end
+    end
+  end
+
+  describe 'allows third party applications to request lone signups for a provider' do
+    context 'for api keys' do
+      before do
+        provider_api
+      end
+
+      it 'updates or creates a consumer with the requested APIs' do
+        expect do
+          params = { email: 'test@example.com', firstName: 'Bon', lastName: 'Jovi', termsOfService: true }
+          post "/platform-backend/v0/providers/#{provider_api.name}/auth-types/apikey/consumers", params: params
+        end.to change(ConsumerAuthRef, :count).by 1
+      end
+    end
+
+    context 'provides singular acg and ccg oauth signups' do
+      let(:api) { create(:api, :with_auth_server) }
+      let(:params) do
+        { email: 'test@example.com', firstName: 'Bon', lastName: 'Jovi', termsOfService: true, oAuthApplicationType: 'web',
+          oAuthRedirectUri: 'http://localhost:3000/callback',
+          oAuthPublicKey: {
+            kid: nil,
+            kty: 'RSA',
+            e: 'AQAB',
+            use: nil,
+            n: '2Fb4_D4-RSjvl11txu-0s9bThk8hTo2SJauTRrS9N7piFlpGi6PBql3KzLmEu_T36YMbmTjDRPyybEEBD_XkEDuNdWSQph5Da7atfFM04IW5WH3MGPuvmaH6WpZB4Li5qESTFaMk0677uCDvOLcJmfa8bzunvbtlB4U-1WLjtDBODWiVpLlGEUofNQdX2MvTF9shtm-QqPk7K-a2Z36LrZpgcQBB1U8QtqexdaLrMgaoxmEbSgXGAc-uDkmQx1VOAsREozYZ9f1tASmOKGlxfVyBHcf6dePxq1cewpmrUfRTezky5A4K6v17uBYSpEols4ritWDRDymb7rFlUwxBjqdCjmtV18HiLIrgBNPQ2-5Jlnt-BCJg3lP_UG0r6cMO2DEtTkAkDcy4HzNuMQCrXn5ZL4kSUITrf9Mixny3vFn3aVcSNsCqLUSAfnpfRIz9oUUz5xI-FD9QsJJ1vneC8mfo-1lNaVRLNhn2t9VWY0kqhNNzS2HIktkZGzGv7gsB'
+          }.to_json }
+      end
+
+      before do
+        api
+      end
+
+      it 'works with acg' do
+        VCR.use_cassette('okta/consumer_signup_200', match_requests_on: [:method]) do
+          expect do
+            post "/platform-backend/v0/providers/#{api.name}/auth-types/oauth/acg/consumers", params: params
+          end.to change(ConsumerAuthRef, :count).by 1
+        end
+      end
+
+      it 'works with ccg' do
+        VCR.use_cassette('okta/consumer_signup_ccg_200', match_requests_on: [:method]) do
+          expect do
+            post "/platform-backend/v0/providers/#{api.name}/auth-types/oauth/ccg/consumers", params: params
+          end.to change(ConsumerAuthRef, :count).by 1
+        end
       end
     end
   end
