@@ -108,6 +108,6 @@ jobs:
       - name: Enable Auto Deploy Workflow
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # if: steps.create_mr.outcome == 'success'
+        if: steps.create_mr.outcome == 'success'
         continue-on-error: true
         run: gh workflow enable 'Auto Deploy master to Production'
