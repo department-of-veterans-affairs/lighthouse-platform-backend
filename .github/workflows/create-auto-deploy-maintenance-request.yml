@@ -5,7 +5,7 @@ on:
 
 env:
   commit_message: ${{ github.event.head_commit.message }}
-  snapshot_commit: 'Test'
+  snapshot_commit: 'Workflow'
 
 jobs:
   verify-version-update:
