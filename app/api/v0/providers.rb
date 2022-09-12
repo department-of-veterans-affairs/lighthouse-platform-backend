@@ -142,7 +142,7 @@ module V0
       desc 'Provide list of apis within categories as developer-portal expects', deprecated: true
       params do
         optional :environment, type: String,
-                               values: %w[dev staging sandbox production],
+                               values: %w[sandbox production],
                                allow_blank: true
       end
       get '/transformations/legacy' do
