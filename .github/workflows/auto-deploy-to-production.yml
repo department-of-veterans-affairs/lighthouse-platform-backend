@@ -82,10 +82,12 @@ jobs:
         if: steps.deploy_to_production.outcome == 'success'
         run: |
           echo "Allowing queued jobs to be picked up... temporarily sleeping..."
+          BUILD_NUMBER=`echo ${{ steps.deploy_to_production.outputs.build_number }}`
+          echo $BUILD_NUMBER
           sleep 60
           BUILD_FOUND="false"
           while [ "$BUILD_FOUND" == "false" ]; do
-            STATUS=`curl  -w "%{http_code}" -o build.json -u ${{ secrets.user_jenkins }}:${{ secrets.api_token_jenkins }} https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/health-apis-deployer/job/d2/${{ build_number }}/api/json`
+            STATUS=`curl  -w "%{http_code}" -o build.json -u ${{ secrets.user_jenkins }}:${{ secrets.api_token_jenkins }} https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/health-apis-deployer/job/d2/$BUILD_NUMBER/api/json`
             if [ $STATUS -ne 200 ]; then
               echo 'Failed to locate build...'
               echo 'exiting...'
@@ -95,7 +97,7 @@ jobs:
             if [ "$USER_ID" == "okapibot" ]; then
               BUILD_FOUND="true"
             else
-              ((build_number++))
+              ((BUILD_NUMBER++))
             fi
           done
 
