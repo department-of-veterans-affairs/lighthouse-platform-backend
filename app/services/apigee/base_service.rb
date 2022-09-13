@@ -9,10 +9,10 @@ module Apigee
       @apigee = apigee_gateway
     end
 
-    def consumer_signup(user, kong_consumer, okta_consumers)
-      uri = URI.parse("#{@apigee}/consumer")
+    def consumer_signup(user, kong_consumer, okta_consumers, apigee_route)
+      uri = URI.parse("#{@apigee}/#{apigee_route}")
       req = Net::HTTP::Post.new(uri)
-      request_data = request_data(user, kong_consumer, okta_consumers)
+      request_data = request_data(user, kong_consumer, okta_consumers, apigee_route)
       req.body = request_data.to_json
       request(req, uri)
     end
@@ -29,16 +29,21 @@ module Apigee
 
     private
 
-    def request_data(user, kong_consumer, okta_consumers)
-      {
+    def request_data(user, kong_consumer, okta_consumers, apigee_route)
+      request = {
         developer: {
-          firstName: user.first_name,
-          lastName: user.last_name,
-          email: user.email,
-          userName: kong_consumer&.[](:kong_username) || okta_consumers&.[](:acg)&.[](:label) || okta_consumers&.[](:ccg)&.[](:label)
+          email: user.email.downcase
         },
         keys: build_key_list(user.consumer, kong_consumer, okta_consumers)
       }
+      if apigee_route == 'consumer'
+        request[:firstName] = user.fist_name
+        request[:lastName] = user.last_name
+        request[:userName] =
+          kong_consumer&.[](:kong_username) || okta_consumers&.[](:acg)&.[](:label) || okta_consumers&.[](:ccg)&.[](:label)
+      end
+
+      request
     end
 
     def build_key_list(consumer, kong_consumer, okta_consumers)

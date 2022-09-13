@@ -146,11 +146,15 @@ module V0
 
         user = user_from_signup_params
 
+        # check user before saving for apigee route select
+        apigee_route = user.persisted? ? 'keys' : 'consumer'
+
         kong_consumer = Kong::ServiceFactory.service(:sandbox).consumer_signup(user)
         okta_consumers = Okta::ServiceFactory.service(:sandbox).consumer_signup(user, okta_signup_options)
         Event.create(event_type: Event::EVENT_TYPES[:sandbox_signup], content: sandbox_signup_event_content)
 
-        _apigee_consumer = Apigee::ServiceFactory.service(:sandbox).consumer_signup(user, kong_consumer, okta_consumers)
+        _apigee_consumer = Apigee::ServiceFactory.service(:sandbox).consumer_signup(user, kong_consumer,
+                                                                                    okta_consumers, apigee_route)
 
         send_sandbox_welcome_emails(params, kong_consumer, okta_consumers) if Flipper.enabled? :send_emails
         Slack::AlertService.new.send_slack_signup_alert(slack_signup_options) if Flipper.enabled? :send_slack_signup
