@@ -8,6 +8,10 @@ prod_kong_elb: "http://localhost:4003"
 kong_password:
 prod_kong_password:
 prod_kong_gateway:
+apigee_gateway:
+apigee_prod_gateway:
+apigee_gateway_apikey:
+apigee_gateway_prod_apikey:
 es_endpoint:
 okta_token:
 prod_okta_token:
