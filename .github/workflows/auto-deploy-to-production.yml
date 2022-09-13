@@ -12,6 +12,7 @@ jobs:
   run_checks_and_deploy:
     runs-on: ubuntu-latest
     outputs:
+      time_string: ${{ steps.get_time_string.outputs.time_string }}
       mr_number: ${{ steps.get_mr_number.outputs.mr_number }}
       build_number: ${{ steps.deploy_to_production.outputs.build_number }}
       start_time: ${{ steps.check_build_status.outputs.start_time }}
