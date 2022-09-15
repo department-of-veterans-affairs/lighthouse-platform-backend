@@ -1,0 +1,33 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://example.com/apigee/consumer
+    body:
+      encoding: UTF-8
+      string: '{"developer":{"email":"also_not_doug@douglas.funnie.org","firstName":"Doug","lastName":"Funny","userName":"AlsoNotDougFunny"},"keys":[{"key":"4p1k3y_c0nsum3r","apiProducts":["veteran-confirmation"]},{"clientId":"cli3nt1d","clientSecret":"cli3ntS3cr3t","apiProducts":["claims"]},{"clientId":"cl13ntId","apiProducts":["claims"]}]}'
+    headers:
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Host:
+      - apigee
+      Content-Type:
+      - application/json
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Content-Length:
+      - '397'
+      Date:
+      - Wed, 14 Sep 2022 20:43:08 GMT
+    body:
+      encoding: UTF-8
+      string: '{"developer":{"email":"also_not_doug@douglas.funnie.org","firstName":"Doug","lastName":"Funny","userName":"AlsoNotDougFunny"},"keys":[{"key":"4p1k3y_c0nsum3r","apiProducts":["veteran-confirmation"]},{"clientId":"cli3nt1d","clientSecret":"cli3ntS3cr3t","apiProducts":["claims"]},{"clientId":"cl13ntId","apiProducts":["claims"]}]}'
+  recorded_at: Wed, 14 Sep 2022 20:43:08 GMT
+recorded_with: VCR 6.1.0

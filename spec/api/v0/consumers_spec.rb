@@ -95,6 +95,28 @@ describe V0::Consumers, type: :request do
       it 'creates the respective user, consumer and apis via the apply page' do
         VCR.use_cassette('okta/consumer_signup_200', match_requests_on: [:method]) do
           VCR.use_cassette('okta/consumer_signup_ccg_200', match_requests_on: [:method]) do
+            VCR.use_cassette('apigee/consumer_signup_200', match_requests_on: %i[method path]) do
+              post apply_base, params: signup_params
+              expect(response.code).to eq('201')
+
+              expect(User.count).to eq(1)
+              expect(Consumer.count).to eq(1)
+              expect(User.last.consumer.apis.count).to eq(3)
+            end
+          end
+        end
+      end
+
+      context 'elects to add keys to apigee' do
+        let(:user) { create(:user, :with_dougs_email) }
+
+        before do
+          user
+        end
+
+        it 'if user already exists within LPB' do
+          VCR.use_cassette('apigee/consumer_update_200', match_requests_on: %i[method path]) do
+            signup_params[:apis] = 'apikey/claims'
             post apply_base, params: signup_params
             expect(response.code).to eq('201')
 
