@@ -7,7 +7,7 @@ FactoryBot.define do
     last_name { 'MyString' }
 
     trait :with_dougs_email do
-      after(:create) do |user, _|
+      before(:create) do |user, _|
         user.email = 'doug@douglas.funnie.org'
       end
     end
