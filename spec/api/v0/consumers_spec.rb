@@ -160,14 +160,16 @@ describe V0::Consumers, type: :request do
         end
 
         it 'sends va_profile_distribution an email if addressValidation is included' do
-          signup_params[:apis] = 'addressValidation'
-          consumer_email = double
-          va_profile_email = double
-          allow(SandboxMailer).to receive(:consumer_sandbox_signup).and_return(consumer_email)
-          allow(SandboxMailer).to receive(:va_profile_sandbox_signup).and_return(va_profile_email)
-          expect(consumer_email).to receive(:deliver_later)
-          expect(va_profile_email).to receive(:deliver_later)
-          post apply_base, params: signup_params
+          VCR.use_cassette('apigee/consumer_signup_200', match_requests_on: %i[method path]) do
+            signup_params[:apis] = 'addressValidation'
+            consumer_email = double
+            va_profile_email = double
+            allow(SandboxMailer).to receive(:consumer_sandbox_signup).and_return(consumer_email)
+            allow(SandboxMailer).to receive(:va_profile_sandbox_signup).and_return(va_profile_email)
+            expect(consumer_email).to receive(:deliver_later)
+            expect(va_profile_email).to receive(:deliver_later)
+            post apply_base, params: signup_params
+          end
         end
       end
 
@@ -181,13 +183,15 @@ describe V0::Consumers, type: :request do
         end
 
         it 'sends slack signup message' do
-          signup_params[:apis] = api_ref_one
-          signup_params[:oAuthApplicationType] = nil
-          signup_params[:oAuthRedirectURI] = nil
-          signup_params[:oAuthPublicKey] = nil
+          VCR.use_cassette('apigee/consumer_signup_200', match_requests_on: %i[method path]) do
+            signup_params[:apis] = api_ref_one
+            signup_params[:oAuthApplicationType] = nil
+            signup_params[:oAuthRedirectURI] = nil
+            signup_params[:oAuthPublicKey] = nil
 
-          expect_any_instance_of(Slack::Web::Client).to receive(:chat_postMessage)
-          post apply_base, params: signup_params
+            expect_any_instance_of(Slack::Web::Client).to receive(:chat_postMessage)
+            post apply_base, params: signup_params
+          end
         end
       end
 
