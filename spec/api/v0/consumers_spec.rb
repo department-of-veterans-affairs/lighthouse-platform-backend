@@ -109,20 +109,21 @@ describe V0::Consumers, type: :request do
 
       context 'elects to add keys to apigee' do
         let(:user) { create(:user, :with_dougs_email) }
+        let(:consumer) { create(:consumer, user_id: user.id) }
 
         before do
-          user
+          consumer
         end
 
         it 'if user already exists within LPB' do
           VCR.use_cassette('apigee/consumer_update_200', match_requests_on: %i[method path]) do
-            signup_params[:apis] = 'apikey/claims'
+            signup_params[:apis] = "apikey/#{api_ref_one}"
             post apply_base, params: signup_params
             expect(response.code).to eq('201')
 
             expect(User.count).to eq(1)
             expect(Consumer.count).to eq(1)
-            expect(User.last.consumer.apis.count).to eq(3)
+            expect(User.last.consumer.apis.count).to eq(1)
           end
         end
       end
