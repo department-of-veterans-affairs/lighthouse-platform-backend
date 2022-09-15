@@ -1,0 +1,29 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "SSL Verification Bypass",
+      "warning_code": 71,
+      "fingerprint": "edd2e2b2ea3668b790a350f2e8f2d617ea0c1d090696849dc76e1e495b834bc7",
+      "check_name": "SSLVerify",
+      "message": "SSL certificate verification was bypassed",
+      "file": "app/services/apigee/base_service.rb",
+      "line": 95,
+      "link": "https://brakemanscanner.org/docs/warning_types/ssl_verification_bypass/",
+      "code": "Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.to_s.start_with?(\"https\"), :verify_mode => (OpenSSL::SSL::VERIFY_NONE))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Apigee::BaseService",
+        "method": "request"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        295
+      ],
+      "note": "Apigee cert is self-signed. Will remove once this is corrected on their end."
+    }
+  ],
+  "updated": "2022-09-15 13:54:25 -0600",
+  "brakeman_version": "5.3.1"
+}
