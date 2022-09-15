@@ -4,6 +4,8 @@ require 'net/http'
 
 module Apigee
   class BaseService
+    attr_reader :client
+
     def initialize
       @client = Net::HTTP
       @apigee = apigee_gateway

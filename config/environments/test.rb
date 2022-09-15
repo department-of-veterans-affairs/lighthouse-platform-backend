@@ -96,4 +96,5 @@ Rails.application.configure do
   ENV['PROVIDER_ACG'] = 't3st_4uthz'
   ENV['PROVIDER_CCG'] = 't3st_4uthz'
   ENV['APIGEE_GATEWAY'] = 'https://example.com/apigee'
+  ENV['APIGEE_PROD_GATEWAY'] = 'https://example.com/apigee'
 end
