@@ -12,11 +12,13 @@ module Apigee
     end
 
     def consumer_signup(user, kong_consumer, okta_consumers, apigee_route)
-      uri = URI.parse("#{@apigee}/#{apigee_route}")
-      req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
       data = request_data(user, kong_consumer, okta_consumers, apigee_route)
-      req.body = data.to_json
-      request(req, uri)
+      if data[:keys].present?
+        uri = URI.parse("#{@apigee}/#{apigee_route}")
+        req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
+        req.body = data.to_json
+        request(req, uri)
+      end
     end
 
     protected
@@ -56,16 +58,22 @@ module Apigee
       kong_consumer&.[](:kong_username) || okta_consumers&.[](:acg)&.[](:label) || okta_consumers&.[](:ccg)&.[](:label)
     end
 
+    def build_keys(apis, kong_consumer, okta_consumers)
+      @kong_consumer = kong_consumer_data(apis, kong_consumer[:token]) unless kong_consumer.nil?
+      @acg = okta_consumer_data(apis, okta_consumers, 'acg') unless okta_consumers.nil?
+      @ccg = okta_consumer_data(apis, okta_consumers, 'ccg') unless okta_consumers.nil?
+    end
+
     def build_key_list(consumer, kong_consumer, okta_consumers)
-      acg = okta_consumers[:acg]
-      ccg = okta_consumers[:ccg]
+      apis = consumer.apis_list.map{ |a| a unless a.internal_only? }.compact
+      unless apis.empty?
+        build_keys(apis, kong_consumer, okta_consumers)
 
-      apis = consumer.apis_list
-
-      [].tap do |a|
-        a << kong_consumer_data(apis, kong_consumer[:token]) unless kong_consumer.nil?
-        a << okta_consumer_data(apis, okta_consumers, 'acg') unless acg.nil?
-        a << okta_consumer_data(apis, okta_consumers, 'ccg') unless ccg.nil?
+        [].tap do |a|
+          a << @kong_consumer unless @kong_consumer.nil? || @kong_consumer[:apiProducts].empty?
+          a << @acg unless @acg.nil? || @acg[:apiProducts].empty?
+          a << @ccg unless @ccg.nil? || @ccg[:apiProducts].empty?
+        end
       end
     end
 

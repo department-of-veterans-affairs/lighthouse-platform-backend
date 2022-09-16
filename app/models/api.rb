@@ -36,6 +36,10 @@ class Api < ApplicationRecord
     types.uniq
   end
 
+  def internal_only?
+    api_metadatum.present? && api_metadatum.va_internal_only == 'StrictlyInternal'
+  end
+
   after_discard do
     api_ref.discard if api_ref.present?
     api_environments.discard_all if api_environments.present?
