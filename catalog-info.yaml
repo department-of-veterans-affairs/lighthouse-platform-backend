@@ -6,11 +6,12 @@ metadata:
     github.com/project-slug: department-of-veterans-affairs/lighthouse-platform-backend
   title: Lighthouse Platform Backend
   tags:
-  - lighthouse
-  - internal
+    - lighthouse
+    - internal
 spec:
   type: openapi
   lifecycle: production
   owner: lighthouse-okapi
+  system: vets-api
   definition:
     $text: https://api.va.gov/internal/platform-backend/v0/openapi.json
