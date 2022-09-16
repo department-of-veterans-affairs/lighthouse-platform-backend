@@ -65,15 +65,18 @@ module Apigee
     end
 
     def build_key_list(consumer, kong_consumer, okta_consumers)
-      apis = consumer.apis_list.map{ |a| a unless a.internal_only? }.compact
+      apis = consumer.apis_list.reject(&:internal_only?)
       unless apis.empty?
         build_keys(apis, kong_consumer, okta_consumers)
+        join_keys
+      end
+    end
 
-        [].tap do |a|
-          a << @kong_consumer unless @kong_consumer.nil? || @kong_consumer[:apiProducts].empty?
-          a << @acg unless @acg.nil? || @acg[:apiProducts].empty?
-          a << @ccg unless @ccg.nil? || @ccg[:apiProducts].empty?
-        end
+    def join_keys
+      [].tap do |a|
+        a << @kong_consumer unless @kong_consumer.nil? || @kong_consumer[:apiProducts].empty?
+        a << @acg unless @acg.nil? || @acg[:apiProducts].empty?
+        a << @ccg unless @ccg.nil? || @ccg[:apiProducts].empty?
       end
     end
 
