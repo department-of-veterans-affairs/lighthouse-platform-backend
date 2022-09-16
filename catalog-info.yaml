@@ -4,6 +4,7 @@ metadata:
   name: lighthouse-platform-backend
   annotations:
     github.com/project-slug: department-of-veterans-affairs/lighthouse-platform-backend
+    backstage.io/techdocs-ref: dir:.
   title: Lighthouse Platform Backend
   tags:
     - lighthouse

@@ -1,0 +1,11 @@
+site_name: Lighthouse Platform Backend
+site_description: "Documentation for the Lighthouse Platform Backend"
+repo_url: https://github.com/department-of-veterans-affairs/lighthouse-platform-backend
+edit_uri: edit/master/docs/
+nav:
+  - Home: index.md
+markdown_extensions:
+  - pymdownx.snippets:
+      check_paths: true
+plugins:
+  - techdocs-core
