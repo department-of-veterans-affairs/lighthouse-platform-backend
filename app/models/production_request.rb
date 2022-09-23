@@ -4,6 +4,13 @@ class ProductionRequest < ApplicationRecord
   has_one :primary_contact, dependent: :destroy
   has_one :secondary_contact, dependent: :destroy
 
+  validates :apis, presence: true
+  validates :organization, presence: true
+  validates :primary_contact, presence: true
+  validates :secondary_contact, presence: true
+  validates :status_update_emails, presence: true
+  validates :value_provided, presence: true
+
   class << self
     # rubocop:disable Metrics/MethodLength
     # rubocop:disable Metrics/AbcSize

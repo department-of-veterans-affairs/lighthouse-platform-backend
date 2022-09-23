@@ -3,7 +3,49 @@
 require 'rails_helper'
 
 RSpec.describe ProductionRequest, type: :model do
+  subject do
+    ProductionRequest.new(ProductionRequest.transform_params(production_request_params))
+  end
+
   let(:production_request_params) { build(:production_access_request) }
+
+  describe 'tests a valid ProductionRequest model' do
+    it 'is valid' do
+      expect(subject).to be_valid
+    end
+  end
+
+  describe 'tests an invalid ProductionRequest model' do
+    it "is invalid without an 'apis' attribute" do
+      subject.apis = nil
+      expect(subject).not_to be_valid
+    end
+
+    it "is invalid without an 'organization' attribute" do
+      subject.organization = nil
+      expect(subject).not_to be_valid
+    end
+
+    it "is invalid without a 'primary_contact' association" do
+      subject.primary_contact = nil
+      expect(subject).not_to be_valid
+    end
+
+    it "is invalid without a 'secondary_contact' association" do
+      subject.secondary_contact = nil
+      expect(subject).not_to be_valid
+    end
+
+    it "is invalid without a 'status_update_emails' attribute" do
+      subject.status_update_emails = nil
+      expect(subject).not_to be_valid
+    end
+
+    it "is invalid without a 'value_provided' attribute" do
+      subject.value_provided = nil
+      expect(subject).not_to be_valid
+    end
+  end
 
   describe '#transform_params' do
     context 'transforming simple params' do
