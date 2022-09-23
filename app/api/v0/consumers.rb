@@ -224,6 +224,9 @@ module V0
 
         send_production_access_emails(params) if Flipper.enabled? :send_emails
 
+        transformed_params = ProductionRequest.transform_params(params)
+        ProductionRequest.create!(transformed_params)
+
         body false
       end
 
