@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_22_185644) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_26_223640) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -176,17 +176,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_22_185644) do
     t.index ["url"], name: "index_malicious_urls_on_url", unique: true
   end
 
-  create_table "production_request_contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
-    t.string "email"
-    t.string "type"
-    t.uuid "production_request_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["production_request_id"], name: "index_production_request_contacts_on_production_request_id"
-  end
-
   create_table "production_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "apis"
     t.text "app_description"
@@ -226,6 +215,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_22_185644) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "production_requests_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "production_request_id", null: false
+    t.bigint "user_id", null: false
+    t.string "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["production_request_id"], name: "index_production_requests_users_on_production_request_id"
+    t.index ["user_id"], name: "index_production_requests_users_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -254,5 +253,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_22_185644) do
   add_foreign_key "consumer_api_assignments", "consumers"
   add_foreign_key "consumer_auth_refs", "consumers"
   add_foreign_key "consumers", "users"
-  add_foreign_key "production_request_contacts", "production_requests"
+  add_foreign_key "production_requests_users", "production_requests"
+  add_foreign_key "production_requests_users", "users"
 end
