@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_26_223640) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_28_205055) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -91,6 +91,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_26_223640) do
     t.string "auth_server_access_key"
     t.index ["discarded_at"], name: "index_apis_on_discarded_at"
     t.index ["name"], name: "index_apis_on_name", unique: true
+  end
+
+  create_table "apis_production_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "api_id", null: false
+    t.uuid "production_request_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_id"], name: "index_apis_production_requests_on_api_id"
+    t.index ["production_request_id"], name: "index_apis_production_requests_on_production_request_id"
   end
 
   create_table "background_job_enforcers", force: :cascade do |t|
@@ -177,7 +186,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_26_223640) do
   end
 
   create_table "production_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "apis"
     t.text "app_description"
     t.string "app_name"
     t.text "breach_management_process"
@@ -250,6 +258,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_26_223640) do
   add_foreign_key "api_metadata", "apis"
   add_foreign_key "api_refs", "apis"
   add_foreign_key "api_release_notes", "api_metadata"
+  add_foreign_key "apis_production_requests", "apis"
+  add_foreign_key "apis_production_requests", "production_requests"
   add_foreign_key "consumer_api_assignments", "consumers"
   add_foreign_key "consumer_auth_refs", "consumers"
   add_foreign_key "consumers", "users"

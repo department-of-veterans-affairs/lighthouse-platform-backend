@@ -1,7 +1,6 @@
 class CreateProductionRequests < ActiveRecord::Migration[7.0]
   def change
     create_table :production_requests, id: :uuid do |t|
-      t.string :apis
       t.text :app_description
       t.string :app_name
       t.text :breach_management_process
