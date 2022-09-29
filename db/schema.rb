@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_28_205055) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_29_220129) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -185,6 +185,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_28_205055) do
     t.index ["url"], name: "index_malicious_urls_on_url", unique: true
   end
 
+  create_table "primary_contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "production_request_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["production_request_id"], name: "index_primary_contacts_on_production_request_id"
+    t.index ["user_id"], name: "index_primary_contacts_on_user_id"
+  end
+
   create_table "production_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "app_description"
     t.string "app_name"
@@ -223,14 +232,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_28_205055) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "production_requests_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "secondary_contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "production_request_id", null: false
     t.bigint "user_id", null: false
-    t.string "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["production_request_id"], name: "index_production_requests_users_on_production_request_id"
-    t.index ["user_id"], name: "index_production_requests_users_on_user_id"
+    t.index ["production_request_id"], name: "index_secondary_contacts_on_production_request_id"
+    t.index ["user_id"], name: "index_secondary_contacts_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -263,6 +271,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_28_205055) do
   add_foreign_key "consumer_api_assignments", "consumers"
   add_foreign_key "consumer_auth_refs", "consumers"
   add_foreign_key "consumers", "users"
-  add_foreign_key "production_requests_users", "production_requests"
-  add_foreign_key "production_requests_users", "users"
+  add_foreign_key "primary_contacts", "production_requests"
+  add_foreign_key "primary_contacts", "users"
+  add_foreign_key "secondary_contacts", "production_requests"
+  add_foreign_key "secondary_contacts", "users"
 end

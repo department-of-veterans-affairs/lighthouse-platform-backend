@@ -1,9 +1,8 @@
-class CreateProductionRequestsUsers < ActiveRecord::Migration[7.0]
+class CreateSecondaryContact < ActiveRecord::Migration[7.0]
   def change
-    create_table :production_requests_users, id: :uuid do |t|
+    create_table :secondary_contacts, id: :uuid do |t|
       t.references :production_request, null: false, foreign_key: true, type: :uuid
       t.references :user, null: false, foreign_key: true, type: :bigint
-      t.string :type
 
       t.timestamps
     end
