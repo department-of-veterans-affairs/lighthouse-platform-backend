@@ -346,11 +346,10 @@ describe V0::Consumers, type: :request do
 
     describe "persisting a 'ProductionRequest' record" do
       it 'creates a new record' do
-        test_value = 'some great app'
-        production_request_params[:appName] = test_value
-        post production_request_base, params: production_request_params
-        expect(ProductionRequest.first.app_name).to eq(test_value)
-        expect(response.code).to eq('204')
+        api = create(:api)
+        production_request_params[:apis] = api.api_ref.name
+
+        expect { post production_request_base, params: production_request_params }.to change(ProductionRequest, :count)
       end
     end
   end

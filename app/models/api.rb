@@ -17,6 +17,7 @@ class Api < ApplicationRecord
   has_one :api_ref, dependent: :destroy
   has_many :api_environments, dependent: :destroy
   has_one :api_metadatum, dependent: :destroy
+  has_and_belongs_to_many :production_requests
 
   scope :displayable, -> { joins(:api_metadatum) }
   scope :auth_type, lambda { |auth_type|

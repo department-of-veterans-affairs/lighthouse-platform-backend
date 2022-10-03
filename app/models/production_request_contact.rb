@@ -2,8 +2,7 @@
 
 class ProductionRequestContact < ApplicationRecord
   belongs_to :production_request
+  belongs_to :user
 
-  validates :email, presence: true
-  validates :first_name, presence: true
-  validates :last_name, presence: true
+  enum contact_type: [:primary, :secondary]
 end
