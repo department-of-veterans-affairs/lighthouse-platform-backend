@@ -9,6 +9,7 @@ module V0
   class Consumers < V0::Base
     version 'v0'
 
+    helpers ProductionRequestHelper
     helpers do
       def user_from_signup_params
         users = User.where('LOWER(email) = ?', params[:email].downcase.strip)
@@ -222,6 +223,11 @@ module V0
         header 'Access-Control-Allow-Origin', request.host_with_port
         protect_from_forgery
 
+        begin
+          create_production_request_record!(params: params)
+        rescue
+          # just in-case... don't want to disrupt the existing workflow
+        end
         send_production_access_emails(params) if Flipper.enabled? :send_emails
 
         body false
