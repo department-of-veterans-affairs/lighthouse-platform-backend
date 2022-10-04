@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_16_194252) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_30_124413) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -91,6 +91,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_16_194252) do
     t.string "auth_server_access_key"
     t.index ["discarded_at"], name: "index_apis_on_discarded_at"
     t.index ["name"], name: "index_apis_on_name", unique: true
+  end
+
+  create_table "apis_production_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "api_id", null: false
+    t.uuid "production_request_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_id"], name: "index_apis_production_requests_on_api_id"
+    t.index ["production_request_id"], name: "index_apis_production_requests_on_production_request_id"
   end
 
   create_table "background_job_enforcers", force: :cascade do |t|
@@ -176,6 +185,54 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_16_194252) do
     t.index ["url"], name: "index_malicious_urls_on_url", unique: true
   end
 
+  create_table "production_request_contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "production_request_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "contact_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["production_request_id"], name: "index_production_request_contacts_on_production_request_id"
+    t.index ["user_id"], name: "index_production_request_contacts_on_user_id"
+  end
+
+  create_table "production_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "app_description"
+    t.string "app_name"
+    t.text "breach_management_process"
+    t.text "business_model"
+    t.string "centralized_backend_log"
+    t.boolean "distributing_api_keys_to_customers", default: false, null: false
+    t.boolean "expose_veteran_information_to_third_parties", default: false, null: false
+    t.boolean "is_508_compliant", default: false, null: false
+    t.boolean "listed_on_my_health_application", default: false, null: false
+    t.text "monitization_explanation"
+    t.boolean "monitized_veteran_information", default: false, null: false
+    t.text "multiple_req_safeguards"
+    t.string "naming_convention"
+    t.string "organization"
+    t.string "phone_number"
+    t.text "pii_storage_method"
+    t.string "platforms"
+    t.string "privacy_policy_url"
+    t.text "production_key_credential_storage"
+    t.text "production_or_oauth_key_credential_storage"
+    t.text "scopes_access_requested"
+    t.string "sign_up_link_url"
+    t.string "status_update_emails"
+    t.boolean "store_pii_or_phi", default: false, null: false
+    t.string "support_link_url"
+    t.string "terms_of_service_url"
+    t.text "third_party_info_description"
+    t.text "value_provided"
+    t.string "vasi_system_name"
+    t.boolean "veteran_facing", default: false, null: false
+    t.text "veteran_facing_description"
+    t.text "vulnerability_management"
+    t.string "website"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -201,7 +258,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_16_194252) do
   add_foreign_key "api_metadata", "apis"
   add_foreign_key "api_refs", "apis"
   add_foreign_key "api_release_notes", "api_metadata"
+  add_foreign_key "apis_production_requests", "apis"
+  add_foreign_key "apis_production_requests", "production_requests"
   add_foreign_key "consumer_api_assignments", "consumers"
   add_foreign_key "consumer_auth_refs", "consumers"
   add_foreign_key "consumers", "users"
+  add_foreign_key "production_request_contacts", "production_requests"
+  add_foreign_key "production_request_contacts", "users"
 end
