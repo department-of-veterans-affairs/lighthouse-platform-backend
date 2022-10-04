@@ -342,6 +342,21 @@ describe V0::Consumers, type: :request do
         expect(support_email).to receive(:deliver_later)
         post production_request_base, params: production_request_params
       end
+
+      context "when an error occurs while creating a 'ProductionRequest' record" do
+        it 'still sends an email to the consumer and support' do
+          allow_any_instance_of(ProductionRequestHelper).to receive(:create_production_request_record!)
+            .and_raise(StandardError)
+
+          consumer_email = double
+          support_email = double
+          allow(ProductionMailer).to receive(:consumer_production_access).and_return(consumer_email)
+          allow(ProductionMailer).to receive(:support_production_access).and_return(support_email)
+          expect(consumer_email).to receive(:deliver_later)
+          expect(support_email).to receive(:deliver_later)
+          post production_request_base, params: production_request_params
+        end
+      end
     end
 
     describe "persisting a 'ProductionRequest' record" do

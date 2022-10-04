@@ -223,9 +223,12 @@ module V0
         header 'Access-Control-Allow-Origin', request.host_with_port
         protect_from_forgery
 
+        begin
+          create_production_request_record!(params: params)
+        rescue
+          # just in-case... don't want to disrupt the existing workflow
+        end
         send_production_access_emails(params) if Flipper.enabled? :send_emails
-
-        create_production_request_record!(params: params)
 
         body false
       end
