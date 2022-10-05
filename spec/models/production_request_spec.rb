@@ -54,6 +54,14 @@ RSpec.describe ProductionRequest, type: :model do
     it 'is valid' do
       expect(subject).to be_valid
     end
+
+    it "has a 'primary_contact'" do
+      expect(subject.primary_contact.user.email).to eq(user_1.email)
+    end
+
+    it "has a 'secondary_contact'" do
+      expect(subject.secondary_contact.user.email).to eq(user_2.email)
+    end
   end
 
   describe 'tests an invalid ProductionRequest model' do
