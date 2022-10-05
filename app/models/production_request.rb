@@ -4,13 +4,11 @@ class ProductionRequest < ApplicationRecord
   has_many :apis_production_requests, dependent: :destroy
   has_many :apis, through: :apis_production_requests
   has_many :production_request_contacts, dependent: :destroy
-  has_one :primary_contact,
-          -> { where(contact_type: 'primary') },
+  has_one :primary_contact, -> { where(contact_type: 'primary') },
           class_name: 'ProductionRequestContact',
           inverse_of: :production_request,
           dependent: :destroy
-  has_one :secondary_contact,
-          -> { where(contact_type: 'secondary') },
+  has_one :secondary_contact, -> { where(contact_type: 'secondary') },
           class_name: 'ProductionRequestContact',
           inverse_of: :production_request,
           dependent: :destroy
