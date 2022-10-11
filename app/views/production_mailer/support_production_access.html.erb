@@ -178,6 +178,16 @@
         <div><%= @request[:appDescription] %></div>
       </div>
     </li>
+    <% if @request[:logoLarge].present? %>
+      <li>
+        <div>
+          <strong>
+            <div>App Logo:</div>
+          </strong>
+          <div><img src="<%= @request[:logoIcon] %>"/><br /><img src="<%= @request[:logoLarge] %>"/></div>
+        </div>
+      </li>
+    <% end %>
   <% end %>
 </ul>
 <h2>Technical Information</h2>

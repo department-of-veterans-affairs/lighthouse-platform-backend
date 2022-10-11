@@ -178,6 +178,8 @@ module V0
         optional :exposeVeteranInformationToThirdParties, type: Boolean
         requires :is508Compliant, type: Boolean
         optional :listedOnMyHealthApplication, type: Boolean
+        optional :logoLarge, type: String
+        optional :logoIcon, type: String
         optional :monitizationExplanation, type: String
         requires :monitizedVeteranInformation, type: Boolean
         optional :multipleReqSafeguards, type: String
@@ -284,6 +286,22 @@ module V0
         present user, with: V0::Entities::ConsumerApplicationEntity,
                       kong_consumer: kong_consumer,
                       okta_consumers: okta_consumers
+      end
+
+      params do
+        requires :fileName, type: String, allow_blank: false
+        requires :fileType,
+          regexp: {
+            value: /^image\/(jpeg|png|svg+xml)$/,
+            message: "Files must be one of these types: image/jpeg, image/png, image/svg+xml"
+          }
+      end
+      post 'logo-upload' do
+        # header 'Access-Control-Allow-Origin', request.host_with_port
+        # protect_from_forgery
+
+        s3 = S3Service.new
+        s3.presigned_url(params)
       end
     end
   end
