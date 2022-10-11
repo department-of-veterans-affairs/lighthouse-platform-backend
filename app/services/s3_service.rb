@@ -26,9 +26,9 @@ class S3Service
     client = Aws::STS::Client.new(options)
 
     role_credentials = Aws::AssumeRoleCredentials.new(
-        client: client,
-        role_arn: Figaro.env.s3_role_arn,
-        role_session_name: Figaro.env.s3_role_session_name
+      client: client,
+      role_arn: Figaro.env.s3_role_arn,
+      role_session_name: Figaro.env.s3_role_session_name
     )
 
     @s3Client = Aws::S3::Client.new(region: Figaro.env.aws_region, credentials: role_credentials)
