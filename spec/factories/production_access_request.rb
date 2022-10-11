@@ -13,6 +13,8 @@ FactoryBot.define do
     exposeVeteranInformationToThirdParties { false }
     is508Compliant { true }
     listedOnMyHealthApplication { false }
+    logoIcon { 'https://dvp-oauth-application-directory-logos.s3-us-gov-west-1.amazonaws.com/AppleHealth+Logo+1024x1024.png' }
+    logoLarge { 'https://dvp-oauth-application-directory-logos.s3-us-gov-west-1.amazonaws.com/AppleHealth+Logo+1024x1024.png' }
     medicalDisclaimerImageLink { Faker::Internet.url(path: '/assets/medicalDisclaimer.jpeg') }
     monitizationExplanation { 'n/a' }
     monitizedVeteranInformation { true }
