@@ -168,7 +168,7 @@ module V0
       }
       params do
         requires :apis, type: String, allow_blank: false
-        optional :appDescription, type: String
+        optional :appDescription, type: String, length: 415
         optional :appName, type: String
         optional :breachManagementProcess, type: String
         optional :businessModel, type: String
@@ -214,7 +214,6 @@ module V0
         requires :valueProvided, type: String
         optional :vasiSystemName, type: String
         requires :veteranFacing, type: Boolean
-        optional :veteranFacingDescription, type: String, length: 415
         optional :vulnerabilityManagement, type: String
         optional :website, type: String
       end
