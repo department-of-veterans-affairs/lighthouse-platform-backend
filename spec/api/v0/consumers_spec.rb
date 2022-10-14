@@ -332,7 +332,7 @@ describe V0::Consumers, type: :request do
 
     context 'fails if provided' do
       it 'an excessive description' do
-        production_request_params[:veteranFacingDescription] = (0..425).map { rand(65..89).chr }.join
+        production_request_params[:appDescription] = (0..425).map { rand(65..89).chr }.join
         post production_request_base, params: production_request_params
         expect(response.code).to eq('400')
       end
