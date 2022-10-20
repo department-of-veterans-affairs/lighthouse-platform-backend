@@ -42,14 +42,6 @@
   <li>
     <div>
       <strong>
-        <div>Application Description:</div>
-      </strong>
-      <div><%= @request[:appDescription] %></div>
-    </div>
-  </li>
-  <li>
-    <div>
-      <strong>
         <div>Website:</div>
       </strong>
       <div><%= @request[:website] %></div>
@@ -183,7 +175,7 @@
         <strong>
           <div>Veteran Facing Description:</div>
         </strong>
-        <div><%= @request[:veteranFacingDescription] %></div>
+        <div><%= @request[:appDescription] %></div>
       </div>
     </li>
   <% end %>
@@ -272,6 +264,7 @@
           <div><%= @request[:thirdPartyInfoDescription] %></div>
         </div>
       </li>
+    <% end %>
       <li>
         <div>
           <strong>
@@ -280,7 +273,6 @@
           <div><%= @request[:scopesAccessRequested] %></div>
         </div>
       </li>
-    <% end %>
       <li>
         <div>
           <strong>
