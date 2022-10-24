@@ -47,6 +47,12 @@ module ProductionRequestHelper
     policy_documents_param.first
   end
 
+  def oauth_public_key_to_json(oauth_public_key_param:)
+    return if oauth_public_key_param.blank?
+
+    oauth_public_key_param.to_json
+  end
+
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/AbcSize
   def create_production_request_record!(params:)
@@ -66,7 +72,7 @@ module ProductionRequestHelper
     prod_req.multiple_req_safeguards = params[:multipleReqSafeguards]
     prod_req.naming_convention = params[:namingConvention]
     prod_req.oauth_application_type = params[:oAuthApplicationType]
-    prod_req.oauth_public_key = params[:oAuthPublicKey]
+    prod_req.oauth_public_key = oauth_public_key_to_json(oauth_public_key_param: params[:oAuthPublicKey])
     prod_req.oauth_redirect_uri = params[:oAuthRedirectURI]
     prod_req.organization = params[:organization]
     prod_req.phone_number = params[:phoneNumber]
