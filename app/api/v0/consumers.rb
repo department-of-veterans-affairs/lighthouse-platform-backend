@@ -9,6 +9,7 @@ module V0
   class Consumers < V0::Base
     version 'v0'
 
+    helpers ProductionRequestHelper
     helpers do
       def user_from_signup_params
         users = User.where('LOWER(email) = ?', params[:email].downcase.strip)
@@ -168,7 +169,7 @@ module V0
       }
       params do
         requires :apis, type: String, allow_blank: false
-        optional :appDescription, type: String
+        optional :appDescription, type: String, length: 415
         optional :appName, type: String
         optional :breachManagementProcess, type: String
         optional :businessModel, type: String
@@ -214,7 +215,6 @@ module V0
         requires :valueProvided, type: String
         optional :vasiSystemName, type: String
         requires :veteranFacing, type: Boolean
-        optional :veteranFacingDescription, type: String, length: 415
         optional :vulnerabilityManagement, type: String
         optional :website, type: String
       end
@@ -222,6 +222,11 @@ module V0
         header 'Access-Control-Allow-Origin', request.host_with_port
         protect_from_forgery
 
+        begin
+          create_production_request_record!(params: params)
+        rescue
+          # just in-case... don't want to disrupt the existing workflow
+        end
         send_production_access_emails(params) if Flipper.enabled? :send_emails
 
         body false

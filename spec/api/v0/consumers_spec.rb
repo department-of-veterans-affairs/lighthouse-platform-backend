@@ -304,19 +304,33 @@ describe V0::Consumers, type: :request do
     end
   end
 
-  describe 'sends emails when prompted for production access' do
-    after do
-      Flipper.disable :send_emails
+  describe 'request for production access' do
+    it 'provides a successful response' do
+      post production_request_base, params: production_request_params
+      expect(response.code).to eq('204')
     end
 
-    before do
-      Flipper.enable :send_emails
-    end
-
-    context 'accepts successful requests' do
-      it 'provides a successful response' do
+    context 'fails if provided' do
+      it 'an excessive description' do
+        production_request_params[:appDescription] = (0..425).map { rand(65..89).chr }.join
         post production_request_base, params: production_request_params
-        expect(response.code).to eq('204')
+        expect(response.code).to eq('400')
+      end
+
+      it 'an incorrect phone number' do
+        production_request_params[:phoneNumber] = '4444444444444444444'
+        post production_request_base, params: production_request_params
+        expect(response.code).to eq('400')
+      end
+    end
+
+    describe 'sends emails when prompted for production access' do
+      after do
+        Flipper.disable :send_emails
+      end
+
+      before do
+        Flipper.enable :send_emails
       end
 
       it 'sends an email to the consumer and support' do
@@ -328,19 +342,29 @@ describe V0::Consumers, type: :request do
         expect(support_email).to receive(:deliver_later)
         post production_request_base, params: production_request_params
       end
+
+      context "when an error occurs while creating a 'ProductionRequest' record" do
+        it 'still sends an email to the consumer and support' do
+          allow_any_instance_of(ProductionRequestHelper).to receive(:create_production_request_record!)
+            .and_raise(StandardError)
+
+          consumer_email = double
+          support_email = double
+          allow(ProductionMailer).to receive(:consumer_production_access).and_return(consumer_email)
+          allow(ProductionMailer).to receive(:support_production_access).and_return(support_email)
+          expect(consumer_email).to receive(:deliver_later)
+          expect(support_email).to receive(:deliver_later)
+          post production_request_base, params: production_request_params
+        end
+      end
     end
 
-    context 'fails if provided' do
-      it 'an excessive description' do
-        production_request_params[:veteranFacingDescription] = (0..425).map { rand(65..89).chr }.join
-        post production_request_base, params: production_request_params
-        expect(response.code).to eq('400')
-      end
+    describe "persisting a 'ProductionRequest' record" do
+      it 'creates a new record' do
+        api = create(:api)
+        production_request_params[:apis] = api.api_ref.name
 
-      it 'an incorrect phone number' do
-        production_request_params[:phoneNumber] = '4444444444444444444'
-        post production_request_base, params: production_request_params
-        expect(response.code).to eq('400')
+        expect { post production_request_base, params: production_request_params }.to change(ProductionRequest, :count)
       end
     end
   end
