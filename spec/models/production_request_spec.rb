@@ -65,6 +65,12 @@ RSpec.describe ProductionRequest, type: :model do
     it "has a 'secondary_contact'" do
       expect(subject.secondary_contact.user.email).to eq(user_2.email)
     end
+
+    it "is valid when both 'oauth_application_type' and 'oauth_redirect_uri' attributes are not provided" do
+      subject.oauth_application_type = nil
+      subject.oauth_redirect_uri = nil
+      expect(subject).to be_valid
+    end
   end
 
   describe 'tests an invalid ProductionRequest model' do
