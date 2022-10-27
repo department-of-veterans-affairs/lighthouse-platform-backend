@@ -19,9 +19,7 @@ RSpec.describe ProductionRequest, type: :model do
       monitized_veteran_information: Faker::Hipster.word,
       multiple_req_safeguards: Faker::Hipster.word,
       naming_convention: Faker::Hipster.word,
-      oauth_application_type: 'web',
       oauth_public_key: Faker::Json.shallow_json(width: 5),
-      oauth_redirect_uri: Faker::Internet.url,
       organization: Faker::Hipster.word,
       phone_number: '(555) 555-5555',
       pii_storage_method: Faker::Hipster.word,
@@ -65,12 +63,6 @@ RSpec.describe ProductionRequest, type: :model do
     it "has a 'secondary_contact'" do
       expect(subject.secondary_contact.user.email).to eq(user_2.email)
     end
-
-    it "is valid when both 'oauth_application_type' and 'oauth_redirect_uri' attributes are not provided" do
-      subject.oauth_application_type = nil
-      subject.oauth_redirect_uri = nil
-      expect(subject).to be_valid
-    end
   end
 
   describe 'tests an invalid ProductionRequest model' do
@@ -103,7 +95,21 @@ RSpec.describe ProductionRequest, type: :model do
       subject.value_provided = nil
       expect(subject).not_to be_valid
     end
+  end
 
+  describe 'tests authorization code flow API production requests' do
+    it "is valid when both 'oauth_application_type' and 'oauth_redirect_uri' attributes are provided" do
+      subject.oauth_application_type = 'web'
+      subject.oauth_redirect_uri = Faker::Internet.url
+      expect(subject).to be_valid
+    end
+
+    it "is valid when both 'oauth_application_type' and 'oauth_redirect_uri' attributes are not provided" do
+      subject.oauth_application_type = nil
+      subject.oauth_redirect_uri = nil
+      expect(subject).to be_valid
+    end
+    
     it "is invalid without a 'oauth_redirect_uri' attribute when 'oauth_application_type' is provided" do
       subject.oauth_redirect_uri = nil
       expect(subject).not_to be_valid
