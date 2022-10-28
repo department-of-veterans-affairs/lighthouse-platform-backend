@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_30_124413) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_28_185931) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -89,6 +89,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_30_124413) do
     t.datetime "discarded_at", precision: nil
     t.string "acl"
     t.string "auth_server_access_key"
+    t.string "veteran_redirect_link_url"
+    t.string "veteran_redirect_link_text"
+    t.string "veteran_redirect_message"
     t.index ["discarded_at"], name: "index_apis_on_discarded_at"
     t.index ["name"], name: "index_apis_on_name", unique: true
   end
@@ -231,6 +234,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_30_124413) do
     t.string "website"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "oauth_application_type"
+    t.jsonb "oauth_public_key"
+    t.string "oauth_redirect_uri"
   end
 
   create_table "users", force: :cascade do |t|
