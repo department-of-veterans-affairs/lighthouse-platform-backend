@@ -234,9 +234,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_28_185931) do
     t.string "website"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "oauth_application_type"
-    t.jsonb "oauth_public_key"
-    t.string "oauth_redirect_uri"
   end
 
   create_table "users", force: :cascade do |t|
