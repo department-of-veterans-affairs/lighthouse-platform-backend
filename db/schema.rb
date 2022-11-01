@@ -56,6 +56,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_28_185931) do
     t.string "url_fragment"
     t.jsonb "deactivation_info"
     t.string "va_internal_only"
+    t.string "veteran_redirect_link_url"
+    t.string "veteran_redirect_link_text"
+    t.string "veteran_redirect_message"
     t.index ["api_category_id"], name: "index_api_metadata_on_api_category_id"
     t.index ["api_id"], name: "index_api_metadata_on_api_id"
     t.index ["discarded_at"], name: "index_api_metadata_on_discarded_at"
@@ -89,9 +92,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_28_185931) do
     t.datetime "discarded_at", precision: nil
     t.string "acl"
     t.string "auth_server_access_key"
-    t.string "veteran_redirect_link_url"
-    t.string "veteran_redirect_link_text"
-    t.string "veteran_redirect_message"
     t.index ["discarded_at"], name: "index_apis_on_discarded_at"
     t.index ["name"], name: "index_apis_on_name", unique: true
   end
