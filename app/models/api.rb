@@ -105,6 +105,7 @@ class Api < ApplicationRecord
                                    va_internal_only: api_metadatum_attributes[:va_internal_only],
                                    url_fragment: api_metadatum_attributes[:url_fragment],
                                    oauth_info: api_metadatum_attributes[:oauth_info],
-                                   api_category: category)
+                                   api_category: category,
+                                   veteran_redirect: api_metadatum_attributes[:veteran_redirect])
   end
 end
