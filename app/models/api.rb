@@ -106,6 +106,8 @@ class Api < ApplicationRecord
                                    url_fragment: api_metadatum_attributes[:url_fragment],
                                    oauth_info: api_metadatum_attributes[:oauth_info],
                                    api_category: category,
-                                   veteran_redirect: api_metadatum_attributes[:veteran_redirect])
+                                   veteran_redirect_link_text: api_metadatum_attributes[:veteran_redirect_link_text],
+                                   veteran_redirect_link_url: api_metadatum_attributes[:veteran_redirect_link_url],
+                                   veteran_redirect_message: api_metadatum_attributes[:veteran_redirect_message])
   end
 end
