@@ -62,11 +62,11 @@ module V0
           end
         end
         expose :veteranRedirect do |entity|
-          if entity.api_category.veteran_redirect_link_url.present?
+          if entity.veteran_redirect_link_url.present?
             {
-              linkUrl: entity.api_category.veteran_redirect_link_url,
-              linkText: entity.api_category.veteran_redirect_link_text,
-              message: entity.api_category.veteran_redirect_message
+              linkUrl: entity.veteran_redirect_link_url,
+              linkText: entity.veteran_redirect_link_text,
+              message: entity.veteran_redirect_message
             }
           end
         end
