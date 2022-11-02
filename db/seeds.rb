@@ -273,6 +273,7 @@ benefits_reference_api.update(
    api_category_attributes: {
      id: benefits_category.id
    }
+  }
 )
 
 facilities_api = Api.create(name: 'va-facilities')
