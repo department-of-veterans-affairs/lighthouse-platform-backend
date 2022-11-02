@@ -30,6 +30,13 @@ describe V0::Consumers, type: :request do
   let(:api_ref_one) { api_environments.first.api.api_ref.name }
   let(:api_ref_two) { api_environments.second.api.api_ref.name }
   let(:api_ref_three) { api_environments.last.api.api_ref.name }
+  let(:logo_upload_base) { '/platform-backend/v0/consumers/logo-upload' }
+  let :logo_upload_params do
+    {
+      fileName: 'logo.jpg',
+      fileType: 'image/jpeg'
+    }
+  end
 
   before do
     api_environments
@@ -422,6 +429,14 @@ describe V0::Consumers, type: :request do
 
       expect(response).to have_http_status(:unprocessable_entity)
       expect(JSON.parse(response.body)['errors']).to include('Invalid API list for consumer')
+    end
+  end
+
+  describe 'request for logo upload Sigv4 policy' do
+    it 'provides a successful response' do
+      post logo_upload_base, params: logo_upload_params
+      expect(response.code).to eq('200')
+      expect(JSON.parse(response.body)[:acl]).to.eq('public-read')
     end
   end
 end
