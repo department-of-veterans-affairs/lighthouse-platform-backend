@@ -182,9 +182,9 @@ module V0
         requires :monitizedVeteranInformation, type: Boolean
         optional :multipleReqSafeguards, type: String
         optional :namingConvention, type: String
-        optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: true
+        optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: false
         optional :oAuthRedirectURI, type: String,
-                                    allow_blank: true,
+                                    allow_blank: false,
                                     regexp: %r{^(https?://.+|)$},
                                     malicious_url_protection: true,
                                     coerce_with: ->(value) { value&.strip }
