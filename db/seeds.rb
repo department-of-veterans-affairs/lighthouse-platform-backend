@@ -272,11 +272,7 @@ benefits_reference_api.update(
    url_fragment: 'benefits_reference_data',
    api_category_attributes: {
      id: benefits_category.id
-   },
-   veteran_redirect_link_text: 'Hi',
-   veteran_redirect_link_url: "https://www.google.com/",
-   veteran_redirect_message: "Hello!"
-  }
+   }
 )
 
 facilities_api = Api.create(name: 'va-facilities')
