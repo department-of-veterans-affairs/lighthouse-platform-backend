@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'securerandom'
 require 'validators/length'
 require 'validators/malicious_url_protection'
 require 'validators/consumer_has_sandbox_api'
@@ -293,16 +294,19 @@ module V0
         requires :fileName, type: String, allow_blank: false
         requires :fileType,
           regexp: {
-            value: /^image\/(jpeg|png|svg+xml)$/,
-            message: "Files must be one of these types: image/jpeg, image/png, image/svg+xml"
+            value: /^image\/(jpeg|png)$/,
+            message: "Files must be one of these types: image/jpeg, image/png"
           }
       end
       post 'logo-upload' do
-        # header 'Access-Control-Allow-Origin', request.host_with_port
-        # protect_from_forgery
+        header 'Access-Control-Allow-Origin', request.host_with_port
+        protect_from_forgery
 
-        s3 = S3Service.new
-        s3.presigned_url(params)
+        aws = AwsSigv4Service.new
+        aws.sign_request(
+          key: "#{SecureRandom.uuid}/#{params[:fileName]}",
+          contentType: params[:fileType]
+        )
       end
     end
   end
