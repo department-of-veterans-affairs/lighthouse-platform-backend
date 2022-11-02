@@ -96,30 +96,4 @@ RSpec.describe ProductionRequest, type: :model do
       expect(subject).not_to be_valid
     end
   end
-
-  describe 'tests authorization code flow API production requests' do
-    it "is valid when both 'oauth_application_type' and 'oauth_redirect_uri' attributes are provided" do
-      subject.oauth_application_type = 'web'
-      subject.oauth_redirect_uri = Faker::Internet.url
-      expect(subject).to be_valid
-    end
-
-    it "is valid when both 'oauth_application_type' and 'oauth_redirect_uri' attributes are not provided" do
-      subject.oauth_application_type = nil
-      subject.oauth_redirect_uri = nil
-      expect(subject).to be_valid
-    end
-    
-    it "is invalid without a 'oauth_redirect_uri' attribute when 'oauth_application_type' is provided" do
-      subject.oauth_application_type = 'web'
-      subject.oauth_redirect_uri = nil
-      expect(subject).not_to be_valid
-    end
-
-    it "is invalid without a 'oauth_application_type' attribute when 'oauth_redirect_uri' is provided" do
-      subject.oauth_application_type = nil
-      subject.oauth_redirect_uri = Faker::Internet.url
-      expect(subject).not_to be_valid
-    end
-  end
 end
