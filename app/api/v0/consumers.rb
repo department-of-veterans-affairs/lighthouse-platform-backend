@@ -292,20 +292,18 @@ module V0
       params do
         requires :fileName, type: String, allow_blank: false
         requires :fileType,
-          regexp: {
-            value: /^image\/(jpeg|png)$/,
-            message: "Files must be one of these types: image/jpeg, image/png"
-          }
+                 regexp: { value: %r{^image/(jpeg|png)$},
+                           message: 'Files must be one of these types: image/jpeg, image/png' }
       end
       post 'logo-upload' do
         header 'Access-Control-Allow-Origin', request.host_with_port
         protect_from_forgery
 
         aws = AwsSigv4Service.new
-        aws.sign_request(
-          key: "#{SecureRandom.uuid}/#{params[:fileName]}",
-          contentType: params[:fileType]
-        )
+        aws.set_key("#{SecureRandom.uuid}/#{params[:fileName]}")
+        aws.set_content_type(params[:fileType])
+
+        aws.sign_request
       end
     end
   end
