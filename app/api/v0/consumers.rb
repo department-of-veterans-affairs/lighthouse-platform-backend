@@ -289,6 +289,13 @@ module V0
                       okta_consumers: okta_consumers
       end
 
+      desc 'Returns the required Sigv4 policy to permit logo uploads in the production request form', {
+        headers: {
+          'Authorization' => {
+            required: false
+          }
+        }
+      }
       params do
         requires :fileName, type: String, allow_blank: false
         requires :fileType,
