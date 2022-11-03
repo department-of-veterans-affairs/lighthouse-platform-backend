@@ -124,6 +124,11 @@ module V0
                                 }
             end
           end
+          optional :veteran_redirect, type: Hash do
+            optional :veteran_redirect_link_text, type: String, allow_blank: false
+            optional :veteran_redirect_link_url, type: String, allow_blank: false
+            optional :veteran_redirect_message, type: String, allow_blank: false
+          end
           requires :api_category_attributes, type: Hash do
             requires :id, type: Integer, values: ->(v) { ApiCategory.kept.map(&:id).include?(v) }
           end
