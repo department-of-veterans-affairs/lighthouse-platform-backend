@@ -75,6 +75,36 @@
       <div><%= @request[:apis] %></div>
     </div>
   </li>
+  <% if @request[:oAuthPublicKey].present? %>
+    <li>
+      <div>
+        <strong>
+          <div>OAuth Public Key:</div>
+        </strong>
+        <div><%= @request[:oAuthPublicKey] %></div>
+      </div>
+    </li>
+  <% end %>
+  <% if @request[:oAuthRedirectURI].present? %>
+    <li>
+      <div>
+        <strong>
+          <div>OAuth Redirect URI:</div>
+        </strong>
+        <div><%= @request[:oAuthRedirectURI] %></div>
+      </div>
+    </li>
+  <% end %>
+  <% if @request[:oAuthApplicationType].present? %>
+    <li>
+      <div>
+        <strong>
+          <div>OAuth Application Type:</div>
+        </strong>
+        <div><%= @request[:oAuthApplicationType] %></div>
+      </div>
+    </li>
+  <% end %>
   <li>
     <div>
       <strong>

@@ -19,6 +19,7 @@ RSpec.describe ProductionRequest, type: :model do
       monitized_veteran_information: Faker::Hipster.word,
       multiple_req_safeguards: Faker::Hipster.word,
       naming_convention: Faker::Hipster.word,
+      oauth_public_key: Faker::Json.shallow_json(width: 5),
       organization: Faker::Hipster.word,
       phone_number: '(555) 555-5555',
       pii_storage_method: Faker::Hipster.word,
