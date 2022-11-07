@@ -95,4 +95,9 @@ Rails.application.configure do
   ENV['AUTHZ_SERVER_TEST'] = 't3st_4uthz'
   ENV['PROVIDER_ACG'] = 't3st_4uthz'
   ENV['PROVIDER_CCG'] = 't3st_4uthz'
+  ENV['S3_ACCESS_KEY_ID'] = 'AKIAQWERTYUIOPASAMPLE'
+  ENV['S3_LOGO_BUCKET_NAME'] = 'bucket-name'
+  ENV['S3_ROLE_ARN'] = 'arn:aws-us-gov:iam::000008675309:role/s3-upload-role'
+  ENV['S3_ROLE_SESSION_NAME'] = 'LPBLogoUpload'
+  ENV['S3_SECRET_ACCESS_KEY'] = 'TopSecret-qwertyuiopasdfghjklzxcvbnmqwer'
 end
