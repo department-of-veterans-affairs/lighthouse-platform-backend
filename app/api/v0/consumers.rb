@@ -182,6 +182,13 @@ module V0
         requires :monitizedVeteranInformation, type: Boolean
         optional :multipleReqSafeguards, type: String
         optional :namingConvention, type: String
+        optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: false
+        optional :oAuthRedirectURI, type: String,
+                                    allow_blank: false,
+                                    regexp: %r{^(https?://.+|)$},
+                                    malicious_url_protection: true,
+                                    coerce_with: ->(value) { value&.strip }
+        optional :oAuthPublicKey, type: JSON
         requires :organization, type: String
         optional :phoneNumber,
                  regexp: { value: /
@@ -217,6 +224,8 @@ module V0
         requires :veteranFacing, type: Boolean
         optional :vulnerabilityManagement, type: String
         optional :website, type: String
+
+        all_or_none_of :oAuthApplicationType, :oAuthRedirectURI
       end
       post 'production-requests' do
         header 'Access-Control-Allow-Origin', request.host_with_port

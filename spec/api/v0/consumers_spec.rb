@@ -324,6 +324,31 @@ describe V0::Consumers, type: :request do
       end
     end
 
+    context 'including an authorization code flow API' do
+      it 'succeeds' do
+        production_request_params[:oAuthApplicationType] = 'web'
+        production_request_params[:oAuthRedirectURI] = 'http://localhost'
+        post production_request_base, params: production_request_params
+        expect(response.code).to eq('204')
+      end
+
+      context 'fails if provided' do
+        it 'an oauth redirect uri without an oauth application type' do
+          production_request_params[:oAuthApplicationType] = nil
+          production_request_params[:oAuthRedirectURI] = 'http://localhost'
+          post production_request_base, params: production_request_params
+          expect(response.code).to eq('400')
+        end
+
+        it 'an oauth application type without an oauth redirect uri' do
+          production_request_params[:oAuthApplicationType] = 'web'
+          production_request_params[:oAuthRedirectURI] = nil
+          post production_request_base, params: production_request_params
+          expect(response.code).to eq('400')
+        end
+      end
+    end
+
     describe 'sends emails when prompted for production access' do
       after do
         Flipper.disable :send_emails
