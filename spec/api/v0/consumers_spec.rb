@@ -458,14 +458,16 @@ describe V0::Consumers, type: :request do
 
   describe 'request for logo upload Sigv4 policy' do
     it 'provides a successful response' do
-      expect_any_instance_of(Aws::STS::Client).to receive(:assume_role).and_return({
-        credentials: {
-          access_key_id: 'AKIAQWERTYUIOPASAMPLE',
-          secret_access_key: 'TopSecret-qwertyuiopasdfghjklzxcvbnmqwer',
-          session_token: 'session_token_session_token_session_token_session_token',
+      allow_any_instance_of(Aws::STS::Client).to receive(:assume_role).and_return(
+        {
+          credentials: {
+            access_key_id: 'AKIAQWERTYUIOPASAMPLE',
+            secret_access_key: 'TopSecret-qwertyuiopasdfghjklzxcvbnmqwer',
+            session_token: 'session_token_session_token_session_token_session_token'
+          }
         }
-      })
-      allow(SecureRandom).to receive(:uuid) { 'e553797f-f290-4668-9bb6-87e96aca8937' }
+      )
+      allow(SecureRandom).to receive(:uuid).and_return('e553797f-f290-4668-9bb6-87e96aca8937')
 
       Timecop.freeze(DateTime.parse('2022/11/07 T16:08:11Z'))
       post logo_upload_base, params: logo_upload_params

@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sts.us-gov-west-1.amazonaws.com/
+    body:
+      encoding: UTF-8
+      string: Action=AssumeRole&RoleArn=arn%3Aaws-us-gov%3Aiam%3A%3A008577686731%3Arole&2Fs3-upload-role&RoleSessionName=LPBLogoUpload&Version=2011-06-15
+    headers:
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby3/3.131.2 ruby/3.0.0 x86_64-linux aws-sdk-core/3.131.2
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Host:
+      - sts.us-gov-west-1.amazonaws.com
+      X-Amz-Date:
+      - 20221107T160811Z
+      X-Amz-Content-Sha256:
+      - 9875c1a48e7e72c224e98892029b8557048b9ea9332a9e77dbfd427682e7d869
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAQWERTYUIOPASAMPLE/20221107/us-gov-west-1/sts/aws4_request,
+        SignedHeaders=content-type;host;x-amz-content-sha256;x-amz-date, Signature=9134c770115b8010bc584ae0736d6f8443c26313c05f14925d962cae91978836
+      Content-Length:
+      - '165'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Amzn-Requestid:
+      - 74a54dea-ae94-d57a-bf60-0f8444d3f1ff
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '762'
+      Date:
+      - Mon, 07 Nov 2022 19:47:27 GMT
+    body:
+      encoding: UTF-8
+      string: |
+        <AssumeRoleResponse xmlns="https://sts.amazonaws.com/doc/2011-06-15/">
+          <AssumeRoleResult>
+            <AssumedRoleUser>
+              <AssumedRoleId>AROAQWERTYUIOPASAMPLE:LPBLogoUpload</AssumedRoleId>
+              <Arn>arn:aws-us-gov:iam::000008675309:role/s3-upload-role/LPBLogoUpload</Arn>
+            </AssumedRoleUser>
+            <Credentials>
+              <AccessKeyId>ASIAQWERTYUIOPASAMPLE</AccessKeyId>
+              <SecretAccessKey>TopSecret-qwertyuiopasdfghjklzxcvbnmqwer</SecretAccessKey>
+              <SessionToken>session_token_session_token_session_token_session_token</SessionToken>
+              <Expiration>2022-11-07T16:08:11Z</Expiration>
+            </Credentials>
+          </AssumeRoleResult>
+          <ResponseMetadata>
+            <RequestId>74a54dea-ae94-d57a-bf60-0f8444d3f1ff</RequestId>
+          </ResponseMetadata>
+        </AssumeRoleResponse>
+  recorded_at: Mon, 07 Nov 2022 19:47:27 GMT
+recorded_with: VCR 6.1.0
