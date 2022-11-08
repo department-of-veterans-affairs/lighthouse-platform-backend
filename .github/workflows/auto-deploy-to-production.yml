@@ -11,13 +11,6 @@ env:
 jobs:
   run_checks_and_deploy:
     runs-on: ubuntu-latest
-    outputs:
-      time_string: ${{ steps.get_time_string.outputs.time_string }}
-      mr_number: ${{ steps.get_mr_number.outputs.mr_number }}
-      build_number: ${{ steps.deploy_to_production.outputs.build_number }}
-      start_time: ${{ steps.check_build_status.outputs.start_time }}
-      end_time: ${{ steps.check_build_status.outputs.end_time }}
-      execution: ${{ steps.check_build_status.outputs.execution }}
     steps:
       - name: Set timezone to Eastern
         uses: szenius/set-timezone@v1.0
@@ -27,15 +20,13 @@ jobs:
         name: Get time string for MR search
         run: |
           TIME_STRING=`date +"%Y/%m/%d %H:%M %Z" | sed -E 's/\:([03]{1}|[14]{1})[0-9]{1}/:\10/g' | sed 's/\:1/:0/' | sed 's/\:4/:3/'`
-          echo $TIME_STRING
-          echo "::set-output name=time_string::$TIME_STRING"
-          echo `curl --help`
+          echo "time_string=$TIME_STRING" >> $GITHUB_OUTPUT
       - id: get_mr_number
         name: Grab matching deploy MR
         continue-on-error: true
         run: |
           TIME_STRING=`echo ${{steps.get_time_string.outputs.time_string}}`
-          echo $TIME_STRING
+          echo "The time is: $TIME_STRING"
           echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
           gh issue list \
             -R 'department-of-veterans-affairs/lighthouse-platform-backend' \
@@ -45,39 +36,39 @@ jobs:
             --jq "[.[]|select(.title==\"Deploy lighthouse-platform-backend to production ($TIME_STRING)\")][0]" \
             > issue.json
           cat issue.json
-          MR_NUMBER=`jq -e ".number" issue.json`
-          echo $MR_NUMBER
+          MR_NUMBER=`jq ".number" issue.json`
           if [ -z "$MR_NUMBER" ]; then
             # If there's no MR_NUMBER then exit because there's no open MR to deploy
             echo "No MR Found. Exiting..."
             exit 1;
           fi
-          APPROVED=`jq ".labels" issue.json | jq -e ".[] | select(.name==\"status: approved\")"`
-          echo $APPROVED
+          echo "Found MR# $MR_NUMBER"
+          APPROVED=`jq ".labels" issue.json | jq ".[] | select(.name==\"status: approved\")"`
           if [ -z "$APPROVED" ]; then
             echo "MR has not been approved. Exiting..."
             exit 1;
           fi
-
-          echo "::set-output name=mr_number::$MR_NUMBER"
+          echo "mr_number=$MR_NUMBER" >> $GITHUB_OUTPUT
       - id: deploy_to_production
         name: Deploy to production
         if: steps.get_mr_number.outcome == 'success'
         continue-on-error: true
         run: |
           echo "pre-fetching next build number..."
-          NEXT_BUILD=`curl -u ${{ secrets.user_jenkins }}:${{ secrets.api_token_jenkins }} https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/health-apis-deployer/job/d2/api/json | jq '.nextBuildNumber'
+          NEXT_BUILD=`curl -u ${{ secrets.user_jenkins }}:${{ secrets.api_token_jenkins }} https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/health-apis-deployer/job/d2/api/json | jq '.nextBuildNumber'`
           echo "Next Build: $NEXT_BUILD"
           echo "Enqueueing ${{ env.environment }} release"
           IS_SUCCESSFUL=`curl -Lsw '%{http_code}' -u ${{ secrets.user_jenkins }}:${{ secrets.api_token_jenkins }} -X POST https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/health-apis-deployer/job/d2/build \
-            --data-urlencode json='{"parameter": [{"name": "PRODUCT", "value": "platform-backend"}, {"name": "VPC", "value": ${{ env.environment }} }]}'`
+            --data-urlencode json='{"parameter": [{"name": "PRODUCT", "value": "platform-backend"}, {"name": "VPC", "value": "${{ env.environment }}"}]}'`
           if [ $IS_SUCCESSFUL -ne 201 ]; then
             echo 'Build failed to queue...'
             exit 1;
           fi
 
           echo 'Successfully queued for build...'
-          echo "::set-output name=build_number::$NEXT_BUILD"
+          BUILD_QUEUE_TIME=`date +"%Y/%m/%d %H:%M %Z"`
+          echo "build_number=$NEXT_BUILD" >> $GITHUB_OUTPUT
+          echo "build_queue_time=$BUILD_QUEUE_TIME" >> $GITHUB_OUTPUT
       - id: check_build_status
         name: Check Build Status
         if: steps.deploy_to_production.outcome == 'success'
@@ -87,15 +78,17 @@ jobs:
           echo $BUILD_NUMBER
           sleep 60
           BUILD_FOUND="false"
-          while [ "$BUILD_FOUND" == "false" ]; do
-            STATUS=`curl  -w "%{http_code}" -o build.json -u ${{ secrets.user_jenkins }}:${{ secrets.api_token_jenkins }} https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/health-apis-deployer/job/d2/$BUILD_NUMBER/api/json`
+          while [[ $BUILD_FOUND == "false" ]]; do
+            STATUS=`curl -w "%{http_code}" -o build.json -u ${{ secrets.user_jenkins }}:${{ secrets.api_token_jenkins }} https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/health-apis-deployer/job/d2/${BUILD_NUMBER}/api/json`
+            echo "The status is ... $STATUS"
             if [ $STATUS -ne 200 ]; then
               echo 'Failed to locate build...'
               echo 'exiting...'
               exit 1;
             fi
-            USER_ID=`jq '.actions[] | select(._class == "hudson.model.CauseAction") | .causes[0].userId' build.json`
-            if [ "$USER_ID" == "okapibot" ]; then
+            USER_ID=`jq '.actions[] | select(._class == "hudson.model.CauseAction") | .causes[0].userId' build.json | xargs echo -n`
+            if [ "$USER_ID" = "okapibot" ]; then
+              echo "Found the correct build!!!"
               BUILD_FOUND="true"
             else
               ((BUILD_NUMBER++))
@@ -104,30 +97,28 @@ jobs:
 
           RUNNING="true"
           while [ $RUNNING == "true" ]; do
-            STATUS=`jq '.result' build.json`
-            if [ "$STATUS" == "FAILURE" ]
+            STATUS=`jq '.result' build.json | xargs echo -n`
+            if [ "$STATUS" = "FAILURE" ]; then
               echo 'Oh noes, something borked...'
-              echo "https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/health-apis-deployer/job/d2/$build_number"
+              echo "https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/health-apis-deployer/job/d2/$BUILD_NUMBER"
               exit 1;
             fi
-            if [ "$STATUS" == "SUCCESS" ]
+            if [ "$STATUS" = "SUCCESS" ]; then
               RUNNING="false"
             else
+              echo "Job status is :: $STATUS.  Sleeping 60 seconds..."
               sleep 60
-              curl -u ${{ secrets.user_jenkins }}:${{ secrets.api_token_jenkins }} https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/health-apis-deployer/job/d2/${{ build_number }}/api/json > build.json
+              curl -u ${{ secrets.user_jenkins }}:${{ secrets.api_token_jenkins }} https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/health-apis-deployer/job/d2/$BUILD_NUMBER/api/json > build.json
             fi
           done
 
-          TIMESTAMP=`jq '.timestamp' build.json`
-          DURATION=`jq '.duration' build.json`
-          END_TIME=$((TIMESTAMP + DURATION))
-          START_TIME=`date --date="$TIMESTAMP" +"%Y/%m/%d %H:%M %Z"`
-          END_TIME=`date --date="$END_TIME" +"%Y/%m/%d %H:%M %Z"`
-          EXECUTION="https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/health-apis-deployer/job/d2/$build_number/console"
+          START_TIME=`echo ${{steps.deploy_to_production.outputs.build_queue_time}}`
+          END_TIME=`date +"%Y/%m/%d %H:%M %Z"`
+          EXECUTION="https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/health-apis-deployer/job/d2/$BUILD_NUMBER/console"
 
-          echo "::set-output name=start_time::$START_TIME"
-          echo "::set-output name=end_time::$END_TIME"
-          echo "::set-output name=execution::$EXECUTION"
+          echo "start_time=$START_TIME" >> $GITHUB_OUTPUT
+          echo "end_time=$END_TIME" >> $GITHUB_OUTPUT
+          echo "execution=$EXECUTION" >> $GITHUB_OUTPUT
       - id: update_mr
         name: Update MR with build information
         if: steps.check_build_status.outcome == 'success'
@@ -154,4 +145,3 @@ jobs:
           && steps.check_build_status.outcome == 'success'
         run: |
           gh workflow disable 'Auto Deploy master to Production'
-          exit 1;
