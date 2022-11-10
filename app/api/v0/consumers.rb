@@ -318,8 +318,9 @@ module V0
         aws = AwsSigv4Service.new
         aws.set_key("#{SecureRandom.uuid}/#{params[:fileName]}")
         aws.set_content_type(params[:fileType])
+        signed_request = aws.sign_request
 
-        aws.sign_request
+        present signed_request, with: V0::Entities::AwsSigv4UploadEntity
       end
     end
   end
