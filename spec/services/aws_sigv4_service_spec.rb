@@ -6,8 +6,8 @@ describe 'AwsSigv4Service' do
   let :expected_sigv4_policy do
     {
       acl: 'public-read',
-      bucket_name: 'bucket-name',
-      content_type: 'image/png',
+      bucketName: 'bucket-name',
+      contentType: 'image/png',
       key: 'original/image.png',
       logoUrls: [
         'https://bucket-name.s3.us-gov-west-1.amazonaws.com/40x40/image.png',
@@ -18,13 +18,13 @@ describe 'AwsSigv4Service' do
         'http://bucket-name.s3-website-us-gov-west-1.amazonaws.com/40x40/image.png',
         'http://bucket-name.s3-website-us-gov-west-1.amazonaws.com/1024x1024/image.png'
       ],
-      s3_region_endpoint: 's3.us-gov-west-1.amazonaws.com',
-      x_amz_algorithm: 'AWS4-HMAC-SHA256',
-      x_amz_credential: 'ASIAQWERTYUIOPASAMPLE/20221107/us-gov-west-1/s3/aws4_request',
-      x_amz_date: '20221107T160811Z',
-      x_amz_expires: 900,
-      x_amz_security_token: 'session_token_session_token_session_token_session_token',
-      x_amz_signature: 'f4e8e7259ddbdc12244e662da83a37579a708dd1e1da71829d64443700879381'
+      s3RegionEndpoint: 's3.us-gov-west-1.amazonaws.com',
+      xAmzAlgorithm: 'AWS4-HMAC-SHA256',
+      xAmzCredential: 'ASIAQWERTYUIOPASAMPLE/20221107/us-gov-west-1/s3/aws4_request',
+      xAmzDate: '20221107T160811Z',
+      xAmzExpires: 900,
+      xAmzSecurityToken: 'session_token_session_token_session_token_session_token',
+      xAmzSignature: 'f4e8e7259ddbdc12244e662da83a37579a708dd1e1da71829d64443700879381'
     }
   end
 

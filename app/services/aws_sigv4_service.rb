@@ -46,8 +46,8 @@ class AwsSigv4Service
 
     {
       acl: acl,
-      bucket_name: @bucket,
-      content_type: @content_type,
+      bucketName: @bucket,
+      contentType: @content_type,
       key: "#{@source_folder}#{@key}",
       logoUrls: [
         "https://#{@bucket}.s3.#{s3_region}.amazonaws.com/40x40/#{@key}",
@@ -58,13 +58,13 @@ class AwsSigv4Service
         "http://#{@bucket}.s3-website-#{s3_region}.amazonaws.com/40x40/#{@key}",
         "http://#{@bucket}.s3-website-#{s3_region}.amazonaws.com/1024x1024/#{@key}"
       ],
-      s3_region_endpoint: "s3.#{s3_region}.amazonaws.com",
-      x_amz_algorithm: x_amz_algorithm,
-      x_amz_credential: x_amz_credential,
-      x_amz_date: x_amz_date,
-      x_amz_expires: 900,
-      x_amz_security_token: @role_session_token,
-      x_amz_signature: x_amz_signature
+      s3RegionEndpoint: "s3.#{s3_region}.amazonaws.com",
+      xAmzAlgorithm: x_amz_algorithm,
+      xAmzCredential: x_amz_credential,
+      xAmzDate: x_amz_date,
+      xAmzExpires: 900,
+      xAmzSecurityToken: @role_session_token,
+      xAmzSignature: x_amz_signature
     }
   end
 

@@ -40,8 +40,8 @@ describe V0::Consumers, type: :request do
   let :logo_upload_expected_response do
     {
       acl: 'public-read',
-      bucket_name: 'bucket-name',
-      content_type: 'image/jpeg',
+      bucketName: 'bucket-name',
+      contentType: 'image/jpeg',
       key: 'original/e553797f-f290-4668-9bb6-87e96aca8937/logo.jpg',
       logoUrls: [
         'https://bucket-name.s3.us-gov-west-1.amazonaws.com/40x40/e553797f-f290-4668-9bb6-87e96aca8937/logo.jpg',
@@ -52,13 +52,13 @@ describe V0::Consumers, type: :request do
         'http://bucket-name.s3-website-us-gov-west-1.amazonaws.com/40x40/e553797f-f290-4668-9bb6-87e96aca8937/logo.jpg',
         'http://bucket-name.s3-website-us-gov-west-1.amazonaws.com/1024x1024/e553797f-f290-4668-9bb6-87e96aca8937/logo.jpg'
       ],
-      s3_region_endpoint: 's3.us-gov-west-1.amazonaws.com',
-      x_amz_algorithm: 'AWS4-HMAC-SHA256',
-      x_amz_credential: 'AKIAQWERTYUIOPASAMPLE/20221107/us-gov-west-1/s3/aws4_request',
-      x_amz_date: '20221107T160811Z',
-      x_amz_expires: 900,
-      x_amz_security_token: 'session_token_session_token_session_token_session_token',
-      x_amz_signature: '4f3387f30d3b04b1617aa5ad76d14cb36344cf6e8a236bb7f5cdca2c9618c2b3'
+      s3RegionEndpoint: 's3.us-gov-west-1.amazonaws.com',
+      xAmzAlgorithm: 'AWS4-HMAC-SHA256',
+      xAmzCredential: 'AKIAQWERTYUIOPASAMPLE/20221107/us-gov-west-1/s3/aws4_request',
+      xAmzDate: '20221107T160811Z',
+      xAmzExpires: 900,
+      xAmzSecurityToken: 'session_token_session_token_session_token_session_token',
+      xAmzSignature: '4f3387f30d3b04b1617aa5ad76d14cb36344cf6e8a236bb7f5cdca2c9618c2b3'
     }
   end
 
