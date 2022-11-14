@@ -30,6 +30,37 @@ describe V0::Consumers, type: :request do
   let(:api_ref_one) { api_environments.first.api.api_ref.name }
   let(:api_ref_two) { api_environments.second.api.api_ref.name }
   let(:api_ref_three) { api_environments.last.api.api_ref.name }
+  let(:logo_upload_base) { '/platform-backend/v0/consumers/logo-upload' }
+  let :logo_upload_params do
+    {
+      fileName: 'logo.jpg',
+      fileType: 'image/jpeg'
+    }
+  end
+  let :logo_upload_expected_response do
+    {
+      acl: 'public-read',
+      bucketName: 'bucket-name',
+      contentType: 'image/jpeg',
+      key: 'original/e553797f-f290-4668-9bb6-87e96aca8937/logo.jpg',
+      logoUrls: [
+        'https://bucket-name.s3.us-gov-west-1.amazonaws.com/40x40/e553797f-f290-4668-9bb6-87e96aca8937/logo.jpg',
+        'https://bucket-name.s3.us-gov-west-1.amazonaws.com/1024x1024/e553797f-f290-4668-9bb6-87e96aca8937/logo.jpg'
+      ],
+      policy: 'eyJleHBpcmF0aW9uIjoiMjAyMi0xMS0wN1QxNjoyMzoxMVoiLCJjb25kaXRpb25zIjpbeyJidWNrZXQiOiJidWNrZXQtbmFtZSJ9LFsiZXEiLCIka2V5Iiwib3JpZ2luYWwvZTU1Mzc5N2YtZjI5MC00NjY4LTliYjYtODdlOTZhY2E4OTM3L2xvZ28uanBnIl0seyJhY2wiOiJwdWJsaWMtcmVhZCJ9LFsiZXEiLCIkQ29udGVudC1UeXBlIiwiaW1hZ2UvanBlZyJdLHsieC1hbXotYWxnb3JpdGhtIjoiQVdTNC1ITUFDLVNIQTI1NiJ9LHsieC1hbXotY3JlZGVudGlhbCI6IkFLSUFRV0VSVFlVSU9QQVNBTVBMRS8yMDIyMTEwNy91cy1nb3Ytd2VzdC0xL3MzL2F3czRfcmVxdWVzdCJ9LHsieC1hbXotZGF0ZSI6IjIwMjIxMTA3VDE2MDgxMVoifSx7IngtYW16LXNlY3VyaXR5LXRva2VuIjoic2Vzc2lvbl90b2tlbl9zZXNzaW9uX3Rva2VuX3Nlc3Npb25fdG9rZW5fc2Vzc2lvbl90b2tlbiJ9XX0=',
+      resizeTriggerUrls: [
+        'http://bucket-name.s3-website-us-gov-west-1.amazonaws.com/40x40/e553797f-f290-4668-9bb6-87e96aca8937/logo.jpg',
+        'http://bucket-name.s3-website-us-gov-west-1.amazonaws.com/1024x1024/e553797f-f290-4668-9bb6-87e96aca8937/logo.jpg'
+      ],
+      s3RegionEndpoint: 's3.us-gov-west-1.amazonaws.com',
+      xAmzAlgorithm: 'AWS4-HMAC-SHA256',
+      xAmzCredential: 'AKIAQWERTYUIOPASAMPLE/20221107/us-gov-west-1/s3/aws4_request',
+      xAmzDate: '20221107T160811Z',
+      xAmzExpires: 900,
+      xAmzSecurityToken: 'session_token_session_token_session_token_session_token',
+      xAmzSignature: '4f3387f30d3b04b1617aa5ad76d14cb36344cf6e8a236bb7f5cdca2c9618c2b3'
+    }
+  end
 
   before do
     api_environments
@@ -447,6 +478,28 @@ describe V0::Consumers, type: :request do
 
       expect(response).to have_http_status(:unprocessable_entity)
       expect(JSON.parse(response.body)['errors']).to include('Invalid API list for consumer')
+    end
+  end
+
+  describe 'request for logo upload Sigv4 policy' do
+    it 'provides a successful response' do
+      allow_any_instance_of(Aws::STS::Client).to receive(:assume_role).and_return(
+        {
+          credentials: {
+            access_key_id: 'AKIAQWERTYUIOPASAMPLE',
+            secret_access_key: 'TopSecret-qwertyuiopasdfghjklzxcvbnmqwer',
+            session_token: 'session_token_session_token_session_token_session_token'
+          }
+        }
+      )
+      allow(SecureRandom).to receive(:uuid).and_return('e553797f-f290-4668-9bb6-87e96aca8937')
+
+      Timecop.freeze(DateTime.parse('2022/11/07 T16:08:11Z'))
+      post logo_upload_base, params: logo_upload_params
+      Timecop.return
+
+      expect(response).to have_http_status(:created)
+      expect(response.body).to eq(logo_upload_expected_response.to_json)
     end
   end
 end

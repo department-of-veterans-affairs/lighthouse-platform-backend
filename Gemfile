@@ -7,6 +7,7 @@ ruby '3.0.0'
 
 gem 'activerecord-import'
 gem 'aws-sdk-dynamodb', '~> 1.62'
+gem 'aws-sdk-s3', '~> 1.114'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'devise'
 gem 'discard'

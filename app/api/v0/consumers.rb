@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'securerandom'
 require 'validators/length'
 require 'validators/malicious_url_protection'
 require 'validators/consumer_has_sandbox_api'
@@ -178,6 +179,8 @@ module V0
         optional :exposeVeteranInformationToThirdParties, type: Boolean
         requires :is508Compliant, type: Boolean
         optional :listedOnMyHealthApplication, type: Boolean
+        optional :logoLarge, type: String
+        optional :logoIcon, type: String
         optional :monitizationExplanation, type: String
         requires :monitizedVeteranInformation, type: Boolean
         optional :multipleReqSafeguards, type: String
@@ -293,6 +296,31 @@ module V0
         present user, with: V0::Entities::ConsumerApplicationEntity,
                       kong_consumer: kong_consumer,
                       okta_consumers: okta_consumers
+      end
+
+      desc 'Returns the required Sigv4 policy to permit logo uploads in the production request form', {
+        headers: {
+          'Authorization' => {
+            required: false
+          }
+        }
+      }
+      params do
+        requires :fileName, type: String, allow_blank: false
+        requires :fileType,
+                 regexp: { value: %r{^image/(jpeg|png)$},
+                           message: 'Files must be one of these types: image/jpeg, image/png' }
+      end
+      post 'logo-upload' do
+        header 'Access-Control-Allow-Origin', request.host_with_port
+        protect_from_forgery
+
+        aws = AwsSigv4Service.new
+        aws.set_key("#{SecureRandom.uuid}/#{params[:fileName]}")
+        aws.set_content_type(params[:fileType])
+        signed_request = aws.sign_request
+
+        present signed_request, with: V0::Entities::AwsSigv4UploadEntity
       end
     end
   end
