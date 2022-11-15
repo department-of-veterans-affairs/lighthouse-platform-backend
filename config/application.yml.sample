@@ -1,3 +1,8 @@
+s3_access_key_id: "dummy"
+s3_logo_bucket_name: "dummy"
+s3_role_arn: "dummy"
+s3_role_session_name: "dummy"
+s3_secret_access_key: "dummy"
 dynamo_endpoint: "http://localhost:4500"
 dynamo_access_key_id: "dummy"
 dynamo_secret_access_key: "dummy"

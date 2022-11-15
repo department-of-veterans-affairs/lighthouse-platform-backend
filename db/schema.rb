@@ -234,6 +234,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_03_141205) do
     t.string "website"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "logo_icon"
+    t.string "logo_large"
     t.string "oauth_application_type"
     t.jsonb "oauth_public_key"
     t.string "oauth_redirect_uri"
