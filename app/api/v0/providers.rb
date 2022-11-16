@@ -81,7 +81,7 @@ module V0
                                   description: 'Metadata URL typically served by Docserver'
           requires :environments_attributes, type: Hash do
             requires :name, type: Array[String], allow_blank: false,
-                            description: 'Environments API is available within - comma separated',
+                            description: 'Available API Environments<br /><h2>Comma separated!<h2>',
                             values: ->(v) { %w[sandbox production].include?(v) },
                             coerce_with: ->(v) { v.split(',') }
           end
@@ -100,7 +100,7 @@ module V0
                                   description: 'Displayed Name for the Developer Portal'
           requires :open_data, type: Boolean, allow_blank: false, default: false
           requires :va_internal_only, type: String,
-                                      values: %w[StrictlyInternal AdditionalDetails FlagOnly],
+                                      values: ['StrictlyInternal', 'AdditionalDetails', 'FlagOnly', ''],
                                       allow_blank: true
           requires :url_fragment, type: String, allow_blank: false,
                                   description: 'URL fragment'
@@ -110,7 +110,7 @@ module V0
               optional :productionAud, type: String, allow_blank: true
               optional :sandboxAud, type: String, allow_blank: true
               optional :scopes, type: Array[String], allow_blank: false,
-                                description: 'Scopes available - comma separated',
+                                description: 'Scopes available<br /><h2>Comma separated!<h2>',
                                 coerce_with: lambda { |v|
                                                v.split(',')
                                              }
@@ -118,7 +118,7 @@ module V0
             optional :acgInfo, type: Hash do
               optional :baseAuthPath, type: String, allow_blank: false
               optional :scopes, type: Array[String], allow_blank: false,
-                                description: 'Scopes available - comma separated',
+                                description: 'Scopes available<br /><h2>Comma separated!<h2>',
                                 coerce_with: lambda { |v|
                                   v.split(',')
                                 }
