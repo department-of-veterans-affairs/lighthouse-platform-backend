@@ -74,6 +74,84 @@ module V0
         present api, with: V0::Entities::ApiEntity
       end
 
+      desc 'Add an API to the developer portal' do
+        detail <<-detailText
+          # Environment and Scopes
+          These fields are CSV ignore what the placeholder text from the textarea says, it's wrong.
+
+          # Sample values (New Demo API)
+          ## Basic details
+          name: new-demo
+          - lowercase with dashes of display name without API
+
+          api_environments_attributes[metadata_url]: https://url.to.docserver/metadata.json
+
+          api_environments_attributes[environments_attributes][name]: sandbox,production
+
+          api_ref_attributes[name]: newDemo
+          - camelCase of display name without API
+
+          acl: new-demo-acl
+
+          auth_server_access_key: AUTHZ_SERVER_NEW_DEMO
+          - CCG APIs, list the key as above and the system will append _CCG when referencing the ENV variables below
+          - https://github.com/department-of-veterans-affairs/lighthouse-platform-backend-deployment/blob/master/ecs/ecs-params.yml
+
+          api_metadatum_attributes[description]: Card description talking about New Demo API
+
+          api_metadatum_attributes[display_name]: New Demo API
+
+          api_metadatum_attributes[open_data]: true/false
+
+          api_metadatum_attributes[va_internal_only]: Select a value
+          - You may have to set this to something incorrect and then reset in /platform-backend/admin/database/api_metadatum
+
+          api_metadatum_attributes[url_fragment]: new_demo
+
+          api_metadatum_attributes[api_category_attributes][id]: 1
+          - Category id in this environment found on /platform-backend/admin/database/api_category
+
+          ## Auth Info
+          ### CCG
+          - From the .well-known openid-configuration
+          - https://api.va.gov/oauth2/claims/system/v1/.well-known/openid-configuration
+          - https://sandbox-api.va.gov/oauth2/claims/system/v1/.well-known/openid-configuration
+
+          api_metadatum_attributes[oauth_info][ccgInfo][baseAuthPath]: /oauth2/claims/system/v1
+          - Remove the domain from the front and /token from the end of token_endpoint
+          - 'https://api.va.gov/oauth2/claims/system/v1/token' -> '/oauth2/claims/system/v1'
+
+          api_metadatum_attributes[oauth_info][ccgInfo][productionAud]: ausajojxqhTsDSVlA297
+          - Last url segment taken from the issuer property
+          - 'https://va.okta.com/oauth2/ausajojxqhTsDSVlA297' -> 'ausajojxqhTsDSVlA297'
+
+          api_metadatum_attributes[oauth_info][ccgInfo][sandboxAud]: ausdg7guis2TYDlFe2p7
+          - Last url segment taken from the issuer property
+          - 'https://deptva-eval.okta.com/oauth2/ausdg7guis2TYDlFe2p7' -> 'ausdg7guis2TYDlFe2p7'
+
+          api_metadatum_attributes[oauth_info][ccgInfo][scopes]: claims.read,claims.write
+          - CSV list of scopes provided in ticket, all must be in scopes_supported property in config
+
+          ### ACG
+          - From the .well-known openid-configuration
+          - https://api.va.gov/oauth2/health/system/v1/.well-known/openid-configuration
+
+          api_metadatum_attributes[oauth_info][acgInfo][baseAuthPath]: /oauth2/health/system/v1
+          - Remove the domain from the front and /token from the end of token_endpoint
+          - 'https://api.va.gov/oauth2/health/system/v1/token' -> '/oauth2/claims/system/v1'
+
+          api_metadatum_attributes[oauth_info][acgInfo][scopes]: patient/AllergyIntolerance.read,patient/Appointment.read,etc...
+          - CSV list of scopes provided in ticket, all must be in scopes_supported property in config
+
+          ## Veteran redirect
+
+          api_metadatum_attributes[veteran_redirect][veteran_redirect_link_text]: Click Here
+
+          api_metadatum_attributes[veteran_redirect][veteran_redirect_link_url]: https://www.va.gov
+
+          api_metadatum_attributes[veteran_redirect][veteran_redirect_message]: Longer message about where Veterans should go
+        detailText
+      end
       params do
         requires :name, type: String, allow_blank: false, description: 'Name of API Provider'
         requires :api_environments_attributes, type: Hash do
@@ -86,13 +164,13 @@ module V0
                             coerce_with: ->(v) { v.split(',') }
           end
         end
-        optional :acl, type: String, allow_blank: false, description: 'Kong ACL for the API'
-        optional :auth_server_access_key, type: String, allow_blank: false,
-                                          description: 'ID for the associated Okta Auth Server'
         requires :api_ref_attributes, type: Hash do
           requires :name, type: String, allow_blank: false,
                           description: 'Reference name for developer portal'
         end
+        optional :acl, type: String, allow_blank: false, description: 'Kong ACL for the API'
+        optional :auth_server_access_key, type: String, allow_blank: false,
+                                          description: 'ID for the associated Okta Auth Server'
         requires :api_metadatum_attributes, type: Hash do
           requires :description, type: String, allow_blank: false,
                                  description: 'Brief description of API'
@@ -104,6 +182,9 @@ module V0
                                       allow_blank: true
           requires :url_fragment, type: String, allow_blank: false,
                                   description: 'URL fragment'
+          requires :api_category_attributes, type: Hash do
+            requires :id, type: Integer, values: ->(v) { ApiCategory.kept.map(&:id).include?(v) }
+          end
           optional :oauth_info, type: Hash do
             optional :ccgInfo, type: Hash do
               optional :baseAuthPath, type: String, allow_blank: false
@@ -128,9 +209,6 @@ module V0
             optional :veteran_redirect_link_text, type: String, allow_blank: false
             optional :veteran_redirect_link_url, type: String, allow_blank: false
             optional :veteran_redirect_message, type: String, allow_blank: false
-          end
-          requires :api_category_attributes, type: Hash do
-            requires :id, type: Integer, values: ->(v) { ApiCategory.kept.map(&:id).include?(v) }
           end
         end
       end
