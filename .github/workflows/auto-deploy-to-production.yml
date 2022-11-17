@@ -6,7 +6,7 @@ on:
     - cron: '*/30 13,14,15,16,17,18,19,20,21,22,23 * * 1,2,3,4,5'
 
 env:
-  environment: 'Production'
+  environment: 'QA'
 
 jobs:
   run_checks_and_deploy:

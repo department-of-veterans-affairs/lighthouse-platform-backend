@@ -12,9 +12,9 @@ jobs:
         name: Check for existing MRs
         continue-on-error: true
         run: |
-          echo ${{ secrets.GIT_AUTO_DEPLOY_TOKEN }} | gh auth login --with-token
+          echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
           gh issue list \
-            -R 'department-of-veterans-affairs/lighthouse-devops-support' \
+            -R 'department-of-veterans-affairs/lighthouse-platform-backend' \
             -l 'repo: lighthouse-platform-backend' \
             --limit 1 \
             --json id,number,state,labels,title \
@@ -80,7 +80,7 @@ jobs:
 
           echo "Create issue"
           gh issue create \
-            -R 'department-of-veterans-affairs/lighthouse-devops-support' \
+            -R 'department-of-veterans-affairs/lighthouse-platform-backend' \
             --title "$ISSUE_TITLE" \
             --assignee "$TEMPLATE_ASSIGNEE" \
             --label "$TEMPLATE_ISSUE_LABEL" \
