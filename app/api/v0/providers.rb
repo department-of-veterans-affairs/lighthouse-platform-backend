@@ -77,7 +77,7 @@ module V0
       desc 'Add an API to the developer portal' do
         detail <<-detailText
           # Environment and Scopes
-          These fields are CSV ignore what the placeholder text from the textarea says, it's wrong.
+          These fields are CSV. Ignore what the placeholder text from the textarea says. It's wrong.
 
           # Sample values (New Demo API)
           ## Basic details
