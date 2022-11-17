@@ -1,0 +1,33 @@
+name: Pull Request Add Labels
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  add_mr_in_progress_label_if_necessary:
+    runs-on: ubuntu-latest
+    steps:
+      - id: check_for_existing_mr
+        name: Check for existing MRs
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
+          gh issue list \
+            -R 'department-of-veterans-affairs/lighthouse-platform-backend' \
+            -l 'repo: lighthouse-platform-backend' \
+            --limit 1 \
+            --json id,number,state,labels,title \
+            > issue.json
+          cat issue.json
+          if [ "[]" == "$(cat issue.json)" ]; then
+            echo "mr_exists='false'" >> $GITHUB_OUTPUT
+          else
+            # there is an actve Maintenance Request (MR)
+            echo "mr_exists='true'" >> $GITHUB_OUTPUT
+          fi
+      - id: add_mr_in_progress_label
+        name: Add MR in progress label
+        if: steps.check_for_existing_mr.outputs.mr_exists == 'true'
+        run: |
+          PR_NUMBER=`echo ${{ github.event.pull_request.number }}`
+          echo "Adding MR in progress label to PR# $PR_NUMBER"
+          gh pr edit $PR_NUMBER --add-label "MR in progress"`
