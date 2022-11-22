@@ -1,0 +1,20 @@
+name: Pull Request Must Not Have Label
+on:
+  pull_request:
+    types: [opened, reopened, labeled, unlabeled, synchronize]
+  workflow_run:
+    workflows: ['Pull Request Add Labels']
+    types:
+      - completed
+
+jobs:
+  is_labeled:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mheap/github-action-required-labels@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          mode: exactly
+          count: 0
+          labels: 'MR in progress'
