@@ -135,6 +135,15 @@ jobs:
           echo '```' >> build-comment.md
 
           gh issue comment $MR_NUMBER -R 'department-of-veterans-affairs/lighthouse-platform-backend' --body-file build-comment.md
+      - id: remove_mr_in_progress_label_from_existing_prs
+        name: Remove MR in progress label from existing PRs
+        if: steps.update_mr.outcome == 'success'
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
+          prNums=$(gh pr list --json number --jq '.[] | .number')
+          for num in ${prNums[@]}; do
+            gh pr edit $num --remove-label "MR in progress"
+          done
       - uses: actions/checkout@v2
         if: |
           steps.deploy_to_production.outcome == 'success'

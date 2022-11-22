@@ -86,6 +86,15 @@ jobs:
             --label "$TEMPLATE_ISSUE_LABEL" \
             --label "repo: lighthouse-platform-backend" \
             --body-file maintenance-request.md
+      - id: add_mr_in_progress_label_to_existing_prs
+        name: Add MR in progress label to existing PRs
+        if: steps.create_mr.outcome == 'success'
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
+          prNums=$(gh pr list --json number --jq '.[] | .number')
+          for num in ${prNums[@]}; do
+            gh pr edit $num --add-label "MR in progress"
+          done
       - uses: actions/checkout@v2
         if: steps.create_mr.outcome == 'success'
       - name: Enable Auto Deploy Workflow
