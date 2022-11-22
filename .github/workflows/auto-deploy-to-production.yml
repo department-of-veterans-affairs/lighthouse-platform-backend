@@ -139,9 +139,9 @@ jobs:
         name: Remove MR in progress label from existing PRs
         if: steps.update_mr.outcome == 'success'
         run: |
-          prNums=$(gh pr list --json number --jq '.[] | .number')
+          prNums=$(gh pr list -R 'department-of-veterans-affairs/lighthouse-platform-backend' --json number --jq '.[] | .number')
           for num in ${prNums[@]}; do
-            gh pr edit $num --remove-label "MR in progress"
+            gh pr edit $num -R 'department-of-veterans-affairs/lighthouse-platform-backend' --remove-label "MR in progress"
           done
       - uses: actions/checkout@v2
         if: |
