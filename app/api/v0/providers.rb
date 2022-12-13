@@ -239,19 +239,11 @@ module V0
       end
 
       resource ':providerName' do
-        desc 'Get list of release notes', {
-          headers: {
-            'Authorization' => {
-              required: false
-            }
-          }
-        }
+        desc 'Get list of release notes'
         params do
           requires :providerName, type: String, allow_blank: false, description: 'Name of provider'
         end
         get '/release-notes' do
-          validate_token(Scope.provider_read)
-
           release_notes = Api.find_by!(name: params[:providerName]).api_metadatum.api_release_notes.kept
 
           present release_notes.kept.order(date: :desc), with: V0::Entities::ApiReleaseNoteEntity
