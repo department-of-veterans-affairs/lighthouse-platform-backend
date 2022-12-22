@@ -32,8 +32,6 @@ class Api < ApplicationRecord
     types << AUTH_TYPES[:apikey] if acl.present?
     if auth_server_access_key.present?
       types << AUTH_TYPES[:acg] if Figaro.env.send(auth_server_access_key).present?
-      types << AUTH_TYPES[:acg] if Figaro.env.send("#{auth_server_access_key}_acg").present?
-      types << AUTH_TYPES[:ccg] if Figaro.env.send("#{auth_server_access_key}_ccg").present?
     end
     types.uniq
   end
