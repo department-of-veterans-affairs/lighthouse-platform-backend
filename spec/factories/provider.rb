@@ -39,6 +39,8 @@ FactoryBot.define do
             sandboxAud: Faker::Lorem.word,
             productionWellKnownConfig: Faker::Internet.url,
             sandboxWellKnownConfig: Faker::Internet.url,
+            productionAud: Faker::Lorem.word,
+            sandboxAud: Faker::Lorem.word,
             scopes: 'test.true,test.false'
           }
         },

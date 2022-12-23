@@ -15,6 +15,8 @@ FactoryBot.define do
           sandboxAud: Faker::Internet.slug,
           productionWellKnownConfig: Faker::Internet.url,
           sandboxWellKnownConfig: Faker::Internet.url,
+          productionAud: Faker::Internet.slug,
+          sandboxAud: Faker::Internet.slug,
           scopes: Faker::Lorem.words(number: 5)
         },
         ccgInfo: {
