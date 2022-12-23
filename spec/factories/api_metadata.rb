@@ -11,6 +11,8 @@ FactoryBot.define do
       {
         acgInfo: {
           baseAuthPath: "/oauth2/#{Faker::Lorem.word}/v1",
+          productionAud: Faker::Internet.slug,
+          sandboxAud: Faker::Internet.slug,
           scopes: Faker::Lorem.words(number: 5)
         },
         ccgInfo: {
