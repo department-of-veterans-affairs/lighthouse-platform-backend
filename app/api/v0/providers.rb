@@ -189,13 +189,14 @@ module V0
             optional :ccgInfo, type: Hash do
               optional :baseAuthPath, type: String, allow_blank: false
               optional :productionAud, type: String, allow_blank: true
+              optional :productionWellKnownConfig, type: String, allow_blank: true
               optional :sandboxAud, type: String, allow_blank: true
+              optional :sandboxWellKnownConfig, type: String, allow_blank: true
               optional :scopes, type: Array[String], allow_blank: false,
                                 description: 'Scopes available<br /><h2>Comma separated!<h2>',
                                 coerce_with: lambda { |v|
                                                v.split(',')
                                              }
-              optional :wellKnownConfig, type: String, allow_blank: true
             end
             optional :acgInfo, type: Hash do
               optional :baseAuthPath, type: String, allow_blank: false
@@ -204,7 +205,8 @@ module V0
                                 coerce_with: lambda { |v|
                                   v.split(',')
                                 }
-              optional :wellKnownConfig, type: String, allow_blank: true
+              optional :productionWellKnownConfig, type: String, allow_blank: true
+              optional :sandboxWellKnownConfig, type: String, allow_blank: true
             end
           end
           optional :veteran_redirect, type: Hash do
