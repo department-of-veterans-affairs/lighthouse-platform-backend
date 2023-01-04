@@ -195,6 +195,7 @@ module V0
                                 coerce_with: lambda { |v|
                                                v.split(',')
                                              }
+              optional :wellKnownConfig, type: String, allow_blank: true
             end
             optional :acgInfo, type: Hash do
               optional :baseAuthPath, type: String, allow_blank: false
@@ -203,6 +204,7 @@ module V0
                                 coerce_with: lambda { |v|
                                   v.split(',')
                                 }
+              optional :wellKnownConfig, type: String, allow_blank: true
             end
           end
           optional :veteran_redirect, type: Hash do

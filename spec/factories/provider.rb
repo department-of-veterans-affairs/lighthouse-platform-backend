@@ -29,11 +29,13 @@ FactoryBot.define do
             baseAuthPath: Faker::Internet.domain_name,
             productionAud: Faker::Lorem.word,
             sandboxAud: Faker::Lorem.word,
-            scopes: 'test.true,test.false'
+            scopes: 'test.true,test.false',
+            wellKnownConfig: Faker::Internet.url
           },
           acgInfo: {
             baseAuthPath: Faker::Internet.domain_name,
-            scopes: 'test.true,test.false'
+            scopes: 'test.true,test.false',
+            wellKnownConfig: Faker::Internet.url
           }
         },
         api_category_attributes: {
