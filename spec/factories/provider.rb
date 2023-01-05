@@ -28,14 +28,16 @@ FactoryBot.define do
           ccgInfo: {
             baseAuthPath: Faker::Internet.domain_name,
             productionAud: Faker::Lorem.word,
+            productionWellKnownConfig: Faker::Internet.url,
             sandboxAud: Faker::Lorem.word,
-            scopes: 'test.true,test.false',
-            wellKnownConfig: Faker::Internet.url
+            sandboxWellKnownConfig: Faker::Internet.url,
+            scopes: 'test.true,test.false'
           },
           acgInfo: {
             baseAuthPath: Faker::Internet.domain_name,
-            scopes: 'test.true,test.false',
-            wellKnownConfig: Faker::Internet.url
+            productionWellKnownConfig: Faker::Internet.url,
+            sandboxWellKnownConfig: Faker::Internet.url,
+            scopes: 'test.true,test.false'
           }
         },
         api_category_attributes: {
