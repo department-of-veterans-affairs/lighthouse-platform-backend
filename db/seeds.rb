@@ -5,7 +5,7 @@ values =  HTTParty.get('https://urlhaus.abuse.ch/downloads/text/').body
                                                                   .split("\r\n")
                                                                   .delete_if { |line| line.starts_with?('#') }
                                                                   .map { |line| [line] }
-MaliciousUrl.import columns, values, validate: false, on_duplicate_key_ignore: true
+# MaliciousUrl.import columns, values, validate: false, on_duplicate_key_ignore: true
 
 
 appeals_category = ApiCategory.create(
@@ -215,12 +215,16 @@ claims_api.update(  auth_server_access_key: 'AUTHZ_SERVER_CLAIMS',
    oauth_info: {
      acgInfo: {
        baseAuthPath: '/oauth2/claims/v1',
+       productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/claims/v1/.well-known/openid-configuration',
+       sandboxWellKnownConfig: 'https://dev-api.va.gov/oauth2/claims/v1/.well-known/openid-configuration',
        scopes: ['profile', 'openid', 'offline_access', 'claim.read', 'claim.write'],
      },
      ccgInfo: {
        baseAuthPath: '/oauth2/claims/system/v1',
        productionAud: 'ausajojxqhTsDSVlA297',
+       productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/claims/system/v1/.well-known/openid-configuration',
        sandboxAud: 'ausdg7guis2TYDlFe2p7',
+       sandboxWellKnownConfig: 'https://dev-api.va.gov/oauth2/claims/system/v1/.well-known/openid-configuration',
        scopes: ['claim.read', 'claim.write'],
      },
    }.to_json,
@@ -344,7 +348,9 @@ lgy_guaranty_remittance_api.update(
     ccgInfo: {
       baseAuthPath: '/oauth2/loan-guaranty/system/v1',
       productionAud: 'ausbts6ndxFQDyeBM297',
+      productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/loan-guaranty/system/v1/.well-known/openid-configuration',
       sandboxAud: 'auseavl6o5AjGZr2n2p7',
+      sandboxWellKnownConfig: 'https://dev-api.va.gov/oauth2/loan-guaranty/system/v1/.well-known/openid-configuration',
       scopes: ['system.loan-remittance.read', 'system.loan-remittance.write', 'system.remediation-evidence.write'],
     },
   }.to_json,
@@ -428,7 +434,7 @@ veteran_letter_generator_api = Api.create(name: 'veteran-letters')
 veteran_letter_generator_api.update(
   auth_server_access_key: 'TBD',
   api_environments_attributes: {
-    metadata_url: 'https://dev-api.va.gov/internal/docs/veteran-letters/metadata.json',
+    metadata_url: 'https://dev-api.va.gov/internal/docs/va-letter-generator/metadata.json',
     environments_attributes: {
       name: ['sandbox', 'production']
     }
@@ -444,9 +450,11 @@ veteran_letter_generator_api.update(
    url_fragment: 'va_letter_generator',
    oauth_info: {
       ccgInfo: {
-        baseAuthPath: '/oauth2/veteran-letters/system/v1',
+        baseAuthPath: '/oauth2/va-letter-generator/system/v1',
         productionAud: 'TBD',
+        productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/va-letter-generator/system/v1/.well-known/openid-configuration',
         sandboxAud: 'TBD',
+        sandboxWellKnownConfig: 'https://dev-api.va.gov/oauth2/va-letter-generator/system/v1/.well-known/openid-configuration',
         scopes: ['letters.read'],
       },
     }.to_json,
@@ -476,6 +484,8 @@ veteran_verification_api.update(
    oauth_info: {
     acgInfo: {
       baseAuthPath: '/oauth2/veteran-verification/v1',
+      productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/veteran-verification/v1/.well-known/openid-configuration',
+      sandboxWellKnownConfig: 'https://dev-api.va.gov/oauth2/veteran-verification/v1/.well-known/openid-configuration',
       scopes: [
         'profile',
         'openid',
@@ -529,7 +539,9 @@ pgd_api.update(
     ccgInfo: {
       baseAuthPath: '/oauth2/pgd/system/v1',
       productionAud: 'aus8ew475sXlNGpbp297',
+      productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/pgd/system/v1/.well-known/openid-configuration',
       sandboxAud: 'aus8x27nv4g4BS01v2p7',
+      sandboxWellKnownConfig: 'https://dev-api.va.gov/oauth2/pgd/system/v1/.well-known/openid-configuration',
       scopes: [
         'launch',
         'patient/Observation.read',
@@ -571,6 +583,8 @@ community_care_api.update(
    oauth_info: {
     acgInfo: {
       baseAuthPath: '/oauth2/community-care/v1',
+      productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/community-care/v1/.well-known/openid-configuration',
+      sandboxWellKnownConfig: 'https://dev-api.va.gov/oauth2/community-care/v1/.well-known/openid-configuration',
       scopes: [
         'profile',
         'openid',
@@ -632,6 +646,8 @@ clinical_fhir_api.update(
    oauth_info: {
     acgInfo: {
       baseAuthPath: '/oauth2/clinical-health/v1',
+      productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/clinical-health/system/v1/.well-known/openid-configuration',
+      sandboxWellKnownConfig: 'https://dev-api.va.gov/oauth2/clinical-health/system/v1/.well-known/openid-configuration',
       scopes: [
         'profile',
         'openid',
@@ -671,6 +687,8 @@ fhir_health_api.update(
    oauth_info: {
       acgInfo: {
         baseAuthPath: '/oauth2/health/v1',
+        productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/health/v1/.well-known/openid-configuration',
+        sandboxWellKnownConfig: 'https://dev-api.va.gov/oauth2/health/v1/.well-known/openid-configuration',
         scopes: [
           'profile',
           'openid',
@@ -698,7 +716,9 @@ fhir_health_api.update(
       ccgInfo: {
         baseAuthPath: '/oauth2/health/system/v1',
         productionAud: 'aus8evxtl123l7Td3297',
+        productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/health/system/v1/.well-known/openid-configuration',
         sandboxAud: 'aus8nm1q0f7VQ0a482p7',
+        sandboxWellKnownConfig: 'https://dev-api.va.gov/oauth2/health/system/v1/.well-known/openid-configuration',
         scopes: [
           'launch',
           'system/AllergyIntolerance.read',
