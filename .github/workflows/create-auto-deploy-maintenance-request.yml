@@ -35,8 +35,6 @@ jobs:
       - id: create_mr
         name: Generate the MR body text and create MR
         if: steps.check_for_existing_mr.outcome == 'success'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           wget https://raw.githubusercontent.com/department-of-veterans-affairs/lighthouse-platform-backend/master/.github/workflows/assets/maintenance-request.md
           TEMPLATE_ISSUE_LABEL=`grep labels maintenance-request.md | cut -f2 -d " "`
@@ -79,6 +77,7 @@ jobs:
           cat maintenance-request.md
 
           echo "Create issue"
+          echo ${{ secrets.GIT_AUTO_DEPLOY_TOKEN }} | gh auth login --with-token
           gh issue create \
             -R 'department-of-veterans-affairs/lighthouse-devops-support' \
             --title "$ISSUE_TITLE" \
@@ -90,6 +89,7 @@ jobs:
         name: Add MR in progress label to existing PRs
         if: steps.create_mr.outcome == 'success'
         run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
           prNums=$(gh pr list -R 'department-of-veterans-affairs/lighthouse-platform-backend' --json number --jq '.[] | .number')
           for num in ${prNums[@]}; do
             gh pr edit $num -R 'department-of-veterans-affairs/lighthouse-platform-backend' --add-label "MR in progress"
