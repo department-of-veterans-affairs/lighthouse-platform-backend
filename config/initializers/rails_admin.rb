@@ -35,7 +35,7 @@ RailsAdmin.config do |config|
     # history_show
   end
 
-  config.model 'ApiMetadatum' do
+  config.model ApiMetadatum do
     show do
       configure :oauth_info do
         formatted_value do
@@ -56,8 +56,9 @@ RailsAdmin.config do |config|
         formatted_value do
           if value.present?
             output = []
-            output << 'ACG' if value['acgInfo'].present?
-            output << 'CCG' if value['ccgInfo'].present?
+            json = JSON.parse(value)
+            output << 'ACG' if json['acgInfo'].present?
+            output << 'CCG' if json['ccgInfo'].present?
             output.to_s
           end
         end
