@@ -34,4 +34,35 @@ RailsAdmin.config do |config|
     # history_index
     # history_show
   end
+
+  config.model ApiMetadatum do
+    show do
+      configure :oauth_info do
+        formatted_value do
+          JSON.pretty_generate(JSON.parse(value))
+        end
+      end
+    end
+    edit do
+      configure :oauth_info, :code_mirror do
+        formatted_value do
+          JSON.pretty_generate(JSON.parse(value))
+        end
+      end
+    end
+    list do
+      configure :oauth_info do
+        label 'OAuth Types'
+        formatted_value do
+          if value.present?
+            output = []
+            json = JSON.parse(value)
+            output << 'ACG' if json['acgInfo'].present?
+            output << 'CCG' if json['ccgInfo'].present?
+            output.to_s
+          end
+        end
+      end
+    end
+  end
 end
