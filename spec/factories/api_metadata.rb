@@ -13,12 +13,16 @@ FactoryBot.define do
           baseAuthPath: "/oauth2/#{Faker::Lorem.word}/v1",
           productionAud: Faker::Internet.slug,
           sandboxAud: Faker::Internet.slug,
+          productionWellKnownConfig: Faker::Internet.url,
+          sandboxWellKnownConfig: Faker::Internet.url,
           scopes: Faker::Lorem.words(number: 5)
         },
         ccgInfo: {
           baseAuthPath: "/oauth2/#{Faker::Lorem.word}/system/v1",
           productionAud: Faker::Internet.slug,
+          productionWellKnownConfig: Faker::Internet.url,
           sandboxAud: Faker::Internet.slug,
+          sandboxWellKnownConfig: Faker::Internet.url,
           scopes: Faker::Lorem.words(number: 2)
         }
       }.to_json

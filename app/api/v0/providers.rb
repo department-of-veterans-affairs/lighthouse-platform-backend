@@ -116,6 +116,8 @@ module V0
           - From the .well-known openid-configuration
           - https://api.va.gov/oauth2/claims/system/v1/.well-known/openid-configuration
           - https://sandbox-api.va.gov/oauth2/claims/system/v1/.well-known/openid-configuration
+          - When on prod, all values except for productionAud and productionWellKnownConfig should come
+            from the sandbox .well-known config file
 
           api_metadatum_attributes[oauth_info][ccgInfo][baseAuthPath]: /oauth2/claims/system/v1
           - Remove the domain from the front and /token from the end of token_endpoint
@@ -125,20 +127,35 @@ module V0
           - Last url segment taken from the issuer property
           - 'https://va.okta.com/oauth2/ausajojxqhTsDSVlA297' -> 'ausajojxqhTsDSVlA297'
 
+          api_metadatum_attributes[oauth_info][ccgInfo][productionWellKnownConfig]:
+          - https://api.va.gov/oauth2/claims/system/v1/.well-known/openid-configuration
+
           api_metadatum_attributes[oauth_info][ccgInfo][sandboxAud]: ausdg7guis2TYDlFe2p7
           - Last url segment taken from the issuer property
           - 'https://deptva-eval.okta.com/oauth2/ausdg7guis2TYDlFe2p7' -> 'ausdg7guis2TYDlFe2p7'
+
+          api_metadatum_attributes[oauth_info][ccgInfo][sandboxWellKnownConfig]:
+          - https://sandbox-api.va.gov/oauth2/claims/system/v1/.well-known/openid-configuration
 
           api_metadatum_attributes[oauth_info][ccgInfo][scopes]: claims.read,claims.write
           - CSV list of scopes provided in ticket, all must be in scopes_supported property in config
 
           ### ACG
           - From the .well-known openid-configuration
-          - https://api.va.gov/oauth2/health/system/v1/.well-known/openid-configuration
+          - https://api.va.gov/oauth2/health/v1/.well-known/openid-configuration
+          - https://sandbox-api.va.gov/oauth2/health/v1/.well-known/openid-configuration
+          - When on prod, all values except for productionAud and productionWellKnownConfig should come
+            from the sandbox .well-known config file
 
-          api_metadatum_attributes[oauth_info][acgInfo][baseAuthPath]: /oauth2/health/system/v1
+          api_metadatum_attributes[oauth_info][acgInfo][baseAuthPath]: /oauth2/health/v1
           - Remove the domain from the front and /token from the end of token_endpoint
-          - 'https://api.va.gov/oauth2/health/system/v1/token' -> '/oauth2/claims/system/v1'
+          - 'https://api.va.gov/oauth2/health/v1/token' -> '/oauth2/health/v1'
+
+          api_metadatum_attributes[oauth_info][acgInfo][productionWellKnownConfig]:
+          - https://api.va.gov/oauth2/health/v1/.well-known/openid-configuration
+
+          api_metadatum_attributes[oauth_info][acgInfo][sandboxWellKnownConfig]:
+          - https://sandbox-api.va.gov/oauth2/health/v1/.well-known/openid-configuration
 
           api_metadatum_attributes[oauth_info][acgInfo][scopes]: patient/AllergyIntolerance.read,patient/Appointment.read,etc...
           - CSV list of scopes provided in ticket, all must be in scopes_supported property in config
@@ -189,7 +206,9 @@ module V0
             optional :ccgInfo, type: Hash do
               optional :baseAuthPath, type: String, allow_blank: false
               optional :productionAud, type: String, allow_blank: true
+              optional :productionWellKnownConfig, type: String, allow_blank: true
               optional :sandboxAud, type: String, allow_blank: true
+              optional :sandboxWellKnownConfig, type: String, allow_blank: true
               optional :scopes, type: Array[String], allow_blank: false,
                                 description: 'Scopes available<br /><h2>Comma separated!<h2>',
                                 coerce_with: lambda { |v|
@@ -200,6 +219,8 @@ module V0
               optional :baseAuthPath, type: String, allow_blank: false
               optional :productionAud, type: String, allow_blank: true
               optional :sandboxAud, type: String, allow_blank: true
+              optional :productionWellKnownConfig, type: String, allow_blank: true
+              optional :sandboxWellKnownConfig, type: String, allow_blank: true
               optional :scopes, type: Array[String], allow_blank: false,
                                 description: 'Scopes available<br /><h2>Comma separated!<h2>',
                                 coerce_with: lambda { |v|
