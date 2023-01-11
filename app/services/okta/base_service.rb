@@ -29,7 +29,7 @@ module Okta
       application = create_application(user, type, options)
 
       client_id = application.credentials.oauthClient.client_id
-      append_default_policy(client_id, type, api)
+      append_default_policy(client_id, api)
 
       save_id_to_user(user, type, application.to_h[:id])
 
@@ -71,7 +71,7 @@ module Okta
       application = create_application(user, type, options)
 
       client_id = application.credentials.oauthClient.client_id
-      oauth_apis.each { |api| append_default_policy(client_id, type, api) }
+      oauth_apis.each { |api| append_default_policy(client_id, api) }
 
       save_id_to_user(user, type, application.to_h[:id])
 
@@ -90,8 +90,8 @@ module Okta
       application
     end
 
-    def append_default_policy(client_id, type, api)
-      auth_server_id = auth_server_id(api, type)
+    def append_default_policy(client_id, api)
+      auth_server_id = auth_server_id(api)
       policies, status_code = @client.list_authorization_server_policies(auth_server_id)
 
       raise handle_okta_error(policies) unless status_code == 200
@@ -115,7 +115,7 @@ module Okta
       user.undiscard if user.discarded?
     end
 
-    def auth_server_id(api, type)
+    def auth_server_id(api)
       server_per_type = api.api_metadatum.oauth_info.acgInfo.sandboxAud || api.api_metadatum.oauth_info.ccgInfo.sandboxAud
       return server_per_type if server_per_type.present?
     end
