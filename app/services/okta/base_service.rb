@@ -116,8 +116,9 @@ module Okta
     end
 
     def auth_server_id(api, type)
-      server_per_type = api.api_metadatum.oauth_info.acgInfo.sandboxAud || 
-                        api.api_metadatum.oauth_info.ccgInfo.sandboxAud
+      parsed_oauth_info = JSON.parse(api.api_metadatum.oauth_info)
+      server_per_type = parsed_oauth_info['acgInfo']['sandboxAud'] || 
+                        parsed_oauth_info['ccgInfo']['sandboxAud']
       return server_per_type if server_per_type.present?
     end
 
