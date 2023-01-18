@@ -56,9 +56,8 @@ RailsAdmin.config do |config|
         formatted_value do
           if value.present?
             output = []
-            json = JSON.parse(value)
-            output << 'ACG' if json['acgInfo'].present?
-            output << 'CCG' if json['ccgInfo'].present?
+            output << 'ACG' if value['acgInfo'].present?
+            output << 'CCG' if value['ccgInfo'].present?
             output.to_s
           end
         end
