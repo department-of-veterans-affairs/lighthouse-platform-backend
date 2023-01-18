@@ -75,7 +75,7 @@ module V0
       end
 
       desc 'Add an API to the developer portal' do
-        detail <<-detailText
+        detail <<-DETAILTEXT
           # Environment and Scopes
           These fields are CSV. Ignore what the placeholder text from the textarea says. It's wrong.
 
@@ -167,7 +167,7 @@ module V0
           api_metadatum_attributes[veteran_redirect][veteran_redirect_link_url]: https://www.va.gov
 
           api_metadatum_attributes[veteran_redirect][veteran_redirect_message]: Longer message about where Veterans should go
-        detailText
+        DETAILTEXT
       end
       params do
         requires :name, type: String, allow_blank: false, description: 'Name of API Provider'
