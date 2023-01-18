@@ -23,9 +23,10 @@ namespace :lpb do
     }.freeze
     base_urls[environment]
   end
+
   def get_path(url_fragment, type)
     paths = {
-    'claims' => {
+      'claims' => {
         'acgInfo' => '/oauth2/claims/v1/.well-known/openid-configuration',
         'ccgInfo' => '/oauth2/claims/system/v1/.well-known/openid-configuration'
       },

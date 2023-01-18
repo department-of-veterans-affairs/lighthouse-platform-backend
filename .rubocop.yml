@@ -93,6 +93,7 @@ Metrics/MethodLength:
     - 'lib/tasks/aud_values.rake'
     - 'lib/tasks/lpb.rake'
     - 'lib/tasks/aud_values.rake'
+    - 'lib/tasks/lpb.rake'
   IgnoredMethods:
     - 'user_params'
     - 'signup_params'
