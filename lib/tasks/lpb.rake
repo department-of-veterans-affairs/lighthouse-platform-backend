@@ -1,33 +1,31 @@
-# frozen_string_literal: true
-
 namespace :lpb do
-  desc 'Inject sandbox and production .well-known config urls'
+  desc "Inject sandbox and production .well-known config urls"
   task seedWellKnownConfigValues: :environment do
     apis = ApiMetadatum.where.not(oauth_info: nil)
     # apis = [ApiMetadatum.find(3)]
     p apis.length
     apis.each do |api|
       p api[:display_name]
-      process_auth_type(api, 'acgInfo') if api.oauth_info['acgInfo'].present?
-      process_auth_type(api, 'ccgInfo') if api.oauth_info['ccgInfo'].present?
+      if api.oauth_info['acgInfo'].present?
+        process_auth_type(api, 'acgInfo')
+      end
+      if api.oauth_info['ccgInfo'].present?
+        process_auth_type(api, 'ccgInfo')
+      end
     end
   end
 
-  def get_base_url(environment)
-    base_urls = {
+  def process_auth_type(api, type)
+    configBaseUrl = {
       'development' => 'https://dev-api.va.gov',
       'production' => 'https://api.va.gov',
       'sandbox' => 'https://sandbox-api.va.gov',
       'staging' => 'https://staging-api.va.gov',
       'test' => 'https://dev-api.va.gov'
     }.freeze
-    base_urls[environment]
-  end
-
-  def get_path(url_fragment, type)
-    paths = {
+    config = { 
       'claims' => {
-        'acgInfo' => '/oauth2/claims/v1/.well-known/openid-configuration',
+        'acgInfo' => '/oauth2/claims/v1/.well-known/openid-configuration', 
         'ccgInfo' => '/oauth2/claims/system/v1/.well-known/openid-configuration'
       },
       'benefits-documents' => {
@@ -43,7 +41,7 @@ namespace :lpb do
         'acgInfo' => '/oauth2/community-care/v1/.well-known/openid-configuration'
       },
       'fhir' => {
-        'acgInfo' => '/oauth2/health/v1/.well-known/openid-configuration',
+        'acgInfo' => '/oauth2/health/v1/.well-known/openid-configuration', 
         'ccgInfo' => '/oauth2/health/system/v1/.well-known/openid-configuration'
       },
       'lgy_guaranty_remittance' => {
@@ -68,16 +66,16 @@ namespace :lpb do
         'ccgInfo' => '/oauth2/pgd/system/v1/.well-known/openid-configuration'
       }
     }.freeze
-    paths[url_fragment][type]
-  end
-
-  def process_auth_type(api, type)
-    url_fragment = api[:url_fragment]
-    environment = ENV.fetch('RAILS_ENV')
+    urlFragment = api[:url_fragment]
+    p config[urlFragment][type]
+    environment = ENV['RAILS_ENV']
+    p configBaseUrl[environment]
     p api.oauth_info
-    api.oauth_info[type]['productionWellKnownConfig'] = get_base_url(environment) + get_path(url_fragment, type)
-    environment = 'sandbox' if environment == 'production'
-    api.oauth_info[type]['sandboxWellKnownConfig'] = get_base_url(environment) + get_path(url_fragment, type)
+    api.oauth_info[type]['productionWellKnownConfig'] = configBaseUrl[environment] + config[urlFragment][type]
+    if environment == 'production'
+      environment = 'sandbox'
+    end
+    api.oauth_info[type]['sandboxWellKnownConfig'] = configBaseUrl[environment] + config[urlFragment][type]
     p api.oauth_info
     api.save
   end
