@@ -12,132 +12,76 @@ namespace :aud_values do
       audience_values = {
         'claims' => {
           'acgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
+            'sandboxAud' => 'aus7y0lyttrObgW622p7',
+            'productionAud' => 'aus7y0lyttrObgW622p7'
           },
           'ccgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
+            'sandboxAud' => 'ausdg7guis2TYDlFe2p7',
+            'productionAud' => 'ausdg7guis2TYDlFe2p7'
           }
         },
         'benefits-documents' => {
-          'acgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
-          },
           'ccgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
+            'sandboxAud' => 'ausi3ui83fLa68IJv2p7',
+            'productionAud' => 'ausi3ui83fLa68IJv2p7'
           }
         },
         'direct-deposit-management' => {
-          'acgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
-          },
           'ccgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
+            'sandboxAud' => 'ausi0e21hbv5iElEh2p7',
+            'productionAud' => 'ausi0e21hbv5iElEh2p7'
           }
         },
         'clinical_health' => {
           'acgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
+            'sandboxAud' => 'default',
+            'productionAud' => 'default'
           },
           'ccgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
+            'sandboxAud' => 'aus8nm1q0f7VQ0a482p7',
+            'productionAud' => 'aus8nm1q0f7VQ0a482p7'
           }
         },
         'community_care' => {
           'acgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
-          },
-          'ccgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
-          }
-        },
-        'fhir' => {
-          'acgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
-          },
-          'ccgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
+            'sandboxAud' => 'aus89xnh1xznM13SK2p7',
+            'productionAud' => 'aus89xnh1xznM13SK2p7'
           }
         },
         'lgy_guaranty_remittance' => {
-          'acgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
-          },
           'ccgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
+            'sandboxAud' => 'auseavl6o5AjGZr2n2p7',
+            'productionAud' => 'auseavl6o5AjGZr2n2p7'
           }
         },
         'loan-review' => {
-          'acgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
-          },
           'ccgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
+            'sandboxAud' => 'aushu53xo9vsmmmKv2p7',
+            'productionAud' => 'aushu53xo9vsmmmKv2p7'
           }
         },
         'address_validation' => {
-          'acgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
-          },
           'ccgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
+            'sandboxAud' => 'ausfhzmx8hzZ6Pdye2p7',
+            'productionAud' => 'ausfhzmx8hzZ6Pdye2p7'
           }
         },
         'contact_information' => {
-          'acgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
-          },
           'ccgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
+            'sandboxAud' => 'ausfhzmx8hzZ6Pdye2p7',
+            'productionAud' => 'TBD'
           }
         },
         'va_letter_generator' => {
-          'acgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
-          },
           'ccgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
+            'sandboxAud' => 'ausftw7zk6eHr7gMN2p7',
+            'productionAud' => 'ausftw7zk6eHr7gMN2p7'
           }
         },
         'veteran_verification' => {
           'acgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
-          },
-          'ccgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
-          }
-        },
-        'pgd' => {
-          'acgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
-          },
-          'ccgInfo' => {
-            'sandboxAud' => 'UPDATEME',
-            'productionAud' => 'UPDATEME'
+            'sandboxAud' => 'aus7y0sefudDrg2HI2p7',
+            'productionAud' => 'aus7y0sefudDrg2HI2p7'
           }
         }
       }.freeze
