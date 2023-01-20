@@ -90,6 +90,7 @@ Metrics/MethodLength:
     - 'app/controllers/admin/api/v0/apis_controller.rb'
     - 'spec/services/consumer_import_service_spec.rb'
     - 'app/models/api.rb'
+    - 'lib/tasks/aud_values.rake'
   IgnoredMethods:
     - 'user_params'
     - 'signup_params'
@@ -146,7 +147,7 @@ Naming/AccessorMethodName:
 
 Rails/LexicallyScopedActionFilter:
   Exclude:
-    - "app/controllers/concerns/filterable.rb"
+    - 'app/controllers/concerns/filterable.rb'
 
 # Blocks are limited to 25 lines or less
 # removing block length rule for rspec DSL
@@ -166,19 +167,18 @@ Metrics/BlockLength:
 # See: https://github.com/rubocop-hq/rubocop/issues/4222
 Lint/AmbiguousBlockAssociation:
   Exclude:
-    - "spec/**/*"
-
+    - 'spec/**/*'
 
 # Don't enforce super for service objects
 # because it breaks when using the `self.call(*args, &block)` pattern
 Lint/MissingSuper:
   Exclude:
-    - "app/services/**/*"
+    - 'app/services/**/*'
 
 # This file does not need to be snake case
 Naming/FileName:
   Exclude:
-    - "Guardfile"
+    - 'Guardfile'
 
 # TODO: REVIEW THESE AND MAKE CHANGES
 
@@ -418,4 +418,3 @@ RSpec/FilePath:
   Enabled: false
 RSpec/MultipleMemoizedHelpers:
   Enabled: false
-

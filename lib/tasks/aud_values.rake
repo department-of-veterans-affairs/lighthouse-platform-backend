@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :aud_values do
     desc 'inject OAuth audience values'
     task seedAudienceValues: :environment do
