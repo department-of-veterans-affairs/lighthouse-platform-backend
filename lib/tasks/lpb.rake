@@ -4,8 +4,6 @@ namespace :lpb do
   desc 'Inject sandbox and production .well-known config urls'
   task seedWellKnownConfigValues: :environment do
     apis = ApiMetadatum.where.not(oauth_info: nil)
-    # apis = [ApiMetadatum.find(3)]
-    p apis.length
     apis.each do |api|
       p api[:display_name]
       process_auth_type(api, 'acgInfo') if api.oauth_info['acgInfo'].present?
@@ -15,8 +13,8 @@ namespace :lpb do
 
   def get_base_url(environment)
     base_urls = {
-      'development' => 'https://dev-api.va.gov',
       'production' => 'https://api.va.gov',
+      'qa' => 'https://dev-api.va.gov',
       'sandbox' => 'https://sandbox-api.va.gov',
       'staging' => 'https://staging-api.va.gov',
       'test' => 'https://dev-api.va.gov'
@@ -73,7 +71,7 @@ namespace :lpb do
 
   def process_auth_type(api, type)
     url_fragment = api[:url_fragment]
-    environment = ENV.fetch('RAILS_ENV')
+    environment = ENV.fetch('ENVIRONMENT')
     p api.oauth_info
     api.oauth_info[type]['productionWellKnownConfig'] = get_base_url(environment) + get_path(url_fragment, type)
     environment = 'sandbox' if environment == 'production'
