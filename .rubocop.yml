@@ -90,6 +90,7 @@ Metrics/MethodLength:
     - 'app/controllers/admin/api/v0/apis_controller.rb'
     - 'spec/services/consumer_import_service_spec.rb'
     - 'app/models/api.rb'
+    - 'lib/tasks/lpb.rake'
   IgnoredMethods:
     - 'user_params'
     - 'signup_params'
