@@ -92,7 +92,6 @@ Metrics/MethodLength:
     - 'app/models/api.rb'
     - 'lib/tasks/aud_values.rake'
     - 'lib/tasks/lpb.rake'
-    - 'lib/tasks/aud_values.rake'
   IgnoredMethods:
     - 'user_params'
     - 'signup_params'
