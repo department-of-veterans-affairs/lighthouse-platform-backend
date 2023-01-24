@@ -72,12 +72,21 @@ namespace :lpb do
 
   def process_auth_type(api, type)
     url_fragment = api[:url_fragment]
-    environment = ENV.fetch('ENVIRONMENT')
+    environment = 'qa'
     p api.oauth_info
-    api.oauth_info[type]['productionWellKnownConfig'] = get_base_url(environment) + get_path(url_fragment, type)
+    json = JSON.parse(api.oauth_info)
+    prodMerge = {
+      'productionWellKnownConfig' => get_base_url(environment) + get_path(url_fragment, type)
+    }
+    p prodMerge
+    json[type] = json[type].to_hash.merge(prodMerge)
     environment = 'sandbox' if environment == 'production'
-    api.oauth_info[type]['sandboxWellKnownConfig'] = get_base_url(environment) + get_path(url_fragment, type)
-    p api.oauth_info
+    sandboxMerge = {
+      'sandboxWellKnownConfig' => get_base_url(environment) + get_path(url_fragment, type)
+    }
+    p sandboxMerge
+    json[type] = json[type].to_hash.merge(sandboxMerge)
+    api.oauth_info = json.to_json
     api.save
   end
 end
