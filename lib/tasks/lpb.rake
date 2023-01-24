@@ -72,7 +72,7 @@ namespace :lpb do
 
   def process_auth_type(api, type)
     url_fragment = api[:url_fragment]
-    environment = 'qa'
+    environment = ENV.fetch('ENVIRONMENT') || 'qa'
     p api.oauth_info
     json = JSON.parse(api.oauth_info)
     prodMerge = {
