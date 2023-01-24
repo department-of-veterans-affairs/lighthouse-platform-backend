@@ -35,7 +35,7 @@ RailsAdmin.config do |config|
     # history_show
   end
 
-  config.model ApiMetadatum do
+  config.model 'ApiMetadatum' do
     show do
       configure :oauth_info do
         formatted_value do
