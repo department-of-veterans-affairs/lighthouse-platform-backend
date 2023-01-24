@@ -24,21 +24,27 @@ namespace :lpb do
 
   def get_path(url_fragment, type)
     paths = {
-      'claims' => {
-        'acgInfo' => '/oauth2/claims/v1/.well-known/openid-configuration',
-        'ccgInfo' => '/oauth2/claims/system/v1/.well-known/openid-configuration'
+      'address_validation' => {
+        'ccgInfo' => '/oauth2/va-profile/system/v1/.well-known/openid-configuration'
       },
       'benefits-documents' => {
         'ccgInfo' => '/oauth2/benefits-documents/system/v1/.well-known/openid-configuration'
       },
-      'direct-deposit-management' => {
-        'ccgInfo' => '/oauth2/direct-deposit-management/system/v1/.well-known/openid-configuration'
+      'claims' => {
+        'acgInfo' => '/oauth2/claims/v1/.well-known/openid-configuration',
+        'ccgInfo' => '/oauth2/claims/system/v1/.well-known/openid-configuration'
       },
       'clinical_health' => {
         'acgInfo' => '/oauth2/clinical-health/system/v1/.well-known/openid-configuration'
       },
       'community_care' => {
         'acgInfo' => '/oauth2/community-care/v1/.well-known/openid-configuration'
+      },
+      'contact_information' => {
+        'ccgInfo' => '/oauth2/va-profile/system/v1/.well-known/openid-configuration'
+      },
+      'direct-deposit-management' => {
+        'ccgInfo' => '/oauth2/direct-deposit-management/system/v1/.well-known/openid-configuration'
       },
       'fhir' => {
         'acgInfo' => '/oauth2/health/v1/.well-known/openid-configuration',
@@ -50,20 +56,15 @@ namespace :lpb do
       'loan-review' => {
         'ccgInfo' => '/oauth2/loan-review/system/v1/.well-known/openid-configuration'
       },
-      'address_validation' => {
-        'ccgInfo' => '/oauth2/va-profile/system/v1/.well-known/openid-configuration'
-      },
-      'contact_information' => {
-        'ccgInfo' => '/oauth2/va-profile/system/v1/.well-known/openid-configuration'
+      'pgd' => {
+        'ccgInfo' => '/oauth2/pgd/system/v1/.well-known/openid-configuration'
       },
       'va_letter_generator' => {
         'ccgInfo' => '/oauth2/va-letter-generator/system/v1/.well-known/openid-configuration'
       },
       'veteran_verification' => {
-        'acgInfo' => '/oauth2/veteran-verification/v1/.well-known/openid-configuration'
-      },
-      'pgd' => {
-        'ccgInfo' => '/oauth2/pgd/system/v1/.well-known/openid-configuration'
+        'acgInfo' => '/oauth2/veteran-verification/v1/.well-known/openid-configuration',
+        'ccgInfo' => '/oauth2/veteran-verification/system/v1/.well-known/openid-configuration'
       }
     }.freeze
     paths[url_fragment][type]
