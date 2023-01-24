@@ -35,8 +35,6 @@ FactoryBot.define do
           },
           acgInfo: {
             baseAuthPath: Faker::Internet.domain_name,
-            productionAud: Faker::Lorem.word,
-            sandboxAud: Faker::Lorem.word,
             productionWellKnownConfig: Faker::Internet.url,
             sandboxWellKnownConfig: Faker::Internet.url,
             productionAud: Faker::Lorem.word,
