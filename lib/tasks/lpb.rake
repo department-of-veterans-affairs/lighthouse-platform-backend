@@ -1,38 +1,38 @@
+# frozen_string_literal: true
+
 namespace :lpb do
-  desc "Inject sandbox and production .well-known config urls"
+  desc 'Inject sandbox and production .well-known config urls'
   task seedWellKnownConfigValues: :environment do
     apis = ApiMetadatum.where.not(oauth_info: nil)
-    # apis = [ApiMetadatum.find(3)]
-    p apis.length
     apis.each do |api|
       p api[:display_name]
-      if api.oauth_info['acgInfo'].present?
-        process_auth_type(api, 'acgInfo')
-      end
-      if api.oauth_info['ccgInfo'].present?
-        process_auth_type(api, 'ccgInfo')
-      end
+      process_auth_type(api, 'acgInfo') if api.oauth_info['acgInfo'].present?
+      process_auth_type(api, 'ccgInfo') if api.oauth_info['ccgInfo'].present?
     end
   end
 
-  def process_auth_type(api, type)
-    configBaseUrl = {
-      'development' => 'https://dev-api.va.gov',
+  def get_base_url(environment)
+    base_urls = {
       'production' => 'https://api.va.gov',
+      'qa' => 'https://dev-api.va.gov',
       'sandbox' => 'https://sandbox-api.va.gov',
       'staging' => 'https://staging-api.va.gov',
       'test' => 'https://dev-api.va.gov'
     }.freeze
-    config = { 
-      'claims' => {
-        'acgInfo' => '/oauth2/claims/v1/.well-known/openid-configuration', 
-        'ccgInfo' => '/oauth2/claims/system/v1/.well-known/openid-configuration'
+    base_urls[environment]
+  end
+
+  def get_path(url_fragment, type)
+    paths = {
+      'address_validation' => {
+        'ccgInfo' => '/oauth2/va-profile/system/v1/.well-known/openid-configuration'
       },
       'benefits-documents' => {
         'ccgInfo' => '/oauth2/benefits-documents/system/v1/.well-known/openid-configuration'
       },
-      'direct-deposit-management' => {
-        'ccgInfo' => '/oauth2/direct-deposit-management/system/v1/.well-known/openid-configuration'
+      'claims' => {
+        'acgInfo' => '/oauth2/claims/v1/.well-known/openid-configuration',
+        'ccgInfo' => '/oauth2/claims/system/v1/.well-known/openid-configuration'
       },
       'clinical_health' => {
         'acgInfo' => '/oauth2/clinical-health/system/v1/.well-known/openid-configuration'
@@ -40,8 +40,14 @@ namespace :lpb do
       'community_care' => {
         'acgInfo' => '/oauth2/community-care/v1/.well-known/openid-configuration'
       },
+      'contact_information' => {
+        'ccgInfo' => '/oauth2/va-profile/system/v1/.well-known/openid-configuration'
+      },
+      'direct-deposit-management' => {
+        'ccgInfo' => '/oauth2/direct-deposit-management/system/v1/.well-known/openid-configuration'
+      },
       'fhir' => {
-        'acgInfo' => '/oauth2/health/v1/.well-known/openid-configuration', 
+        'acgInfo' => '/oauth2/health/v1/.well-known/openid-configuration',
         'ccgInfo' => '/oauth2/health/system/v1/.well-known/openid-configuration'
       },
       'lgy_guaranty_remittance' => {
@@ -50,33 +56,37 @@ namespace :lpb do
       'loan-review' => {
         'ccgInfo' => '/oauth2/loan-review/system/v1/.well-known/openid-configuration'
       },
-      'address_validation' => {
-        'ccgInfo' => '/oauth2/va-profile/system/v1/.well-known/openid-configuration'
-      },
-      'contact_information' => {
-        'ccgInfo' => '/oauth2/va-profile/system/v1/.well-known/openid-configuration'
+      'pgd' => {
+        'ccgInfo' => '/oauth2/pgd/system/v1/.well-known/openid-configuration'
       },
       'va_letter_generator' => {
         'ccgInfo' => '/oauth2/va-letter-generator/system/v1/.well-known/openid-configuration'
       },
       'veteran_verification' => {
-        'acgInfo' => '/oauth2/veteran-verification/v1/.well-known/openid-configuration'
-      },
-      'pgd' => {
-        'ccgInfo' => '/oauth2/pgd/system/v1/.well-known/openid-configuration'
+        'acgInfo' => '/oauth2/veteran-verification/v1/.well-known/openid-configuration',
+        'ccgInfo' => '/oauth2/veteran-verification/system/v1/.well-known/openid-configuration'
       }
     }.freeze
-    urlFragment = api[:url_fragment]
-    p config[urlFragment][type]
-    environment = ENV['RAILS_ENV']
-    p configBaseUrl[environment]
+    paths[url_fragment][type]
+  end
+
+  def process_auth_type(api, type)
+    url_fragment = api[:url_fragment]
+    environment = ENV.fetch('ENVIRONMENT') || 'qa'
     p api.oauth_info
-    api.oauth_info[type]['productionWellKnownConfig'] = configBaseUrl[environment] + config[urlFragment][type]
-    if environment == 'production'
-      environment = 'sandbox'
-    end
-    api.oauth_info[type]['sandboxWellKnownConfig'] = configBaseUrl[environment] + config[urlFragment][type]
-    p api.oauth_info
+    json = JSON.parse(api.oauth_info)
+    prod_merge = {
+      'productionWellKnownConfig' => get_base_url(environment) + get_path(url_fragment, type)
+    }
+    p prod_merge
+    json[type] = json[type].to_hash.merge(prod_merge)
+    environment = 'sandbox' if environment == 'production'
+    sandbox_merge = {
+      'sandboxWellKnownConfig' => get_base_url(environment) + get_path(url_fragment, type)
+    }
+    p sandbox_merge
+    json[type] = json[type].to_hash.merge(sandbox_merge)
+    api.oauth_info = json.to_json
     api.save
   end
 end
