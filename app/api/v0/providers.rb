@@ -217,8 +217,6 @@ module V0
             end
             optional :acgInfo, type: Hash do
               optional :baseAuthPath, type: String, allow_blank: false
-              optional :productionAud, type: String, allow_blank: true
-              optional :sandboxAud, type: String, allow_blank: true
               optional :productionWellKnownConfig, type: String, allow_blank: true
               optional :sandboxWellKnownConfig, type: String, allow_blank: true
               optional :productionAud, type: String, allow_blank: true
