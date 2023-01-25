@@ -75,13 +75,17 @@ namespace :lpb do
     environment = ENV.fetch('ENVIRONMENT') || 'qa'
     p api.oauth_info
     json = JSON.parse(api.oauth_info)
-    json[type] = json[type].to_hash.merge({
+    prod_merge = {
       'productionWellKnownConfig' => get_base_url(environment) + get_path(url_fragment, type)
-    })
+    }
+    p prod_merge
+    json[type] = json[type].to_hash.merge(prod_merge)
     environment = 'sandbox' if environment == 'production'
-    json[type] = json[type].to_hash.merge({
+    sandbox_merge = {
       'sandboxWellKnownConfig' => get_base_url(environment) + get_path(url_fragment, type)
-    })
+    }
+    p sandbox_merge
+    json[type] = json[type].to_hash.merge(sandbox_merge)
     api.oauth_info = json.to_json
     api.save
   end
