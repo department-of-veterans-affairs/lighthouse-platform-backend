@@ -5,8 +5,9 @@ namespace :aud_values do
   task seedAudienceValues: :environment do
     apis = ApiMetadatum.where.not(oauth_info: nil)
     apis.each do |api|
-      update_oauth_aud_values(api, 'acgInfo') if api.oauth_info['acgInfo'].present?
-      update_oauth_aud_values(api, 'ccgInfo') if api.oauth_info['ccgInfo'].present?
+      json = JSON.parse(api.oauth_info)
+      update_oauth_aud_values(api, 'acgInfo') if json['acgInfo'].present?
+      update_oauth_aud_values(api, 'ccgInfo') if json['ccgInfo'].present?
     end
   end
 
@@ -95,8 +96,13 @@ namespace :aud_values do
     environment = ENV.fetch('ENVIRONMENT') || 'qa'
     sandbox_aud = get_aud_values(url_fragment, oauth_type, 'sandboxAud')
     production_aud = get_aud_values(url_fragment, oauth_type, 'productionAud')
-    api.oauth_info[oauth_type]['sandboxAud'] = sandbox_aud
-    api.oauth_info[oauth_type]['productionAud'] = environment == 'production' ? production_aud : sandbox_aud
+    audiences = {
+      'sandboxAud' => sandbox_aud,
+      'productionAud' => environment == 'production' ? production_aud : sandbox_aud
+    }
+    json = JSON.parse(api.oauth_info)
+    json[type] = json[type].to_hash.merge(audiences)
+    api.oauth_info = json.to_json
     api.save
   end
 end
