@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-namespace :aud_values do
+namespace :lpb do
   desc 'inject OAuth audience values'
   task seedAudienceValues: :environment do
     apis = ApiMetadatum.where.not(oauth_info: nil)
@@ -88,21 +88,23 @@ namespace :aud_values do
         }
       }
     }.freeze
-    audience_values[url_fragment][type][audience]
+    audience_values.dig([url_fragment], [type], [audience])
   end
 
   def update_oauth_aud_values(api, oauth_type)
     url_fragment = api[:url_fragment]
     environment = ENV.fetch('ENVIRONMENT') || 'qa'
     sandbox_aud = get_aud_values(url_fragment, oauth_type, 'sandboxAud')
-    production_aud = get_aud_values(url_fragment, oauth_type, 'productionAud')
-    audiences = {
-      'sandboxAud' => sandbox_aud,
-      'productionAud' => environment == 'production' ? production_aud : sandbox_aud
-    }
-    json = JSON.parse(api.oauth_info)
-    json[oauth_type] = json[oauth_type].to_hash.merge(audiences)
-    api.oauth_info = json.to_json
-    api.save
+    production_aud = environment == 'production' ? get_aud_values(url_fragment, oauth_type, 'productionAud') : sandbox_aud
+    if sandbox_aud.present? && production_aud.present?
+      audiences = {
+        'sandboxAud' => sandbox_aud,
+        'productionAud' => production_aud
+      }
+      json = JSON.parse(api.oauth_info)
+      json[oauth_type] = json[oauth_type].to_hash.merge(audiences)
+      api.oauth_info = json.to_json
+      api.save
+    end
   end
 end
