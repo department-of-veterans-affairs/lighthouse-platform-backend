@@ -93,10 +93,10 @@ namespace :aud_values do
   def update_oauth_aud_values(api, oauth_type)
     url_fragment = api[:url_fragment]
     environment = ENV.fetch('ENVIRONMENT') || 'qa'
-    sandboxAud = get_aud_values(url_fragment, oauth_type, 'sandboxAud')
-    productionAud = get_aud_values(url_fragment, oauth_type, 'productionAud')
-    api.oauth_info[oauth_type]['sandboxAud'] = sandboxAud
-    api.oauth_info[oauth_type]['productionAud'] = environment == 'production' ? productionAud : sandboxAud
+    sandbox_aud = get_aud_values(url_fragment, oauth_type, 'sandboxAud')
+    production_aud = get_aud_values(url_fragment, oauth_type, 'productionAud')
+    api.oauth_info[oauth_type]['sandboxAud'] = sandbox_aud
+    api.oauth_info[oauth_type]['productionAud'] = environment == 'production' ? production_aud : sandbox_aud
     api.save
   end
 end
