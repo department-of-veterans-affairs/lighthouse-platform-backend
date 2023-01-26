@@ -16,8 +16,8 @@ namespace :spec do
       Rake::Task['spec'].invoke
     rescue SystemExit => e
       e.status
-    else
-      0
+                  else
+                    0
     end
 
     if ENV['CC_TEST_REPORTER_ID']
