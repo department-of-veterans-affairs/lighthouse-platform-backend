@@ -101,7 +101,7 @@ namespace :aud_values do
       'productionAud' => environment == 'production' ? production_aud : sandbox_aud
     }
     json = JSON.parse(api.oauth_info)
-    json[type] = json[type].to_hash.merge(audiences)
+    json[oauth_type] = json[oauth_type].to_hash.merge(audiences)
     api.oauth_info = json.to_json
     api.save
   end
