@@ -88,7 +88,7 @@ namespace :lpb do
         }
       }
     }.freeze
-    audience_values.dig([url_fragment], [type], [audience])
+    audience_values.dig(:url_fragment, :type, :audience)
   end
 
   def update_oauth_aud_values(api, oauth_type)
