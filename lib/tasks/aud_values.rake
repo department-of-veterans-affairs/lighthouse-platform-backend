@@ -103,7 +103,6 @@ namespace :lpb do
     sandbox_aud = get_aud_values(url_fragment, oauth_type, 'sandboxAud')
     production_aud = environment == 'production' ? get_aud_values(url_fragment, oauth_type, 'productionAud') : sandbox_aud
     if sandbox_aud.present? && production_aud.present?
-      p 'inside'
       audiences = {
         'sandboxAud' => sandbox_aud,
         'productionAud' => production_aud
