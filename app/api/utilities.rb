@@ -26,8 +26,28 @@ class Utilities < Base
   resource 'utilities' do
     resource 'consumers' do
       desc 'Returns list of consumers'
+      params do
+        optional :apiId, type: Integer, description: 'Id of API to filter for'
+        optional :environment, type: String, description: 'Environment to filter for', values: %w[sandbox production]
+        all_or_none_of :apiId, :environment
+      end
       get '/' do
-        users = User.kept.select { |user| user.consumer.present? }
+        # no filters provided, return all consumers
+        unless params[:apiId] && params[:environment]
+          users = User.kept.select { |user| user.consumer.present? }
+          return present users, with: Entities::UserEntity
+        end
+
+        api_id_filter = params[:apiId]
+        environment_filter = params[:environment]
+
+        api = Api.find(api_id_filter)
+        environment = Environment.find_by(name: environment_filter)
+        api_environment = ApiEnvironment.find_by(environment: environment, api: api)
+
+        users = api_environment.consumer_api_assignment.map do |record|
+          record.consumer.user.kept? ? record.consumer.user : nil
+        end.compact
 
         present users, with: Entities::UserEntity
       end
