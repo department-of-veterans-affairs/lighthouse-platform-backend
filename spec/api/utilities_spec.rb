@@ -30,6 +30,57 @@ describe Utilities, type: :request do
       expect(response).to have_http_status(:ok)
     end
 
+    context 'filtering users/consumers' do
+      context 'by api and environment' do
+        context "enforcing all-or-none for 'apiId' and 'environment' filters" do
+          it "rejects the request if 'apiId' is present, but 'environment' isn't" do
+            get '/platform-backend/utilities/consumers?apiId=1'
+            expect(response).to have_http_status(:bad_request)
+          end
+
+          it "rejects the request if 'environment' is present, but 'apiId' isn't" do
+            get '/platform-backend/utilities/consumers?environment=sandbox'
+            expect(response).to have_http_status(:bad_request)
+          end
+        end
+
+        context "enforcing allowed values for 'environment'" do
+          context "when 'environment' is anything other than 'sandbox' or 'production'" do
+            it 'rejects the request' do
+              get '/platform-backend/utilities/consumers?apiId=1&environment=blah'
+              expect(response).to have_http_status(:bad_request)
+            end
+          end
+        end
+
+        it 'returns only matching users/consumers' do
+          temp_user = create(:user)
+          temp_consumer = create(:consumer, :with_production_apis, user_id: temp_user.id)
+          temp_api = temp_consumer.api_environments.first.api
+
+          get "/platform-backend/utilities/consumers?apiId=#{temp_api.id}&environment=production"
+
+          json_output = JSON.parse(response.body)
+          expect(json_output.count).to be(1)
+          expect(json_output.first['email']).to eq(temp_user.email)
+        end
+
+        context 'when the user/consumer has been discarded' do
+          it 'does not return the discarded user/consumer' do
+            temp_user = create(:user)
+            temp_consumer = create(:consumer, :with_production_apis, user_id: temp_user.id)
+            temp_api = temp_consumer.api_environments.first.api
+            temp_user.discard
+
+            get "/platform-backend/utilities/consumers?apiId=#{temp_api.id}&environment=production"
+
+            json_output = JSON.parse(response.body)
+            expect(json_output.count).to be(0)
+          end
+        end
+      end
+    end
+
     it 'gets weekly signups for consumers' do
       get '/platform-backend/utilities/consumers/signups-report/week'
       expect(response).to have_http_status(:ok)
