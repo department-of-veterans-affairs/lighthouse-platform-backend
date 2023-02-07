@@ -13,6 +13,8 @@ FactoryBot.define do
           baseAuthPath: "/oauth2/#{Faker::Lorem.word}/v1",
           productionWellKnownConfig: Faker::Internet.url,
           sandboxWellKnownConfig: Faker::Internet.url,
+          productionAud: Faker::Internet.slug,
+          sandboxAud: Faker::Internet.slug,
           scopes: Faker::Lorem.words(number: 5)
         },
         ccgInfo: {

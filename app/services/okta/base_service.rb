@@ -116,10 +116,10 @@ module Okta
     end
 
     def auth_server_id(api, type)
-      server_per_type = Figaro.env.send("#{api.auth_server_access_key}_#{type}")
+      parsed_oauth_info = JSON.parse(api.api_metadatum.oauth_info)
+      server_per_type = parsed_oauth_info['acgInfo']['sandboxAud'] || 
+                        parsed_oauth_info['ccgInfo']['sandboxAud']
       return server_per_type if server_per_type.present?
-
-      Figaro.env.send(api.auth_server_access_key)
     end
 
     def consumer_name(user)

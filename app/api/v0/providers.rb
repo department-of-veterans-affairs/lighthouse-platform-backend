@@ -219,6 +219,8 @@ module V0
               optional :baseAuthPath, type: String, allow_blank: false
               optional :productionWellKnownConfig, type: String, allow_blank: true
               optional :sandboxWellKnownConfig, type: String, allow_blank: true
+              optional :productionAud, type: String, allow_blank: true
+              optional :sandboxAud, type: String, allow_blank: true
               optional :scopes, type: Array[String], allow_blank: false,
                                 description: 'Scopes available<br /><h2>Comma separated!<h2>',
                                 coerce_with: lambda { |v|

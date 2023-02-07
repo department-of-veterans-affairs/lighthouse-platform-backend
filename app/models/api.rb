@@ -30,10 +30,10 @@ class Api < ApplicationRecord
   def locate_auth_types
     types = []
     types << AUTH_TYPES[:apikey] if acl.present?
-    if auth_server_access_key.present?
-      types << AUTH_TYPES[:acg] if Figaro.env.send(auth_server_access_key).present?
-      types << AUTH_TYPES[:acg] if Figaro.env.send("#{auth_server_access_key}_acg").present?
-      types << AUTH_TYPES[:ccg] if Figaro.env.send("#{auth_server_access_key}_ccg").present?
+    if api_metadatum.oauth_info.present?
+      parsed_oauth_info = JSON.parse(api_metadatum.oauth_info)
+      types << AUTH_TYPES[:acg] if parsed_oauth_info['acgInfo']['sandboxAud'].present?
+      types << AUTH_TYPES[:ccg] if parsed_oauth_info['ccgInfo']['sandboxAud'].present?
     end
     types.uniq
   end
