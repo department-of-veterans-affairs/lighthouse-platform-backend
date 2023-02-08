@@ -88,6 +88,10 @@ namespace :lpb do
         }
       },
       'fhir' => {
+        'acgInfo' => {
+          'productionAud' => 'default',
+          'sandboxAud' => 'default'
+        },
         'ccgInfo' => {
           'productionAud' => 'aus8evxtl123l7Td3297',
           'sandboxAud' => 'aus8nm1q0f7VQ0a482p7'
