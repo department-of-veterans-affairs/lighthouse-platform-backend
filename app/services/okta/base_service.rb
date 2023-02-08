@@ -8,6 +8,11 @@ module Okta
       @client = Oktakit::Client.new(token: okta_token, api_endpoint: okta_api_endpoint)
     end
 
+    OAUTH_TYPES = {
+      acg: 'acg',
+      ccg: 'ccg'
+    }.freeze
+
     def list_applications
       resp, = @client.list_applications
       resp.map(&:to_h)
@@ -19,8 +24,8 @@ module Okta
     end
 
     def consumer_signup(user, options = {})
-      acg_application = consumer_signup_per_type(user, 'acg', options)
-      ccg_application = consumer_signup_per_type(user, 'ccg', options)
+      acg_application = consumer_signup_per_type(user, OAUTH_TYPES[:acg], options)
+      ccg_application = consumer_signup_per_type(user, OAUTH_TYPES[:ccg], options)
 
       { acg: acg_application, ccg: ccg_application }
     end
@@ -117,9 +122,11 @@ module Okta
 
     def auth_server_id(api, type)
       parsed_oauth_info = JSON.parse(api.api_metadatum.oauth_info)
-      server_per_type = parsed_oauth_info['acgInfo']['sandboxAud'] || 
-                        parsed_oauth_info['ccgInfo']['sandboxAud']
-      return server_per_type if server_per_type.present?
+      if (type == OAUTH_TYPES[:acg]) {
+        return parsed_oauth_info['acgInfo']['sandboxAud']
+      } elsif (type == OAUTH_TYPES[:ccg]) {
+        return parsed_oauth_info['ccgInfo']['sandboxAud']
+      }
     end
 
     def consumer_name(user)
@@ -135,8 +142,8 @@ module Okta
     end
 
     def build_new_application_payload(user, type, options = {})
-      return build_new_ccg_application_payload(user, options) if type == 'ccg'
-      return build_new_acg_application_payload(user, options) if type == 'acg'
+      return build_new_ccg_application_payload(user, options) if type == OAUTH_TYPES[:ccg]
+      return build_new_acg_application_payload(user, options) if type == OAUTH_TYPES[:acg]
 
       raise 'Invalid supplied arguments'
     end
