@@ -122,11 +122,8 @@ module Okta
 
     def auth_server_id(api, type)
       parsed_oauth_info = JSON.parse(api.api_metadatum.oauth_info)
-      if (type == OAUTH_TYPES[:acg]) {
-        return parsed_oauth_info['acgInfo']['sandboxAud']
-      } elsif (type == OAUTH_TYPES[:ccg]) {
-        return parsed_oauth_info['ccgInfo']['sandboxAud']
-      }
+      return parsed_oauth_info['acgInfo']['sandboxAud'] if type == OAUTH_TYPES[:acg]
+      return parsed_oauth_info['ccgInfo']['sandboxAud'] if type == OAUTH_TYPES[:ccg]
     end
 
     def consumer_name(user)
