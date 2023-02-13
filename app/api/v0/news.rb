@@ -20,6 +20,7 @@ module V0
       params do
         requires :title, type: String, allow_blank: false
         requires :url, type: String, allow_blank: false
+        requires :category, type: String, values: %w[articles digital_media news_releases], allow_blank: false
       end
       post '/' do
         validate_token(Scope.provider_write)

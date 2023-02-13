@@ -5,6 +5,7 @@ module Entities
       expose :id
       expose :title
       expose :url
+      expose :category
       expose :created_at, as: :createdAt
       expose :updated_at, as: :updatedAt
     end
