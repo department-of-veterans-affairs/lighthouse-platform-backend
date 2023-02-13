@@ -105,7 +105,12 @@ namespace :lpb do
     url_fragment = api[:url_fragment]
     environment = ENV.fetch('ENVIRONMENT') || 'qa'
     sandbox_aud = get_aud_values(url_fragment, oauth_type, 'sandboxAud')
-    production_aud = environment == 'production' ? get_aud_values(url_fragment, oauth_type, 'productionAud') : sandbox_aud
+    production_aud = if environment == 'production'
+                       get_aud_values(url_fragment, oauth_type,
+                                      'productionAud')
+                     else
+                       sandbox_aud
+                     end
     if sandbox_aud.present? && production_aud.present?
       audiences = {
         'sandboxAud' => sandbox_aud,
