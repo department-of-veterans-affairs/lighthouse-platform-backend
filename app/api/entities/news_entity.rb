@@ -6,6 +6,7 @@ module Entities
     expose :title
     expose :url
     expose :category
+    expose :source
     expose :created_at, as: :createdAt
     expose :updated_at, as: :updatedAt
   end
