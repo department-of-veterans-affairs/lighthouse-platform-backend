@@ -40,7 +40,7 @@ RailsAdmin.config do |config|
       configure :oauth_info do
         formatted_value do
           JSON.pretty_generate(JSON.parse(value))
-        rescue => e
+        rescue
           JSON.pretty_generate(JSON.parse('{}'))
         end
       end
@@ -49,7 +49,7 @@ RailsAdmin.config do |config|
       configure :oauth_info, :code_mirror do
         formatted_value do
           JSON.pretty_generate(JSON.parse(value))
-        rescue => e
+        rescue
           JSON.pretty_generate(JSON.parse('{}'))
         end
       end
