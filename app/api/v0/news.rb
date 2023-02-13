@@ -14,7 +14,7 @@ module V0
       }
       get '/' do
         news = News
-        present news, with: V0:Entities::NewsEntity
+        present news, with: V0::Entities::NewsEntity
       end
 
       params do
