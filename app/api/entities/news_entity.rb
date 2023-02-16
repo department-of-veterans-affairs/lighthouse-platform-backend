@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 module Entities
-  class NewsEntity < Grape::Entity
-    expose :id
-    expose :title
-    expose :url
-    expose :category
-    expose :source
-    expose :created_at, as: :createdAt
-    expose :updated_at, as: :updatedAt
+    class NewsEntity < Grape::Entity
+      expose :call_to_action, as: :callToAction
+      expose :description
+      expose :items, using: Entities::NewsItemEntity
+      expose :media
+      expose :title
+    end
   end
-end
+  

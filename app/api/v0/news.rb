@@ -27,8 +27,8 @@ module V0
       end
       post '/' do
         validate_token(Scope.provider_write)
-        news_item = News.create(title: params[:title], url: params[:url], category: params[:category], source: params[:source])
-        present news_item, with: V0::Entities::NewsEntity
+        news_item = NewsItem.create(title: params[:title], url: params[:url], category: params[:category], source: params[:source])
+        present news_item, with: V0::Entities::NewsItemEntity
       end
     end
   end
