@@ -6,19 +6,29 @@ This service is the "source of truth" for information regarding a Lighthouse API
 It provides data about consumers that can be retrieved and processed by various Lighthouse systems, such as SalesForce.
 These internal systems can then manage Lighthouse consumers, such as promoting a consumer from sandbox to the production environment.
 
-## Deployment
 
+## Auto-Deployment Lifecycle
 Service lives within the DVP environment and can be found here in production: https://blue.production.lighthouse.va.gov/platform-backend
-within the VA network.
-
-Deploying to production requires a Maintenance Request (MR)
-An MR can be created here: https://github.com/department-of-veterans-affairs/lighthouse-devops-support/issues/new/choose
-
-MR Example here: https://github.com/department-of-veterans-affairs/lighthouse-devops-support/issues/1314
-
-Jenkins CI build for master branch can be found here: https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/lighthouse-platform-backend/job/master/
+within the VA network.  
 
 Deployment repository for this project can be found here: https://github.com/department-of-veterans-affairs/lighthouse-platform-backend-deployment
+
+- Once a PR is merged into Master ::
+  - a [Jenkins CI build](https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/lighthouse-platform-backend/job/master/) is started and if everything builds successfully, the Jenkins CI job will create and publish a [GitHub Release in the LPB Repo](https://github.com/department-of-veterans-affairs/lighthouse-platform-backend/releases).
+  - Once the GitHub Release is published, that will trigger the [`Create Auto Deploy Maintenance Request`](https://github.com/department-of-veterans-affairs/lighthouse-platform-backend/blob/master/.github/workflows/create-auto-deploy-maintenance-request.yml#L1) GitHub Action (GHA) Workflow.
+    - The `Create Auto Deploy Maintenance Request` workflow will check to see if there are any active LPB Maintenance Requests (MR) in the [Lighthouse DevOps Support](https://github.com/department-of-veterans-affairs/lighthouse-devops-support/issues) repo.
+      - If there is an active LPB MR, then do nothing and exit the `Create Auto Deploy Maintenance Request` workflow.  
+      - If there is NOT an active LPB MR ::
+        - auto-generate a new LPB MR ([see an example](https://github.com/department-of-veterans-affairs/lighthouse-devops-support/issues/2182))
+          - scheduled for 10am (eastern time) the next day (or the next Monday if the current day is a Friday)
+          - add a `MR in progress` label to all open PR's in the LPB repo
+          - enable the [`Auto Deploy master to Production`](https://github.com/department-of-veterans-affairs/lighthouse-platform-backend/blob/master/.github/workflows/auto-deploy-to-production.yml#L1) GHA workflow.
+  - The `Auto Deploy master to Production` workflow will periodically check to see if there is an approved LPB MR in the [Lighthouse DevOps Support](https://github.com/department-of-veterans-affairs/lighthouse-devops-support/issues) repo that matches the current day/time.
+    - When the workflow finds an approved LPB MR that matches the current day/time, the workflow will trigger a [Jenkins CI build of the `health-apis-deploy` job](https://tools.health.dev-developer.va.gov/jenkins/job/department-of-veterans-affairs/job/health-apis-deployer/job/d2/) which will deploy the changes to production.
+    - After the job successfully deploys to production, the workflow will ::
+      - Update the LPB MR with the start-time, end-time, and a link to the Jenkins job that peformed the deployment.
+      - Remove the `MR in prgoress` labels from all open PR's in the LPB repo.
+      - Disable the [`Auto Deploy master to Production`](https://github.com/department-of-veterans-affairs/lighthouse-platform-backend/blob/master/.github/workflows/auto-deploy-to-production.yml#L1) GHA Workflow.
 
 
 ## Getting Started
