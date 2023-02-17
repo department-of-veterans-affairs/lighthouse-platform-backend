@@ -138,6 +138,17 @@ module Okta
       "#{consumer_name(user)}-#{Time.now.to_i}#{lower_env? ? '-dev' : ''}"
     end
 
+    def construct_credentials(application_type)
+      if %w[web service].include? application_type
+        { oauthClient: {
+          autoKeyRotation: true,
+          token_endpoint_auth_method: application_type == 'web' ? 'client_secret_basic' : 'private_key_jwt'
+        } }
+      elsif application_type == 'native'
+        { oauthClient: { token_endpoint_auth_method: 'none' } }
+      end
+    end
+
     def build_new_application_payload(user, type, options = {})
       return build_new_ccg_application_payload(user, options) if type == OAUTH_TYPES[:ccg]
       return build_new_acg_application_payload(user, options) if type == OAUTH_TYPES[:acg]
@@ -158,12 +169,7 @@ module Okta
         name: 'oidc_client',
         label: construct_label(user),
         signOnMode: 'OPENID_CONNECT',
-        credentials: {
-          oauthClient: {
-            autoKeyRotation: true,
-            token_endpoint_auth_method: 'client_secret_basic'
-          }
-        },
+        credentials: construct_credentials(options[:application_type]),
         visibility: {
           autoSubmitToolbar: false,
           hide: {
@@ -192,12 +198,7 @@ module Okta
         name: 'oidc_client',
         label: construct_label(user),
         signOnMode: 'OPENID_CONNECT',
-        credentials: {
-          oauthClient: {
-            autoKeyRotation: true,
-            token_endpoint_auth_method: 'private_key_jwt'
-          }
-        },
+        credentials: construct_credentials('service'),
         settings: {
           oauthClient: {
             application_type: 'service',
