@@ -3,6 +3,12 @@
 require 'rails_helper'
 
 describe V0::News, type: :request do
+  let(:news) { create(:news) }
+
+  before do
+    news
+  end
+
   describe 'returns list of news' do
     it 'returns all news' do
       get '/platform-backend/v0/news'
