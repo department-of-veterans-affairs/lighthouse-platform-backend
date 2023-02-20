@@ -188,7 +188,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_13_145053) do
     t.index ["url"], name: "index_malicious_urls_on_url", unique: true
   end
 
-  create_table "news", force: :cascade do |t|
+  create_table "news_categories", force: :cascade do |t|
     t.string "call_to_action"
     t.string "description"
     t.string "media"
@@ -196,14 +196,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_13_145053) do
   end
 
   create_table "news_items", force: :cascade do |t|
-    t.bigint "news_id"
+    t.bigint "news_categories_id"
     t.string "date"
     t.string "source"
     t.string "title"
     t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["news_id"], name: "index_news_items_on_news_id"
+    t.index ["news_categories_id"], name: "index_news_items_on_news_categories_id"
   end
 
   create_table "production_request_contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -289,7 +289,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_13_145053) do
   add_foreign_key "consumer_api_assignments", "consumers"
   add_foreign_key "consumer_auth_refs", "consumers"
   add_foreign_key "consumers", "users"
-  add_foreign_key "news_items", "news"
+  add_foreign_key "news_items", "news_categories", column: "news_categories_id"
   add_foreign_key "production_request_contacts", "production_requests"
   add_foreign_key "production_request_contacts", "users"
 end
