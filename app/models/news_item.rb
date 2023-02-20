@@ -3,6 +3,6 @@
 class NewsItem < ApplicationRecord
   include Discard::Model
 
-  belongs_to :news_category
+  belongs_to :news
   validates :date, :title, :url, presence: true
 end

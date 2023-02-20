@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class NewsCategory < ApplicationRecord
+class News < ApplicationRecord
   include Discard::Model
 
   validates :call_to_action, :description, :media, :title, presence: true
