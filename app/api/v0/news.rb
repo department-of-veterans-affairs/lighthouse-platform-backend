@@ -37,7 +37,7 @@ module V0
       end
       post '/item' do
         news_category = NewsCategory.find_by!(title: params[:title])
-        news_item = NewsItem.create(news_category_id: news_category.id, date: params[:date], source: params[:source],
+        news_item = NewsItem.create(news_categories_id: news_category.id, date: params[:date], source: params[:source],
                                     title: params[:title], url: params[:url])
         present news_item, with: V0::Entities::NewsItemEntity
       end
