@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :news do
+  factory :news_category do
     call_to_action { Faker::Lorem.sentence }
     description { Faker::Lorem.sentence }
     media { Faker::Boolean.boolean }

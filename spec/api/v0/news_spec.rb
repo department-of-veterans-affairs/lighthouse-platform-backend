@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe V0::News, type: :request do
-  let(:news) { create(:news) }
+  let(:news) { create_list(:news_category, 3) }
 
   before do
     news

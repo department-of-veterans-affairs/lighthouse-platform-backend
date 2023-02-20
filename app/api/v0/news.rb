@@ -13,8 +13,8 @@ module V0
         }
       }
       get '/' do
-        news = News.all
-        present news, with: V0::Entities::NewsEntity
+        news = NewsCategory.all
+        present news, with: V0::Entities::NewsCategoryEntity
       end
 
       params do
@@ -24,9 +24,9 @@ module V0
         requires :title, type: String, allow_blank: false
       end
       post '/category' do
-        news_category = News.create(call_to_action: params[:callToAction], description: params[:description],
-                                    media: params[:media], title: params[:title])
-        present news_category, with: V0::Entities::NewsEntity
+        news_category = NewsCategory.create(call_to_action: params[:callToAction], description: params[:description],
+                                            media: params[:media], title: params[:title])
+        present news_category, with: V0::Entities::NewsCategoryEntity
       end
 
       params do
@@ -36,7 +36,7 @@ module V0
         requires :url, type: String, allow_blank: false
       end
       post '/item' do
-        news_category = News.find_by!(title: params[:title])
+        news_category = NewsCategory.find_by!(title: params[:title])
         news_item = NewsItem.create(news_category_id: news_category.id, date: params[:date], source: params[:source],
                                     title: params[:title], url: params[:url])
         present news_item, with: V0::Entities::NewsItemEntity
