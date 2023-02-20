@@ -6,6 +6,6 @@ FactoryBot.define do
     description { Faker::Lorem.sentence }
     media { Faker::Boolean.boolean }
     title { Faker::Lorem.word }
-    news_items { association :news_items }
+    items { association :news_item }
   end
 end
