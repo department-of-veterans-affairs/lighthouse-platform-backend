@@ -5,6 +5,7 @@ module V0
     mount V0::Consumers
     mount V0::Providers
     mount V0::Support
+    mount V0::News
 
     add_swagger_documentation \
       mount_path: '/v0/openapi',
