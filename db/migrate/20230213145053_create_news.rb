@@ -8,7 +8,7 @@ class CreateNews < ActiveRecord::Migration[7.0]
     end
 
     create_table :news_items do |t|
-      t.references :news_categories, foreign_key: true
+      t.references :news_category, foreign_key: true
       t.string :date
       t.string :source
       t.string :title
