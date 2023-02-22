@@ -19,4 +19,20 @@ describe V0::News, type: :request do
       end.to change(NewsCategory, :count).by 1
     end
   end
+
+  describe 'post news item' do
+    let(:news_category) { build(:news_category) }
+
+    before do
+      news_category
+    end
+
+    it 'creates a valid news item for a given news category id' do
+      expect do
+        params = { id: news_category.id, date: '01/01/2020', source: 'VA', title: 'Benefits', url: 'https://www.va.gov' }
+        post "/platform-backend/v0/news/categories/#{news_category.id}/items", params: params
+        expect(response).to have_http_status(:created)
+      end.to change(NewsItem, :count).by 1
+    end
+  end
 end
