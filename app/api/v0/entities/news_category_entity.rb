@@ -5,7 +5,7 @@ module V0
     class NewsCategoryEntity < Grape::Entity
       expose :call_to_action, as: :callToAction
       expose :description
-      expose :items
+      expose :items, using: V0::Entities::NewsItemEntity
       expose :media
       expose :title
     end
