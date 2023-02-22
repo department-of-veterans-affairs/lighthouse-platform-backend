@@ -11,7 +11,7 @@ describe V0::News, type: :request do
   end
 
   describe 'post news category' do
-    let(:news) { build(:news_category) }
+    let(:news) { create(:news_category) }
 
     it 'creates a valid news category' do
       expect do
