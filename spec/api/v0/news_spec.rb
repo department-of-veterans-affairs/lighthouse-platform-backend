@@ -22,7 +22,7 @@ describe V0::News, type: :request do
 
   describe 'post news item' do
     let(:news_category) { create(:news_category) }
-    let(:news_item) { create(:news_item) }
+    let(:news_item) { create(:news_item, news_category_id: news_category.id) }
 
     before do
       news_category
