@@ -30,15 +30,30 @@ module V0
       end
 
       params do
-        requires :id, type: Integer, allow_blank: false
+        requires :categoryId, type: Integer, allow_blank: false
         requires :date, type: String, allow_blank: false
         requires :source, type: String, allow_blank: false
         requires :title, type: String, allow_blank: false
         requires :url, type: String, allow_blank: false
       end
-      post '/categories/:id/items' do
-        news_item = NewsItem.create(news_category_id: params[:id], date: params[:date], source: params[:source],
+      post '/categories/:categoryId/items' do
+        news_item = NewsItem.create(news_category_id: params[:categoryId], date: params[:date], source: params[:source],
                                     title: params[:title], url: params[:url])
+        present news_item, with: V0::Entities::NewsItemEntity
+      end
+
+      params do
+        requires :categoryId, type: Integer, allow_blank: false
+        requires :itemId, type: Integer, allow_blank: false
+        requires :date, type: String, allow_blank: false
+        requires :source, type: String, allow_blank: false
+        requires :title, type: String, allow_blank: false
+        requires :url, type: String, allow_blank: false
+      end
+      put '/categories/:categoryId/items/:itemId' do
+        news_item = NewsItem.find(params[:itemId])
+        news_item.update(news_category_id: params[:categoryId], date: params[:date], source: params[:source],
+                         title: params[:title], url: params[:url])
         present news_item, with: V0::Entities::NewsItemEntity
       end
     end
