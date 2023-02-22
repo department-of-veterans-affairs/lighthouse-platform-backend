@@ -43,7 +43,7 @@ describe V0::News, type: :request do
           params: params
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)).to have_key('url')
-      expect(JSON.parse(response.body)['url']).to be('https://www.va.gov/benefits')
+      expect(JSON.parse(response.body)['url']).to eq('https://www.va.gov/benefits')
     end
   end
 end
