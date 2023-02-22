@@ -21,7 +21,7 @@ describe V0::News, type: :request do
   end
 
   describe 'post news item' do
-    let(:news_category) { build(:news_category) }
+    let(:news_category) { create(:news_category) }
 
     before do
       news_category
