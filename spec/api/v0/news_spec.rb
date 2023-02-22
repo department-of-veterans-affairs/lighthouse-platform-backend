@@ -11,11 +11,10 @@ describe V0::News, type: :request do
   end
 
   describe 'post news category' do
-    let(:news) { create(:news_category) }
-
     it 'creates a valid news category' do
       expect do
-        post '/platform-backend/v0/news/categories', params: news
+        params = { callToAction: 'Read this!', description: 'Some news', media: false, title: 'News' }
+        post '/platform-backend/v0/news/categories', params: params
         expect(response).to have_http_status(:created)
       end.to change(NewsCategory, :count).by 1
     end
