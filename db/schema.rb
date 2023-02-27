@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_08_190820) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_13_145053) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -188,6 +188,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_08_190820) do
     t.index ["url"], name: "index_malicious_urls_on_url", unique: true
   end
 
+  create_table "news_categories", force: :cascade do |t|
+    t.string "call_to_action"
+    t.string "description"
+    t.string "media"
+    t.string "title"
+  end
+
+  create_table "news_items", force: :cascade do |t|
+    t.bigint "news_category_id"
+    t.string "date"
+    t.string "source"
+    t.string "title"
+    t.string "url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["news_category_id"], name: "index_news_items_on_news_category_id"
+  end
+
   create_table "production_request_contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "production_request_id", null: false
     t.bigint "user_id", null: false
@@ -271,6 +289,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_08_190820) do
   add_foreign_key "consumer_api_assignments", "consumers"
   add_foreign_key "consumer_auth_refs", "consumers"
   add_foreign_key "consumers", "users"
+  add_foreign_key "news_items", "news_categories"
   add_foreign_key "production_request_contacts", "production_requests"
   add_foreign_key "production_request_contacts", "users"
 end
