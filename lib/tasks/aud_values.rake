@@ -103,7 +103,7 @@ namespace :lpb do
 
   def update_oauth_aud_values(api, oauth_type)
     url_fragment = api[:url_fragment]
-    environment = ENV.fetch('ENVIRONMENT') || 'qa'
+    environment = ENV.fetch('ENVIRONMENT', 'qa')
     sandbox_aud = get_aud_values(url_fragment, oauth_type, 'sandboxAud')
     production_aud = if environment == 'production'
                        get_aud_values(url_fragment, oauth_type,
