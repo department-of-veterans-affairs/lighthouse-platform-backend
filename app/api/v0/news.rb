@@ -38,12 +38,13 @@ module V0
       end
       post '/categories/:category/items' do
         news_category = NewsCategory.find_by(title: params[:category])
-        if news_category.title == 'releases'
-          news_item = NewsItem.create(news_category_id: news_category.id, date: params[:date],
-                                    title: params[:title], url: params[:url])
-        else
-          news_item = NewsItem.create(news_category_id: news_category.id, date: params[:date], source: params[:source],
-            title: params[:title], url: params[:url])
+        news_item = if news_category.title == 'releases'
+                      NewsItem.create(news_category_id: news_category.id, date: params[:date],
+                                      title: params[:title], url: params[:url])
+                    else
+                      NewsItem.create(news_category_id: news_category.id, date: params[:date], source: params[:source],
+                                      title: params[:title], url: params[:url])
+                    end
         present news_item, with: V0::Entities::NewsItemEntity
       end
 
@@ -60,10 +61,11 @@ module V0
         news_item = NewsItem.find_by(title: params[:item])
         if news_category.title == 'releases'
           news_item.update(news_category_id: news_category.id, date: params[:date],
-            title: params[:title], url: params[:url])
+                           title: params[:title], url: params[:url])
         else
           news_item.update(news_category_id: news_category.id, date: params[:date], source: params[:source],
-                         title: params[:title], url: params[:url])
+                           title: params[:title], url: params[:url])
+        end
         present news_item, with: V0::Entities::NewsItemEntity
       end
     end
