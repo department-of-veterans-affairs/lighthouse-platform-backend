@@ -31,15 +31,15 @@ describe V0::News, type: :request do
 
     it 'creates a news item' do
       expect do
-        params = { categoryId: news_category.id, date: '01/01/2020', source: 'VA', title: 'Benefits', url: 'https://www.va.gov' }
-        post "/platform-backend/v0/news/categories/#{news_category.id}/items", params: params
+        params = { category: news_category.title, date: '01/01/2020', source: 'VA', title: 'Benefits', url: 'https://www.va.gov' }
+        post "/platform-backend/v0/news/categories/#{news_category.title}/items", params: params
         expect(response).to have_http_status(:created)
       end.to change(NewsItem, :count).by 1
     end
 
     it 'updates a news item' do
-      params = { categoryId: news_category.id, date: '01/01/2020', source: 'VA', title: 'Benefits', url: 'https://www.va.gov/benefits' }
-      put "/platform-backend/v0/news/categories/#{news_category.id}/items/#{news_item.id}",
+      params = { category: news_category.title, date: '01/01/2020', source: 'VA', title: 'Benefits', url: 'https://www.va.gov/benefits' }
+      put "/platform-backend/v0/news/categories/#{news_category.title}/items/#{news_item.title}",
           params: params
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)).to have_key('url')
