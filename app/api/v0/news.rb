@@ -30,7 +30,7 @@ module V0
       end
 
       params do
-        requires :category, type: Integer, allow_blank: false
+        requires :category, type: String, allow_blank: false
         requires :date, type: String, allow_blank: false
         optional :source, type: String, allow_blank: false
         requires :title, type: String, allow_blank: false
@@ -38,7 +38,7 @@ module V0
       end
       post '/categories/:category/items' do
         news_category = NewsCategory.find_by(title: params[:category])
-        news_item = if news_category.title == 'releases'
+        news_item = if news_category.present? && news_category.title == 'releases'
                       NewsItem.create(news_category_id: news_category.id, date: params[:date],
                                       title: params[:title], url: params[:url])
                     else
@@ -49,8 +49,8 @@ module V0
       end
 
       params do
-        requires :category, type: Integer, allow_blank: false
-        requires :item, type: Integer, allow_blank: false
+        requires :category, type: String, allow_blank: false
+        requires :item, type: String, allow_blank: false
         requires :date, type: String, allow_blank: false
         optional :source, type: String, allow_blank: false
         requires :title, type: String, allow_blank: false
@@ -59,7 +59,7 @@ module V0
       put '/categories/:category/items/:item' do
         news_category = NewsCategory.find_by(title: params[:category])
         news_item = NewsItem.find_by(title: params[:item])
-        if news_category.title == 'releases'
+        if news_category.present? && news_category.title == 'releases'
           news_item.update(news_category_id: news_category.id, date: params[:date],
                            title: params[:title], url: params[:url])
         else
