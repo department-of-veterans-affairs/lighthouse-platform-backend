@@ -57,15 +57,15 @@ describe V0::News, type: :request do
     end
 
     it 'returns an error if news category does not exist when adding a news item' do
-      params = { category: 'articles', date: '01/01/2020', source: 'VA', title: 'Benefits', url: 'https://www.va.gov' }
+      params = { category: 'not-articles', date: '01/01/2020', source: 'VA', title: 'Benefits', url: 'https://www.va.gov' }
       post '/platform-backend/v0/news/categories/random-category/items', params: params
       expect(response.code).to eq('500')
       expect(response.body).to include('News category does not exist')
     end
 
     it 'returns an error if news item does not exist' do
-      params = { category: 'articles', date: '01/01/2020', source: 'VA', title: 'Benefits', url: 'https://www.va.gov/benefits' }
-      put "/platform-backend/v0/news/categories/#{invalid_news_category.title}/items/#{invalid_news_item.title}",
+      params = { category: invalid_news_category.title, date: '01/01/2020', source: 'VA', title: 'not-benefits', url: 'https://www.va.gov/benefits' }
+      put "/platform-backend/v0/news/categories/#{params.category}/items/#{params.title}",
           params: params
       expect(response.code).to eq('500')
       expect(response.body).to include('News item does not exist')
