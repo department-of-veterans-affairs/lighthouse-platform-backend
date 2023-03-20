@@ -63,6 +63,8 @@ module V0
         raise 'News category does not exist' if news_category.blank?
 
         news_item = NewsItem.find_by(title: params[:item])
+        raise 'News item does not exist' if news_item.blank?
+
         if news_category.title == 'releases'
           news_item.update(news_category_id: news_category.id, date: params[:date],
                            title: params[:title], url: params[:url])
