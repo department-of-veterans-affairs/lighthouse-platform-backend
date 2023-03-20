@@ -38,7 +38,9 @@ module V0
       end
       post '/categories/:category/items' do
         news_category = NewsCategory.find_by(title: params[:category])
-        news_item = if news_category.present? && news_category.title == 'releases'
+        raise 'News category does not exist' if news_category.blank?
+
+        news_item = if news_category.title == 'releases'
                       NewsItem.create(news_category_id: news_category.id, date: params[:date],
                                       title: params[:title], url: params[:url])
                     else
@@ -58,8 +60,10 @@ module V0
       end
       put '/categories/:category/items/:item' do
         news_category = NewsCategory.find_by(title: params[:category])
+        raise 'News category does not exist' if news_category.blank?
+
         news_item = NewsItem.find_by(title: params[:item])
-        if news_category.present? && news_category.title == 'releases'
+        if news_category.title == 'releases'
           news_item.update(news_category_id: news_category.id, date: params[:date],
                            title: params[:title], url: params[:url])
         else
