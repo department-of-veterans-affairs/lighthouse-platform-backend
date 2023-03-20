@@ -32,7 +32,7 @@ describe V0::News, type: :request do
     it 'creates a news item' do
       expect do
         params = { category: 'articles', date: '01/01/2020', source: 'VA', title: 'Benefits', url: 'https://www.va.gov' }
-        post '/platform-backend/v0/news/categories/articles/items', params: params
+        post "/platform-backend/v0/news/categories/#{news_category.title}/items", params: params
         expect(response).to have_http_status(:created)
       end.to change(NewsItem, :count).by 1
     end
@@ -44,6 +44,33 @@ describe V0::News, type: :request do
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)).to have_key('url')
       expect(JSON.parse(response.body)['url']).to eq('https://www.va.gov/benefits')
+    end
+  end
+
+  describe 'invalid news' do
+    let(:news_category) { create(:news_category) }
+    let(:news_item) { create(:news_item, news_category_id: news_category.id) }
+
+    before do
+      news_category
+      news_item
+    end
+
+    it 'returns an error if news category does not exist when adding a news item' do
+      expect do
+        params = { category: 'articles', date: '01/01/2020', source: 'VA', title: 'Benefits', url: 'https://www.va.gov' }
+        post '/platform-backend/v0/news/categories/random-category/items', params: params
+        expect(response.code).to eq('500')
+        expect(response.body).to include('News category does not exist')
+      end.not_to change(NewsItem, :count).by 1
+    end
+
+    it 'returns an error if news item does not exist' do
+      params = { category: 'articles', date: '01/01/2020', source: 'VA', title: 'Benefits', url: 'https://www.va.gov/benefits' }
+      put "/platform-backend/v0/news/categories/#{news_category.title}/items/#{news_item.title}",
+          params: params
+      expect(response.code).to eq('500')
+      expect(response.body).to include('News item does not exist')
     end
   end
 end
