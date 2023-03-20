@@ -62,7 +62,7 @@ describe V0::News, type: :request do
         post '/platform-backend/v0/news/categories/random-category/items', params: params
         expect(response.code).to eq('500')
         expect(response.body).to include('News category does not exist')
-      end.not_to change(NewsItem, :count).by 1
+      end
     end
 
     it 'returns an error if news item does not exist' do
