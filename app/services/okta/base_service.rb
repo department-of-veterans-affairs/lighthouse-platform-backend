@@ -189,6 +189,9 @@ module Okta
             redirect_uris: [options[:redirect_uri], va_redirect],
             response_types: ['code']
           }
+        },
+        profile: {
+          label: construct_label(user)
         }
       }
     end
@@ -210,6 +213,9 @@ module Okta
               ]
             }
           }
+        },
+        profile: {
+          label: construct_label(user)
         }
       }
     end
