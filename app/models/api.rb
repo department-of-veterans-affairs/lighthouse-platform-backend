@@ -32,8 +32,8 @@ class Api < ApplicationRecord
     types << AUTH_TYPES[:apikey] if acl.present?
     if api_metadatum.oauth_info.present?
       parsed_oauth_info = JSON.parse(api_metadatum.oauth_info)
-      types << AUTH_TYPES[:acg] if parsed_oauth_info['acgInfo']['sandboxAud'].present?
-      types << AUTH_TYPES[:ccg] if parsed_oauth_info['ccgInfo']['sandboxAud'].present?
+      types << AUTH_TYPES[:acg] if parsed_oauth_info.dig('acgInfo', 'sandboxAud').present?
+      types << AUTH_TYPES[:ccg] if parsed_oauth_info.dig('ccgInfo', 'sandboxAud').present?
     end
     types.uniq
   end
