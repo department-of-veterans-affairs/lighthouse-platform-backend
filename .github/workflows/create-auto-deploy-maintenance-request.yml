@@ -32,11 +32,14 @@ jobs:
         uses: szenius/set-timezone@v1.0
         with:
           timezoneLinux: 'America/New_York'
+      - name: Checkout
+        uses: actions/checkout@v3
+        if: steps.check_for_existing_mr.outcome == 'success'
       - id: create_mr
         name: Generate the MR body text and create MR
         if: steps.check_for_existing_mr.outcome == 'success'
         run: |
-          wget https://raw.githubusercontent.com/department-of-veterans-affairs/lighthouse-platform-backend/master/.github/workflows/assets/maintenance-request.md
+          mv ./.github/workflows/assets/maintenance-request.md ./
           TEMPLATE_ISSUE_LABEL=`grep labels maintenance-request.md | cut -f2 -d " "`
           TEMPLATE_ASSIGNEE=`grep assignees maintenance-request.md | cut -f2 -d " "`
           sed -i -e '1,8d' maintenance-request.md
@@ -94,8 +97,6 @@ jobs:
           for num in ${prNums[@]}; do
             gh pr edit $num -R 'department-of-veterans-affairs/lighthouse-platform-backend' --add-label "MR in progress"
           done
-      - uses: actions/checkout@v2
-        if: steps.create_mr.outcome == 'success'
       - name: Enable Auto Deploy Workflow
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
