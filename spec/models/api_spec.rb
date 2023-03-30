@@ -89,4 +89,62 @@ RSpec.describe Api, type: :model do
       }
     end
   end
+
+  describe "'locate_auth_types'" do
+    context 'when the api has all auth types' do
+      subject do
+        create(:api)
+      end
+
+      it 'correctly returns all auth types' do
+        auth_types = subject.locate_auth_types
+
+        expect(auth_types).to include('apikey')
+        expect(auth_types).to include('oauth/acg')
+        expect(auth_types).to include('oauth/ccg')
+      end
+    end
+
+    context "when the api does not support the 'apiKey' auth type" do
+      subject do
+        create(:api_without_acl)
+      end
+
+      it "does not contain the 'apiKey' auth type" do
+        auth_types = subject.locate_auth_types
+
+        expect(auth_types).not_to include('apikey')
+        expect(auth_types).to include('oauth/acg')
+        expect(auth_types).to include('oauth/ccg')
+      end
+    end
+
+    context "when the api does not support the 'acg' auth type" do
+      subject do
+        create(:api_without_acg)
+      end
+
+      it "does not contain the 'oauth/acg' auth type and does not blow up" do
+        auth_types = subject.locate_auth_types
+
+        expect(auth_types).to include('apikey')
+        expect(auth_types).not_to include('oauth/acg')
+        expect(auth_types).to include('oauth/ccg')
+      end
+    end
+
+    context "when the api does not support the 'ccg' auth type" do
+      subject do
+        create(:api_without_ccg)
+      end
+
+      it "does not contain the 'oauth/ccg' auth type and does not blow up" do
+        auth_types = subject.locate_auth_types
+
+        expect(auth_types).to include('apikey')
+        expect(auth_types).to include('oauth/acg')
+        expect(auth_types).not_to include('oauth/ccg')
+      end
+    end
+  end
 end
