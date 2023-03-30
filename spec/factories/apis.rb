@@ -24,5 +24,21 @@ FactoryBot.define do
       acl { nil }
       auth_server_access_key { 'PROVIDER' }
     end
+
+    trait :no_acl do
+      acl { nil }
+    end
+
+    trait :no_acg do
+      api_metadatum { build(:api_metadatum, :without_acg) }
+    end
+
+    trait :no_ccg do
+      api_metadatum { build(:api_metadatum, :without_ccg) }
+    end
+
+    factory :api_without_acl, traits: [:no_acl]
+    factory :api_without_acg, traits: [:no_acg]
+    factory :api_without_ccg, traits: [:no_ccg]
   end
 end
