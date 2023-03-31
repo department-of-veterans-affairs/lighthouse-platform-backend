@@ -7,18 +7,6 @@ describe V0::Providers, type: :request do
   let(:provider_api) { create(:api) }
 
   describe 'returns list of api providers' do
-    it 'returns all apis in a form the developer-portal knows how to deal with' do
-      Rails.application.load_tasks if Rake.application.tasks.blank?
-      VCR.use_cassette('urlhaus/malicious_urls_200', match_requests_on: [:method]) do
-        Rake::Task['db:seed'].execute
-      end
-
-      get '/platform-backend/v0/providers/transformations/legacy'
-      expect(response.code).to eq('200')
-
-      expect(JSON.parse(response.body).count).to eq(7)
-    end
-
     it 'returns all apis' do
       get '/platform-backend/v0/providers'
       expect(response.code).to eq('200')
@@ -186,6 +174,67 @@ describe V0::Providers, type: :request do
             post "/platform-backend/v0/providers/#{api.name}/auth-types/oauth/ccg/consumers", params: params
           end.to change(ConsumerAuthRef, :count).by 1
         end
+      end
+    end
+  end
+
+  describe 'transformations legacy endpoint' do
+    it 'returns all apis in a form the developer-portal knows how to deal with' do
+      Rails.application.load_tasks if Rake.application.tasks.blank?
+      VCR.use_cassette('urlhaus/malicious_urls_200', match_requests_on: [:method]) do
+        Rake::Task['db:seed'].execute
+      end
+
+      get '/platform-backend/v0/providers/transformations/legacy'
+      expect(response.code).to eq('200')
+
+      expect(JSON.parse(response.body).count).to eq(7)
+    end
+
+    describe "it includes the new 'IA' fields" do
+      it "includes the 'overviewPageContent' field" do
+        get '/platform-backend/v0/providers/transformations/legacy'
+
+        parsed_response = JSON.parse(response.body)
+        first_category_key = parsed_response.keys[0]
+        first_api = parsed_response[first_category_key]['apis'].first
+        expect(first_api).to have_key('overviewPageContent')
+      end
+
+      it "includes the 'restrictedAccessDetails' field" do
+        get '/platform-backend/v0/providers/transformations/legacy'
+
+        parsed_response = JSON.parse(response.body)
+        first_category_key = parsed_response.keys[0]
+        first_api = parsed_response[first_category_key]['apis'].first
+        expect(first_api).to have_key('restrictedAccessDetails')
+      end
+
+      it "includes the 'restrictedAccessToggle' field" do
+        get '/platform-backend/v0/providers/transformations/legacy'
+
+        parsed_response = JSON.parse(response.body)
+        first_category_key = parsed_response.keys[0]
+        first_api = parsed_response[first_category_key]['apis'].first
+        expect(first_api).to have_key('restrictedAccessToggle')
+      end
+
+      it "includes the api 'urlSlug' field" do
+        get '/platform-backend/v0/providers/transformations/legacy'
+
+        parsed_response = JSON.parse(response.body)
+        first_category_key = parsed_response.keys[0]
+        first_api = parsed_response[first_category_key]['apis'].first
+        expect(first_api).to have_key('urlSlug')
+      end
+
+      it "includes the api category 'urlSlug' field" do
+        get '/platform-backend/v0/providers/transformations/legacy'
+
+        parsed_response = JSON.parse(response.body)
+        first_category_key = parsed_response.keys[0]
+        first_category = parsed_response[first_category_key]
+        expect(first_category).to have_key('urlSlug')
       end
     end
   end
