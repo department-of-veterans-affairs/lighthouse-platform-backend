@@ -111,6 +111,16 @@ module V0
           api_metadatum_attributes[api_category_attributes][id]: 1
           - Category id in this environment found on /platform-backend/admin/database/api_category
 
+          api_metadatum_attributes[overview_page_content]: Some nice content...
+          - Markdown content for the "overview page" on DevPortal
+
+          api_metadatum_attributes[url_slug]: new_demo
+
+          api_metadatum_attributes[restricted_access_toggle]: true/false
+
+          api_metadatum_attributes[restricted_access_details]: Why is the API restricted?
+          - Verbiage indicating why the API is restricted.
+
           ## Auth Info
           ### CCG
           - From the .well-known openid-configuration
@@ -199,6 +209,13 @@ module V0
                                       allow_blank: true
           requires :url_fragment, type: String, allow_blank: false,
                                   description: 'URL fragment'
+          requires :overview_page_content, type: String, allow_blank: false,
+                                           description: 'Markdown content for the "overview page" on DevPortal'
+          requires :url_slug, type: String, allow_blank: false,
+                              description: 'Url slug'
+          requires :restricted_access_toggle, type: Boolean, allow_blank: false, default: false
+          optional :restricted_access_details, type: String, allow_blank: true,
+                                               description: 'Verbiage indicating why the API is restricted.'
           requires :api_category_attributes, type: Hash do
             requires :id, type: Integer, values: ->(v) { ApiCategory.kept.map(&:id).include?(v) }
           end
