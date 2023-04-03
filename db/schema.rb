@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_13_145053) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_30_195231) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,6 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_13_145053) do
     t.string "veteran_redirect_message"
     t.text "overview"
     t.string "key"
+    t.string "url_slug"
     t.index ["discarded_at"], name: "index_api_categories_on_discarded_at"
     t.index ["key"], name: "index_api_categories_on_key", unique: true
   end
@@ -59,6 +60,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_13_145053) do
     t.string "veteran_redirect_link_url"
     t.string "veteran_redirect_link_text"
     t.string "veteran_redirect_message"
+    t.text "overview_page_content"
+    t.text "restricted_access_details"
+    t.boolean "restricted_access_toggle"
+    t.string "url_slug"
     t.index ["api_category_id"], name: "index_api_metadata_on_api_category_id"
     t.index ["api_id"], name: "index_api_metadata_on_api_id"
     t.index ["discarded_at"], name: "index_api_metadata_on_discarded_at"
@@ -252,11 +257,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_13_145053) do
     t.string "website"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "logo_icon"
-    t.string "logo_large"
     t.string "oauth_application_type"
     t.jsonb "oauth_public_key"
     t.string "oauth_redirect_uri"
+    t.string "logo_icon"
+    t.string "logo_large"
   end
 
   create_table "users", force: :cascade do |t|
