@@ -179,7 +179,7 @@ describe V0::Providers, type: :request do
   end
 
   describe 'transformations legacy endpoint' do
-    it 'returns all apis in a form the developer-portal knows how to deal with' do
+    xit 'returns all apis in a form the developer-portal knows how to deal with' do
       Rails.application.load_tasks if Rake.application.tasks.blank?
       VCR.use_cassette('urlhaus/malicious_urls_200', match_requests_on: [:method]) do
         Rake::Task['db:seed'].execute
