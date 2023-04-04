@@ -179,16 +179,12 @@ describe V0::Providers, type: :request do
   end
 
   describe 'transformations legacy endpoint' do
-    xit 'returns all apis in a form the developer-portal knows how to deal with' do
-      Rails.application.load_tasks if Rake.application.tasks.blank?
-      VCR.use_cassette('urlhaus/malicious_urls_200', match_requests_on: [:method]) do
-        Rake::Task['db:seed'].execute
-      end
-
+    it 'returns all apis' do
       get '/platform-backend/v0/providers/transformations/legacy'
       expect(response.code).to eq('200')
 
-      expect(JSON.parse(response.body).count).to eq(7)
+      # 3 because of the 'create_list(:api_environment, 3)' at the top of this file
+      expect(JSON.parse(response.body).count).to eq(3)
     end
 
     describe "it includes the new 'IA' fields" do
