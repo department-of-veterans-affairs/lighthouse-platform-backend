@@ -3,6 +3,9 @@
 class ApiMetadatum < ApplicationRecord
   include Discard::Model
 
+  validates :overview_page_content, presence: true
+  validates :url_slug, presence: true
+
   enum va_internal_only: {
     StrictlyInternal: 'StrictlyInternal',
     AdditionalDetails: 'AdditionalDetails',
