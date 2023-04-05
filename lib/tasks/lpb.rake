@@ -29,7 +29,7 @@ namespace :lpb do
       api.api_metadatum.url_slug = url_slug
       api.api_metadatum.restricted_access_toggle = false
       api.api_metadatum.restricted_access_details = ''
-      api.api_metadatum.overview_page_content = 'temporary default value'
+      api.api_metadatum.overview_page_content = '# This is default content'
       api.api_metadatum.save!
     end
 
