@@ -44,6 +44,15 @@ RailsAdmin.config do |config|
           JSON.pretty_generate(JSON.parse('{}'))
         end
       end
+
+      configure :overview_page_content do
+        formatted_value do
+          # since this isn't user-provided input, this should be fine
+          # rubocop:disable Rails/OutputSafety
+          Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(value).html_safe
+          # rubocop:enable Rails/OutputSafety
+        end
+      end
     end
     edit do
       configure :oauth_info, :code_mirror do

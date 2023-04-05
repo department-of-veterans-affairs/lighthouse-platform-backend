@@ -419,6 +419,7 @@ GEM
     rb-fsevent (0.11.1)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    redcarpet (3.6.0)
     regexp_parser (2.5.0)
     request_store (1.5.1)
       rack (>= 1.4)
@@ -616,6 +617,7 @@ DEPENDENCIES
   rails
   rails-healthcheck
   rails_admin (~> 3.0)
+  redcarpet (~> 3.6)
   rest-client
   rspec-rails (~> 5.0.0)
   rubocop
