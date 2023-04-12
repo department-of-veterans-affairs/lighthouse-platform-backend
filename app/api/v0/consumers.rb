@@ -132,7 +132,7 @@ module V0
                                     malicious_url_protection: true,
                                     coerce_with: ->(value) { value&.strip }
         optional :oAuthPublicKey, type: JSON
-        requires :organization, type: String
+        optional :organization, type: String
         requires :termsOfService, type: Boolean, allow_blank: false, values: [true]
         optional :internalApiInfo, type: Hash do
           optional :programName, type: String

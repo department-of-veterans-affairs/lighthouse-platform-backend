@@ -7,6 +7,10 @@ FactoryBot.define do
     open_data { Faker::Boolean.boolean }
     va_internal_only { [nil, 'StrictlyInternal', 'AdditionalDetails', 'FlagOnly'].sample }
     url_fragment { Faker::Lorem.word }
+    overview_page_content { Faker::Lorem.sentence }
+    restricted_access_details { Faker::Lorem.sentence }
+    restricted_access_toggle { false }
+    url_slug { Faker::Lorem.word }
     oauth_info do
       {
         acgInfo: {

@@ -105,11 +105,4 @@ RSpec.describe Consumer, type: :model do
       expect(subject.discarded_at).not_to be_nil
     end
   end
-
-  describe 'fails on an invalid input' do
-    it 'fails without an organization' do
-      subject[:organization] = nil
-      expect(subject).not_to be_valid
-    end
-  end
 end
