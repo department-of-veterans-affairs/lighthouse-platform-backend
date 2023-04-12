@@ -9,6 +9,7 @@ module V0
         expose :api_metadatum, as: :apis do |entity, options|
           V0::Entities::Legacy::ApiProviderEntity.represent(entity.api_metadatum, environment: options[:environment])
         end
+        expose :url_slug, as: :urlSlug
         expose :content do |entity|
           response = { consumerDocsLinkText: entity.consumer_docs_link_text,
                        shortDescription: entity.short_description,

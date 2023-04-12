@@ -5,7 +5,6 @@ class Consumer < ApplicationRecord
 
   attr_accessor :tos_accepted, :apis_list
 
-  validates :organization, presence: true
   validate :confirm_tos
 
   belongs_to :user

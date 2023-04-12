@@ -14,5 +14,6 @@ FactoryBot.define do
     veteran_redirect_link_text { Faker::Lorem.sentence }
     veteran_redirect_message { Faker::Lorem.sentence }
     overview { Faker::Lorem.paragraph }
+    url_slug { Faker::Lorem.word }
   end
 end

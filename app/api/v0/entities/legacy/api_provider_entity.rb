@@ -74,6 +74,10 @@ module V0
                                    as: :deactivationInfo do |entity|
           JSON.parse(entity.deactivation_info)
         end
+        expose :overview_page_content, as: :overviewPageContent
+        expose :restricted_access_details, as: :restrictedAccessDetails
+        expose :restricted_access_toggle, as: :restrictedAccessToggle
+        expose :url_slug, as: :urlSlug
       end
     end
   end
