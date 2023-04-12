@@ -24,6 +24,10 @@ FactoryBot.define do
         open_data: Faker::Boolean.boolean,
         va_internal_only: [nil, 'StrictlyInternal', 'AdditionalDetails', 'FlagOnly'].sample,
         url_fragment: Faker::Lorem.word,
+        overview_page_content: Faker::Lorem.sentence(word_count: 12),
+        url_slug: Faker::Lorem.word,
+        restricted_access_toggle: false,
+        restricted_access_details: '',
         oauth_info: {
           ccgInfo: {
             baseAuthPath: Faker::Internet.domain_name,
