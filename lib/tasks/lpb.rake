@@ -11,6 +11,39 @@ namespace :lpb do
     end
   end
 
+  desc 'Populates new IA fields'
+  task seedIAFieldValues: :environment do
+    Api.all.each do |api|
+      next if api.api_metadatum.blank?
+
+      sanitized_api_name = api.api_metadatum.display_name.downcase
+                              .gsub('api', '')
+                              .gsub('fhir', '')
+                              .gsub('(', '')
+                              .gsub(')', '')
+                              .strip
+      api_name_pieces = sanitized_api_name.split
+      hyphenated_api_name = api_name_pieces.join('-')
+      url_slug = hyphenated_api_name
+
+      api.api_metadatum.url_slug = url_slug
+      api.api_metadatum.restricted_access_toggle = false
+      api.api_metadatum.restricted_access_details = ''
+      api.api_metadatum.overview_page_content = '# This is default content'
+      api.api_metadatum.save!
+    end
+
+    ApiCategory.all.each do |category|
+      sanitized_category_name = category.name.downcase.gsub('apis', '').strip
+      category_name_pieces = sanitized_category_name.split
+      hyphenated_category_name = category_name_pieces.join('-')
+      url_slug = hyphenated_category_name
+
+      category.url_slug = url_slug
+      category.save!
+    end
+  end
+
   def get_base_url(environment)
     base_urls = {
       'production' => 'https://api.va.gov',
