@@ -106,7 +106,7 @@ module V0
           api_metadatum_attributes[va_internal_only]: Select a value
           - You may have to set this to something incorrect and then reset in /platform-backend/admin/database/api_metadatum
 
-          api_metadatum_attributes[url_fragment]: new_demo
+          api_metadatum_attributes[url_fragment]: new-demo
 
           api_metadatum_attributes[api_category_attributes][id]: 1
           - Category id in this environment found on /platform-backend/admin/database/api_category
@@ -114,7 +114,7 @@ module V0
           api_metadatum_attributes[overview_page_content]: Some nice content...
           - Markdown content for the "overview page" on DevPortal
 
-          api_metadatum_attributes[url_slug]: new_demo
+          api_metadatum_attributes[url_slug]: new-demo
 
           api_metadatum_attributes[restricted_access_toggle]: true/false
 
