@@ -13,7 +13,7 @@ appeals_category = ApiCategory.create(
   key: 'appeals',
   short_description: 'Enables managing benefit decision appeals on behalf of a Veteran.',
   consumer_docs_link_text: 'Read the consumer onboarding guide for getting production access',
-  url_slug: 'default-slug',
+  url_slug: 'appeals',
   overview: <<~MARKDOWN
     ## Allows internal VA users to manage Veterans’ decision review requests per the [Appeals Modernization Act (AMA)](https://benefits.va.gov/benefits/appeals.asp) or the legacy benefits appeals process.
 
@@ -28,7 +28,7 @@ benefits_category = ApiCategory.create(
   veteran_redirect_link_url: 'https://www.va.gov/claim-or-appeal-status/',
   veteran_redirect_link_text: 'benefits or appeals claim status',
   veteran_redirect_message: 'Are you a Veteran or a Veteran representative? Check your',
-  url_slug: 'default-slug',
+  url_slug: 'benefits',
   overview: <<~MARKDOWN
     ## Enables electronic submission and status tracking of non-medical, VA-related benefit claims.
 
@@ -43,7 +43,7 @@ facilities_category = ApiCategory.create(
   veteran_redirect_link_url: 'https://www.va.gov/find-locations/',
   veteran_redirect_link_text: "Find the facility that's right for you",
   veteran_redirect_message: 'Are you a Veteran?',
-  url_slug: 'default-slug',
+  url_slug: 'facilities',
   overview: <<~MARKDOWN
     ## Use the VA Facilities API to find information about a specific VA facility.
 
@@ -55,7 +55,7 @@ health_category = ApiCategory.create(
   key: 'health',
   short_description: 'Use our APIs to build tools that help Veterans manage their health.',
   consumer_docs_link_text: 'Read the consumer onboarding guide for getting production access',
-  url_slug: 'default-slug',
+  url_slug: 'health',
   overview: (<<~MARKDOWN
     ## Use our Health APIs to build tools that help Veterans manage their health, view their VA medical records, share their health information, and determine potential eligibility for community care. While these APIs allow greater access to health data, they do not currently allow submission of medical claims.
 
@@ -118,7 +118,7 @@ loan_guaranty_category = ApiCategory.create(
   key: 'loanGuaranty',
   short_description: 'Enables electronic submission and status tracking of non-medical, VA-related benefit claims.',
   consumer_docs_link_text: 'Read the consumer onboarding guide for getting production access',
-  url_slug: 'default-slug',
+  url_slug: 'loan-guaranty',
   overview: <<~MARKDOWN
     ## Help approved lenders automate and navigate the VA home loan process.
 
@@ -133,7 +133,7 @@ forms_category = ApiCategory.create(
   veteran_redirect_link_url: 'https://www.va.gov/find-forms/',
   veteran_redirect_link_text: 'Find the forms you need',
   veteran_redirect_message: 'Are you a Veteran?',
-  url_slug: 'default-slug',
+  url_slug: 'forms',
   overview: <<~MARKDOWN
     ## Use this API to stay up-to-date on VA forms.
 
@@ -145,7 +145,7 @@ veteran_verification_category = ApiCategory.create(
   key: 'verification',
   short_description: 'Empowering Veterans to take control of their data and put it to work.',
   consumer_docs_link_text: 'Read the consumer onboarding guide for getting production access',
-  url_slug: 'default-slug',
+  url_slug: 'veteran-verification',
   overview: <<~MARKDOWN
     ## These APIs allow verification of Veteran status and data. They return service history, confirm Veteran status, and validate address information.
 
@@ -171,7 +171,7 @@ appeals_status_api.update(
    open_data: false,
    va_internal_only: 'StrictlyInternal',
    url_fragment: 'appeals',
-   url_slug: 'default-slug',
+   url_slug: 'appeals',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -199,7 +199,7 @@ decision_reviews_api.update(
    open_data: false,
    va_internal_only: 'StrictlyInternal',
    url_fragment: 'decision_reviews',
-   url_slug: 'default-slug',
+   url_slug: 'decision-reviews',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -225,7 +225,7 @@ claims_api.update(  auth_server_access_key: 'AUTHZ_SERVER_CLAIMS',
    display_name: 'Benefits Claims API',
    open_data: false,
    url_fragment: 'claims',
-   url_slug: 'default-slug',
+   url_slug: 'claims',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -268,7 +268,7 @@ benefits_intake_api.update(
    display_name: 'Benefits Intake API',
    open_data: false,
    url_fragment: 'benefits',
-   url_slug: 'default-slug',
+   url_slug: 'benefits',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -295,7 +295,7 @@ benefits_reference_api.update(
    display_name: 'Benefits Reference Data API',
    open_data: true,
    url_fragment: 'benefits_reference_data',
-   url_slug: 'default-slug',
+   url_slug: 'benefits-reference-data',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -322,7 +322,7 @@ facilities_api.update(
    display_name: 'VA Facilities API',
    open_data: true,
    url_fragment: 'facilities',
-   url_slug: 'default-slug',
+   url_slug: 'facilities',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -350,7 +350,7 @@ loan_guaranty_api.update(
    open_data: false,
    va_internal_only: 'StrictlyInternal',
    url_fragment: 'loan_guaranty',
-   url_slug: 'default-slug',
+   url_slug: 'loan-guaranty',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -377,7 +377,7 @@ lgy_guaranty_remittance_api.update(
    display_name: 'Guaranty Remittance API',
    open_data: false,
    url_fragment: 'lgy_guaranty_remittance',
-   url_slug: 'default-slug',
+   url_slug: 'lgy-guaranty-remittance',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -414,7 +414,7 @@ forms_api.update(
    display_name: 'VA Forms API',
    open_data: true,
    url_fragment: 'vaForms',
-   url_slug: 'default-slug',
+   url_slug: 'va-forms',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -442,7 +442,7 @@ address_validation_api.update(
    open_data: false,
    va_internal_only: 'AdditionalDetails',
    url_fragment: 'address_validation',
-   url_slug: 'default-slug',
+   url_slug: 'address-validation',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -469,7 +469,7 @@ veteran_confirmation_api.update(
    display_name: 'Veteran Confirmation API',
    open_data: false,
    url_fragment: 'veteran_confirmation',
-   url_slug: 'default-slug',
+   url_slug: 'veteran-confirmation',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -497,7 +497,7 @@ veteran_letter_generator_api.update(
    open_data: false,
    va_internal_only: 'FlagOnly',
    url_fragment: 'va_letter_generator',
-   url_slug: 'default-slug',
+   url_slug: 'va-letter-generator',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -534,7 +534,7 @@ veteran_verification_api.update(
    display_name: 'Veteran Verification API',
    open_data: false,
    url_fragment: 'veteran_verification',
-   url_slug: 'default-slug',
+   url_slug: 'veteran-verification',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -575,7 +575,7 @@ provider_directory_api.update(
    display_name: 'Provider Directory API',
    open_data: false,
    url_fragment: 'provider_directory',
-   url_slug: 'default-slug',
+   url_slug: 'provider-directory',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -596,7 +596,7 @@ pgd_api.update(
    open_data: false,
    va_internal_only: 'StrictlyInternal',
    url_fragment: 'pgd',
-   url_slug: 'default-slug',
+   url_slug: 'pgd',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -645,7 +645,7 @@ community_care_api.update(
    display_name: 'Community Care Eligibility API',
    open_data: false,
    url_fragment: 'community_care',
-   url_slug: 'default-slug',
+   url_slug: 'community-care',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -676,7 +676,7 @@ urgent_care_api.update(
    display_name: 'Urgent Care Eligibility API (FHIR)',
    open_data: false,
    url_fragment: 'urgent_care',
-   url_slug: 'default-slug',
+   url_slug: 'urgent-care',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -716,7 +716,7 @@ clinical_fhir_api.update(
    open_data: false,
    va_internal_only: 'StrictlyInternal',
    url_fragment: 'clinical_health',
-   url_slug: 'default-slug',
+   url_slug: 'clinical-health',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
@@ -761,7 +761,7 @@ fhir_health_api.update(
    display_name: 'Patient Health API (FHIR)',
    open_data: false,
    url_fragment: 'fhir',
-   url_slug: 'default-slug',
+   url_slug: 'fhir',
    restricted_access_toggle: false,
    restricted_access_details: '',
    overview_page_content: '# This is default content',
