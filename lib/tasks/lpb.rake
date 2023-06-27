@@ -13,8 +13,15 @@ namespace :lpb do
 
   desc 'Populate Overview Page Content'
   task seedOverviewPageContent: :environment do
+    apisWithContent = Array.new
+    apisWithoutContent = Array.new
+    apisWithoutMetadata = Array.new
+
     Api.all.each do |api|
-      next if api.api_metadatum.blank?
+      if api.api_metadatum.blank?
+        apisWithoutMetadata.push(api.name)
+        next
+      end
 
       puts "Processing #{api.api_metadatum.display_name}"
 
@@ -176,11 +183,19 @@ namespace :lpb do
           - Search for an individual patient’s appointments, conditions, immunizations, medications, observations including vital signs and lab tests, and more.
         MARKDOWN
       else
-        puts "No overview page content for #{api.name}"
+        puts "No overview page content for #{api.api_metadatum.display_name}"
+        apisWithoutContent.push api.api_metadatum.display_name
+        next
       end
+
+      apisWithContent.push api.api_metadatum.display_name
 
       api.api_metadatum.save!
     end
+
+    puts "These APIs were updated: display_names(#{apisWithContent.join(', ')})"
+    puts "These APIs were not updated because their display name did not match any of the values in the switch case: display_names(#{apisWithoutContent.join(', ')})"
+    puts "These APIs were not updated because they did not have api_metadatum: names(#{apisWithoutMetadata.join(', ')})"
   end
 
   desc 'Populates new IA fields'
