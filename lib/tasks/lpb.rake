@@ -13,13 +13,13 @@ namespace :lpb do
 
   desc 'Populate Overview Page Content'
   task seedOverviewPageContent: :environment do
-    apisWithContent = Array.new
-    apisWithoutContent = Array.new
-    apisWithoutMetadata = Array.new
+    apis_with_content = []
+    apis_without_content = []
+    apis_without_metadata = []
 
     Api.all.each do |api|
       if api.api_metadatum.blank?
-        apisWithoutMetadata.push(api.name)
+        apis_without_metadata.push(api.name)
         next
       end
 
@@ -184,18 +184,20 @@ namespace :lpb do
         MARKDOWN
       else
         puts "No overview page content for #{api.api_metadatum.display_name}"
-        apisWithoutContent.push api.api_metadatum.display_name
+        apis_without_content.push api.api_metadatum.display_name
         next
       end
 
-      apisWithContent.push api.api_metadatum.display_name
+      apis_with_content.push api.api_metadatum.display_name
 
       api.api_metadatum.save!
     end
 
-    puts "These APIs were updated: display_names(#{apisWithContent.join(', ')})"
-    puts "These APIs were not updated because their display name did not match any of the values in the switch case: display_names(#{apisWithoutContent.join(', ')})"
-    puts "These APIs were not updated because they did not have api_metadatum: names(#{apisWithoutMetadata.join(', ')})"
+    puts "These apis were updated: display_names(#{apis_with_content.join(', ')})"
+    # rubocop:disable Layout/LineLength
+    puts "These apis were not updated because their display name did not match any of the values in the switch case: display_names(#{apis_without_content.join(', ')})"
+    puts "These apis were not updated because they did not have api_metadatum: names(#{apis_without_metadata.join(', ')})"
+    # rubocop:enable Layout/LineLength
   end
 
   desc 'Populates new IA fields'
