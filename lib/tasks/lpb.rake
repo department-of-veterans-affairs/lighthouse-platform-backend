@@ -91,7 +91,7 @@ namespace :lpb do
           ### Getting access
           **Sandbox:** To request sandbox access for this API, [contact us](https://developer.va.gov/support/contact-us).
         MARKDOWN
-      when 'Veteran Verification', 'Veteran Service History and Eligibility'
+      when 'Veteran Verification API', 'Veteran Service History and Eligibility'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
           ### With this API you can
           - Confirm an individual’s Title 38 Veteran status.
