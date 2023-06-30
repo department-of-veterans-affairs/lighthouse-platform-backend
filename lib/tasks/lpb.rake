@@ -91,7 +91,7 @@ namespace :lpb do
           ### Getting access
           **Sandbox:** To request sandbox access for this API, [contact us](https://developer.va.gov/support/contact-us).
         MARKDOWN
-      when 'Veteran Verification API', 'Veteran Service History and Eligibility'
+      when 'Veteran Verification API', 'Veteran Service History and Eligibility API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
           ### With this API you can
           - Confirm an individual’s Title 38 Veteran status.
@@ -112,7 +112,7 @@ namespace :lpb do
           ### With this API you can
           - Return a probability of a VA patient’s eligibility for community care.
         MARKDOWN
-      when 'Benefits Documents'
+      when 'Benefits Documents API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
           ### With this API you can
           - Return all claims evidence documents associated with a claim ID.
