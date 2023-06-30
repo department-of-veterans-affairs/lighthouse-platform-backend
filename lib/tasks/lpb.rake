@@ -182,6 +182,40 @@ namespace :lpb do
           - Return demographic and health data of patients, including Veterans treated at VA facilities.
           - Search for an individual patient’s appointments, conditions, immunizations, medications, observations including vital signs and lab tests, and more.
         MARKDOWN
+      when 'Notice of Disagreements API'
+        api.api_metadatum.overview_page_content = <<~MARKDOWN
+          ### With this API you can
+          - Create and submit a Notice of Disagreement.
+          - Submit evidence for a Notice of Disagreement.
+          - Find a Notice of Disagreement.
+          - Return details about a specific Notice of Disagreement, including its status.
+        MARKDOWN
+      when 'Supplemental Claims API'
+        api.api_metadatum.overview_page_content = <<~MARKDOWN
+          ### With this API you can
+          - Create and submit a Supplemental Claim.
+          - Submit evidence for a Supplemental Claim.
+          - Find a Supplemental Claim.
+          - Return details about a specific Supplemental Claim, including its status.
+        MARKDOWN
+      when 'Legacy Appeals API'
+        api.api_metadatum.overview_page_content = <<~MARKDOWN
+          ### With this API you can
+          - Return a list of a claimant's active legacy appeals which are not part of the Appeals Modernization Act (AMA) process.
+          ### With this API you can
+        MARKDOWN
+      when 'Higher Level Reviews API'
+        api.api_metadatum.overview_page_content = <<~MARKDOWN
+          ### With this API you can
+          - Create and submit a Higher Level Review.
+          - Find a Higher Level Review.
+          - Return details about a specific Higher Level Review, including its status.
+        MARKDOWN
+      when 'Appealable Issues API'
+        api.api_metadatum.overview_page_content = <<~MARKDOWN
+          ### With this API you can
+          -  Return all appealable issues for a specific Veteran.
+        MARKDOWN
       else
         puts "No overview page content for #{api.api_metadatum.display_name}"
         apis_without_content.push api.api_metadatum.display_name
