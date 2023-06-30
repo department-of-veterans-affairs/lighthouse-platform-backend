@@ -35,6 +35,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Benefits Reference Data API'
@@ -45,6 +46,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Provider Directory API'
@@ -55,6 +57,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'VA Facilities API'
@@ -66,6 +69,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'VA Forms API'
@@ -76,6 +80,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Veteran Confirmation API'
@@ -85,6 +90,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Address Validation API'
@@ -94,6 +100,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Decision Reviews API'
@@ -109,6 +116,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
         MARKDOWN
       when 'Loan Guaranty API'
@@ -119,6 +127,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
         MARKDOWN
       when 'Veteran Verification API', 'Veteran Service History and Eligibility API'
@@ -130,6 +139,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Clinical Health API (FHIR)'
@@ -140,6 +150,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
         MARKDOWN
       when 'Community Care Eligibility API'
@@ -149,6 +160,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Benefits Documents API'
@@ -159,6 +171,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Contact Information API'
@@ -168,6 +181,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Direct Deposit Management API'
@@ -177,6 +191,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Education Benefits API'
@@ -189,6 +204,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Guaranty Remittance API'
@@ -201,6 +217,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Loan Review API'
@@ -210,6 +227,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
         MARKDOWN
       when 'VA Letter Generator API'
@@ -220,6 +238,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Appeals Status API'
@@ -229,6 +248,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
         MARKDOWN
       when 'Benefits Claims API'
@@ -243,6 +263,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Patient Health API (FHIR)'
@@ -253,6 +274,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Notice of Disagreements API'
@@ -265,6 +287,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Supplemental Claims API'
@@ -277,6 +300,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Legacy Appeals API'
@@ -286,6 +310,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Higher Level Reviews API'
@@ -297,6 +322,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       when 'Appealable Issues API'
@@ -306,6 +332,7 @@ namespace :lpb do
 
           ### Getting access
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
+
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
         MARKDOWN
       else
