@@ -14,13 +14,13 @@ namespace :lpb do
   desc 'Fix category url_slug fields to their expected values'
   task fixCategoryUrlSlugValues: :environment do
     ApiCategory.all.each do |category|
-      case category.url_fragment
+      case category.key
       when 'loanGuaranty'
         category.url_slug = 'loan-guaranty'
       when 'vaForms'
         category.url_slug = 'forms'
       else
-        category.url_slug = category.url_fragment
+        category.url_slug = category.key
       end
       category.save!
     end
