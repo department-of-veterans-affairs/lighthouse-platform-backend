@@ -389,8 +389,6 @@ namespace :lpb do
       api.api_metadatum.overview_page_content = '# This is default content'
       api.api_metadatum.save!
     end
-
-    Rake::Task['lpb:fixCategoryUrlSlugValues'].invoke
   end
 
   def get_base_url(environment)
