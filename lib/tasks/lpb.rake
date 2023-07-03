@@ -393,7 +393,7 @@ namespace :lpb do
         api.api_metadatum.description = 'Find VA facilities, including their addresses, available services, and hours of operation.'
         # rubocop:enable Layout/LineLength
       else
-        puts "No updated desription for #{api.api_metadatum.display_name}"
+        puts "No updated description for #{api.api_metadatum.display_name}"
         apis_without_content.push api.api_metadatum.display_name
         next
       end
