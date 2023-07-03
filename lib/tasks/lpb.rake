@@ -11,6 +11,21 @@ namespace :lpb do
     end
   end
 
+  desc 'Fix category url_slug fields to their expected values'
+  task fixCategoryUrlSlugValues: :environment do
+    ApiCategory.all.each do |category|
+      case category.key
+      when 'loanGuaranty'
+        category.url_slug = 'loan-guaranty'
+      when 'vaForms'
+        category.url_slug = 'forms'
+      else
+        category.url_slug = category.key
+      end
+      category.save!
+    end
+  end
+
   desc 'Populate Overview Page Content'
   task seedOverviewPageContent: :environment do
     apis_with_content = []
@@ -373,16 +388,6 @@ namespace :lpb do
       api.api_metadatum.restricted_access_details = ''
       api.api_metadatum.overview_page_content = '# This is default content'
       api.api_metadatum.save!
-    end
-
-    ApiCategory.all.each do |category|
-      sanitized_category_name = category.name.downcase.gsub('apis', '').strip
-      category_name_pieces = sanitized_category_name.split
-      hyphenated_category_name = category_name_pieces.join('-')
-      url_slug = hyphenated_category_name
-
-      category.url_slug = url_slug
-      category.save!
     end
   end
 
