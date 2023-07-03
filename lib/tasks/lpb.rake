@@ -106,7 +106,7 @@ namespace :lpb do
       when 'Decision Reviews API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
           ### With this API you can
-          - Create a higher level review.
+          - Create a higher-level review.
           - Return contestable issues for a Veteran.
           - Create a notice of disagreement.
           - Return all available data on a notice of disagreement submission.
@@ -313,12 +313,12 @@ namespace :lpb do
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
-      when 'Higher Level Reviews API'
+      when 'Higher-Level Reviews API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
           ### With this API you can
-          - Create and submit a Higher Level Review.
-          - Find a Higher Level Review.
-          - Return details about a specific Higher Level Review, including its status.
+          - Create and submit a Higher-Level Review.
+          - Find a Higher-Level Review.
+          - Return details about a specific Higher-Level Review, including its status.
 
           ### Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
