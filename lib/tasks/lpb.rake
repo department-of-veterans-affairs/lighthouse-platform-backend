@@ -328,7 +328,8 @@ namespace :lpb do
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
-      when 'Higher-Level Reviews API'
+      when 'Higher Level Reviews API', 'Higher-Level Reviews API'
+        api.api_metadatum.display_name = 'Higher-Level Reviews API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
           ### With this API you can
           - Create and submit a Higher-Level Review.
