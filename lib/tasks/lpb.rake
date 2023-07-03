@@ -34,9 +34,9 @@ namespace :lpb do
           - Validate that an individual document meets VA system file requirements.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Benefits Reference Data API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -45,9 +45,9 @@ namespace :lpb do
           - Return a list of service branches, disabilities, intake-sites, countries, contention-types, and more.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Provider Directory API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -56,9 +56,9 @@ namespace :lpb do
           - Determine if a VA healthcare provider is taking patients.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'VA Facilities API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -68,9 +68,9 @@ namespace :lpb do
           - Search for active VA facilities by geography, radius, services, facility IDs, and more.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'VA Forms API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -79,9 +79,9 @@ namespace :lpb do
           - Find forms by their name.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Veteran Confirmation API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -89,9 +89,9 @@ namespace :lpb do
           - Confirm an individual’s Title 38 Veteran status.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Address Validation API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -99,9 +99,9 @@ namespace :lpb do
           - Validate an address submitted to VA Profile.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Decision Reviews API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -115,9 +115,9 @@ namespace :lpb do
           - Returns eligible appeals in the legacy process for a Veteran.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Loan Guaranty API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -126,9 +126,9 @@ namespace :lpb do
           - Register VA-affiliated API account to a Loan Guaranty service account.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Veteran Verification API', 'Veteran Service History and Eligibility API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -138,9 +138,9 @@ namespace :lpb do
           - Return the service history of a Veteran.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Clinical Health API (FHIR)'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -149,9 +149,9 @@ namespace :lpb do
           - Search for an individual patient’s conditions, medications, observations including vital signs and lab tests, and more.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Community Care Eligibility API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -159,9 +159,9 @@ namespace :lpb do
           - Return a probability of a VA patient’s eligibility for community care.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Benefits Documents API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -170,9 +170,9 @@ namespace :lpb do
           - Upload a file to a Veteran’s VBMS efolder.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Contact Information API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -180,9 +180,9 @@ namespace :lpb do
           - Return, update, and add records for an individual’s home address, phone number, and email address.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Direct Deposit Management API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -190,9 +190,9 @@ namespace :lpb do
           - Return, create, or update direct deposit banking information for disability and pension compensation.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Education Benefits API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -203,9 +203,9 @@ namespace :lpb do
           - Determine a Veteran’s past educational enrollment.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Guaranty Remittance API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -216,9 +216,9 @@ namespace :lpb do
           - Check a pre-close loan against VA policies.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Loan Review API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -226,9 +226,9 @@ namespace :lpb do
           - Transmit post-close Loan Guaranty documents.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'VA Letter Generator API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -237,9 +237,9 @@ namespace :lpb do
           - Generate real-time JSON-formatted and PDF letters.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Appeals Status API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -247,9 +247,9 @@ namespace :lpb do
           - Return statuses of legacy and Appeals Modernization Act (AMA) decision reviews and appeals.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Benefits Claims API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -262,9 +262,9 @@ namespace :lpb do
           - Submit Evidence Waiver 5103 with version 2.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Patient Health API (FHIR)'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -273,9 +273,9 @@ namespace :lpb do
           - Search for an individual patient’s appointments, conditions, immunizations, medications, observations including vital signs and lab tests, and more.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Notice of Disagreements API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -286,9 +286,9 @@ namespace :lpb do
           - Return details about a specific Notice of Disagreement, including its status.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Supplemental Claims API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -299,9 +299,9 @@ namespace :lpb do
           - Return details about a specific Supplemental Claim, including its status.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Legacy Appeals API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -309,9 +309,9 @@ namespace :lpb do
           - Return a list of a claimant's active legacy appeals which are not part of the Appeals Modernization Act (AMA) process.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Higher Level Reviews API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -321,9 +321,9 @@ namespace :lpb do
           - Return details about a specific Higher Level Review, including its status.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Appealable Issues API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
@@ -331,9 +331,9 @@ namespace :lpb do
           -  Return all appealable issues for a specific Veteran.
 
           ### Getting access
-          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
-
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
+
+          **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       else
         puts "No overview page content for #{api.api_metadatum.display_name}"
