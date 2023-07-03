@@ -145,7 +145,7 @@ veteran_verification_category = ApiCategory.create(
   key: 'verification',
   short_description: 'Empowering Veterans to take control of their data and put it to work.',
   consumer_docs_link_text: 'Read the consumer onboarding guide for getting production access',
-  url_slug: 'veteran-verification',
+  url_slug: 'verification',
   overview: <<~MARKDOWN
     ## These APIs allow verification of Veteran status and data. They return service history, confirm Veteran status, and validate address information.
 
