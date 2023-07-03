@@ -368,6 +368,48 @@ namespace :lpb do
     # rubocop:enable Layout/LineLength
   end
 
+  desc 'Update API descriptions'
+  task updateApiDescriptions: :environment do
+    apis_with_content = []
+    apis_without_content = []
+    apis_without_metadata = []
+
+    Api.all.each do |api|
+      next if api.api_metadatum.blank?
+
+      case api.api_metadatum.display_name
+      when 'Benefits Claims API'
+        api.api_metadatum.description = 'Find and submit Veteran benefits claims.'
+      when 'Benefits Intake API'
+        api.api_metadatum.description = 'Upload and get the status of VA benefits documents.'
+      when 'Benefits Reference Data API'
+        api.api_metadatum.description = 'Look up data and codes that help with VA benefits claims.'
+      when 'Contact Information API'
+        api.api_metadatum.description = 'Find, update, and add Veteran contact information.'
+      when 'Loan Review API'
+        api.api_metadatum.description = 'Transmit post-close Loan Guaranty documents.'
+      when 'VA Facilities API'
+        # rubocop:disable Layout/LineLength
+        api.api_metadatum.description = 'Find VA facilities, including their addresses, available services, and hours of operation.'
+        # rubocop:enable Layout/LineLength
+      else
+        puts "No updated desription for #{api.api_metadatum.display_name}"
+        apis_without_content.push api.api_metadatum.display_name
+        next
+      end
+
+      apis_with_content.push api.api_metadatum.display_name
+
+      api.api_metadatum.save!
+    end
+
+    puts "These apis were updated: display_names(#{apis_with_content.join(', ')})"
+    # rubocop:disable Layout/LineLength
+    puts "These apis were not updated because their display name did not match any of the values in the switch case: display_names(#{apis_without_content.join(', ')})"
+    puts "These apis were not updated because they did not have api_metadatum: names(#{apis_without_metadata.join(', ')})"
+    # rubocop:enable Layout/LineLength
+  end
+
   desc 'Populates new IA fields'
   task seedIAFieldValues: :environment do
     Api.all.each do |api|
