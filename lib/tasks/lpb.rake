@@ -121,12 +121,12 @@ namespace :lpb do
       when 'Decision Reviews API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
           ### With this API you can
-          - Create a higher-level review.
+          - Create a Higher-Level Review.
           - Return contestable issues for a Veteran.
-          - Create a notice of disagreement.
-          - Return all available data on a notice of disagreement submission.
-          - Create a supplemental claim.
-          - Return all available data on supplemental claim submission.
+          - Create a Notice of Disagreement.
+          - Return all available data on a Notice of Disagreement submission.
+          - Create a Supplemental Claim.
+          - Return all available data on Supplemental Claim submission.
           - Returns eligible appeals in the legacy process for a Veteran.
 
           ### Getting access
