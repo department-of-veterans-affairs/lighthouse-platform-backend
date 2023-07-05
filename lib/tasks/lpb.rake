@@ -512,4 +512,13 @@ namespace :lpb do
     api.oauth_info = json.to_json
     api.save
   end
+
+  desc 'Fix Veteran Verification URL Slug'
+  task updateVeteranVerificationUrlSlug: :environment do
+    apis = ApiMetadatum.where(display_name: 'Veteran Service History and Eligibility API')
+    apis.each do |api|
+      api.url_slug = 'veteran-service-history-and-eligibility'
+      api.save
+    end
+  end
 end
