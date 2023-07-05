@@ -126,7 +126,7 @@ namespace :lpb do
           - Create a Notice of Disagreement.
           - Return all available data on a Notice of Disagreement submission.
           - Create a Supplemental Claim.
-          - Return all available data on Supplemental Claim submission.
+          - Return all available data on a Supplemental Claim submission.
           - Returns eligible appeals in the legacy process for a Veteran.
 
           ### Getting access
