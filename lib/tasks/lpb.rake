@@ -43,232 +43,234 @@ namespace :lpb do
       case api.api_metadatum.display_name
       when 'Benefits Intake API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Upload VA benefits claims documents.
           - Get the statuses of previously uploaded benefits documents.
           - Validate that an individual document meets VA system file requirements.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Benefits Reference Data API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Look up static information that is filtered and formatted for VA benefits claims.
           - Return a list of service branches, disabilities, intake-sites, countries, contention-types, and more.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Provider Directory API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Return list of VA healthcare providers, locations, specialities, and office hours.
           - Determine if a VA healthcare provider is taking patients.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'VA Facilities API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Return active VA facilities including health facilities, benefits facilities, cemeteries, and vet centers.
           - Return geographic locations, addresses, phone numbers, available services, hours of operation, and more of active VA facilities.
           - Search for active VA facilities by geography, radius, services, facility IDs, and more.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'VA Forms API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Return all VA Forms and their last revision date.
           - Find forms by their name.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Veteran Confirmation API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Confirm an individual’s Title 38 Veteran status.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Address Validation API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Validate an address submitted to VA Profile.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Decision Reviews API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
-          - Create a higher-level review.
+          ## With this API you can
+          - Create a Higher-Level Review.
           - Return contestable issues for a Veteran.
-          - Create a notice of disagreement.
-          - Return all available data on a notice of disagreement submission.
-          - Create a supplemental claim.
-          - Return all available data on supplemental claim submission.
+          - Create a Notice of Disagreement.
+          - Return all available data on a Notice of Disagreement submission.
+          - Create a Supplemental Claim.
+          - Return all available data on a Supplemental Claim submission.
           - Returns eligible appeals in the legacy process for a Veteran.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Loan Guaranty API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Transmit post-close Loan Guaranty documents.
           - Register VA-affiliated API account to a Loan Guaranty service account.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Veteran Verification API', 'Veteran Service History and Eligibility API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Confirm an individual’s Title 38 Veteran status.
           - Return disability ratings of a Veteran.
           - Return the service history of a Veteran.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Clinical Health API (FHIR)'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Return demographic and health data of patients, including Veterans treated at VA facilities, for a clinician at the point of care.
           - Search for an individual patient’s conditions, medications, observations including vital signs and lab tests, and more.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Community Care Eligibility API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Return a probability of a VA patient’s eligibility for community care.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Benefits Documents API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Return all claims evidence documents associated with a claim ID.
           - Upload a file to a Veteran’s VBMS efolder.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Contact Information API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Return, update, and add records for an individual’s home address, phone number, and email address.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Direct Deposit Management API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Return, create, or update direct deposit banking information for disability and pension compensation.
+          - Determine eligibility for direct deposit including detection of payments.
+          - Validate routing information.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Education Benefits API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Determine Veteran eligibility for Post-9/11 GI Bill’s education benefits.
           - Return what education benefits the Veteran has already used.
           - Discover what educational benefits remain for a Veteran.
           - Determine a Veteran’s past educational enrollment.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Guaranty Remittance API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Return a loan guarantee certificate.
           - Submit loan to the VA for remittance.
           - Submit remediation evidence to the VA for a remitted loan.
           - Check a pre-close loan against VA policies.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Loan Review API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Transmit post-close Loan Guaranty documents.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'VA Letter Generator API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Get list of official VA letters that a Veteran is eligible for.
           - Generate real-time JSON-formatted and PDF letters.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Appeals Status API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Return statuses of legacy and Appeals Modernization Act (AMA) decision reviews and appeals.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** To request sandbox access for this API, [contact us](/support/contact-us).
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Benefits Claims API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Find all benefits claims for a Veteran.
           - Auto-establish and submit forms 21-526EZ, 21-0966, 21-22, and 21-22a with version 1.
           - Submit documents supporting a claim with version 1.
@@ -276,54 +278,54 @@ namespace :lpb do
           - Find all benefits claims by Veteran ID with version 2.
           - Submit Evidence Waiver 5103 with version 2.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Patient Health API (FHIR)'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Return demographic and health data of patients, including Veterans treated at VA facilities.
           - Search for an individual patient’s appointments, conditions, immunizations, medications, observations including vital signs and lab tests, and more.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Notice of Disagreements API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Create and submit a Notice of Disagreement.
           - Submit evidence for a Notice of Disagreement.
           - Find a Notice of Disagreement.
           - Return details about a specific Notice of Disagreement, including its status.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Supplemental Claims API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Create and submit a Supplemental Claim.
           - Submit evidence for a Supplemental Claim.
           - Find a Supplemental Claim.
           - Return details about a specific Supplemental Claim, including its status.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Legacy Appeals API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Return a list of a claimant's active legacy appeals which are not part of the Appeals Modernization Act (AMA) process.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
@@ -331,22 +333,22 @@ namespace :lpb do
       when 'Higher Level Reviews API', 'Higher-Level Reviews API'
         api.api_metadatum.display_name = 'Higher-Level Reviews API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           - Create and submit a Higher-Level Review.
           - Find a Higher-Level Review.
           - Return details about a specific Higher-Level Review, including its status.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
         MARKDOWN
       when 'Appealable Issues API'
         api.api_metadatum.overview_page_content = <<~MARKDOWN
-          ### With this API you can
+          ## With this API you can
           -  Return all appealable issues for a specific Veteran.
 
-          ### Getting access
+          ## Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
 
           **Production:** Timeline for getting production access varies. [Learn more about getting production access](/onboarding/request-prod-access).
