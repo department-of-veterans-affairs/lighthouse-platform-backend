@@ -203,6 +203,8 @@ namespace :lpb do
         api.api_metadatum.overview_page_content = <<~MARKDOWN
           ### With this API you can
           - Return, create, or update direct deposit banking information for disability and pension compensation.
+          - Determine eligibility for direct deposit including detection of payments.
+          - Validate routing information.
 
           ### Getting access
           **Sandbox:** [Start developing](/explore/api/{API_URL_SLUG}/sandbox-access) immediately with test data.
