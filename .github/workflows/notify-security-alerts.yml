@@ -1,0 +1,27 @@
+name: Notify Security Alerts
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 15 * * 1-5
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    name: Check for security alerts and notify team via Slack
+    steps:
+      - id: check_for_security_alerts
+        name: Check for security alerts
+        run: |
+          echo ${{ secrets.GIT_AUTO_DEPLOY_TOKEN }} | gh auth login --with-token
+          gh api '/repos/department-of-veterans-affairs/lighthouse-platform-backend/code-scanning/alerts?state=open' \
+            > code-scanning.json
+          cat code-scanning.json
+          if [ "[]" == "$(cat code-scanning.json)" ]; then
+            echo "security_alert_exists='false'" >> $GITHUB_OUTPUT
+          else
+            echo "security_alert_exists='true'" >> $GITHUB_OUTPUT
+          fi
+      - id: send_slack_message
+        name: Send Slack Message
+        if: steps.check_for_security_alerts.outputs.security_alert_exists == 'true'
+        run: |
+            echo 'Sending Slack Message'
