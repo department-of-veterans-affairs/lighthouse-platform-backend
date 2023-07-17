@@ -12,6 +12,7 @@ jobs:
         name: Check for code-scanning alerts
         run: |
           echo ${{ secrets.GIT_AUTO_DEPLOY_TOKEN }} | gh auth login --with-token
+          gh auth refresh -h github.com -s admin:repo_hook
           gh api '/repos/department-of-veterans-affairs/lighthouse-platform-backend/code-scanning/alerts?state=open' \
             > code-scanning.json
           cat code-scanning.json
