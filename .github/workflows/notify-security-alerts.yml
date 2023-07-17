@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Check for security alerts and notify team via Slack
     steps:
-      - id: check_for_security_alerts
-        name: Check for security alerts
+      - id: check_for_code_scanning_alerts
+        name: Check for code-scanning alerts
         run: |
           echo ${{ secrets.GIT_AUTO_DEPLOY_TOKEN }} | gh auth login --with-token
           gh api '/repos/department-of-veterans-affairs/lighthouse-platform-backend/code-scanning/alerts?state=open' \
@@ -20,8 +20,59 @@ jobs:
           else
             echo "security_alert_exists='true'" >> $GITHUB_OUTPUT
           fi
+      - id: check_for_dependabot_alerts
+        name: Check for dependabot alerts   
+        run: |
+          echo ${{ secrets.GIT_AUTO_DEPLOY_TOKEN }} | gh auth login --with-token
+          gh api '/repos/department-of-veterans-affairs/lighthouse-platform-backend/dependabot/alerts?state=open' \
+            > dependabot.json
+          cat dependabot.json
+          if [ "[]" == "$(cat dependabot.json)" ]; then
+            echo "security_alert_exists='false'" >> $GITHUB_OUTPUT
+          else
+            echo "security_alert_exists='true'" >> $GITHUB_OUTPUT
+          fi
+      - id: check_for_secret_scanning_alerts
+        name: Check for secret scanning alerts   
+        run: |
+          echo ${{ secrets.GIT_AUTO_DEPLOY_TOKEN }} | gh auth login --with-token
+          gh api '/repos/department-of-veterans-affairs/lighthouse-platform-backend/secret-scanning/alerts?state=open' \
+            > secret-scanning.json
+          cat secret-scanning.json
+          if [ "[]" == "$(cat secret-scanning.json)" ]; then
+            echo "security_alert_exists='false'" >> $GITHUB_OUTPUT
+          else
+            echo "security_alert_exists='true'" >> $GITHUB_OUTPUT
+          fi
       - id: send_slack_message
         name: Send Slack Message
-        if: steps.check_for_security_alerts.outputs.security_alert_exists == 'true'
-        run: |
-            echo 'Sending Slack Message'
+        uses: slackapi/slack-github-action@v1.23.0
+        if: |
+          steps.check_for_code_scanning_alerts.outputs.security_alert_exists == 'true' ||
+          steps.check_for_dependabot_alerts.outputs.security_alert_exists == 'true' ||
+          steps.check_for_secret_scanning_alerts.outputs.security_alert_exists == 'true'
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+        with:
+          # This ID is for #team-okapi in Lighthouse Slack
+          channel-id: C01931CFMTQ
+          payload: |
+            {
+              "text": "Lighthouse Platform Backend (LPB) Security Alerts Check",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "A security vulnerability alert has been detected in the LPB repository".
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "@teamokapi please investigate."
+                  }
+                }
+              ]
+            }
