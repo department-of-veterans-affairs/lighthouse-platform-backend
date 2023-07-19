@@ -65,7 +65,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "A security vulnerability alert has been detected in the LPB repository".
+                    "text": "A security vulnerability alert has been detected in the LPB repository."
                   }
                 },
                 {
