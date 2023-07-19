@@ -50,7 +50,8 @@ jobs:
         if: |
           steps.check_for_code_scanning_alerts.outputs.security_alert_exists == 'true' ||
           steps.check_for_dependabot_alerts.outputs.security_alert_exists == 'true' ||
-          steps.check_for_secret_scanning_alerts.outputs.security_alert_exists == 'true'
+          steps.check_for_secret_scanning_alerts.outputs.security_alert_exists == 'true' ||
+          'true' == 'true'
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
         with:
