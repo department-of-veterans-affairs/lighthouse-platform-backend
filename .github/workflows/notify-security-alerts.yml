@@ -54,8 +54,8 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
         with:
-          # This ID is for #team-okapi in Lighthouse Slack
-          channel-id: C01931CFMTQ
+          # This ID is for #team-okapi-alerts in Lighthouse Slack
+          channel-id: C05HL4MTAFR
           payload: |
             {
               "text": "Lighthouse Platform Backend (LPB) Security Alerts Check",
