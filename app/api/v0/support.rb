@@ -50,7 +50,6 @@ module V0
         protect_from_forgery
 
         body false
-        return unless Flipper.enabled? :send_emails
 
         email_params = declared(params, include_missing: false)
         if params[:type] == 'PUBLISHING'
