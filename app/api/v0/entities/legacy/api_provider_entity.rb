@@ -61,6 +61,7 @@ module V0
             types
           end
         end
+        expose :block_sandbox_form, as: :blockSandboxForm
         expose :veteranRedirect do |entity|
           if entity.veteran_redirect_link_url.present?
             {

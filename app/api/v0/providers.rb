@@ -121,6 +121,8 @@ module V0
           api_metadatum_attributes[restricted_access_details]: Why is the API restricted?
           - Verbiage indicating why the API is restricted.
 
+          api_metadatum_attributes[block_sandbox_form]: Block the sandbox access request form.
+
           ## Auth Info
           ### CCG
           - From the .well-known openid-configuration
@@ -216,6 +218,8 @@ module V0
           requires :restricted_access_toggle, type: Boolean, allow_blank: false, default: false
           optional :restricted_access_details, type: String, allow_blank: true,
                                                description: 'Verbiage indicating why the API is restricted.'
+          optional :block_sandbox_form, type: Boolean, allow_blank: false, default: false,
+                                        description: 'Block Sandbox Access Form on dev portal.'
           requires :api_category_attributes, type: Hash do
             requires :id, type: Integer, values: ->(v) { ApiCategory.kept.map(&:id).include?(v) }
           end
