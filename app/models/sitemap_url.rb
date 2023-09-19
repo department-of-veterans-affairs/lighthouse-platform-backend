@@ -1,0 +1,2 @@
+class SitemapUrl < ApplicationRecord
+end
