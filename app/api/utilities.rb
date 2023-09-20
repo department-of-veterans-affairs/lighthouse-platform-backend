@@ -27,28 +27,28 @@ class Utilities < Base
     resource 'sitemap' do
       desc 'Returns a list of all public portal urls for a sitemap'
       get '/' do
-        staticUrls = SitemapUrl.all().pluck(:url)
+        static_urls = SitemapUrl.all.pluck(:url)
         apis = Api.includes(:api_metadatum)
         apis.each do |api|
           if api.api_metadatum
-            staticUrls.push('/explore/api/' + api.api_metadatum[:url_slug])
+            static_urls.push("/explore/api/#{api.api_metadatum[:url_slug]}")
             if api.api_metadatum.oauth_info.present?
               oauth = JSON.parse(api.api_metadatum[:oauth_info])
               if oauth['acgInfo'].present?
-                staticUrls.push('/explore/api/' + api.api_metadatum[:url_slug] + '/authorization-code')
+                static_urls.push("/explore/api/#{api.api_metadatum[:url_slug]}/authorization-code")
               end
               if oauth['ccgInfo'].present?
-                staticUrls.push('/explore/api/' + api.api_metadatum[:url_slug] + '/client-credentials')
+                static_urls.push("/explore/api/#{api.api_metadatum[:url_slug]}/client-credentials")
               end
             end
-            staticUrls.push('/explore/api/' + api.api_metadatum[:url_slug] + '/release-notes')
-            if !api.api_metadatum.block_sandbox_form
-              staticUrls.push('/explore/api/' + api.api_metadatum[:url_slug] + '/sandbox-access')
+            static_urls.push("/explore/api/#{api.api_metadatum[:url_slug]}/release-notes")
+            unless api.api_metadatum.block_sandbox_form
+              static_urls.push("/explore/api/#{api.api_metadatum[:url_slug]}/sandbox-access")
             end
           end
         end
 
-        p staticUrls.sort()
+        return static_urls.sort
       end
     end
     resource 'consumers' do
