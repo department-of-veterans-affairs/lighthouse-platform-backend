@@ -49,11 +49,10 @@ gem 'turbolinks', '~> 5'
 
 group :development, :test do
   gem 'brakeman'
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails', '> 5'
   gem 'faker'
   gem 'rspec-rails', '~> 5.0.0'
-  gem 'rubocop-rspec', '2.12.1'
+  gem 'rubocop-rspec'
   gem 'rubocop-thread_safety'
   gem 'timecop'
   gem 'vcr'
@@ -66,8 +65,8 @@ group :development do
   gem 'dotenv-rails'
   gem 'listen', '~> 3.3'
   gem 'rack-mini-profiler', '~> 2.0'
-  gem 'rubocop', '1.31.2', require: false
-  gem 'rubocop-rails', '2.15.2'
+  gem 'rubocop', require: false
+  gem 'rubocop-rails'
   gem 'spring'
   gem 'web-console', '>= 4.1.0'
 end
