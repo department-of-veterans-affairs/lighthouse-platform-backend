@@ -3,7 +3,7 @@
 class HomeController < ApplicationController
   def index; end
 
-  def sitemap;
+  def sitemap
     static_urls = SitemapUrl.all.pluck(:url)
     apis = Api.includes(:api_metadatum)
     apis.each do |api|
@@ -26,6 +26,6 @@ class HomeController < ApplicationController
     end
 
     static_urls.sort
-    render :sitemap, :content_type => 'text/xml', :locals => { :urls => static_urls }
+    render :sitemap, content_type: 'text/xml', locals: { urls: static_urls }
   end
 end
