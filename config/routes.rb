@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   scope '/platform-backend' do # everything must be scoped under platform-backend for DVP load balancer reqs
     root to: 'home#index'
 
+    get '/sitemap.xml', to: 'home#sitemap'
+
     mount OkComputer::Engine, at: '/health_check'
     mount OkComputer::Engine, at: '/healthcheck', as: 'healthcheckiest_healthcheck'
     devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
