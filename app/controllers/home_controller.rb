@@ -3,6 +3,7 @@
 class HomeController < ApplicationController
   def index; end
 
+  # rubocop:disable Metrics/MethodLength
   def sitemap
     static_urls = SitemapUrl.all.pluck(:url)
     apis = Api.includes(:api_metadatum)
@@ -28,4 +29,5 @@ class HomeController < ApplicationController
     static_urls.sort
     render :sitemap, content_type: 'text/xml', locals: { urls: static_urls }
   end
+  # rubocop:enable Metrics/MethodLength
 end
