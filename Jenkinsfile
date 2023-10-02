@@ -1,4 +1,6 @@
 standardShellPipeline {
+  dockerRegistryUrl = 'https://ghcr.io'
+  dockerRegistryCredentialsId = 'GITHUB_USERNAME_TOKEN'
   credentials = [
     string(credentialsId:'SLACK_WEBHOOK_LIGHTHOUSE',variable: 'SLACK_WEBHOOK_LIGHTHOUSE')
   ]
