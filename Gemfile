@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.0'
+ruby '3.2.2'
 
 gem 'activerecord-import'
 gem 'aws-sdk-dynamodb', '~> 1.62'
@@ -49,7 +49,6 @@ gem 'turbolinks', '~> 5'
 
 group :development, :test do
   gem 'brakeman'
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails', '> 5'
   gem 'faker'
   gem 'rspec-rails', '~> 5.0.0'
@@ -65,7 +64,6 @@ group :development do
   gem 'bundler-audit', require: false
   gem 'dotenv-rails'
   gem 'listen', '~> 3.3'
-  gem 'pry-byebug'
   gem 'rack-mini-profiler', '~> 2.0'
   gem 'rubocop', require: false
   gem 'rubocop-rails'
