@@ -51,27 +51,53 @@ RSpec.describe 'Homes', type: :request do
 
     context 'when an API blocks the sandbox access form' do
       it "does not include the 'sanbox access form' url" do
-        # setup code goes here
+        api = create(:api)
+        api_slug = api.api_metadatum.url_slug
+
+        # indicate that this API should not have a sandbox access form
+        api.api_metadatum.block_sandbox_form = true
+        api.api_metadatum.save!
+
         get '/platform-backend/sitemap.xml'
-        # expectation code goes here
+        temp = Hash.from_xml(response.body)
+
+        has_sanbox_access_url = temp['urlset']['url'].any? { |url| url['loc'] == "https://developer.va.gov/explore/api/#{api_slug}/sandbox-access" }
+
         expect(response).to have_http_status(:success)
+        expect(has_sanbox_access_url).to be false
       end
     end
 
     context 'when an API does not block the sandbox access form' do
-      it "does include the 'sanbox access form' url" do
-        # setup code goes here
+      it "does include the 'sandbox access form' url" do
+        api = create(:api)
+        api_slug = api.api_metadatum.url_slug
+
+        # indicate that this API should have a sandbox access form
+        api.api_metadatum.block_sandbox_form = false
+        api.api_metadatum.save!
+
         get '/platform-backend/sitemap.xml'
-        # expectation code goes here
+        temp = Hash.from_xml(response.body)
+
+        has_sanbox_access_url = temp['urlset']['url'].any? { |url| url['loc'] == "https://developer.va.gov/explore/api/#{api_slug}/sandbox-access" }
+
         expect(response).to have_http_status(:success)
+        expect(has_sanbox_access_url).to be true
       end
     end
 
     it "includes the API's base 'explore' url" do
-      # setup code goes here
+      api = create(:api)
+      api_slug = api.api_metadatum.url_slug
+
       get '/platform-backend/sitemap.xml'
-      # expectation code goes here
+      temp = Hash.from_xml(response.body)
+
+      has_explore_url = temp['urlset']['url'].any? { |url| url['loc'] == "https://developer.va.gov/explore/api/#{api_slug}" }
+
       expect(response).to have_http_status(:success)
+      expect(has_explore_url).to be true
     end
   end
 end
