@@ -87,6 +87,23 @@ RSpec.describe 'Homes', type: :request do
       end
     end
 
+    context 'when an API had deactivation info' do
+      it "does not include the API in the list of urls" do
+        api = create(:api)
+        api_slug = api.api_metadatum.url_slug
+
+        api.api_metadatum.deactivation_info = JSON.parse("{\"deprecationContent\":\"This API is deprecated and scheduled for deactivation in the 3rd quarter of 2020.\\n\",\"deprecationDate\":\"2020-07-13T00:00:00.000-04:00\",\"deactivationContent\":\"Our Urgent Care Eligibility API was deactivated on July 20, 2020. The API and related\\ndocumentation is no longer accessible. For more information, [contact us](/support/contact-us)\\nor visit our [Google Developer Forum](https://groups.google.com/forum/m/#!forum/va-lighthouse).\\n\",\"deactivationDate\":\"2020-07-20T00:00:00.000-04:00\"}")
+
+        get '/platform-backend/sitemap.xml'
+        temp = Hash.from_xml(response.body)
+
+        has_any_url = temp['urlset']['url'].any? { |url| url['loc'] == "https://developer.va.gov/explore/api/#{api_slug}" }
+
+        expect(response).to have_http_status(:success)
+        expect(has_any_url).to be false
+      end
+    end
+
     it "includes the API's base 'explore' url" do
       api = create(:api)
       api_slug = api.api_metadatum.url_slug
