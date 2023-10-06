@@ -93,6 +93,7 @@ RSpec.describe 'Homes', type: :request do
         api_slug = api.api_metadatum.url_slug
 
         api.api_metadatum.deactivation_info = JSON.parse('{"deprecationContent":"Dummy content is acceptable."}')
+        api.api_metadatum.save!
 
         get '/platform-backend/sitemap.xml'
         temp = Hash.from_xml(response.body)
