@@ -9,19 +9,27 @@ class HomeController < ApplicationController
     Api.joins(:api_metadatum).each do |api|
       unless api.api_metadatum.deactivation_info?
         urls.push("/explore/api/#{api.api_metadatum[:url_slug]}")
-        urls.push("/explore/api/#{api.api_metadatum[:url_slug]}/docs")
-        oauth = JSON.parse(api.api_metadatum[:oauth_info]) if api.api_metadatum.oauth_info.present?
-        if oauth.present?
-          urls.push("/explore/api/#{api.api_metadatum[:url_slug]}/authorization-code") if oauth['acgInfo'].present?
-          urls.push("/explore/api/#{api.api_metadatum[:url_slug]}/client-credentials") if oauth['ccgInfo'].present?
-        end
-        urls.push("/explore/api/#{api.api_metadatum[:url_slug]}/release-notes")
-        unless api.api_metadatum.block_sandbox_form?
-          urls.push("/explore/api/#{api.api_metadatum[:url_slug]}/sandbox-access")
+        suffixes = url_suffixes api
+        suffixes.each do |suffix|
+          urls.push("/explore/api/#{api.api_metadatum[:url_slug]}/#{suffix}")
         end
       end
     end
     render :sitemap, content_type: 'text/xml', locals: { urls: urls }
   end
   # rubocop:enable Metrics/MethodLength
+
+  private
+
+  def url_suffixes(api)
+    suffixes = []
+    suffixes.push('docs')
+    oauth = JSON.parse(api.api_metadatum[:oauth_info]) if api.api_metadatum.oauth_info.present?
+    if oauth.present?
+      suffixes.push('authorization-code') if oauth['acgInfo'].present?
+      suffixes.push('client-credentials') if oauth['ccgInfo'].present?
+    end
+    suffixes.push('release-notes')
+    suffixes.push('sandbox-access') unless api.api_metadatum.block_sandbox_form?
+  end
 end
