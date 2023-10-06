@@ -87,7 +87,7 @@ RSpec.describe 'Homes', type: :request do
       end
     end
 
-    context 'when an API had deactivation info' do
+    context 'when an API has deactivation info' do
       it 'does not include the API in the list of urls' do
         api = create(:api)
         api_slug = api.api_metadatum.url_slug
