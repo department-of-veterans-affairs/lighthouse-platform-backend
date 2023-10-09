@@ -89,7 +89,6 @@ RSpec.describe 'Homes', type: :request do
 
     context 'when an API has deactivation info' do
       it 'does not include the API in the list of urls' do
-        SitemapUrl.create(url: 'https://developer.va.gov/explore')
         api = create(:api)
         api_slug = api.api_metadatum.url_slug
 
@@ -99,7 +98,7 @@ RSpec.describe 'Homes', type: :request do
         get '/platform-backend/sitemap.xml'
         temp = Hash.from_xml(response.body)
 
-        has_any_url = temp['urlset']['url'].any? { |url| url['loc'] == "https://developer.va.gov/explore/api/#{api_slug}" }
+        has_any_url = temp['urlset'].has_key?('url')
 
         expect(response).to have_http_status(:success)
         expect(has_any_url).to be false
