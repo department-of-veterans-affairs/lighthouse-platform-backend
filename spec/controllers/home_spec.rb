@@ -90,7 +90,6 @@ RSpec.describe 'Homes', type: :request do
     context 'when an API has deactivation info' do
       it 'does not include the API in the list of urls' do
         api = create(:api)
-        api_slug = api.api_metadatum.url_slug
 
         api.api_metadatum.deactivation_info = JSON.parse('{"deprecationContent":"Dummy content is acceptable."}')
         api.api_metadatum.save!
@@ -98,7 +97,7 @@ RSpec.describe 'Homes', type: :request do
         get '/platform-backend/sitemap.xml'
         temp = Hash.from_xml(response.body)
 
-        has_any_url = temp['urlset'].has_key?('url')
+        has_any_url = temp['urlset'].key?('url')
 
         expect(response).to have_http_status(:success)
         expect(has_any_url).to be false
