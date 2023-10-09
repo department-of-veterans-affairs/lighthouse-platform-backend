@@ -89,6 +89,7 @@ RSpec.describe 'Homes', type: :request do
 
     context 'when an API has deactivation info' do
       it 'does not include the API in the list of urls' do
+        SitemapUrl.create(url: 'https://developer.va.gov/explore')
         api = create(:api)
         api_slug = api.api_metadatum.url_slug
 
