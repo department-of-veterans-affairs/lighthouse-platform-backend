@@ -79,6 +79,7 @@ module V0
         expose :restricted_access_details, as: :restrictedAccessDetails
         expose :restricted_access_toggle, as: :restrictedAccessToggle
         expose :url_slug, as: :urlSlug
+        expose :is_stealth_launched, as: :isStealthLaunched
       end
     end
   end
