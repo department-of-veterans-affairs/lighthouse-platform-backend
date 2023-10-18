@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_15_150722) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_17_151330) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,6 +65,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_15_150722) do
     t.boolean "restricted_access_toggle"
     t.string "url_slug"
     t.boolean "block_sandbox_form", default: false
+    t.boolean "is_stealth_launched", default: true
     t.index ["api_category_id"], name: "index_api_metadata_on_api_category_id"
     t.index ["api_id"], name: "index_api_metadata_on_api_id"
     t.index ["discarded_at"], name: "index_api_metadata_on_discarded_at"
