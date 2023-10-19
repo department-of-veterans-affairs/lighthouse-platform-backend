@@ -12,6 +12,7 @@ FactoryBot.define do
     restricted_access_toggle { false }
     url_slug { Faker::Lorem.word }
     block_sandbox_form { false }
+    is_stealth_launched { false }
     oauth_info do
       {
         acgInfo: {
