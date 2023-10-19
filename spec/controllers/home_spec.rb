@@ -104,6 +104,23 @@ RSpec.describe 'Homes', type: :request do
       end
     end
 
+    context 'when an API is stealth launched' do
+      it 'does not include the API in the list of urls' do
+        api = create(:api)
+
+        api.api_metadatum.is_stealth_launched = true
+        api.api_metadatum.save!
+
+        get '/platform-backend/sitemap.xml'
+        temp = Hash.from_xml(response.body)
+
+        has_any_url = temp['urlset'].key?('url')
+
+        expect(response).to have_http_status(:success)
+        expect(has_any_url).to be false
+      end
+    end
+
     it "includes the API's base 'explore' url" do
       api = create(:api)
       api_slug = api.api_metadatum.url_slug

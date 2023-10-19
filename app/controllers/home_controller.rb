@@ -7,7 +7,7 @@ class HomeController < ApplicationController
   def sitemap
     urls = SitemapUrl.all.pluck(:url)
     Api.joins(:api_metadatum).each do |api|
-      if api.api_metadatum.deactivation_info.blank?
+      if api.api_metadatum.deactivation_info.blank? && !api.api_metadatum.is_stealth_launched?
         urls.push("/explore/api/#{api.api_metadatum.url_slug}")
         suffixes = url_suffixes api
         suffixes.each do |suffix|
