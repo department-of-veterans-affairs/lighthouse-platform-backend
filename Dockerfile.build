@@ -1,5 +1,5 @@
 ARG VERSION
-FROM vasdvp/health-apis-dev-tools:mvn-3.6-jdk-14
+FROM ghcr.io/department-of-veterans-affairs/health-apis-docker-octopus/developer-utils:latest
 
 WORKDIR /etc/build
 
