@@ -33,6 +33,21 @@ module V0
         redirect_uris = options.dig(:okta_consumers, :acg, :settings, :oauthClient, :redirect_uris)
         redirect_uris.first if redirect_uris.present?
       end
+
+      expose :userId, documentation: { type: Integer } do |user, _options|
+        user[:id]
+      end
+
+      expose :deeplinkHash, documentation: { type: String } do |_user, options|
+        options[:deeplink_hash]
+      end
+      expose :providerName, documentation: { type: String } do |_user, options|
+        options[:provider_name]
+      end
+
+      expose :api, documentation: { type: Object } do |_user,options|
+        options[:api]
+      end
     end
   end
 end

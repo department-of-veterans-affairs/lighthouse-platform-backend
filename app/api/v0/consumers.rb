@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'digest'
 require 'securerandom'
 require 'validators/length'
 require 'validators/malicious_url_protection'
@@ -10,6 +11,7 @@ module V0
   class Consumers < V0::Base
     version 'v0'
 
+    helpers ApplicationHelper
     helpers ProductionRequestHelper
     helpers do
       def user_from_signup_params
@@ -147,6 +149,9 @@ module V0
         protect_from_forgery
 
         user = user_from_signup_params
+        url_slug = params[:apis].first.api_metadatum.url_slug
+        deeplink_hash = generate_deeplink_hash(user)
+        deeplink_url = generate_deeplink(url_slug, user)
 
         kong_consumer = Kong::ServiceFactory.service(:sandbox).consumer_signup(user)
         okta_consumers = Okta::ServiceFactory.service(:sandbox).consumer_signup(user, okta_signup_options)
@@ -157,7 +162,8 @@ module V0
 
         present user, with: V0::Entities::ConsumerApplicationEntity,
                       kong_consumer: kong_consumer,
-                      okta_consumers: okta_consumers
+                      okta_consumers: okta_consumers,
+                      deeplink_hash: deeplink_hash
       end
 
       desc 'Accepts request for production access', {
