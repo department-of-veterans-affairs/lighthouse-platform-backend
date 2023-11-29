@@ -62,6 +62,7 @@ end
 group :development do
   gem 'bullet'
   gem 'bundler-audit', require: false
+  gem 'debug', ">= 1.0.0"
   gem 'dotenv-rails'
   gem 'listen', '~> 3.3'
   gem 'rack-mini-profiler', '~> 2.0'

@@ -24,3 +24,5 @@ services:
       - RAILS_SERVE_STATIC_FILES=true
       - RAILS_ENV=development
       - DEEPLINK_SALT=badSalt123
+    stdin_open: true
+    tty: true
