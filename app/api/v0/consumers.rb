@@ -34,8 +34,8 @@ module V0
         ProductionMailer.support_production_access(request).deliver_later
       end
 
-      def send_sandbox_welcome_emails(request, kong_consumer, okta_consumers)
-        SandboxMailer.consumer_sandbox_signup(request, kong_consumer, okta_consumers).deliver_later
+      def send_sandbox_welcome_emails(request, kong_consumer, okta_consumers, deeplink_url)
+        SandboxMailer.consumer_sandbox_signup(request, kong_consumer, okta_consumers, deeplink_url).deliver_later
         if request[:apis].map(&:api_ref).map(&:name).include?('addressValidation')
           SandboxMailer.va_profile_sandbox_signup(request).deliver_later
         end
@@ -149,15 +149,19 @@ module V0
         protect_from_forgery
 
         user = user_from_signup_params
-        url_slug = params[:apis].first.api_metadatum.url_slug
-        deeplink_hash = generate_deeplink_hash(user)
-        deeplink_url = generate_deeplink(url_slug, user)
+        deeplink_hash = ''
+        deeplink_url = ''
+        if 'oauth/acg'.in? params[:apis].first.locate_auth_types
+          url_slug = params[:apis].first.api_metadatum.url_slug
+          deeplink_hash = generate_deeplink_hash(user)
+          deeplink_url = generate_deeplink(url_slug, user)
+        end
 
         kong_consumer = Kong::ServiceFactory.service(:sandbox).consumer_signup(user)
         okta_consumers = Okta::ServiceFactory.service(:sandbox).consumer_signup(user, okta_signup_options)
         Event.create(event_type: Event::EVENT_TYPES[:sandbox_signup], content: sandbox_signup_event_content)
 
-        send_sandbox_welcome_emails(params, kong_consumer, okta_consumers) if Flipper.enabled? :send_emails
+        send_sandbox_welcome_emails(params, kong_consumer, okta_consumers, deeplink_url) if Flipper.enabled? :send_emails
         Slack::AlertService.new.send_slack_signup_alert(slack_signup_options) if Flipper.enabled? :send_slack_signup
 
         present user, with: V0::Entities::ConsumerApplicationEntity,

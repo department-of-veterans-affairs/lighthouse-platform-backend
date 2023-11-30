@@ -28,6 +28,9 @@
   <% end %>
 
   <div>Please visit our OAuth documentation for implementation guidelines: <a href="https://developer.va.gov/oauth">developer.va.gov/oauth</a></div><br />
+  <% if @deeplink_url.present? %>
+    <div>You can find test user information at this <a href="https://developer.va.gov<%= @deeplink_url %>">link</a>.</div><br />
+  <% end %>
 <% end %>
 
 <div>If you find a bug or would like to make a feature request, please open an issue through our Support page. We are continually working to improve our process and welcome <a href="https://developer.va.gov/support">feedback along your journey</a>.</div><br />
