@@ -39,14 +39,7 @@ module V0
       end
 
       expose :deeplinkHash, documentation: { type: String } do |_user, options|
-        options[:deeplink_hash]
-      end
-      expose :providerName, documentation: { type: String } do |_user, options|
-        options[:provider_name]
-      end
-
-      expose :api, documentation: { type: Object } do |_user,options|
-        options[:api]
+        options[:deeplink_hash] if Flipper.enabled? :deeplink_in_sandbox_callback
       end
     end
   end
