@@ -170,6 +170,31 @@ module V0
                       deeplink_hash: deeplink_hash
       end
 
+      desc 'Validate test user data deeplink values and present test user data', {
+        deprecated: true,
+        headers: {
+          'X-Csrf-Token' => {
+            required: false
+          }
+        }
+      }
+      params do
+        requires :userId, type: String
+        requires :hash, type: String
+        requires :urlSlug, type: String
+      end
+      post 'test-user-data' do
+        header 'Access-Control-Allow-Origin', request.host_with_port
+        protect_from_forgery
+
+        if validate_deeplink_hash(params[:userId], params[:hash])
+          user = User.find(params[:userId])
+        else
+          user = Object.new
+        end
+        present user
+      end
+
       desc 'Accepts request for production access', {
         deprecated: true,
         headers: {
