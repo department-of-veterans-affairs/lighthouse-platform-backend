@@ -188,11 +188,16 @@ module V0
         protect_from_forgery
 
         if validate_deeplink_hash(params[:userId], params[:hash])
-          user = User.find(params[:userId])
+          s3 = AwsS3Service.new
+          bucket = ENV.fetch('TEST_USERS_BUCKET')
+          key = ENV.fetch('TEST_USERS_OBJECT_KEY')
+
+          res = s3.get_object(bucket: bucket, key: key)
+          body = JSON.parse(res.body.read)
         else
-          user = Object.new
+          body = ''
         end
-        present user
+        body
       end
 
       desc 'Accepts request for production access', {

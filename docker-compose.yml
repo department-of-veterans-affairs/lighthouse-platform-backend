@@ -17,6 +17,8 @@ services:
       - prod-kong-database
       - dynamodb
       - elasticsearch
+    env_file:
+      - .env
     environment:
       - DATABASE_HOST=${DATABASE_HOST:-db}
       - DATABASE_USER=${DATABASE_USER:-postgres}
