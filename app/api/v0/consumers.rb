@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'net/http'
+require 'uri'
 require 'digest'
 require 'securerandom'
 require 'validators/length'
@@ -188,14 +190,12 @@ module V0
         protect_from_forgery
 
         if validate_deeplink_hash(params[:userId], params[:hash])
-          s3 = AwsS3Service.new
-          bucket = ENV.fetch('TEST_USERS_BUCKET')
-          key = ENV.fetch('TEST_USERS_OBJECT_KEY')
+          uri = URI.parse(ENV.fetch('TEST_USERS_S3_URL'))
+          res = Net::HTTP.get_response(uri)
 
-          res = s3.get_object(bucket: bucket, key: key)
-          body = JSON.parse(res.body.read)
+          body = JSON.parse(res.body)
         else
-          body = ''
+          body = JSON.parse('{"error": "Failed to validate request for test user data."}')
         end
         body
       end
