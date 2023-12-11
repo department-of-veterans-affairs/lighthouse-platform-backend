@@ -1,0 +1,141 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://dummy-bucket.s3.us-gov-west-1.amazonaws.com/test-user-accounts.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - dummy-bucket.s3.us-gov-west-1.amazonaws.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Amz-Id-2:
+      - 3vg1RaBEgLtXGFaABL4RAAXIAmWSFtF6WLGRvYaBw9Y/kns6cPU/1Emaupv0Fs73tNe5qxTA3EA=
+      X-Amz-Request-Id:
+      - 7M3GFR8S03TYV8X3
+      Date:
+      - Mon, 11 Dec 2023 18:45:44 GMT
+      Last-Modified:
+      - Wed, 06 Dec 2023 18:42:56 GMT
+      Etag:
+      - '"e668c7af2a14873cfa02f7b791879bfd"'
+      X-Amz-Server-Side-Encryption:
+      - AES256
+      X-Amz-Version-Id:
+      - j7FeXFS__P8BwIplZ9ZEdjgpgWd9z3m2
+      Accept-Ranges:
+      - bytes
+      Content-Type:
+      - application/json
+      Server:
+      - AmazonS3
+      Content-Length:
+      - '2207'
+    body:
+      encoding: UTF-8
+      string: |
+        [
+          {
+            "id": "001",
+            "name_given": "Tamara",
+            "name_family": "Ellis",
+            "ssn": "796130115",
+            "icn": "1012667145V762142",
+            "credentials": {
+              "idme": {
+                "username": "va.api.user+idme.001@gmail.com",
+                "password": "Password1234!"
+              },
+              "logingov": {
+                "username": "va.api.user+001@gmail.com",
+                "password": "Password12345!!!",
+                "seed": "LKI7FZ7ZEVRLGQRW"
+              }
+            }
+          },
+          {
+            "id": "002",
+            "name_given": "Janet",
+            "name_family": "Moore",
+            "ssn": "796127677",
+            "icn": "1012861229V078999",
+            "credentials": {
+              "idme": {
+                "username": "va.api.user+idme.002@gmail.com",
+                "password": "Password1234!"
+              },
+              "logingov": {
+                "username": "va.api.user+002@gmail.com",
+                "password": "Password12345!!!",
+                "seed": "B5C3L42PLUWO3U5T"
+              }
+            }
+          },
+          {
+            "id": "003",
+            "name_given": "Ralph",
+            "name_family": "Lee",
+            "ssn": "796378782",
+            "icn": "1012667169V030190",
+            "credentials": {
+              "idme": {
+                "username": "va.api.user+idme.003@gmail.com",
+                "password": "Password1234!"
+              },
+              "logingov": {
+                "username": "va.api.user+003@gmail.com",
+                "password": "Password12345!!!",
+                "seed": "DIN72VD3MUOWJEENIS2FTJZEAROTGBAC"
+              }
+            }
+          },
+          {
+            "id": "004",
+            "name_given": "Jesse",
+            "name_family": "Gray",
+            "ssn": "796378881",
+            "icn": "1012666073V986297",
+            "credentials": {
+              "idme": {
+                "username": "va.api.user+idme.004@gmail.com",
+                "password": "Password1234!"
+              },
+              "logingov": {
+                "username": "va.api.user+004@gmail.com",
+                "password": "Password12345!!!",
+                "seed": "7OMSKULT5PSVFE3SINTWBT2YA2MSFXU4"
+              }
+            }
+          },
+          {
+            "id": "005",
+            "name_given": "Pauline",
+            "name_family": "Foster",
+            "ssn": "796330625",
+            "icn": "1012845630V900607",
+            "credentials": {
+              "idme": {
+                "username": "va.api.user+idme.005@gmail.com",
+                "password": "Password1234!"
+              },
+              "logingov": {
+                "username": "va.api.user+005@gmail.com",
+                "password": "Password12345!!!",
+                "seed": "RJIZ4BAI6OIYVKKGYYNHTR7F62IERCDT"
+              }
+            }
+          }
+        ]
+  recorded_at: Mon, 11 Dec 2023 18:45:43 GMT
+recorded_with: VCR 6.1.0
