@@ -65,16 +65,6 @@ describe V0::Consumers, type: :request do
     }
   end
   let(:test_users_base) { '/platform-backend/v0/consumers/test-user-data' }
-  let :test_users_expected_response do
-    [
-      {
-        email: 'something to fill in later'
-      },
-      {
-        email: 'more somethings to fill in later'
-      }
-    ]
-  end
 
   before do
     api_environments
