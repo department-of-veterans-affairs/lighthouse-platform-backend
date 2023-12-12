@@ -2,7 +2,6 @@
 
 require 'net/http'
 require 'uri'
-require 'digest'
 require 'securerandom'
 require 'validators/length'
 require 'validators/malicious_url_protection'
