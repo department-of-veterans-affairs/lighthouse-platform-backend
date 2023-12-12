@@ -18,7 +18,7 @@ services:
       - dynamodb
       - elasticsearch
     env_file:
-      - .env
+      - ${LPB_ENV_FILE:-/dev/null}
     environment:
       - DATABASE_HOST=${DATABASE_HOST:-db}
       - DATABASE_USER=${DATABASE_USER:-postgres}
