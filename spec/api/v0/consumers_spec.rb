@@ -320,7 +320,7 @@ describe V0::Consumers, type: :request do
         user = User.create!(first_name: 'Test', last_name: 'McTesterson', email: 'test@domain.com')
         test_users_params = {
           userId: user.id,
-          hash: `#{generate_deeplink_hash(user)}BadHash`,
+          hash: "#{generate_deeplink_hash(user)}BadHash",
           urlSlug: 'veteran-verification'
         }
         post test_users_base, params: test_users_params

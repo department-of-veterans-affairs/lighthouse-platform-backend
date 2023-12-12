@@ -11,7 +11,8 @@ RSpec.describe SandboxMailer, type: :mailer do
     let(:mail) do
       SandboxMailer.consumer_sandbox_signup(sandbox_request,
                                             kong_consumer,
-                                            okta_consumers)
+                                            okta_consumers,
+                                            nil)
     end
 
     it 'renders the headers' do
@@ -37,7 +38,8 @@ RSpec.describe SandboxMailer, type: :mailer do
       let(:oauth_email) do
         SandboxMailer.consumer_sandbox_signup(sandbox_request,
                                               nil,
-                                              okta_consumers)
+                                              okta_consumers,
+                                              nil)
       end
 
       it 'hides the key_auth fields' do
@@ -49,6 +51,7 @@ RSpec.describe SandboxMailer, type: :mailer do
       let(:key_auth_email) do
         SandboxMailer.consumer_sandbox_signup(sandbox_request,
                                               kong_consumer,
+                                              nil,
                                               nil)
       end
 
