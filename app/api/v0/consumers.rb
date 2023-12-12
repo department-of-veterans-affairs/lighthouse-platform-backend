@@ -162,7 +162,9 @@ module V0
         okta_consumers = Okta::ServiceFactory.service(:sandbox).consumer_signup(user, okta_signup_options)
         Event.create(event_type: Event::EVENT_TYPES[:sandbox_signup], content: sandbox_signup_event_content)
 
-        send_sandbox_welcome_emails(params, kong_consumer, okta_consumers, deeplink_url) if Flipper.enabled? :send_emails
+        if Flipper.enabled? :send_emails
+          send_sandbox_welcome_emails(params, kong_consumer, okta_consumers, deeplink_url)
+        end
         Slack::AlertService.new.send_slack_signup_alert(slack_signup_options) if Flipper.enabled? :send_slack_signup
 
         present user, with: V0::Entities::ConsumerApplicationEntity,

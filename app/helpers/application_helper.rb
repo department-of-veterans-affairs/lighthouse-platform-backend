@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'digest'
 
 module ApplicationHelper
@@ -14,14 +15,14 @@ module ApplicationHelper
   end
 
   def validate_deeplink_hash(user_id, hash)
+    salt = ENV.fetch('DEEPLINK_SALT')
     begin
       user = User.find(user_id)
-      salt = ENV.fetch('DEEPLINK_SALT')
       email = user.email
       expected_hash = Digest::SHA256.hexdigest "#{salt}-#{email}"
 
-      hash === expected_hash  
-    rescue 
+      hash == expected_hash
+    rescue
       false
     end
   end

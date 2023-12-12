@@ -3,9 +3,9 @@
 require 'rails_helper'
 require 'yaml'
 
-include ApplicationHelper
-
 describe V0::Consumers, type: :request do
+  include ApplicationHelper
+
   let(:production_request_base) { '/platform-backend/v0/consumers/production-requests' }
   let(:production_request_params) { build(:production_access_request) }
   let(:apply_base) { '/platform-backend/v0/consumers/applications' }
@@ -300,7 +300,7 @@ describe V0::Consumers, type: :request do
     context 'when validation passes' do
       it 'loads the user data with a valid request' do
         user = User.create!(first_name: 'Test', last_name: 'McTesterson', email: 'test@domain.com')
-        VCR.use_cassette('aws/s3_test_users_data', match_requests_on: [:method], :record => :new_episodes) do
+        VCR.use_cassette('aws/s3_test_users_data', match_requests_on: [:method]) do
           test_users_params = {
             userId: user.id,
             hash: generate_deeplink_hash(user),
@@ -309,10 +309,10 @@ describe V0::Consumers, type: :request do
           post test_users_base, params: test_users_params
           expect(response.code).to eq('201')
           test_user_data = YAML.load_file('./spec/support/vcr_cassettes/aws/s3_test_users_data.yml')
-          jsonExpectedData = JSON.parse(test_user_data.to_h['http_interactions'][0]['response']['body']['string'])
-          jsonResponseBody = JSON.parse(response.body)
+          expected_json = JSON.parse(test_user_data.to_h['http_interactions'][0]['response']['body']['string'])
+          response_json = JSON.parse(response.body)
 
-          expect(jsonResponseBody).to eq(jsonExpectedData)
+          expect(response_json).to eq(expected_json)
         end
       end
 
@@ -320,7 +320,7 @@ describe V0::Consumers, type: :request do
         user = User.create!(first_name: 'Test', last_name: 'McTesterson', email: 'test@domain.com')
         test_users_params = {
           userId: user.id,
-          hash: generate_deeplink_hash(user)+'BadHash',
+          hash: `#{generate_deeplink_hash(user)}BadHash`,
           urlSlug: 'veteran-verification'
         }
         post test_users_base, params: test_users_params
