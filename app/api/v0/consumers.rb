@@ -150,6 +150,11 @@ module V0
         protect_from_forgery
 
         user = user_from_signup_params
+
+        kong_consumer = Kong::ServiceFactory.service(:sandbox).consumer_signup(user)
+        okta_consumers = Okta::ServiceFactory.service(:sandbox).consumer_signup(user, okta_signup_options)
+        Event.create(event_type: Event::EVENT_TYPES[:sandbox_signup], content: sandbox_signup_event_content)
+
         deeplink_hash = ''
         deeplink_url = ''
         if 'oauth/acg'.in? params[:apis].first.locate_auth_types
@@ -157,11 +162,6 @@ module V0
           deeplink_hash = generate_deeplink_hash(user)
           deeplink_url = generate_deeplink(url_slug, user)
         end
-
-        kong_consumer = Kong::ServiceFactory.service(:sandbox).consumer_signup(user)
-        okta_consumers = Okta::ServiceFactory.service(:sandbox).consumer_signup(user, okta_signup_options)
-        Event.create(event_type: Event::EVENT_TYPES[:sandbox_signup], content: sandbox_signup_event_content)
-
         if Flipper.enabled? :send_emails
           send_sandbox_welcome_emails(params, kong_consumer, okta_consumers, deeplink_url)
         end
@@ -194,11 +194,10 @@ module V0
           uri = URI.parse(ENV.fetch('TEST_USERS_S3_URL'))
           res = Net::HTTP.get_response(uri)
 
-          body = JSON.parse(res.body)
+          JSON.parse(res.body)
         else
-          body = JSON.parse('{"error": "Failed to validate request for test user data."}')
+          raise AuthorizationError
         end
-        body
       end
 
       desc 'Accepts request for production access', {
