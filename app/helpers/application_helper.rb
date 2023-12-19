@@ -11,7 +11,7 @@ module ApplicationHelper
 
   def generate_deeplink(url_slug, user)
     hash = generate_deeplink_hash(user)
-    "/explore/api/#{url_slug}/test-user-data/#{user.id}/#{hash}"
+    "/explore/api/#{url_slug}/test-users/#{user.id}/#{hash}"
   end
 
   def validate_deeplink_hash(user_id, hash)
