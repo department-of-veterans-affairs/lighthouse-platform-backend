@@ -130,5 +130,42 @@ class Utilities < Base
         end
       end
     end
+
+    resource 'candidate' do
+      desc 'Returns result from Address Validation API v2 /candidate endpoint'
+      params do
+        requires :requestAddress, type: Hash do
+          requires :addressLine1, type: String
+          requires :addressLine2, type: String
+          requires :addressLine3, type: String
+          requires :city, type: String
+          requires :zipCode5, type: String
+          requires :zipCode4, type: String
+          requires :internationalPostalCode, type: String
+          requires :addressPOU, type: String
+          requires :stateProvince, type: Hash do
+            requires :name, type: String
+            requires :code, type: String
+          end
+          requires :requestCountry, type: Hash do
+            requires :countryName, type: String
+            requires :countryCode, type: String
+          end
+        end
+      end
+      post '/' do
+        uri = URI('')
+        http = Net::HTTP.new(uri)
+        request = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
+        request.body = params.require(:requestAddress).permit(
+          :addressLine1, :addressLine2, :addressLine3, :city, :zipCode5, :zipCode4, 
+          :internationalPostalCode, :addressPOU, stateProvince: [:name, :code],
+          requestCountry: [:countryName, :countryCode]
+        ).to_json
+        response = http.request(request)
+
+        render json: response.body
+      end
+    end
   end
 end
