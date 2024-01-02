@@ -1,7 +1,7 @@
 ARG VERSION
 FROM ghcr.io/department-of-veterans-affairs/health-apis-docker-octopus/developer-utils:latest
 
-RUN ${OCTOSBIN}/install-va-ca-certs
+# RUN ${OCTOSBIN}/install-va-ca-certs
 
 WORKDIR /etc/build
 
