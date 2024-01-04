@@ -324,7 +324,7 @@ describe V0::Consumers, type: :request do
           urlSlug: 'veteran-verification'
         }
         post test_users_base, params: test_users_params
-        expect(response.body).to eq('{"error":"Failed to validate request for test user data."}')
+        expect(response.body).to eq('{"errors":["Unauthorized"]}')
       end
     end
   end
