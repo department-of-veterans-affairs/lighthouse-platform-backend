@@ -154,9 +154,13 @@ class Utilities < Base
         end
       end
       post '/' do
-        uri = URI('')
+        uri = URI.parse(ENV.fetch(Figaro.env.address_validation_api_v2_candidate_endpoint))
         http = Net::HTTP.new(uri)
-        request = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
+        headers = {
+          'apikey' => Figaro.env.address_validation_api_v2_apikey,
+          'Content-Type' => 'application/json'
+        }
+        request = Net::HTTP::Post.new(uri.path, headers)
         request.body = params.require(:requestAddress).permit(
           :addressLine1, :addressLine2, :addressLine3, :city, :zipCode5, :zipCode4, 
           :internationalPostalCode, :addressPOU, stateProvince: [:name, :code],
