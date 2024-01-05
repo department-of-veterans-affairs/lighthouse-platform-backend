@@ -10,7 +10,7 @@ class SandboxMailer < ApplicationMailer
     @deeplink_url = deeplink_url if Flipper.enabled? :deeplink_in_sandbox_email
     mail(to: request[:email],
          from: from_email_wrapper('VA API Platform team'),
-         subject: "Sandbox Access for #{list_apis(request[:apis])}")
+         subject: "Sandbox Access for #{request[:apis].first.api_metadatum.display_name}")
   end
 
   def va_profile_sandbox_signup(request)
