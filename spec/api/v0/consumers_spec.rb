@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'yaml'
 
 describe V0::Consumers, type: :request do
+  include ApplicationHelper
+
   let(:production_request_base) { '/platform-backend/v0/consumers/production-requests' }
   let(:production_request_params) { build(:production_access_request) }
   let(:apply_base) { '/platform-backend/v0/consumers/applications' }
@@ -61,6 +64,7 @@ describe V0::Consumers, type: :request do
       xAmzSignature: '4f3387f30d3b04b1617aa5ad76d14cb36344cf6e8a236bb7f5cdca2c9618c2b3'
     }
   end
+  let(:test_users_base) { '/platform-backend/v0/consumers/test-user-data' }
 
   before do
     api_environments
@@ -288,6 +292,39 @@ describe V0::Consumers, type: :request do
         signup_params[:oAuthRedirectURI] = create(:malicious_url).url
         post apply_base, params: signup_params
         expect(response.code).to eq('400')
+      end
+    end
+  end
+
+  describe 'get test user data' do
+    context 'when validation passes' do
+      it 'loads the user data with a valid request' do
+        user = User.create!(first_name: 'Test', last_name: 'McTesterson', email: 'test@domain.com')
+        VCR.use_cassette('aws/s3_test_users_data', match_requests_on: [:method]) do
+          test_users_params = {
+            userId: user.id,
+            hash: generate_deeplink_hash(user),
+            urlSlug: 'veteran-verification'
+          }
+          post test_users_base, params: test_users_params
+          expect(response.code).to eq('201')
+          test_user_data = YAML.load_file('./spec/support/vcr_cassettes/aws/s3_test_users_data.yml')
+          expected_json = JSON.parse(test_user_data.to_h['http_interactions'][0]['response']['body']['string'])
+          response_json = JSON.parse(response.body)
+
+          expect(response_json).to eq(expected_json)
+        end
+      end
+
+      it 'Returns an error when the hash validation fails' do
+        user = User.create!(first_name: 'Test', last_name: 'McTesterson', email: 'test@domain.com')
+        test_users_params = {
+          userId: user.id,
+          hash: "#{generate_deeplink_hash(user)}BadHash",
+          urlSlug: 'veteran-verification'
+        }
+        post test_users_base, params: test_users_params
+        expect(response.body).to eq('{"errors":["Unauthorized"]}')
       end
     end
   end

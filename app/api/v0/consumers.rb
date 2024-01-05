@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'net/http'
+require 'uri'
 require 'securerandom'
 require 'validators/length'
 require 'validators/malicious_url_protection'
@@ -10,6 +12,7 @@ module V0
   class Consumers < V0::Base
     version 'v0'
 
+    helpers ApplicationHelper
     helpers ProductionRequestHelper
     helpers do
       def user_from_signup_params
@@ -32,8 +35,8 @@ module V0
         ProductionMailer.support_production_access(request).deliver_later
       end
 
-      def send_sandbox_welcome_emails(request, kong_consumer, okta_consumers)
-        SandboxMailer.consumer_sandbox_signup(request, kong_consumer, okta_consumers).deliver_later
+      def send_sandbox_welcome_emails(request, kong_consumer, okta_consumers, deeplink_url)
+        SandboxMailer.consumer_sandbox_signup(request, kong_consumer, okta_consumers, deeplink_url).deliver_later
         if request[:apis].map(&:api_ref).map(&:name).include?('addressValidation')
           SandboxMailer.va_profile_sandbox_signup(request).deliver_later
         end
@@ -152,12 +155,50 @@ module V0
         okta_consumers = Okta::ServiceFactory.service(:sandbox).consumer_signup(user, okta_signup_options)
         Event.create(event_type: Event::EVENT_TYPES[:sandbox_signup], content: sandbox_signup_event_content)
 
-        send_sandbox_welcome_emails(params, kong_consumer, okta_consumers) if Flipper.enabled? :send_emails
+        deeplink_hash = ''
+        deeplink_url = ''
+        if 'oauth/acg'.in? params[:apis].first.locate_auth_types
+          user.save!
+          url_slug = params[:apis].first.api_metadatum.url_slug
+          deeplink_hash = generate_deeplink_hash(user)
+          deeplink_url = generate_deeplink(url_slug, user)
+        end
+        if Flipper.enabled? :send_emails
+          send_sandbox_welcome_emails(params, kong_consumer, okta_consumers, deeplink_url)
+        end
         Slack::AlertService.new.send_slack_signup_alert(slack_signup_options) if Flipper.enabled? :send_slack_signup
 
         present user, with: V0::Entities::ConsumerApplicationEntity,
                       kong_consumer: kong_consumer,
-                      okta_consumers: okta_consumers
+                      okta_consumers: okta_consumers,
+                      deeplink_hash: deeplink_hash
+      end
+
+      desc 'Validate test user data deeplink values and present test user data', {
+        deprecated: true,
+        headers: {
+          'X-Csrf-Token' => {
+            required: false
+          }
+        }
+      }
+      params do
+        requires :userId, type: String
+        requires :hash, type: String
+        requires :urlSlug, type: String
+      end
+      post 'test-user-data' do
+        header 'Access-Control-Allow-Origin', request.host_with_port
+        protect_from_forgery
+
+        if validate_deeplink_hash(params[:userId], params[:hash])
+          uri = URI.parse(ENV.fetch('TEST_USERS_S3_URL'))
+          res = Net::HTTP.get_response(uri)
+
+          JSON.parse(res.body)
+        else
+          raise AuthorizationError
+        end
       end
 
       desc 'Accepts request for production access', {

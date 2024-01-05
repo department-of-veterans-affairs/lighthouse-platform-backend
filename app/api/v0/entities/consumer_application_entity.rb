@@ -33,6 +33,14 @@ module V0
         redirect_uris = options.dig(:okta_consumers, :acg, :settings, :oauthClient, :redirect_uris)
         redirect_uris.first if redirect_uris.present?
       end
+
+      expose :userId, documentation: { type: Integer } do |user, _options|
+        user[:id]
+      end
+
+      expose :deeplinkHash, documentation: { type: String } do |_user, options|
+        options[:deeplink_hash] if Flipper.enabled? :deeplink_in_sandbox_callback
+      end
     end
   end
 end
