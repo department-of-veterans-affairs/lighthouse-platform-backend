@@ -158,6 +158,7 @@ module V0
         deeplink_hash = ''
         deeplink_url = ''
         if 'oauth/acg'.in? params[:apis].first.locate_auth_types
+          user.save!
           url_slug = params[:apis].first.api_metadatum.url_slug
           deeplink_hash = generate_deeplink_hash(user)
           deeplink_url = generate_deeplink(url_slug, user)
