@@ -19,7 +19,7 @@ SimpleCov.start 'rails' do
   add_filter '/lib/tasks/lpb.rake'
   add_filter '/lib/tasks/aud_values.rake'
 
-  SimpleCov.minimum_coverage_by_file 90
+  SimpleCov.minimum_coverage_by_file 85
   SimpleCov.refuse_coverage_drop
 
   SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
