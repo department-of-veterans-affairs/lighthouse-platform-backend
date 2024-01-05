@@ -234,6 +234,7 @@ claims_api.update(  auth_server_access_key: 'AUTHZ_SERVER_CLAIMS',
    oauth_info: {
      acgInfo: {
        baseAuthPath: '/oauth2/claims/v1',
+       gitHubTestUsers: 'https://github.com/department-of-veterans-affairs/vets-api-clients/blob/master/test_accounts/benefits_test_accounts.md',
        productionAud: 'aus7y0lyttrObgW622p7',
        productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/claims/v1/.well-known/openid-configuration',
        sandboxAud: 'aus7y0lyttrObgW622p7',
@@ -546,6 +547,7 @@ veteran_verification_api.update(
    oauth_info: {
     acgInfo: {
       baseAuthPath: '/oauth2/veteran-verification/v1',
+      gitHubTestUsers: 'https://github.com/department-of-veterans-affairs/vets-api-clients/blob/master/test_accounts/verification_test_accounts.md',
       productionAud: 'aus7y0sefudDrg2HI2p7',
       productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/veteran-verification/v1/.well-known/openid-configuration',
       sandboxAud: 'aus7y0sefudDrg2HI2p7',
@@ -660,6 +662,7 @@ community_care_api.update(
    oauth_info: {
     acgInfo: {
       baseAuthPath: '/oauth2/community-care/v1',
+      gitHubTestUsers: 'https://github.com/department-of-veterans-affairs/vets-api-clients/blob/master/test_accounts/community_care_test_accounts.md',
       productionAud: 'aus89xnh1xznM13SK2p7',
       productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/community-care/v1/.well-known/openid-configuration',
       sandboxAud: 'aus89xnh1xznM13SK2p7',
@@ -734,6 +737,7 @@ clinical_fhir_api.update(
    oauth_info: {
     acgInfo: {
       baseAuthPath: '/oauth2/clinical-health/v1',
+      gitHubTestUsers: 'https://github.com/department-of-veterans-affairs/vets-api-clients/blob/master/test_accounts/clinical_health_test_accounts.md',
       productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/clinical-health/system/v1/.well-known/openid-configuration',
       sandboxWellKnownConfig: 'https://dev-api.va.gov/oauth2/clinical-health/system/v1/.well-known/openid-configuration',
       scopes: [
@@ -779,6 +783,7 @@ fhir_health_api.update(
    oauth_info: {
       acgInfo: {
         baseAuthPath: '/oauth2/health/v1',
+        gitHubTestUsers: 'https://github.com/department-of-veterans-affairs/vets-api-clients/blob/master/test_accounts/health_test_accounts.md',
         productionAud: 'default',
         productionWellKnownConfig: 'https://dev-api.va.gov/oauth2/health/v1/.well-known/openid-configuration',
         sandboxAud: 'default',
