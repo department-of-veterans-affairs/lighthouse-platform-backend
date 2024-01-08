@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'rake'
+require 'net/http'
+require 'uri'
 
 class Utilities < Base
   helpers do
@@ -131,7 +133,7 @@ class Utilities < Base
       end
     end
 
-    resource 'candidate' do
+    resource 'address-validation' do
       desc 'Returns result from Address Validation API v2 /candidate endpoint'
       params do
         requires :requestAddress, type: Hash do
@@ -153,8 +155,8 @@ class Utilities < Base
           end
         end
       end
-      post '/' do
-        uri = URI.parse(ENV.fetch(Figaro.env.address_validation_api_v2_candidate_endpoint))
+      post '/candidate' do
+        uri = URI.parse(ENV.fetch('ADDRESS_VALIDATION_API_V2_CANDIDATE_ENDPOINT'))
         http = Net::HTTP.new(uri)
         headers = {
           'apikey' => ENV.fetch(Figaro.env.address_validation_api_v2_apikey),
