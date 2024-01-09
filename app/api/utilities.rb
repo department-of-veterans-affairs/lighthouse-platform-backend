@@ -138,11 +138,11 @@ class Utilities < Base
       params do
         requires :requestAddress, type: Hash do
           requires :addressLine1, type: String
-          requires :addressLine2, type: String
-          requires :addressLine3, type: String
+          optional :addressLine2, type: String
+          optional :addressLine3, type: String
           requires :city, type: String
           requires :zipCode5, type: String
-          requires :zipCode4, type: String
+          optional :zipCode4, type: String
           requires :internationalPostalCode, type: String
           requires :addressPOU, type: String
           requires :stateProvince, type: Hash do
@@ -158,7 +158,7 @@ class Utilities < Base
       post '/candidate' do
         header 'Access-Control-Allow-Origin', request.host_with_port
         protect_from_forgery
-        
+
         uri = URI.parse(ENV.fetch('ADDRESS_VALIDATION_API_V2_CANDIDATE_ENDPOINT'))
         http = Net::HTTP.new(uri)
         headers = {
