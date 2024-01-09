@@ -156,6 +156,9 @@ class Utilities < Base
         end
       end
       post '/candidate' do
+        header 'Access-Control-Allow-Origin', request.host_with_port
+        protect_from_forgery
+        
         uri = URI.parse(ENV.fetch('ADDRESS_VALIDATION_API_V2_CANDIDATE_ENDPOINT'))
         http = Net::HTTP.new(uri)
         headers = {
