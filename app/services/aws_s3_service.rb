@@ -7,7 +7,7 @@ class AwsS3Service
     if Rails.env === 'development'
       # Because of access restrictions to the s3 bucket with the users file we need to fake
       # the request when doing local dev through a basic, unauthenticated GET request.
-      url = "https://#{params[:bucket]}.s3.#{ENV.fetch('AWS_DEFAULT_REGION')}.amazonaws.com#{params[:key]}"
+      url = "https://#{params[:bucket]}.s3.#{ENV.fetch('AWS_DEFAULT_REGION')}.amazonaws.com/#{params[:key]}"
       uri = URI.parse(url)
       res = Net::HTTP.get_response(uri)
 
