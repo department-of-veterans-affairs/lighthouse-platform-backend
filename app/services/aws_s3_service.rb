@@ -4,7 +4,7 @@ require 'securerandom'
 
 class AwsS3Service
   def get_object(params)
-    if Rails.env == 'development'
+    if Rails.env.in? ['development', 'test']
       get_object_local(params)
     else
       get_object_in_ecs(params)
