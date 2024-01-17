@@ -195,7 +195,6 @@ module V0
           s3 = AwsS3Service.new
           bucket = ENV.fetch('TEST_USERS_BUCKET')
           key = ENV.fetch('TEST_USERS_OBJECT_KEY')
-          debugger
           response = s3.get_object(bucket: bucket, key: key)
 
           JSON.parse(response)
