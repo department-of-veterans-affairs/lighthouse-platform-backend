@@ -100,5 +100,6 @@ Rails.application.configure do
   ENV['S3_ROLE_ARN'] = 'arn:aws-us-gov:iam::000008675309:role/s3-upload-role'
   ENV['S3_ROLE_SESSION_NAME'] = 'LPBLogoUpload'
   ENV['S3_SECRET_ACCESS_KEY'] = 'TopSecret-qwertyuiopasdfghjklzxcvbnmqwer'
-  ENV['TEST_USERS_S3_URL'] = 'https://dummy-bucket.s3.us-gov-west-1.amazonaws.com/test-user-accounts.json'
+  ENV['TEST_USERS_BUCKET'] = 'dummy-bucket'
+  ENV['TEST_USERS_OBJECT_KEY'] = '/test-user-accounts.json'
 end

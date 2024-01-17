@@ -192,10 +192,13 @@ module V0
         protect_from_forgery
 
         if validate_deeplink_hash(params[:userId], params[:hash])
-          uri = URI.parse(ENV.fetch('TEST_USERS_S3_URL'))
-          res = Net::HTTP.get_response(uri)
+          s3 = AwsS3Service.new
+          bucket = ENV.fetch('TEST_USERS_BUCKET')
+          key = ENV.fetch('TEST_USERS_OBJECT_KEY')
+          debugger
+          response = s3.get_object(bucket: bucket, key: key)
 
-          JSON.parse(res.body)
+          JSON.parse(response)
         else
           raise AuthorizationError
         end
