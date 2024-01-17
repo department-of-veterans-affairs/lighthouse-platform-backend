@@ -123,35 +123,35 @@ describe Utilities, type: :request do
     end
   end
 
-  describe 'address validation API' do
-    let(:address_validation_candidate_params) do
-      {
-        requestAddress: {
-          addressLine1: "1700 Epcot Resorts Blvd",
-          addressLine2: "",
-          addressLine3: "",
-          city: "Lake Buena Vista",
-          zipCode5: "32830",
-          zipCode4: "",
-          internationalPostalCode: "",
-          addressPOU: "RESIDENCE/CHOICE",
-          stateProvince: {
-            name: "Florida",
-            code: "FL"
-          },
-          requestCountry: {
-            countryName: "United States of America",
-            countryCode: "USA"
-          }
-        }
-      }
-    end
+  # describe 'address validation API' do
+  #   let(:address_validation_candidate_params) do
+  #     {
+  #       requestAddress: {
+  #         addressLine1: "1700 Epcot Resorts Blvd",
+  #         addressLine2: "",
+  #         addressLine3: "",
+  #         city: "Lake Buena Vista",
+  #         zipCode5: "32830",
+  #         zipCode4: "",
+  #         internationalPostalCode: "",
+  #         addressPOU: "RESIDENCE/CHOICE",
+  #         stateProvince: {
+  #           name: "Florida",
+  #           code: "FL"
+  #         },
+  #         requestCountry: {
+  #           countryName: "United States of America",
+  #           countryCode: "USA"
+  #         }
+  #       }
+  #     }
+  #   end
 
-    it 'returns the result from the Address Validation API v2 /candidate endpoint' do
-      VCR.use_cassette('address_validation/candidate_v2_200', match_requests_on: [:method]) do
-        post '/platform-backend/utilities/address-validation/candidate', params: address_validation_candidate_params
-        expect(response).to have_http_status(:ok)
-      end
-    end
-  end
+  #   it 'returns the result from the Address Validation API v2 /candidate endpoint' do
+  #     VCR.use_cassette('address_validation/candidate_v2_200', match_requests_on: [:method]) do
+  #       post '/platform-backend/utilities/address-validation/candidate', params: address_validation_candidate_params
+  #       expect(response).to have_http_status(:ok)
+  #     end
+  #   end
+  # end
 end

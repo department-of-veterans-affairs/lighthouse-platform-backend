@@ -173,7 +173,7 @@ class Utilities < Base
         ).to_json
         response = http.request(request)
 
-        render json: response.body
+        JSON.parse(response.body)
       end
     end
   end
