@@ -159,23 +159,25 @@ class Utilities < Base
         header 'Access-Control-Allow-Origin', request.host_with_port
         protect_from_forgery
 
-        return unless Flipper.enabled? :address_validation
+        if Flipper.enabled? :address_validation
+          uri = URI.parse(ENV.fetch('ADDRESS_VALIDATION_API_V2_CANDIDATE_ENDPOINT'))
+          http = Net::HTTP.new(uri)
+          headers = {
+            'apikey' => ENV.fetch(Figaro.env.address_validation_api_v2_apikey),
+            'Content-Type' => 'application/json'
+          }
+          request = Net::HTTP::Post.new(uri.path, headers)
+          request.body = params.require(:requestAddress).permit(
+            :addressLine1, :addressLine2, :addressLine3, :city, :zipCode5, :zipCode4,
+            :internationalPostalCode, :addressPOU, stateProvince: %i[name code],
+            requestCountry: %i[countryName countryCode]
+          ).to_json
+          response = http.request(request)
 
-        uri = URI.parse(ENV.fetch('ADDRESS_VALIDATION_API_V2_CANDIDATE_ENDPOINT'))
-        http = Net::HTTP.new(uri)
-        headers = {
-          # 'apikey' => ENV.fetch(Figaro.env.address_validation_api_v2_apikey),
-          'Content-Type' => 'application/json'
-        }
-        request = Net::HTTP::Post.new(uri.path, headers)
-        request.body = params.require(:requestAddress).permit(
-          :addressLine1, :addressLine2, :addressLine3, :city, :zipCode5, :zipCode4,
-          :internationalPostalCode, :addressPOU, stateProvince: %i[name code],
-          requestCountry: %i[countryName countryCode]
-        ).to_json
-        response = http.request(request)
-
-        JSON.parse(response.body)
+          JSON.parse(response.body)
+        else
+          raise 'Address validation is not enabled'
+        end
       end
     end
   end

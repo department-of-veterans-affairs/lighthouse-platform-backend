@@ -155,6 +155,7 @@ describe Utilities, type: :request do
       VCR.use_cassette('address_validation/candidate_v2_200', match_requests_on: [:method]) do
         post '/platform-backend/utilities/address-validation/candidate', params: address_validation_candidate_params
         expect(response).to have_http_status(:ok)
+        puts "res: #{response.body}"
       end
     end
   end
