@@ -124,6 +124,11 @@ describe Utilities, type: :request do
   end
 
   describe 'address validation API' do
+
+    before do
+      Flipper.enable :address_validation
+    end
+
     let(:address_validation_candidate_params) do
       {
         requestAddress: {
