@@ -159,6 +159,8 @@ class Utilities < Base
         header 'Access-Control-Allow-Origin', request.host_with_port
         protect_from_forgery
 
+        return unless Flipper.enabled? :address_validation
+
         uri = URI.parse(ENV.fetch('ADDRESS_VALIDATION_API_V2_CANDIDATE_ENDPOINT'))
         http = Net::HTTP.new(uri)
         headers = {
