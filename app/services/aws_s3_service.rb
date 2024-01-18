@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'securerandom'
-
 class AwsS3Service
   def get_object(params)
     if Rails.env.in? %w(development test)
@@ -16,7 +14,7 @@ class AwsS3Service
   def get_object_local(params)
     # Because of access restrictions to the s3 bucket with the users file we need to fake
     # the request when doing local dev through a basic, unauthenticated GET request.
-    url = "https://#{params[:bucket]}.s3.#{ENV.fetch('AWS_DEFAULT_REGION')}.amazonaws.com/#{params[:key]}"
+    url = "https://#{params[:bucket]}.s3.#{ENV.fetch('AWS_REGION')}.amazonaws.com/#{params[:key]}"
     uri = URI.parse(url)
     res = Net::HTTP.get_response(uri)
 
@@ -26,7 +24,7 @@ class AwsS3Service
   def get_object_in_ecs(params)
     credentials = Aws::ECSCredentials.new
     options = {
-      region: ENV.fetch('AWS_DEFAULT_REGION'),
+      region: ENV.fetch('AWS_REGION'),
       credentials: credentials
     }
     s3 = Aws::S3::Client.new(options)

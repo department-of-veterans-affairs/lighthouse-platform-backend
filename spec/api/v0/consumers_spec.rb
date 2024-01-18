@@ -296,7 +296,7 @@ describe V0::Consumers, type: :request do
     end
   end
 
-  describe "get test user data (env:#{Rails.env})" do
+  describe 'get test user data' do
     context 'when validation passes' do
       it 'loads the user data with a valid request' do
         user = User.create!(first_name: 'Test', last_name: 'McTesterson', email: 'test@domain.com')
