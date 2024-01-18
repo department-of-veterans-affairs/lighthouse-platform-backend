@@ -2,11 +2,15 @@
 
 class AwsS3Service
   def get_object(params)
-    if Rails.env.in? %w(development test)
-      get_object_local(params)
-    else
-      get_object_in_ecs(params)
-    end
+    credentials = Aws::ECSCredentials.new
+    options = {
+      region: ENV.fetch('AWS_REGION'),
+      credentials: credentials
+    }
+    s3 = Aws::S3::Client.new(options)
+    response = s3.get_object(bucket: params[:bucket], key: params[:key])
+
+    response.body.read
   end
 
   private
