@@ -26,7 +26,7 @@ RSpec.describe SandboxMailer, type: :mailer do
 
     context 'with all of the provided information' do
       it 'displays the oauth information' do
-        expect(mail.body).to include("Your OAuth client secret is:")
+        expect(mail.body).to include('Your OAuth client secret is:')
       end
 
       it 'displays the key_auth information' do
