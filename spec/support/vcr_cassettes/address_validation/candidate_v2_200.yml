@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://api.va.gov/services/address_validation/v2/candidate
+    uri: https://sandbox-api.va.gov/services/address_validation/v2/candidate
     body:
       encoding: UTF-8
       string: '{"requestAddress":{"addressLine1":"1700 Epcot Resorts Blvd","addressLine2":"","addressLine3":"","city":"Lake Buena Vista","zipCode5":"32830","zipCode4":"","internationalPostalCode":"","addressPOU":"RESIDENCE/CHOICE","stateProvince":{"name":"Florida","code":"FL"},"requestCountry":{"countryName":"United States of America","countryCode":"USA"}}}'
