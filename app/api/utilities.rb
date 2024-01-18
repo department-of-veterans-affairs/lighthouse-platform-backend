@@ -169,9 +169,9 @@ class Utilities < Base
         }
         request = Net::HTTP::Post.new(uri.path, headers)
         request.body = params.require(:requestAddress).permit(
-          :addressLine1, :addressLine2, :addressLine3, :city, :zipCode5, :zipCode4, 
-          :internationalPostalCode, :addressPOU, stateProvince: [:name, :code],
-          requestCountry: [:countryName, :countryCode]
+          :addressLine1, :addressLine2, :addressLine3, :city, :zipCode5, :zipCode4,
+          :internationalPostalCode, :addressPOU, stateProvince: %i[:name :code],
+          requestCountry: %i[:countryName :countryCode]
         ).to_json
         response = http.request(request)
 

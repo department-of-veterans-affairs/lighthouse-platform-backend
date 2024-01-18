@@ -124,7 +124,6 @@ describe Utilities, type: :request do
   end
 
   describe 'address validation API requests' do
-
     before do
       Flipper.enable :address_validation
     end
@@ -132,21 +131,21 @@ describe Utilities, type: :request do
     let(:address_validation_candidate_params) do
       {
         requestAddress: {
-          addressLine1: "1700 Epcot Resorts Blvd",
-          addressLine2: "",
-          addressLine3: "",
-          city: "Lake Buena Vista",
-          zipCode5: "32830",
-          zipCode4: "",
-          internationalPostalCode: "",
-          addressPOU: "RESIDENCE/CHOICE",
+          addressLine1: '1700 Epcot Resorts Blvd',
+          addressLine2: '',
+          addressLine3: '',
+          city: 'Lake Buena Vista',
+          zipCode5: '32830',
+          zipCode4: '',
+          internationalPostalCode: '',
+          addressPOU: 'RESIDENCE/CHOICE',
           stateProvince: {
-            name: "Florida",
-            code: "FL"
+            name: 'Florida',
+            code: 'FL'
           },
           requestCountry: {
-            countryName: "United States of America",
-            countryCode: "USA"
+            countryName: 'United States of America',
+            countryCode: 'USA'
           }
         }
       }
