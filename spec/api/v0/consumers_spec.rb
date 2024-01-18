@@ -296,7 +296,7 @@ describe V0::Consumers, type: :request do
     end
   end
 
-  describe 'get test user data' do
+  describe "get test user data (env:#{Rails.env})" do
     context 'when validation passes' do
       it 'loads the user data with a valid request' do
         user = User.create!(first_name: 'Test', last_name: 'McTesterson', email: 'test@domain.com')
@@ -315,7 +315,8 @@ describe V0::Consumers, type: :request do
           expect(response_json).to eq(expected_json)
         end
       end
-
+    end
+    context 'when validation fails' do
       it 'Returns an error when the hash validation fails' do
         user = User.create!(first_name: 'Test', last_name: 'McTesterson', email: 'test@domain.com')
         test_users_params = {
