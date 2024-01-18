@@ -123,7 +123,7 @@ describe Utilities, type: :request do
     end
   end
 
-  describe 'address validation API' do
+  describe 'address validation API requests' do
 
     before do
       Flipper.enable :address_validation
