@@ -101,4 +101,5 @@ Rails.application.configure do
   ENV['S3_ROLE_SESSION_NAME'] = 'LPBLogoUpload'
   ENV['S3_SECRET_ACCESS_KEY'] = 'TopSecret-qwertyuiopasdfghjklzxcvbnmqwer'
   ENV['TEST_USERS_S3_URL'] = 'https://dummy-bucket.s3.us-gov-west-1.amazonaws.com/test-user-accounts.json'
+  ENV['ADDRESS_VALIDATION_API_V2_CANDIDATE_ENDPOINT'] = 'https://sandbox-api.va.gov/address_validation/v2/candidate'
 end
