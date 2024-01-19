@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :production_access_request, class: Hash do
+    addressLine1 { '1700 Epcot Resorts Blvd' }
     apis { Faker::Hipster.word }
     appDescription { 'A social media platform with one room.' }
     appImageLink { Faker::Internet.url(path: '/assets/app.jpeg') }
@@ -9,6 +10,8 @@ FactoryBot.define do
     breachManagementProcess { 'golem' }
     businessModel { 'magical rings >> profit' }
     centralizedBackendLog { 'non-existent' }
+    city { 'Lake Buena Vista' }
+    country { 'USA' }
     distributingAPIKeysToCustomers { false }
     exposeVeteranInformationToThirdParties { false }
     is508Compliant { true }
@@ -32,6 +35,7 @@ FactoryBot.define do
     scopesAccessRequested { 'profile' }
     secondaryContact { association :production_access_request_user }
     signUpLink { [Faker::Internet.url(path: '/signup')] }
+    state { 'FL' }
     statusUpdateEmails { [Faker::Internet.safe_email] }
     storePIIOrPHI { false }
     supportLink { [Faker::Internet.url(path: '/support')] }
@@ -41,6 +45,7 @@ FactoryBot.define do
     veteranFacing { true }
     vulnerabilityManagement { 'golem' }
     website { Faker::Internet.url }
+    zipCode5 { '32830' }
 
     initialize_with { attributes }
   end
