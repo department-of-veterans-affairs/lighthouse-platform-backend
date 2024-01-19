@@ -11,7 +11,10 @@ describe V0::Consumers, type: :request do
   let(:apply_base) { '/platform-backend/v0/consumers/applications' }
   let :signup_params do
     {
+      addressLine1: '1700 Epcot Resorts Blvd',
       apis: "#{api_ref_one},#{api_ref_two},#{api_ref_three},ccg/#{api_ref_three}",
+      city: 'Lake Buena Vista',
+      country: 'USA',
       description: 'Signing up for Patti',
       email: 'doug@douglas.funnie.org',
       firstName: 'Douglas',
@@ -26,7 +29,9 @@ describe V0::Consumers, type: :request do
         n: '2Fb4_D4-RSjvl11txu-0s9bThk8hTo2SJauTRrS9N7piFlpGi6PBql3KzLmEu_T36YMbmTjDRPyybEEBD_XkEDuNdWSQph5Da7atfFM04IW5WH3MGPuvmaH6WpZB4Li5qESTFaMk0677uCDvOLcJmfa8bzunvbtlB4U-1WLjtDBODWiVpLlGEUofNQdX2MvTF9shtm-QqPk7K-a2Z36LrZpgcQBB1U8QtqexdaLrMgaoxmEbSgXGAc-uDkmQx1VOAsREozYZ9f1tASmOKGlxfVyBHcf6dePxq1cewpmrUfRTezky5A4K6v17uBYSpEols4ritWDRDymb7rFlUwxBjqdCjmtV18HiLIrgBNPQ2-5Jlnt-BCJg3lP_UG0r6cMO2DEtTkAkDcy4HzNuMQCrXn5ZL4kSUITrf9Mixny3vFn3aVcSNsCqLUSAfnpfRIz9oUUz5xI-FD9QsJJ1vneC8mfo-1lNaVRLNhn2t9VWY0kqhNNzS2HIktkZGzGv7gsB'
       }.to_json,
       organization: 'Doug',
-      termsOfService: true
+      state: 'FL',
+      termsOfService: true,
+      zipCode5: '32830'
     }
   end
   let(:api_environments) { create_list(:api_environment, 3) }
