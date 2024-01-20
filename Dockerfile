@@ -5,6 +5,7 @@ ENV BUNDLER_VERSION=2.5.5
 WORKDIR /home/ruby
 
 COPY Gemfile Gemfile.lock ./
+COPY .ruby-version .
 RUN gem install bundler:${BUNDLER_VERSION}
 
 # ----
