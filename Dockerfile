@@ -1,6 +1,6 @@
 FROM ghcr.io/department-of-veterans-affairs/health-apis-docker-octopus/lighthouse-ruby-application-base:v2-ruby3 AS base
 
-ENV BUNDLER_VERSION=2.2.23
+ENV BUNDLER_VERSION=2.5.5
 
 WORKDIR /home/ruby
 
