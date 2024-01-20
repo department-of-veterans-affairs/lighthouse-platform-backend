@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby file: ".ruby-version"
+ruby File.read(".ruby-version").strip
 
 gem 'activerecord-import'
 gem 'aws-sdk-dynamodb', '~> 1.62'
