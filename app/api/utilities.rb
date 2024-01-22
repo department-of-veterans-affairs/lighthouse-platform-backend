@@ -143,7 +143,7 @@ class Utilities < Base
           requires :city, type: String
           requires :zipCode5, type: String
           optional :zipCode4, type: String
-          requires :internationalPostalCode, type: String
+          optional :internationalPostalCode, type: String
           requires :addressPOU, type: String
           requires :stateProvince, type: Hash do
             requires :name, type: String
@@ -160,21 +160,18 @@ class Utilities < Base
         protect_from_forgery
 
         if Flipper.enabled? :address_validation
+          address_data = JSON.parse(request.body.read)
           uri = URI.parse(ENV.fetch('ADDRESS_VALIDATION_API_V2_CANDIDATE_ENDPOINT'))
-          http = Net::HTTP.new(uri)
+          http = Net::HTTP.new(uri.host, uri.port)
           headers = {
-            'apikey' => ENV.fetch(Figaro.env.address_validation_api_v2_apikey),
+            'apikey' => Figaro.env.address_validation_api_v2_apikey,
             'Content-Type' => 'application/json'
           }
-          request = Net::HTTP::Post.new(uri.path, headers)
-          request.body = params.require(:requestAddress).permit(
-            :addressLine1, :addressLine2, :addressLine3, :city, :zipCode5, :zipCode4,
-            :internationalPostalCode, :addressPOU, stateProvince: %i[name code],
-            requestCountry: %i[countryName countryCode]
-          ).to_json
-          response = http.request(request)
-
-          JSON.parse(response.body)
+          api_request = Net::HTTP::Post.new(uri, headers)
+          api_request.body = address_data.to_json
+          api_response = http.request(api_request)
+          status api_response.code.to_i
+          JSON.parse(api_response.body)
         else
           raise 'Address validation is not enabled'
         end

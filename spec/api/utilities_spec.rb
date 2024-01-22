@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'yaml'
 
 describe Utilities, type: :request do
   describe 'APIs' do
@@ -153,9 +154,13 @@ describe Utilities, type: :request do
 
     it 'returns the result from the Address Validation API v2 /candidate endpoint' do
       VCR.use_cassette('address_validation/candidate_v2_200', match_requests_on: [:method]) do
-        post '/platform-backend/utilities/address-validation/candidate', params: address_validation_candidate_params
+        post '/platform-backend/utilities/address-validation/candidate',
+             params: address_validation_candidate_params.to_json, headers: { 'Content-Type' => 'application/json' }
         expect(response).to have_http_status(:ok)
-        puts "res: #{response.body}"
+        mock_response = YAML.load_file('./spec/support/vcr_cassettes/address_validation/candidate_v2_200.yml')
+        expected_response = JSON.parse(mock_response.to_h['http_interactions'][0]['response']['body']['string'])
+        actual_response = JSON.parse(response.body)
+        expect(expected_response).to eq(actual_response)
       end
     end
   end
