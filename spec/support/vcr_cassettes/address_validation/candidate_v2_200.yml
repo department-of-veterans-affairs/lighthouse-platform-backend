@@ -7,21 +7,15 @@ http_interactions:
       encoding: UTF-8
       string: '{"requestAddress":{"addressLine1":"1700 Epcot Resorts Blvd","addressLine2":"","addressLine3":"","city":"Lake Buena Vista","zipCode5":"32830","zipCode4":"","internationalPostalCode":"","addressPOU":"RESIDENCE/CHOICE","stateProvince":{"name":"Florida","code":"FL"},"requestCountry":{"countryName":"United States of America","countryCode":"USA"}}}'
     headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
       - application/json
       Content-Type:
       - application/json
-      User-Agent:
-      - Ruby
   response:
     status:
       code: 200
       message: OK
     headers:
-      Date:
-      - Wed, 17 Jan 2024 14:20:19 GMT
       Content-Type:
       - application/json; charset=utf-8
     body:
