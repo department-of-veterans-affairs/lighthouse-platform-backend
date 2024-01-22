@@ -125,10 +125,6 @@ describe Utilities, type: :request do
   end
 
   describe 'address validation API requests' do
-    before do
-      Flipper.enable :address_validation
-    end
-
     let(:address_validation_candidate_params) do
       {
         requestAddress: {
@@ -154,6 +150,7 @@ describe Utilities, type: :request do
 
     it 'returns the result from the Address Validation API v2 /candidate endpoint' do
       VCR.use_cassette('address_validation/candidate_v2_200', match_requests_on: [:method]) do
+        Flipper.enable :address_validation
         post '/platform-backend/utilities/address-validation/candidate',
              params: address_validation_candidate_params.to_json, headers: { 'Content-Type' => 'application/json' }
         expect(response).to have_http_status(:ok)
@@ -162,6 +159,12 @@ describe Utilities, type: :request do
         actual_response = JSON.parse(response.body)
         expect(expected_response).to eq(actual_response)
       end
+    end
+
+    it 'returns address validation is not enabled' do
+      post '/platform-backend/utilities/address-validation/candidate',
+           params: address_validation_candidate_params.to_json, headers: { 'Content-Type' => 'application/json' }
+      expect(response.body).to eq('{"errors":["Address validation is not enabled"]}')
     end
   end
 end
