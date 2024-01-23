@@ -1,0 +1,69 @@
+# The only changes that may be required are the HOME and AWS_PROFILE
+# environment variables on the ecs-local-endpoints service.
+# Copy this file to docker-compose.override.yml and make your edits.
+version: "3.8"
+networks:
+  credentials_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "169.254.170.0/24"
+          gateway: 169.254.170.1
+services:
+  ecs-local-endpoints:
+    image: amazon/amazon-ecs-local-container-endpoints
+    volumes:
+      - /var/run:/var/run
+      - $HOME/.aws/:/home/.aws
+    env_file:
+      - ${LPB_ENV_FILE:-./empty-for-jenkins.env}
+    environment:
+      HOME: "/home"
+      AWS_PROFILE: "profile-name"
+    networks:
+      credentials_network:
+        ipv4_address: "169.254.170.2"
+  app:
+    depends_on:
+      - ecs-local-endpoints
+    networks:
+      credentials_network:
+        ipv4_address: "169.254.170.3"
+    environment:
+      AWS_DEFAULT_REGION: "us-gov-west-1"
+      AWS_CONTAINER_CREDENTIALS_RELATIVE_URI: "/creds"
+      ECS_CONTAINER_METADATA_URI: "http://169.254.179.2/v3"
+  db:
+    networks:
+      credentials_network:
+        ipv4_address: "169.254.170.4"
+
+  kong:
+    networks:
+      credentials_network:
+        ipv4_address: "169.254.170.5"
+
+  prod-kong:
+    networks:
+      credentials_network:
+        ipv4_address: "169.254.170.6"
+
+  elasticsearch:
+    networks:
+      credentials_network:
+        ipv4_address: "169.254.170.7"
+
+  dynamodb:
+    networks:
+      credentials_network:
+        ipv4_address: "169.254.170.8"
+
+  kong-database:
+    networks:
+      credentials_network:
+        ipv4_address: "169.254.170.9"
+
+  kong-migrations:
+    networks:
+      credentials_network:
+        ipv4_address: "169.254.170.10"
