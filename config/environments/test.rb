@@ -61,6 +61,8 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+  config.hosts << 'www.example.com'
+
   ENV['SLACK_WEBHOOK_URL'] = 'https://www.slack.com'
   ENV['GITHUB_EMAIL_DEFAULT_EMAIL_ADDRESS'] = 'testing@example.com'
   ENV['DSVA_ENVIRONMENT'] = 'Development'
@@ -101,5 +103,7 @@ Rails.application.configure do
   ENV['S3_ROLE_SESSION_NAME'] = 'LPBLogoUpload'
   ENV['S3_SECRET_ACCESS_KEY'] = 'TopSecret-qwertyuiopasdfghjklzxcvbnmqwer'
   ENV['TEST_USERS_BUCKET'] = 'dummy-bucket'
-  ENV['TEST_USERS_OBJECT_KEY'] = '/test-user-accounts.json'
+  ENV['TEST_USERS_OBJECT_KEY'] = 'test-user-accounts.json'
+  ENV['AWS_CONTAINER_CREDENTIALS_RELATIVE_URI'] = '/creds'
+  ENV['AWS_DEFAULT_REGION'] = 'us-gov-west-1'
 end

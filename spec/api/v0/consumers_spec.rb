@@ -65,6 +65,100 @@ describe V0::Consumers, type: :request do
     }
   end
   let(:test_users_base) { '/platform-backend/v0/consumers/test-user-data' }
+  let :test_users_data_expected_response do
+    [
+      {
+        id: '001',
+        name_given: 'Tamara',
+        name_family: 'Ellis',
+        ssn: '796130115',
+        icn: '1012667145V762142',
+        credentials: {
+          idme: {
+            username: 'va.api.user+idme.001@gmail.com',
+            password: 'Password1234!'
+          },
+          logingov: {
+            username: 'va.api.user+001@gmail.com',
+            password: 'Password12345!!!',
+            seed: 'LKI7FZ7ZEVRLGQRW'
+          }
+        }
+      },
+      {
+        id: '002',
+        name_given: 'Janet',
+        name_family: 'Moore',
+        ssn: '796127677',
+        icn: '1012861229V078999',
+        credentials: {
+          idme: {
+            username: 'va.api.user+idme.002@gmail.com',
+            password: 'Password1234!'
+          },
+          logingov: {
+            username: 'va.api.user+002@gmail.com',
+            password: 'Password12345!!!',
+            seed: 'B5C3L42PLUWO3U5T'
+          }
+        }
+      },
+      {
+        id: '003',
+        name_given: 'Ralph',
+        name_family: 'Lee',
+        ssn: '796378782',
+        icn: '1012667169V030190',
+        credentials: {
+          idme: {
+            username: 'va.api.user+idme.003@gmail.com',
+            password: 'Password1234!'
+          },
+          logingov: {
+            username: 'va.api.user+003@gmail.com',
+            password: 'Password12345!!!',
+            seed: 'DIN72VD3MUOWJEENIS2FTJZEAROTGBAC'
+          }
+        }
+      },
+      {
+        id: '004',
+        name_given: 'Jesse',
+        name_family: 'Gray',
+        ssn: '796378881',
+        icn: '1012666073V986297',
+        credentials: {
+          idme: {
+            username: 'va.api.user+idme.004@gmail.com',
+            password: 'Password1234!'
+          },
+          logingov: {
+            username: 'va.api.user+004@gmail.com',
+            password: 'Password12345!!!',
+            seed: '7OMSKULT5PSVFE3SINTWBT2YA2MSFXU4'
+          }
+        }
+      },
+      {
+        id: '005',
+        name_given: 'Pauline',
+        name_family: 'Foster',
+        ssn: '796330625',
+        icn: '1012845630V900607',
+        credentials: {
+          idme: {
+            username: 'va.api.user+idme.005@gmail.com',
+            password: 'Password1234!'
+          },
+          logingov: {
+            username: 'va.api.user+005@gmail.com',
+            password: 'Password12345!!!',
+            seed: 'RJIZ4BAI6OIYVKKGYYNHTR7F62IERCDT'
+          }
+        }
+      }
+    ]
+  end
 
   before do
     api_environments
@@ -299,23 +393,35 @@ describe V0::Consumers, type: :request do
   describe 'get test user data' do
     context 'when validation passes' do
       it 'loads the user data with a valid request' do
+        stub_request(:get, 'http://169.254.170.2/creds').to_return(
+          status: 200,
+          body: '{"RoleArn" : "arn:aws:iam::123456789012:role/BarFooRole","AccessKeyId" : "akid-full","SecretAccessKey" : "secret-full","Token" : "session-token-full","Expiration" : "2024-01-19T17:50:04Z"}'
+        )
+        stub_request(
+          :get,
+          "https://#{ENV.fetch('TEST_USERS_BUCKET')}.s3.#{ENV.fetch('AWS_DEFAULT_REGION')}.amazonaws.com/#{ENV.fetch('TEST_USERS_OBJECT_KEY')}"
+        ).to_return(
+          status: 201,
+          body: test_users_data_expected_response.to_json
+        )
         user = User.create!(first_name: 'Test', last_name: 'McTesterson', email: 'test@domain.com')
-        VCR.use_cassette('aws/s3_test_users_data', match_requests_on: [:method]) do
-          test_users_params = {
-            userId: user.id,
-            hash: generate_deeplink_hash(user),
-            urlSlug: 'veteran-verification'
-          }
-          post test_users_base, params: test_users_params
-          expect(response.code).to eq('201')
-          test_user_data = YAML.load_file('./spec/support/vcr_cassettes/aws/s3_test_users_data.yml')
-          expected_json = JSON.parse(test_user_data.to_h['http_interactions'][0]['response']['body']['string'])
-          response_json = JSON.parse(response.body)
+        result = AwsS3Service.new.get_object(
+          bucket: ENV.fetch('TEST_USERS_BUCKET'),
+          key: ENV.fetch('TEST_USERS_OBJECT_KEY')
+        )
+        expect(result).to eq(test_users_data_expected_response.to_json)
 
-          expect(response_json).to eq(expected_json)
-        end
+        test_users_params = {
+          userId: user.id,
+          hash: generate_deeplink_hash(user),
+          urlSlug: 'veteran-verification'
+        }
+        post test_users_base, params: test_users_params
+        expect(response.code).to eq('201')
+        expect(response.body).to eq(test_users_data_expected_response.to_json)
       end
     end
+
     context 'when validation fails' do
       it 'Returns an error when the hash validation fails' do
         user = User.create!(first_name: 'Test', last_name: 'McTesterson', email: 'test@domain.com')
