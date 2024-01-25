@@ -56,9 +56,11 @@ class Utilities < Base
       desc 'Returns last week signups report'
       namespace '/signups-report' do
         get '/week' do
+          validate_token(Scope.utilities_read)
           Slack::ReportService.new.query_events('week', 1.week.ago)
         end
         get '/month' do
+          validate_token(Scope.utilities_read)
           Slack::ReportService.new.query_events('month', 1.month.ago)
         end
       end
@@ -67,6 +69,7 @@ class Utilities < Base
     resource 'apis' do
       desc 'Return list of APIs'
       get '/' do
+        validate_token(Scope.utilities_read)
         apis = Api.left_joins(:api_ref).kept
 
         present apis, with: Entities::ApiEntity
@@ -74,6 +77,7 @@ class Utilities < Base
 
       desc 'Returns a list of API categories'
       get '/categories' do
+        validate_token(Scope.utilities_read)
         api_categories = ApiCategory.kept
 
         present api_categories, with: Entities::ApiCategoryEntity
