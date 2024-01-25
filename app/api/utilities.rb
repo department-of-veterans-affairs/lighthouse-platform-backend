@@ -32,6 +32,7 @@ class Utilities < Base
         all_or_none_of :apiId, :environment
       end
       get '/' do
+        validate_token(Scope.utilities_read)
         # no filters provided, return all consumers
         unless params[:apiId] && params[:environment]
           users = User.kept.select { |user| user.consumer.present? }
@@ -82,6 +83,7 @@ class Utilities < Base
     resource 'kong' do
       desc 'Return list Kong consumers'
       get '/consumers' do
+        validate_token(Scope.utilities_read)
         Kong::SandboxService.new.list_all_consumers
       end
 
@@ -91,6 +93,7 @@ class Utilities < Base
         optional :filterLastDay, type: Boolean, allow_blank: false, values: [true, false], default: true
       end
       get '/environments/:environment/unknown-consumers' do
+        validate_token(Scope.utilities_read)
         drift_service_arg = params[:environment] == 'production' ? :production : nil
         Kong::DriftService.new(drift_service_arg).detect_drift(alert: false, filter: params[:filterLastDay])
       end
@@ -103,6 +106,7 @@ class Utilities < Base
         optional :filterLastDay, type: Boolean, allow_blank: false, values: [true, false], default: true
       end
       get '/environments/:environment/unknown-applications' do
+        validate_token(Scope.utilities_read)
         drift_service_arg = params[:environment] == 'production' ? :production : nil
         Okta::DriftService.new(drift_service_arg).detect_drift(alert: false, filter: params[:filterLastDay])
       end
@@ -119,6 +123,7 @@ class Utilities < Base
           requires :termsOfService, type: Boolean, allow_blank: false, values: [true]
         end
         post 'applications' do
+          validate_token(Scope.utilities_write)
           user = user_from_signup_params
 
           okta_service = Okta::ServiceFactory.service(params[:environment])

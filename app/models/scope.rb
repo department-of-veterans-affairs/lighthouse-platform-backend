@@ -16,4 +16,12 @@ class Scope
   def self.provider_write
     'provider.write'
   end
+
+  def self.utilities_read
+    'utilities.read'
+  end
+
+  def self.utilities_write
+    'utilities.write'
+  end
 end
