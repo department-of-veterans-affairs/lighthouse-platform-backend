@@ -523,4 +523,58 @@ namespace :lpb do
       api.save
     end
   end
+
+  desc 'Export emails and deeplinks'
+  task idmeEmailsExport: :environment do
+    require 'csv'
+    require 'set'
+    puts 'Starting export for ID.me emails with deeplinks...'
+    csvFileName = 'test-users-with-deeplinks.csv'
+    events = Event.where(event_type: 'sandbox_signup')
+    events.each do |event|
+      eventApis = event.content['apis'].split(',')
+      eventApis.each do |eventApi|
+        TestUserEmail.upsert({
+          email: event.content['email'],
+          claims: true
+        }, unique_by: :email) if eventApi === 'claims'
+        TestUserEmail.upsert({
+          email: event.content['email'],
+          clinicalHealth: true
+        }, unique_by: :email) if eventApi === 'clinicalHealth'
+        TestUserEmail.upsert({
+          email: event.content['email'],
+          communityCare: true
+        }, unique_by: :email) if eventApi === 'communityCare'
+        TestUserEmail.upsert({
+          email: event.content['email'],
+          health: true
+        }, unique_by: :email) if eventApi === 'health'
+        TestUserEmail.upsert({
+          email: event.content['email'],
+          verification: true
+        }, unique_by: :email) if eventApi === 'verification'
+      end
+    end
+    puts 'All required signups added to test_user_emails table.'
+    testUsers = TestUserEmail.all
+    CSV.open(csvFileName, 'w') do |csv|
+      csv << %w[email links]
+      testUsers.each do |testUser|
+        csv << [testUser.email, testUser.get_deeplinks]
+      end
+    end
+    puts 'Created and populated test-users-with-deeplinks.csv file.'
+    csvFile = File.read(csvFileName)
+    s3 = AwsS3Service.new
+    bucket = ENV.fetch('TEST_USERS_BUCKET')
+    puts bucket
+    response = s3.put_object(bucket: bucket, key: csvFileName, fileContents: csvFile, content_type: 'text/csv')
+    if response.etag
+      puts "File uploaded to s3://#{bucket}/#{csvFileName}"
+    else
+      puts 'An error occured doing s3.put_object'
+    end
+    puts 'End of export'
+  end
 end
