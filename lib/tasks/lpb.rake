@@ -568,7 +568,6 @@ namespace :lpb do
     csvFile = File.read(csvFileName)
     s3 = AwsS3Service.new
     bucket = ENV.fetch('TEST_USERS_BUCKET')
-    puts bucket
     response = s3.put_object(bucket: bucket, key: csvFileName, fileContents: csvFile, content_type: 'text/csv')
     if response.etag
       puts "File uploaded to s3://#{bucket}/#{csvFileName}"
