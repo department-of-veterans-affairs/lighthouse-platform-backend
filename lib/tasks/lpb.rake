@@ -540,12 +540,6 @@ namespace :lpb do
                                  claims: true
                                }, unique_by: :email)
         end
-        if event_api == 'clinicalHealth'
-          TestUserEmail.upsert({ # rubocop:disable Rails/SkipsModelValidations
-                                 email: event.content['email'],
-                                 clinicalHealth: true
-                               }, unique_by: :email)
-        end
         if event_api == 'communityCare'
           TestUserEmail.upsert({ # rubocop:disable Rails/SkipsModelValidations
                                  email: event.content['email'],
@@ -576,15 +570,14 @@ namespace :lpb do
     end
     puts 'Created and populated test-users-with-deeplinks.csv file.'
     csv_file = File.read(csv_file_name)
-    puts csv_file
-    # s3 = AwsS3Service.new
-    # bucket = ENV.fetch('TEST_USERS_BUCKET')
-    # response = s3.put_object(bucket: bucket, key: csv_file_name, fileContents: csv_file, content_type: 'text/csv')
-    # if response.etag
-    #   puts "File uploaded to s3://#{bucket}/#{csv_file_name}"
-    # else
-    #   puts 'An error occured doing s3.put_object'
-    # end
+    s3 = AwsS3Service.new
+    bucket = ENV.fetch('TEST_USERS_BUCKET')
+    response = s3.put_object(bucket: bucket, key: csv_file_name, fileContents: csv_file, content_type: 'text/csv')
+    if response.etag
+      puts "File uploaded to s3://#{bucket}/#{csv_file_name}"
+    else
+      puts 'An error occured doing s3.put_object'
+    end
     puts 'End of export'
   end
 end

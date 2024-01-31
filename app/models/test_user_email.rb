@@ -7,7 +7,6 @@ class TestUserEmail < ApplicationRecord
     user = User.where(email: email).first
     links = ''
     links += single_link(user, 'community-care-eligibility', 'Community Care Eligibility API)', communityCare)
-    links += single_link(user, 'clinical-health', 'Clinical Health API)', clinicalHealth)
     links += single_link(user, 'patient-health', 'Patient Health API (FHIR))', health)
     links += single_link(user, 'benefits-claims', 'Benefits Claims API)', claims)
     links += single_link(user, 'veteran-verification', 'Veteran Verification API', verification)

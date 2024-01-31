@@ -275,7 +275,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_31_034635) do
   create_table "test_user_emails", force: :cascade do |t|
     t.text "email", null: false
     t.boolean "claims", default: false, null: false
-    t.boolean "clinicalHealth", default: false, null: false
     t.boolean "communityCare", default: false, null: false
     t.boolean "health", default: false, null: false
     t.boolean "verification", default: false, null: false
