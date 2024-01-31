@@ -2,11 +2,7 @@
 
 class AwsS3Service
   def get_object(params)
-    credentials = Aws::ECSCredentials.new
-    options = {
-      region: ENV.fetch('AWS_REGION'),
-      credentials: credentials
-    }
+    options = get_client_options
     s3 = Aws::S3::Client.new(options)
     response = s3.get_object(bucket: params[:bucket], key: params[:key])
 
@@ -14,14 +10,10 @@ class AwsS3Service
   end
 
   def put_object(params)
-    credentials = Aws::ECSCredentials.new
-    options = {
-      region: ENV.fetch('AWS_REGION'),
-      credentials: credentials
-    }
+    options = get_client_options
 
     s3 = Aws::S3::Client.new(options)
-    response = s3.put_object(
+    s3.put_object(
       bucket: params[:bucket],
       key: params[:key],
       body: params[:fileContents],
@@ -29,4 +21,13 @@ class AwsS3Service
     )
   end
 
+  private
+
+  def get_client_options
+    credentials = Aws::ECSCredentials.new
+    {
+      region: ENV.fetch('AWS_REGION'),
+      credentials: credentials
+    }
+  end
 end

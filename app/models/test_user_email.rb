@@ -4,14 +4,24 @@ class TestUserEmail < ApplicationRecord
   include ApplicationHelper
 
   def get_deeplinks
-    user = User.where(email: self.email).first
+    user = User.where(email: email).first
     links = ''
-    links += "[https://developer.va.gov#{generate_deeplink('veteran-verification', user)}](Veteran Verification API)\\n" if self.verification
-    links += "[https://developer.va.gov#{generate_deeplink('community-care-eligibility', user)}](Community Care Eligibility API)\\n" if self.communityCare
-    links += "[https://developer.va.gov#{generate_deeplink('clinical-health', user)}](Clinical Health API)\\n" if self.clinicalHealth
-    links += "[https://developer.va.gov#{generate_deeplink('patient-health', user)}](Patient Health API (FHIR))\\n" if self.health
-    links += "[https://developer.va.gov#{generate_deeplink('benefits-claims', user)}](Benefits Claims API)\\n" if self.claims
+    links += single_link(user, 'community-care-eligibility', 'Community Care Eligibility API)', communityCare)
+    links += single_link(user, 'clinical-health', 'Clinical Health API)', clinicalHealth)
+    links += single_link(user, 'patient-health', 'Patient Health API (FHIR))', health)
+    links += single_link(user, 'benefits-claims', 'Benefits Claims API)', claims)
+    links += single_link(user, 'veteran-verification', 'Veteran Verification API', verification)
 
-    links.delete_suffix("\\n")
+    links.delete_suffix('\\n')
+  end
+
+  private
+
+  def single_link(user, url_slug, name, condition)
+    if condition
+      "[https://developer.va.gov#{generate_deeplink(url_slug, user)}](#{name})\\n"
+    else
+      ''
+    end
   end
 end

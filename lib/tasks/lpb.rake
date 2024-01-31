@@ -529,51 +529,62 @@ namespace :lpb do
     require 'csv'
     require 'set'
     puts 'Starting export for ID.me emails with deeplinks...'
-    csvFileName = 'test-users-with-deeplinks.csv'
+    csv_file_name = 'test-users-with-deeplinks.csv'
     events = Event.where(event_type: 'sandbox_signup')
     events.each do |event|
-      eventApis = event.content['apis'].split(',')
-      eventApis.each do |eventApi|
-        TestUserEmail.upsert({
-          email: event.content['email'],
-          claims: true
-        }, unique_by: :email) if eventApi === 'claims'
-        TestUserEmail.upsert({
-          email: event.content['email'],
-          clinicalHealth: true
-        }, unique_by: :email) if eventApi === 'clinicalHealth'
-        TestUserEmail.upsert({
-          email: event.content['email'],
-          communityCare: true
-        }, unique_by: :email) if eventApi === 'communityCare'
-        TestUserEmail.upsert({
-          email: event.content['email'],
-          health: true
-        }, unique_by: :email) if eventApi === 'health'
-        TestUserEmail.upsert({
-          email: event.content['email'],
-          verification: true
-        }, unique_by: :email) if eventApi === 'verification'
+      event_apis = event.content['apis'].split(',')
+      event_apis.each do |event_api|
+        if event_api == 'claims'
+          TestUserEmail.upsert({ # rubocop:disable Rails/SkipsModelValidations
+                                 email: event.content['email'],
+                                 claims: true
+                               }, unique_by: :email)
+        end
+        if event_api == 'clinicalHealth'
+          TestUserEmail.upsert({ # rubocop:disable Rails/SkipsModelValidations
+                                 email: event.content['email'],
+                                 clinicalHealth: true
+                               }, unique_by: :email)
+        end
+        if event_api == 'communityCare'
+          TestUserEmail.upsert({ # rubocop:disable Rails/SkipsModelValidations
+                                 email: event.content['email'],
+                                 communityCare: true
+                               }, unique_by: :email)
+        end
+        if event_api == 'health'
+          TestUserEmail.upsert({ # rubocop:disable Rails/SkipsModelValidations
+                                 email: event.content['email'],
+                                 health: true
+                               }, unique_by: :email)
+        end
+        if event_api == 'verification'
+          TestUserEmail.upsert({ # rubocop:disable Rails/SkipsModelValidations
+                                 email: event.content['email'],
+                                 verification: true
+                               }, unique_by: :email)
+        end
       end
     end
     puts 'All required signups added to test_user_emails table.'
-    testUsers = TestUserEmail.all
-    CSV.open(csvFileName, 'w') do |csv|
+    test_users = TestUserEmail.all
+    CSV.open(csv_file_name, 'w') do |csv|
       csv << %w[email links]
-      testUsers.each do |testUser|
-        csv << [testUser.email, testUser.get_deeplinks]
+      test_users.each do |user|
+        csv << [user.email, testUser.get_deeplinks]
       end
     end
     puts 'Created and populated test-users-with-deeplinks.csv file.'
-    csvFile = File.read(csvFileName)
-    s3 = AwsS3Service.new
-    bucket = ENV.fetch('TEST_USERS_BUCKET')
-    response = s3.put_object(bucket: bucket, key: csvFileName, fileContents: csvFile, content_type: 'text/csv')
-    if response.etag
-      puts "File uploaded to s3://#{bucket}/#{csvFileName}"
-    else
-      puts 'An error occured doing s3.put_object'
-    end
+    csv_file = File.read(csv_file_name)
+    puts csv_file
+    # s3 = AwsS3Service.new
+    # bucket = ENV.fetch('TEST_USERS_BUCKET')
+    # response = s3.put_object(bucket: bucket, key: csv_file_name, fileContents: csv_file, content_type: 'text/csv')
+    # if response.etag
+    #   puts "File uploaded to s3://#{bucket}/#{csv_file_name}"
+    # else
+    #   puts 'An error occured doing s3.put_object'
+    # end
     puts 'End of export'
   end
 end
