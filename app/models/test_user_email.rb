@@ -19,7 +19,7 @@ class TestUserEmail < ApplicationRecord
 
   def single_link(user, url_slug, name, condition)
     if condition
-      "[https://developer.va.gov#{generate_deeplink(url_slug, user)}](#{name})\\n"
+      "[#{name}](https://developer.va.gov#{generate_deeplink(url_slug, user)})\\n"
     else
       ''
     end
