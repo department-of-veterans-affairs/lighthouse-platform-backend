@@ -13,7 +13,7 @@ describe 'AwsS3Service' do
         content_type: 'text/plain'
       )
       puts response
-      expect(response.etag).to eq('\"d41d8cd98f00b204e9800998ecf8427e\"')
+      expect(response.etag).to eq('"d41d8cd98f00b204e9800998ecf8427e"')
     end
   end
 end
