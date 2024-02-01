@@ -536,25 +536,25 @@ namespace :lpb do
       event_apis.each do |event_api|
         if event_api == 'claims'
           TestUserEmail.upsert({ # rubocop:disable Rails/SkipsModelValidations
-                                 email: event.content['email'],
+                                 email: event.content['email'].downcase,
                                  claims: true
                                }, unique_by: :email)
         end
         if event_api == 'communityCare'
           TestUserEmail.upsert({ # rubocop:disable Rails/SkipsModelValidations
-                                 email: event.content['email'],
+                                 email: event.content['email'].downcase,
                                  communityCare: true
                                }, unique_by: :email)
         end
         if event_api == 'health'
           TestUserEmail.upsert({ # rubocop:disable Rails/SkipsModelValidations
-                                 email: event.content['email'],
+                                 email: event.content['email'].downcase,
                                  health: true
                                }, unique_by: :email)
         end
         if event_api == 'verification'
           TestUserEmail.upsert({ # rubocop:disable Rails/SkipsModelValidations
-                                 email: event.content['email'],
+                                 email: event.content['email'].downcase,
                                  verification: true
                                }, unique_by: :email)
         end
