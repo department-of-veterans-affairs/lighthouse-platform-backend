@@ -574,7 +574,7 @@ namespace :lpb do
     bucket = ENV.fetch('TEST_USERS_BUCKET')
     response = s3.put_object(bucket: bucket, key: csv_file_name, fileContents: csv_file, content_type: 'text/csv')
     if response.etag
-      puts "File uploaded to s3://#{bucket}/#{csv_file_name}"
+      puts "File uploaded to S3 bucket"
     else
       puts 'An error occured doing s3.put_object'
     end
