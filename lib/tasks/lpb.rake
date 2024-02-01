@@ -565,7 +565,7 @@ namespace :lpb do
     CSV.open(csv_file_name, 'w') do |csv|
       csv << %w[email links]
       test_users.each do |user|
-        csv << [user.email, testUser.get_deeplinks]
+        csv << [user.email, user.get_deeplinks]
       end
     end
     puts 'Created and populated test-users-with-deeplinks.csv file.'
