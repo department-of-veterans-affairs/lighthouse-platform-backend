@@ -562,17 +562,22 @@ namespace :lpb do
     end
     puts 'All required signups added to test_user_emails table.'
     test_users = TestUserEmail.all
+    processed = 0
+    errors = 0
     CSV.open(csv_file_name, 'w') do |csv|
       csv << %w[email links]
       test_users.each do |user|
         begin
           csv << [user.email, user.get_deeplinks]
+          processed += 1
         rescue
           puts "Error caught with TestUserEmail#id:#{user.id}"
+          errors += 1
         end
       end
     end
     puts 'Created and populated test-users-with-deeplinks.csv file.'
+    puts "#{processed} rows successfully created with #{errors} errors."
     csv_file = File.read(csv_file_name)
     s3 = AwsS3Service.new
     bucket = ENV.fetch('TEST_USERS_BUCKET')
