@@ -1,0 +1,122 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://169.254.170.2/creds
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 31 Jan 2024 22:22:07 GMT
+      Content-Length:
+      - '432'
+    body:
+      encoding: UTF-8
+      string: '{"AccessKeyId":"AKIAQWERTYUIOPASAMPLE","Expiration":"2024-01-31T23:22:07Z","RoleArn":"","SecretAccessKey":"TopSecret-qwertyuiopasdfghjklzxcvbnmqwer"}'
+  recorded_at: Wed, 31 Jan 2024 22:22:07 GMT
+- request:
+    method: post
+    uri: https://sts.us-gov-west-1.amazonaws.com/
+    body:
+      encoding: UTF-8
+      string: Action=AssumeRole&RoleArn=arn%3Aaws-us-gov%3Aiam%3A%3A008577686731%3Arole&2Fs3-upload-role&RoleSessionName=LPBLogoUpload&Version=2011-06-15
+    headers:
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby3/3.131.2 ruby/3.2.2 x86_64-linux aws-sdk-core/3.131.2
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Host:
+      - sts.us-gov-west-1.amazonaws.com
+      Content-Length:
+      - '165'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Amzn-Requestid:
+      - 0d458ccf-400b-4dab-8d77-468666cb7d92
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '762'
+      Date:
+      - Wed, 31 Jan 2024 22:22:08 GMT
+    body:
+      encoding: UTF-8
+      string: |
+        <AssumeRoleResponse xmlns="https://sts.amazonaws.com/doc/2011-06-15/">
+          <AssumeRoleResult>
+            <AssumedRoleUser>
+              <AssumedRoleId>AROAQWERTYUIOPASAMPLE:LPBLogoUpload</AssumedRoleId>
+              <Arn>arn:aws-us-gov:iam::000008675309:role/s3-upload-role/LPBLogoUpload</Arn>
+            </AssumedRoleUser>
+            <Credentials>
+              <AccessKeyId>ASIAQWERTYUIOPASAMPLE</AccessKeyId>
+              <SecretAccessKey>TopSecret-qwertyuiopasdfghjklzxcvbnmqwer</SecretAccessKey>
+              <SessionToken>session_token_session_token_session_token_session_token</SessionToken>
+              <Expiration>2022-11-07T16:08:11Z</Expiration>
+            </Credentials>
+          </AssumeRoleResult>
+          <ResponseMetadata>
+            <RequestId>74a54dea-ae94-d57a-bf60-0f8444d3f1ff</RequestId>
+          </ResponseMetadata>
+        </AssumeRoleResponse>
+  recorded_at: Wed, 31 Jan 2024 22:22:08 GMT
+- request:
+    method: put
+    uri: https://bucket-name.s3.us-gov-west-1.amazonaws.com/dummy.txt
+    body:
+      encoding: UTF-8
+      string: this is dummy content
+    headers:
+      Accept-Encoding:
+      - ''
+      User-Agent:
+      - aws-sdk-ruby3/3.131.2 ruby/3.2.2 x86_64-linux aws-sdk-s3/1.114.0
+      Expect:
+      - 100-continue
+      Content-Md5:
+      - RGihx4TzwFV7j8zIe8TP0Q==
+      Host:
+      - bucket-name.s3.us-gov-west-1.amazonaws.com
+      Content-Length:
+      - '21'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 31 Jan 2024 22:22:10 GMT
+      Etag:
+      - '"d41d8cd98f00b204e9800998ecf8427e"'
+      Server:
+      - AmazonS3
+      Content-Length:
+      - '0'
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Wed, 31 Jan 2024 22:22:09 GMT
+recorded_with: VCR 6.1.0

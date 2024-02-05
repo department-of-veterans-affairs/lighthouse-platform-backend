@@ -279,6 +279,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_05_143738) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "test_user_emails", force: :cascade do |t|
+    t.text "email", null: false
+    t.boolean "claims", default: false, null: false
+    t.boolean "communityCare", default: false, null: false
+    t.boolean "health", default: false, null: false
+    t.boolean "verification", default: false, null: false
+    t.index ["email"], name: "index_test_user_emails_on_email", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
