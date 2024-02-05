@@ -4,7 +4,7 @@ class TestUserEmail < ApplicationRecord
   include ApplicationHelper
 
   def get_deeplinks
-    user = User.where(email: email).first
+    user = User.joins(:consumer).merge(Consumer.where(unsubscribe: false)).where(email: email).first
     links = ''
     links += single_link(user, 'community-care-eligibility', 'Community Care Eligibility API', communityCare)
     links += single_link(user, 'patient-health', 'Patient Health API (FHIR)', health)
