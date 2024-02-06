@@ -567,13 +567,11 @@ namespace :lpb do
     CSV.open(csv_file_name, 'w') do |csv|
       csv << %w[email links]
       test_users.each do |user|
-        begin
-          csv << [user.email, user.get_deeplinks]
-          processed += 1
-        rescue
-          puts "Error caught with TestUserEmail#id:#{user.id}"
-          errors += 1
-        end
+        csv << [user.email, user.get_deeplinks]
+        processed += 1
+      rescue
+        puts "Error caught with TestUserEmail#id:#{user.id}"
+        errors += 1
       end
     end
     puts 'Created and populated test-users-with-deeplinks.csv file.'
