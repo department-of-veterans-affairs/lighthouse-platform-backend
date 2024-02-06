@@ -9,7 +9,7 @@ class TestUserEmail < ApplicationRecord
     links += single_link(user, 'community-care-eligibility', 'Community Care Eligibility API', communityCare)
     links += single_link(user, 'patient-health', 'Patient Health API (FHIR)', health)
     links += single_link(user, 'benefits-claims', 'Benefits Claims API', claims)
-    links += single_link(user, 'veteran-verification', 'Veteran Verification API', verification)
+    links += single_link(user, 'veteran-service-history-and-eligibility', 'Veteran Verification API', verification)
 
     links.delete_suffix('\\n')
   end
