@@ -528,7 +528,7 @@ namespace :lpb do
   task :idmeEmailsExport, [:before] => [:environment] do |_, args|
     require 'csv'
     require 'set'
-    if !args.before.present?
+    if args.before.blank?
       puts 'You must specify a before argument which is the first Event ID omitted from the export.'
       next
     end
