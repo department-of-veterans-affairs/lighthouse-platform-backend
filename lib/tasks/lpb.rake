@@ -525,12 +525,18 @@ namespace :lpb do
   end
 
   desc 'Export emails and deeplinks'
-  task idmeEmailsExport: :environment do
+  task :idmeEmailsExport, [:before] => [:environment] do |_, args|
     require 'csv'
     require 'set'
+    if args.before.blank?
+      puts 'You must specify a before argument which is the first Event ID omitted from the export.'
+      next
+    end
+    puts 'Clear existing data from test_user_emails table'
+    ActiveRecord::Base.connection.execute('TRUNCATE test_user_emails RESTART IDENTITY')
     puts 'Starting export for ID.me emails with deeplinks...'
     csv_file_name = 'test-users-with-deeplinks.csv'
-    events = Event.where(event_type: 'sandbox_signup')
+    events = Event.where(event_type: 'sandbox_signup').where('id < ?', Integer(args.before))
     events.each do |event|
       event_apis = event.content['apis'].split(',')
       event_apis.each do |event_api|
@@ -567,13 +573,11 @@ namespace :lpb do
     CSV.open(csv_file_name, 'w') do |csv|
       csv << %w[email links]
       test_users.each do |user|
-        begin
-          csv << [user.email, user.get_deeplinks]
-          processed += 1
-        rescue
-          puts "Error caught with TestUserEmail#id:#{user.id}"
-          errors += 1
-        end
+        csv << [user.email, user.get_deeplinks]
+        processed += 1
+      rescue
+        puts "Error caught with TestUserEmail#id:#{user.id}"
+        errors += 1
       end
     end
     puts 'Created and populated test-users-with-deeplinks.csv file.'
