@@ -14,7 +14,7 @@
   <% if @okta_consumers.dig(:ccg, :credentials).present? %>
     <div>Here's your Client Credentials Grant OAuth Client ID: <pre><%= @okta_consumers.dig(:ccg, :credentials, :oauthClient, :client_id) %></pre></div><br />
 
-    <div>Please visit our OAuth documentation for implementation guidelines: <a href="https://developer.va.gov/explore/api/<%= get_api_metadata(@request[:apis]).dig('urlSlug') %>/client-credentials">https://developer.va.gov/explore/api/<%= get_api_metadata(@request[:apis]).dig('urlSlug') %>/client-credentials</a></div><br />
+    <div>Please visit our OAuth documentation for implementation guidelines: <a href="https://developer.va.gov/explore/api/<%= @request[:apis].first.api_metadatum.url_slug %>/client-credentials">https://developer.va.gov/explore/api/<%= @request[:apis].first.api_metadatum.url_slug %>/client-credentials</a></div><br />
   <% end %>
 
   <% if @okta_consumers.dig(:acg, :credentials).present? %>
