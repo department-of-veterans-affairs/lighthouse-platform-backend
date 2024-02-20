@@ -13,7 +13,7 @@ RSpec.describe ElasticsearchService do
 
   describe 'locates the first successful call in es' do
     let(:user) { create(:user) }
-    let(:consumer) { create(:consumer, :with_sandbox_ids, user: user) }
+    let(:consumer) { create(:consumer, :with_sandbox_ids, user:) }
 
     it 'retrieves a successful first call by a consumer' do
       expect(subject.first_successful_call(consumer)).to eq({ first_sandbox_interaction_at: 'July 03, 2015' })

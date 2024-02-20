@@ -137,7 +137,7 @@ describe V0::Providers, type: :request do
       it 'updates or creates a consumer with the requested APIs' do
         expect do
           params = { email: 'test@example.com', firstName: 'Bon', lastName: 'Jovi', termsOfService: true }
-          post "/platform-backend/v0/providers/#{provider_api.name}/auth-types/apikey/consumers", params: params
+          post "/platform-backend/v0/providers/#{provider_api.name}/auth-types/apikey/consumers", params:
         end.to change(ConsumerAuthRef, :count).by 1
       end
     end
@@ -163,7 +163,7 @@ describe V0::Providers, type: :request do
       it 'works with acg' do
         VCR.use_cassette('okta/consumer_signup_200', match_requests_on: [:method]) do
           expect do
-            post "/platform-backend/v0/providers/#{api.name}/auth-types/oauth/acg/consumers", params: params
+            post "/platform-backend/v0/providers/#{api.name}/auth-types/oauth/acg/consumers", params:
           end.to change(ConsumerAuthRef, :count).by 1
         end
       end
@@ -171,7 +171,7 @@ describe V0::Providers, type: :request do
       it 'works with ccg' do
         VCR.use_cassette('okta/consumer_signup_ccg_200', match_requests_on: [:method]) do
           expect do
-            post "/platform-backend/v0/providers/#{api.name}/auth-types/oauth/ccg/consumers", params: params
+            post "/platform-backend/v0/providers/#{api.name}/auth-types/oauth/ccg/consumers", params:
           end.to change(ConsumerAuthRef, :count).by 1
         end
       end

@@ -19,13 +19,13 @@ FactoryBot.define do
       before(:create) do |consumer, _|
         create(:consumer_auth_ref, key: 'sandbox_gateway_ref',
                                    value: '65a46870-a16a-4ded-85f1-e9fc33b03270',
-                                   consumer: consumer)
+                                   consumer:)
         create(:consumer_auth_ref, key: 'sandbox_acg_oauth_ref',
                                    value: '4n-0kt4-1d-f0r-us',
-                                   consumer: consumer)
+                                   consumer:)
         create(:consumer_auth_ref, key: 'sandbox_ccg_oauth_ref',
                                    value: '4n-0kt4-1d-f0r-us-ccg',
-                                   consumer: consumer)
+                                   consumer:)
       end
     end
 
@@ -33,7 +33,7 @@ FactoryBot.define do
       after(:create) do |consumer, _|
         api = create(:api)
         environment = Environment.find_or_create_by(name: 'production')
-        consumer.api_environments << ApiEnvironment.find_or_create_by(api: api, environment: environment)
+        consumer.api_environments << ApiEnvironment.find_or_create_by(api:, environment:)
       end
     end
   end

@@ -340,7 +340,7 @@ module V0
               user = initialize_user
               kong_consumer = Kong::ServiceFactory.service(:sandbox).third_party_signup(user, api)
               present user, with: V0::Entities::ApikeyEntity,
-                            kong_consumer: kong_consumer,
+                            kong_consumer:,
                             provider_name: api.name
             end
           end
@@ -375,9 +375,9 @@ module V0
                                                       'acg', api, declared(params)
                                                     )
                 present user, with: V0::Entities::AcgClientEntity,
-                              okta_consumer: okta_consumer,
+                              okta_consumer:,
                               provider_name: api.name,
-                              params: params
+                              params:
               end
             end
             namespace 'ccg' do
@@ -403,9 +403,9 @@ module V0
                                                       'ccg', api, declared(params)
                                                     )
                 present user, with: V0::Entities::CcgClientEntity,
-                              okta_consumer: okta_consumer,
+                              okta_consumer:,
                               provider_name: api.name,
-                              params: params
+                              params:
               end
             end
           end

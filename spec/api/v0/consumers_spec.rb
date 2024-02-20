@@ -571,7 +571,7 @@ describe V0::Consumers, type: :request do
 
   describe 'consumer statistics api' do
     let(:user) { create(:user) }
-    let(:consumer) { create(:consumer, :with_sandbox_ids, user: user) }
+    let(:consumer) { create(:consumer, :with_sandbox_ids, user:) }
 
     before do
       consumer

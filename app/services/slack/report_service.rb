@@ -116,7 +116,7 @@ module Slack
             }
           end
         end
-        message[:blocks] << { type: 'section', fields: fields }
+        message[:blocks] << { type: 'section', fields: }
         refs.slice!(0, 10)
       end
       message[:blocks] << { type: 'divider' }

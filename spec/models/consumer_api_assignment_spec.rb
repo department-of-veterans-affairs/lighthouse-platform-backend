@@ -5,13 +5,13 @@ require 'rails_helper'
 RSpec.describe ConsumerApiAssignment, type: :model do
   subject do
     build(:consumer_api_assignment,
-          consumer: consumer,
-          api_environment: api_environment)
+          consumer:,
+          api_environment:)
   end
 
   let(:current_time) { DateTime.now }
   let(:user) { create(:user) }
-  let(:consumer) { create(:consumer, user: user) }
+  let(:consumer) { create(:consumer, user:) }
   let(:api_environment) { build(:api_environment) }
 
   describe 'creates a valid ConsumerApiAssignment' do

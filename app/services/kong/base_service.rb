@@ -53,7 +53,7 @@ module Kong
     def add_acl(consumer, group)
       uri = URI.parse("#{@kong_elb}/consumers/#{consumer}/acls")
       req = Net::HTTP::Post.new(uri)
-      req.set_form_data({ group: group })
+      req.set_form_data({ group: })
       request(req, uri)
     end
 
@@ -79,7 +79,7 @@ module Kong
 
       save_id_to_user(user, kong_id)
 
-      { kong_id: kong_id, kong_username: kong_consumer_name, token: kong_api_key }
+      { kong_id:, kong_username: kong_consumer_name, token: kong_api_key }
     end
 
     def third_party_signup(user, api)
@@ -89,7 +89,7 @@ module Kong
 
       save_id_to_user(user, kong_id)
 
-      { kong_id: kong_id, token: kong_api_key }
+      { kong_id:, token: kong_api_key }
     end
 
     protected

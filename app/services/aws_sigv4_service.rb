@@ -45,7 +45,7 @@ class AwsSigv4Service
     x_amz_signature = get_signature(policy_date, s3_region, encoded_policy)
 
     {
-      acl: acl,
+      acl:,
       bucketName: @bucket,
       contentType: @content_type,
       key: "#{@source_folder}#{@key}",

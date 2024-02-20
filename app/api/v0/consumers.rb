@@ -168,9 +168,9 @@ module V0
         Slack::AlertService.new.send_slack_signup_alert(slack_signup_options) if Flipper.enabled? :send_slack_signup
 
         present user, with: V0::Entities::ConsumerApplicationEntity,
-                      kong_consumer: kong_consumer,
-                      okta_consumers: okta_consumers,
-                      deeplink_hash: deeplink_hash
+                      kong_consumer:,
+                      okta_consumers:,
+                      deeplink_hash:
       end
 
       desc 'Validate test user data deeplink values and present test user data', {
@@ -187,14 +187,14 @@ module V0
         requires :urlSlug, type: String
       end
       post 'test-user-data' do
-        header 'Access-Control-Allow-Origin', request.host_with_port
+        # header 'Access-Control-Allow-Origin', request.host_with_port
         protect_from_forgery
 
         if validate_deeplink_hash(params[:userId], params[:hash])
           s3 = AwsS3Service.new
           bucket = ENV.fetch('TEST_USERS_BUCKET')
           key = ENV.fetch('TEST_USERS_OBJECT_KEY')
-          response = s3.get_object(bucket: bucket, key: key)
+          response = s3.get_object(bucket:, key:)
 
           JSON.parse(response)
         else
@@ -277,7 +277,7 @@ module V0
         protect_from_forgery
 
         begin
-          create_production_request_record!(params: params)
+          create_production_request_record!(params:)
         rescue
           # just in-case... don't want to disrupt the existing workflow
         end

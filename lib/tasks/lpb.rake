@@ -585,7 +585,7 @@ namespace :lpb do
     csv_file = File.read(csv_file_name)
     s3 = AwsS3Service.new
     bucket = ENV.fetch('TEST_USERS_BUCKET')
-    response = s3.put_object(bucket: bucket, key: csv_file_name, fileContents: csv_file, content_type: 'text/csv')
+    response = s3.put_object(bucket:, key: csv_file_name, fileContents: csv_file, content_type: 'text/csv')
     if response.etag
       puts 'File uploaded to S3 bucket'
     else

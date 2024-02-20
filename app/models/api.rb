@@ -88,7 +88,7 @@ class Api < ApplicationRecord
     api_environments_attributes[:environments_attributes][:name].map do |envs|
       environment = Environment.find_or_create_by(name: envs)
       api_environments << ApiEnvironment.find_or_create_by(metadata_url: api_environments_attributes[:metadata_url],
-                                                           environment: environment)
+                                                           environment:)
     end
   end
 

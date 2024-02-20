@@ -15,7 +15,7 @@ class HomeController < ApplicationController
         end
       end
     end
-    render :sitemap, content_type: 'text/xml', locals: { urls: urls }
+    render :sitemap, content_type: 'text/xml', locals: { urls: }
   end
   # rubocop:enable Metrics/MethodLength
 
