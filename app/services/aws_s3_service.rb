@@ -29,6 +29,5 @@ class AwsS3Service
       region: ENV.fetch('AWS_REGION'),
       credentials:
     }
-    }
   end
 end
