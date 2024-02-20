@@ -5,7 +5,6 @@ require 'uri'
 require 'securerandom'
 require 'validators/length'
 require 'validators/malicious_url_protection'
-require 'validators/consumer_has_sandbox_api'
 require 'validators/provided_oauth_params'
 
 module V0
