@@ -210,12 +210,17 @@ module V0
         }
       }
       params do
+        requires :addressLine1, type: String
+        optional :addressLine2, type: String
+        optional :addressLine3, type: String
         requires :apis, type: String, allow_blank: false
         optional :appDescription, type: String, length: 415
         optional :appName, type: String
         optional :breachManagementProcess, type: String
         optional :businessModel, type: String
         optional :centralizedBackendLog, type: String
+        requires :city, type: String
+        requires :country, type: String
         optional :distributingAPIKeysToCustomers, type: Boolean
         optional :exposeVeteranInformationToThirdParties, type: Boolean
         requires :is508Compliant, type: Boolean
@@ -259,6 +264,7 @@ module V0
           requires :lastName, type: String
         end
         optional :signUpLink, type: Array[String]
+        requires :state, type: String
         requires :statusUpdateEmails, type: Array[String], regexp: /^(?!.*(test|sample|fake|email)).*/
         requires :storePIIOrPHI, type: Boolean
         optional :supportLink, type: Array[String]
@@ -268,6 +274,7 @@ module V0
         requires :veteranFacing, type: Boolean
         optional :vulnerabilityManagement, type: String
         optional :website, type: String
+        requires :zipCode5, type: String
 
         all_or_none_of :oAuthApplicationType, :oAuthRedirectURI
       end

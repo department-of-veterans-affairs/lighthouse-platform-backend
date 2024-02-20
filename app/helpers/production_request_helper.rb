@@ -57,12 +57,17 @@ module ProductionRequestHelper
   # rubocop:disable Metrics/AbcSize
   def create_production_request_record!(params:)
     prod_req = ProductionRequest.new
+    prod_req.address_line_1 = params[:addressLine1]
+    prod_req.address_line_2 = params[:addressLine2]
+    prod_req.address_line_3 = params[:addressLine3]
     prod_req.apis = build_api_references(apis: params[:apis])
     prod_req.app_description = params[:appDescription]
     prod_req.app_name = params[:appName]
     prod_req.breach_management_process = params[:breachManagementProcess]
     prod_req.business_model = params[:businessModel]
     prod_req.centralized_backend_log = params[:centralizedBackendLog]
+    prod_req.city = params[:city]
+    prod_req.country = params[:country]
     prod_req.distributing_api_keys_to_customers = params[:distributingAPIKeysToCustomers]
     prod_req.expose_veteran_information_to_third_parties = params[:exposeVeteranInformationToThirdParties]
     prod_req.is_508_compliant = params[:is508Compliant]
@@ -91,6 +96,7 @@ module ProductionRequestHelper
     )
     prod_req.scopes_access_requested = params[:scopesAccessRequested]
     prod_req.sign_up_link_url = extract_sign_up_link_url(sign_up_link_param: params[:signUpLink])
+    prod_req.state = params[:state]
     prod_req.status_update_emails = extract_status_update_emails(
       status_update_emails_param: params[:statusUpdateEmails]
     )
@@ -104,6 +110,7 @@ module ProductionRequestHelper
     prod_req.veteran_facing_description = params[:veteranFacingDescription]
     prod_req.vulnerability_management = params[:vulnerabilityManagement]
     prod_req.website = params[:website]
+    prod_req.zip_code_5 = params[:zipCode5]
     prod_req.save!
   end
   # rubocop:enable Metrics/MethodLength
