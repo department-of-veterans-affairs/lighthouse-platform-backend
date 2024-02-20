@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_31_034635) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_05_143738) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -264,6 +264,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_31_034635) do
     t.string "oauth_application_type"
     t.jsonb "oauth_public_key"
     t.string "oauth_redirect_uri"
+    t.string "address_line_1"
+    t.string "address_line_2"
+    t.string "address_line_3"
+    t.string "city"
+    t.string "country"
+    t.string "state"
+    t.string "zip_code_5"
   end
 
   create_table "sitemap_urls", force: :cascade do |t|
