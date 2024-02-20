@@ -68,7 +68,6 @@ class Base < Grape::API
   end
 
   mount V0::Base
-  mount Utilities
 
   add_swagger_documentation \
     mount_path: '/openapi',
