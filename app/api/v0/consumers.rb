@@ -186,7 +186,7 @@ module V0
         requires :urlSlug, type: String
       end
       post 'test-user-data' do
-        # header 'Access-Control-Allow-Origin', request.host_with_port
+        header 'Access-Control-Allow-Origin', request.host_with_port
         protect_from_forgery
 
         if validate_deeplink_hash(params[:userId], params[:hash])
