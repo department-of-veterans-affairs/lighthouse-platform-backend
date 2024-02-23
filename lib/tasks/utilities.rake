@@ -17,11 +17,10 @@ namespace :utilities do
       users = api_environment.consumer_api_assignment.map do |record|
         record.consumer.user.kept? ? record.consumer.user : nil
       end.compact
-
-      File.write('./rake-utilities-comsumers.json', users.to_json)
     else
       users = User.kept.select { |user| user.consumer.present? }
-      File.write('./rake-utilities-comsumers.json', users.to_json)
     end
+
+    File.write('./rake-utilities-comsumers.json', users.to_json)
   end
 end
