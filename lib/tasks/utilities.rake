@@ -18,10 +18,10 @@ namespace :utilities do
         record.consumer.user.kept? ? record.consumer.user : nil
       end.compact
 
-      puts users, with: Entities::UserEntity
+      File.write('./rake-utilities-comsumers.json', users.to_json)
     else
       users = User.kept.select { |user| user.consumer.present? }
-      puts users
+      File.write('./rake-utilities-comsumers.json', users.to_json)
     end
   end
 end
