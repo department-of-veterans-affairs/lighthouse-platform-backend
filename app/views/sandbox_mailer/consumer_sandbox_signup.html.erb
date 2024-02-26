@@ -12,9 +12,19 @@
 
 <% if @okta_consumers.present? %>
   <% if @okta_consumers.dig(:ccg, :credentials).present? %>
-    <div>Here's your Client Credentials Grant OAuth Client ID: <pre><%= @okta_consumers.dig(:ccg, :credentials, :oauthClient, :client_id) %></pre></div><br />
+    <div><b>Your Client ID is:</b></div>
+    <pre><%= @okta_consumers.dig(:ccg, :credentials, :oauthClient, :client_id) %></pre><br />
 
-    <div>Please visit our OAuth documentation for implementation guidelines: <a href="https://developer.va.gov/explore/api/<%= @request[:apis].first.api_metadatum.url_slug %>/client-credentials">https://developer.va.gov/explore/api/<%= @request[:apis].first.api_metadatum.url_slug %>/client-credentials</a></div><br />
+    <div><b>What's next?</b></div>
+    <br />
+    <div># Use the above credentials to start developing in sandbox with test data.</div>
+    <div># Once you’ve developed and tested your app in sandbox, you can <a href="https://developer.va.gov/onboarding/request-prod-access">request production access</a>.</div>
+    <br />
+    <br />
+    <div><b>Important:</b> To get production access using client credentials grant, you must either work for VA or have specific VA agreements in place.</div>
+    <br />
+    <br />
+    <div>If you have any questions about VA APIs or the sandbox or production access process, <a href="https://developer.va.gov/support/contact-us">contact us</a>.</div>
   <% end %>
 
   <% if @okta_consumers.dig(:acg, :credentials).present? %>
@@ -51,13 +61,3 @@
     <% end %>
   <% end %>
 <% end %>
-
-<div>If you find a bug or would like to make a feature request, please open an issue through our Support page. We are continually working to improve our process and welcome <a href="https://developer.va.gov/support">feedback along your journey</a>.</div><br />
-
-<div>When you're ready to move to a production environment, please follow the steps outlined on our <a href="https://developer.va.gov/go-live">Path to Production</a> page.</div><br />
-
-<div>Thank you again,</div>
-<div>VA API Platform Team</div> <br />
-<div><strong>Read VA API Docs at: </strong><a href="https://developer.va.gov">developer.va.gov</a></div>
-<div><strong>Get support: </strong><a href="https://github.com/department-of-veterans-affairs/vets-api-clients/issues/new/choose">Create Github Issue</a></div>
-<div><strong>Email us at: </strong><a href="mailto:api@va.gov">api@va.gov</a></div>
