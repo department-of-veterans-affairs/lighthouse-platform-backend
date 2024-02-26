@@ -5,6 +5,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby File.read('.ruby-version').strip
 
+gem 'actionpack', '~> 7.0.8'
 gem 'activerecord-import'
 gem 'aws-sdk-dynamodb', '~> 1.62'
 gem 'aws-sdk-s3', '~> 1.114'
