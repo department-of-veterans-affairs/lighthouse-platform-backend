@@ -578,7 +578,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  actionpack (~> 7.0.8)
   activerecord-import
   aws-sdk-dynamodb (~> 1.62)
   aws-sdk-s3 (~> 1.114)
@@ -618,7 +617,7 @@ DEPENDENCIES
   puma (~> 5.6)
   rack-mini-profiler (~> 2.0)
   rack-protection (< 2.2.0)
-  rails
+  rails (~> 7.0.8)
   rails-healthcheck
   rails_admin (~> 3.0)
   redcarpet (~> 3.6)

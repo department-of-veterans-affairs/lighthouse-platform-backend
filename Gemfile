@@ -5,7 +5,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby File.read('.ruby-version').strip
 
-gem 'actionpack', '~> 7.0.8'
 gem 'activerecord-import'
 gem 'aws-sdk-dynamodb', '~> 1.62'
 gem 'aws-sdk-s3', '~> 1.114'
@@ -35,7 +34,7 @@ gem 'pg', '~> 1.1'
 gem 'premailer-rails'
 gem 'puma', '~> 5.6'
 gem 'rack-protection', '< 2.2.0'
-gem 'rails'
+gem 'rails', '~> 7.0.8'
 gem 'rails_admin', '~> 3.0'
 gem 'rails-healthcheck'
 gem 'redcarpet', '~> 3.6'
