@@ -30,8 +30,8 @@
 <% if @okta_consumers.present? %>
   <% if @okta_consumers.dig(:ccg, :credentials).present? %>
     <div><b>Your Client ID is:</b></div>
-    <pre><%= @okta_consumers.dig(:ccg, :credentials, :oauthClient, :client_id) %></pre><br />
-
+    <pre><%= @okta_consumers.dig(:ccg, :credentials, :oauthClient, :client_id) %></pre>
+    <br />
     <div><b>What's next?</b></div>
     <br />
     <div># Use the above credentials to start developing in sandbox with test data.</div>
@@ -45,23 +45,28 @@
   <% end %>
 
   <% if @okta_consumers.dig(:acg, :credentials).present? %>
-    <div><strong>Your OAuth client ID is:</strong> <pre><%= @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_id) %></pre></div><br />
-
+    <div><strong>Your OAuth client ID is:</strong> <pre><%= @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_id) %></pre></div>
+    <br />
     <% if @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_secret).present? %>
-      <div><strong>Your OAuth client secret is:</strong> <pre><%= @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_secret) %></pre></div><br />
+      <div><strong>Your OAuth client secret is:</strong> <pre><%= @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_secret) %></pre></div>
+      <br />
     <% end %>
-
     <% if @okta_consumers.dig(:acg, :settings, :oauthClient, :redirect_uris).present? %>
-      <div><strong>Your redirect URI is:</strong> <pre><%= @okta_consumers.dig(:acg, :settings, :oauthClient, :redirect_uris).first %></pre></div><br />
+      <div><strong>Your redirect URI is:</strong> <pre><%= @okta_consumers.dig(:acg, :settings, :oauthClient, :redirect_uris).first %></pre></div>
+      <br />
     <% end %>
     <% if @deeplink_url.present? %>
-      <div>Your link to test data credentials is: <a href="https://developer.va.gov<%= @deeplink_url %>">https://developer.va.gov<%= @deeplink_url %></a></div><br />
+      <div>Your link to test data credentials is: <a href="https://developer.va.gov<%= @deeplink_url %>">https://developer.va.gov<%= @deeplink_url %></a></div>
+      <br />
     <% end %>
     <% if !@deeplink_url.present? %>
-      <div><strong>Your link to test data credentials is:</strong> <a href="<%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %>"><%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %></a></div><br />
+      <div><strong>Your link to test data credentials is:</strong> <a href="<%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %>"><%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %></a></div>
+      <br />
     <% end %>
-    <div><strong>What's next?</strong></div><br />
-    <div><strong>Start developing.</strong></div><br />
+    <div><strong>What's next?</strong></div>
+    <br />
+    <div><strong>Start developing.</strong></div>
+    <br />
     <div><ol>
       <li>Use the above credentials to start developing in sandbox.</li>
       <% if @deeplink_url.present? %>
@@ -74,7 +79,8 @@
       <% end %>
     </ol></div><br />
     <% if !@deeplink_url.present? %>
-      <div><strong>A note:</strong> the way you access this data, and any test account credentials for ID.me, will change in early February, 2024. We will email you more information about this change, including instructions and a new access link, in February. For now, be sure to save any ID.me credentials you are using.</div><br />
+      <div><strong>A note:</strong> the way you access this data, and any test account credentials for ID.me, will change in early February, 2024. We will email you more information about this change, including instructions and a new access link, in February. For now, be sure to save any ID.me credentials you are using.</div>
+      <br />
     <% end %>
   <% end %>
 <% end %>
