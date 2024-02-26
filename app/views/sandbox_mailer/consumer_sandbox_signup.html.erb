@@ -12,6 +12,12 @@
   <div>1. Use the above key to start developing in sandbox with test data.</div>
   <div>2. Once you’ve developed and tested your app in sandbox, you can <a href="https://developer.va.gov/onboarding/request-prod-access">request production access</a>.</div>
   <br />
+  <% if get_api_metadata(@request[:apis]).restricted_access_toggle %>
+    <br />
+    <div><b>Important:</b> To get production access using client credentials grant, you must either work for VA or have specific VA agreements in place.</div>
+    <br />
+    <br />
+  <% end %>
   <div>If you have any questions about VA APIs or the sandbox or production access process, <a href="https://developer.va.gov/support/contact-us">contact us</a>.</div>
   <br />
   <br />
