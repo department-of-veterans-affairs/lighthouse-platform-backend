@@ -19,7 +19,7 @@ module ProductionRequestHelper
     user.first_name = first_name
     user.last_name = last_name
 
-    ProductionRequestContact.new(user: user, contact_type: contact_type)
+    ProductionRequestContact.new(user:, contact_type:)
   end
 
   def extract_privacy_policy_url(policy_documents_param:)

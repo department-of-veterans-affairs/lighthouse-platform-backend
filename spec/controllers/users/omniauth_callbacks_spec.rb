@@ -64,8 +64,8 @@ def setup_github_login(name, email, is_admin) # rubocop:disable Metrics/MethodLe
                                                                 uid: '123545',
                                                                 info: {
                                                                   uid: '123545',
-                                                                  name: name,
-                                                                  email: email
+                                                                  name:,
+                                                                  email:
                                                                 },
                                                                 credentials: {
                                                                   token: '123456',

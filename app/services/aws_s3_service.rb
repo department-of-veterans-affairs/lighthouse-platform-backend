@@ -27,7 +27,7 @@ class AwsS3Service
     credentials = Aws::ECSCredentials.new
     {
       region: ENV.fetch('AWS_REGION'),
-      credentials: credentials
+      credentials:
     }
   end
 end

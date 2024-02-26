@@ -15,8 +15,8 @@ def stub_github_team_req(page_num, body, next_page = nil) # rubocop:disable Metr
         }
     )
     .to_return(
-      body: body,
-      headers: headers,
+      body:,
+      headers:,
       status: 200
     )
 end

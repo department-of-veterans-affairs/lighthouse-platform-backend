@@ -5,7 +5,6 @@ require 'uri'
 require 'securerandom'
 require 'validators/length'
 require 'validators/malicious_url_protection'
-require 'validators/consumer_has_sandbox_api'
 require 'validators/provided_oauth_params'
 
 module V0
@@ -16,8 +15,7 @@ module V0
     helpers ProductionRequestHelper
     helpers do
       def user_from_signup_params
-        users = User.where('LOWER(email) = ?', params[:email].downcase.strip)
-        user = users.present? ? users.first : User.new(email: params[:email].strip)
+        user = User.find_or_initialize_by(email: params[:email].downcase.strip)
 
         user.first_name = params[:firstName]
         user.last_name = params[:lastName]
@@ -169,9 +167,9 @@ module V0
         Slack::AlertService.new.send_slack_signup_alert(slack_signup_options) if Flipper.enabled? :send_slack_signup
 
         present user, with: V0::Entities::ConsumerApplicationEntity,
-                      kong_consumer: kong_consumer,
-                      okta_consumers: okta_consumers,
-                      deeplink_hash: deeplink_hash
+                      kong_consumer:,
+                      okta_consumers:,
+                      deeplink_hash:
       end
 
       desc 'Validate test user data deeplink values and present test user data', {
@@ -195,7 +193,7 @@ module V0
           s3 = AwsS3Service.new
           bucket = ENV.fetch('TEST_USERS_BUCKET')
           key = ENV.fetch('TEST_USERS_OBJECT_KEY')
-          response = s3.get_object(bucket: bucket, key: key)
+          response = s3.get_object(bucket:, key:)
 
           JSON.parse(response)
         else
@@ -285,7 +283,7 @@ module V0
         protect_from_forgery
 
         begin
-          create_production_request_record!(params: params)
+          create_production_request_record!(params:)
         rescue
           # just in-case... don't want to disrupt the existing workflow
         end
@@ -311,41 +309,6 @@ module V0
         consumer = Consumer.find(params[:consumerId])
         first_call = ElasticsearchService.new.first_successful_call consumer
         present first_call, with: V0::Entities::ConsumerStatisticEntity
-      end
-
-      desc 'Promotes a consumer to the production environment for the provided API(s)', {
-        headers: {
-          'Authorization' => {
-            required: false
-          }
-        }
-      }
-      params do
-        requires :apis, type: Array[Api],
-                        allow_blank: false,
-                        description: 'Comma separated values of API Refs for promotion to production',
-                        consumer_has_sandbox_api: true,
-                        coerce_with: ->(value) { ApiService.parse(value, filter_lpb: false) }
-        optional :oAuthApplicationType, type: String, values: %w[web native], allow_blank: false
-        optional :oAuthRedirectURI, type: String,
-                                    allow_blank: false,
-                                    regexp: %r{^https?://.+},
-                                    malicious_url_protection: true
-        optional :oAuthPublicKey, type: JSON
-      end
-      post '/:consumerId/promotion-requests' do
-        validate_token(Scope.consumer_write)
-
-        user = Consumer.find(params[:consumerId]).user
-        params[:apis].map { |api| user.consumer.promote_to_prod(api.api_ref.name) }
-
-        user.consumer.apis_list = params[:apis]
-        kong_consumer = Kong::ServiceFactory.service(:production).consumer_signup(user)
-        okta_consumers = Okta::ServiceFactory.service(:production).consumer_signup(user, okta_signup_options)
-
-        present user, with: V0::Entities::ConsumerApplicationEntity,
-                      kong_consumer: kong_consumer,
-                      okta_consumers: okta_consumers
       end
 
       desc 'Returns the required Sigv4 policy to permit logo uploads in the production request form', {

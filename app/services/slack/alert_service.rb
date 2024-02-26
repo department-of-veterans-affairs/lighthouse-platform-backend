@@ -8,7 +8,7 @@ module Slack
 
     def send_message(channel, message)
       @key = message.keys.first
-      @client.chat_postMessage(channel: channel, @key => message[@key], as_user: true) if valid_key?
+      @client.chat_postMessage(channel:, @key => message[@key], as_user: true) if valid_key?
     end
 
     def send_slack_signup_alert(options)

@@ -138,7 +138,7 @@ module Utility
       credentials = Aws::Credentials.new(Figaro.env.dynamo_access_key_id, Figaro.env.dynamo_secret_access_key)
       options = {
         region: Figaro.env.aws_region,
-        credentials: credentials
+        credentials:
       }
       options[:endpoint] = Figaro.env.dynamo_endpoint if Figaro.env.dynamo_endpoint.present?
 
