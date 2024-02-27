@@ -14,7 +14,7 @@
   <br />
   <% if get_api_metadata(@request[:apis]).restricted_access_toggle %>
     <br />
-    <div><b>Important:</b> To get production access using client credentials grant, you must either work for VA or have specific VA agreements in place.</div>
+    <div><b>Important:</b> To get production access for this API, you must either work for VA or have specific VA agreements in place.</div>
     <br />
     <br />
   <% end %>
@@ -24,7 +24,7 @@
   <div><b>Your Sandbox Request ID is:</b></div>
   <pre><%= @kong_consumer[:kong_username] %></pre>
   <br />  
-  <div>We will be able to help you more quickly if you include your sandbox request ID when reaching out to us.</div>
+  <div>We will be able to help you more quickly if you include your Sandbox Request ID when reaching out to us.</div>
 <% end %>
 
 <% if @okta_consumers.present? %>
@@ -36,7 +36,6 @@
     <br />
     <div>1. Use the above credentials to start developing in sandbox with test data.</div>
     <div>2. Once you’ve developed and tested your app in sandbox, you can <a href="https://developer.va.gov/onboarding/request-prod-access">request production access</a>.</div>
-    <br />
     <br />
     <div><b>Important:</b> To get production access using client credentials grant, you must either work for VA or have specific VA agreements in place.</div>
     <br />
