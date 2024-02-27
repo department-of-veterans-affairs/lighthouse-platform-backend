@@ -5,20 +5,16 @@ require 'factory_bot_rails'
 class SandboxMailerPreview < ActionMailer::Preview
   include FactoryBot::Syntax::Methods
 
-  def consumer_sandbox_signup
-    SandboxMailer.consumer_sandbox_signup(sandbox_request, kong_consumer, okta_consumers)
-  end
-
   def consumer_sandbox_signup_key_auth_only
-    SandboxMailer.consumer_sandbox_signup(sandbox_request, kong_consumer, nil)
+    SandboxMailer.consumer_sandbox_signup(sandbox_request, kong_consumer, nil, 'http://www.deeplink_url.com')
   end
 
   def consumer_sandbox_signup_acg_oauth_only
-    SandboxMailer.consumer_sandbox_signup(sandbox_request, nil, { acg: okta_consumers[:acg] })
+    SandboxMailer.consumer_sandbox_signup(sandbox_request, nil, { acg: okta_consumers[:acg] }, 'http://www.deeplink_url.com')
   end
 
   def consumer_sandbox_signup_ccg_oauth_only
-    SandboxMailer.consumer_sandbox_signup(sandbox_request, nil, { ccg: okta_consumers[:ccg] })
+    SandboxMailer.consumer_sandbox_signup(sandbox_request, nil, { ccg: okta_consumers[:ccg] }, 'http://www.deeplink_url.com')
   end
 
   def va_profile_sandbox_signup
