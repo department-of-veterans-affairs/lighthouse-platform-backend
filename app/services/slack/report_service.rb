@@ -122,7 +122,7 @@ module Slack
       message[:blocks] << { type: 'divider' }
       message[:blocks] << {
         text: {
-          text: '_Have questions about these numbers? Read <https://community.max.gov/display/VAExternal/Calculating Sandbox Signups|how we calculate signups>._',
+          text: '_Have questions about these numbers? Read <https://confluence.devops.va.gov/display/VAExternal/Calculating+Sandbox+Signups|how we calculate signups>._',
           type: 'mrkdwn'
         },
         type: 'section'
