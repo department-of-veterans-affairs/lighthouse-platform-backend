@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_05_143738) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_14_152200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -271,6 +271,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_05_143738) do
     t.string "country"
     t.string "state"
     t.string "zip_code_5"
+    t.boolean "attestation_checked"
   end
 
   create_table "sitemap_urls", force: :cascade do |t|

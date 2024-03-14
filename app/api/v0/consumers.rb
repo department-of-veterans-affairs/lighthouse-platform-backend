@@ -216,6 +216,7 @@ module V0
         requires :apis, type: String, allow_blank: false
         optional :appDescription, type: String, length: 415
         optional :appName, type: String
+        optional :attestationChecked, type: Boolean
         optional :breachManagementProcess, type: String
         optional :businessModel, type: String
         optional :centralizedBackendLog, type: String
