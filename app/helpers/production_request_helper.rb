@@ -63,6 +63,7 @@ module ProductionRequestHelper
     prod_req.apis = build_api_references(apis: params[:apis])
     prod_req.app_description = params[:appDescription]
     prod_req.app_name = params[:appName]
+    prod_req.attestation_checked = params[:attestationChecked]
     prod_req.breach_management_process = params[:breachManagementProcess]
     prod_req.business_model = params[:businessModel]
     prod_req.centralized_backend_log = params[:centralizedBackendLog]
