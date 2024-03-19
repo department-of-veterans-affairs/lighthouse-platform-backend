@@ -44,41 +44,47 @@
   <% end %>
 
   <% if @okta_consumers.dig(:acg, :credentials).present? %>
-    <div><strong>Your OAuth client ID is:</strong> <pre><%= @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_id) %></pre></div>
+    <div><b>Your OAuth client ID is:</b> <pre><%= @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_id) %></pre></div>
     <br />
     <% if @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_secret).present? %>
-      <div><strong>Your OAuth client secret is:</strong> <pre><%= @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_secret) %></pre></div>
+      <div><b>Your OAuth client secret is:</b> <pre><%= @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_secret) %></pre></div>
       <br />
     <% end %>
     <% if @okta_consumers.dig(:acg, :settings, :oauthClient, :redirect_uris).present? %>
-      <div><strong>Your redirect URI is:</strong> <pre><%= @okta_consumers.dig(:acg, :settings, :oauthClient, :redirect_uris).first %></pre></div>
+      <div><b>Your redirect URI is:</b> <pre><%= @okta_consumers.dig(:acg, :settings, :oauthClient, :redirect_uris).first %></pre></div>
       <br />
     <% end %>
     <% if @deeplink_url.present? %>
-      <div>Your link to test data credentials is: <a href="https://developer.va.gov<%= @deeplink_url %>">https://developer.va.gov<%= @deeplink_url %></a></div>
+      <div>
+        <b>Your link to test data credentials is:</b><br />
+        <a href="https://developer.va.gov<%= @deeplink_url %>">https://developer.va.gov<%= @deeplink_url %></a>
+      </div>
       <br />
     <% end %>
     <% if !@deeplink_url.present? %>
-      <div><strong>Your link to test data credentials is:</strong> <a href="<%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %>"><%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %></a></div>
+      <div>
+        <b>Your link to test data credentials is:</b><br />
+        <a href="<%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %>"><%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %></a>
+      </div>
       <br />
     <% end %>
-    <div><strong>What's next?</strong></div>
+    <div><b>What's next?</b></div>
     <br />
-    <div><strong>Start developing.</strong></div>
+    <div><b>Start developing.</b></div>
     <br />
-    <div><ol>
-      <li>Use the above credentials to start developing in sandbox.</li>
+    <table cellspacing="0" cellpadding="0">
+      <tr><td width="30">1.</td><td>Use the above credentials to start developing in sandbox.</td></tr>
       <% if @deeplink_url.present? %>
-        <li>To access test data, go to the <a href="<%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %>">test accounts GitHub page</a> and find test users that meet your use case.</li>
-        <li>Then, use the link to test data credentials (above) to access further instructions and test user login data.</li>
-        <li>We suggest bookmarking both the page with test data credentials and the GitHub page so you can return to them if you need other test accounts. The links to these pages do not expire.</li>
+        <tr><td width="30">2.</td><td>To access test data, go to the <a href="<%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %>">test accounts GitHub page</a> and find test users that meet your use case.</td></tr>
+        <tr><td width="30">3.</td><td>Then, use the link to test data credentials (above) to access further instructions and test user login data.</td></tr>
+        <tr><td width="30">4.</td><td>We suggest bookmarking both the page with test data credentials and the GitHub page so you can return to them if you need other test accounts. The links to these pages do not expire.</td></tr>
       <% end %>
       <% if !@deeplink_url.present? %>
-        <li>Access sandbox test data from the <a href="<%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %>">test accounts GitHub page</a>.</li>
+        <tr><td width="30">2.</td><td>Access sandbox test data from the <a href="<%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %>">test accounts GitHub page</a>.</td></tr>
       <% end %>
-    </ol></div><br />
+    </table><br />
     <% if !@deeplink_url.present? %>
-      <div><strong>A note:</strong> the way you access this data, and any test account credentials for ID.me, will change in early February, 2024. We will email you more information about this change, including instructions and a new access link, in February. For now, be sure to save any ID.me credentials you are using.</div>
+      <div><b>A note:</b> the way you access this data, and any test account credentials for ID.me, will change in early February, 2024. We will email you more information about this change, including instructions and a new access link, in February. For now, be sure to save any ID.me credentials you are using.</div>
       <br />
     <% end %>
   <% end %>
