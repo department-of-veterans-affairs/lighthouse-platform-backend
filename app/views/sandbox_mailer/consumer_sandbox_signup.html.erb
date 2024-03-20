@@ -9,8 +9,10 @@
   <pre><%= @kong_consumer[:token] %></pre>
   <br />
   <div><b>What's next?</b></div>
-  <div>1. Use the above key to start developing in sandbox with test data.</div>
-  <div>2. Once you’ve developed and tested your app in sandbox, you can <a href="https://developer.va.gov/onboarding/request-prod-access">request production access</a>.</div>
+  <table cellspacing="0" cellpadding="0">
+    <tr><td width="30">1.</td><td>Use the above key to start developing in sandbox with test data.</td></tr>
+    <tr><td width="30">2.</td><td>Once you&apos;ve developed and tested your app in sandbox, you can <a href="https://developer.va.gov/onboarding/request-prod-access">request production access</a>.</td></td>
+  </table>
   <br />
   <% if get_api_metadata(@request[:apis]).restricted_access_toggle %>
     <br />
@@ -23,7 +25,7 @@
   <br />
   <div><b>Your Sandbox Request ID is:</b></div>
   <pre><%= @kong_consumer[:kong_username] %></pre>
-  <br />  
+  <br />
   <div>We will be able to help you more quickly if you include your Sandbox Request ID when reaching out to us.</div>
 <% end %>
 
@@ -34,8 +36,10 @@
     <br />
     <div><b>What's next?</b></div>
     <br />
-    <div>1. Use the above credentials to start developing in sandbox with test data.</div>
-    <div>2. Once you’ve developed and tested your app in sandbox, you can <a href="https://developer.va.gov/onboarding/request-prod-access">request production access</a>.</div>
+    <table cellspacing="0" cellpadding="0">
+      <tr><td width="30">1.</td><td>Use the above credentials to start developing in sandbox with test data.</td></tr>
+      <tr><td width="30">2.</td><td>Once you&apos;ve developed and tested your app in sandbox, you can <a href="https://developer.va.gov/onboarding/request-prod-access">request production access</a>.</td></tr>
+    </table>
     <br />
     <div><b>Important:</b> To get production access using client credentials grant, you must either work for VA or have specific VA agreements in place.</div>
     <br />
@@ -54,24 +58,19 @@
       <div><b>Your redirect URI is:</b> <pre><%= @okta_consumers.dig(:acg, :settings, :oauthClient, :redirect_uris).first %></pre></div>
       <br />
     <% end %>
-    <% if @deeplink_url.present? %>
-      <div>
-        <b>Your link to test data credentials is:</b><br />
+    <div>
+      <b>Your link to test data credentials is:</b><br />
+      <% if @deeplink_url.present? %>
         <a href="https://developer.va.gov<%= @deeplink_url %>">https://developer.va.gov<%= @deeplink_url %></a>
-      </div>
-      <br />
-    <% end %>
-    <% if !@deeplink_url.present? %>
-      <div>
-        <b>Your link to test data credentials is:</b><br />
+      <% end %>
+      <% if !@deeplink_url.present? %>
         <a href="<%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %>"><%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %></a>
-      </div>
-      <br />
-    <% end %>
+      <% end %>
+    </div>
+    <br />
     <div><b>What's next?</b></div>
     <br />
     <div><b>Start developing.</b></div>
-    <br />
     <table cellspacing="0" cellpadding="0">
       <tr><td width="30">1.</td><td>Use the above credentials to start developing in sandbox.</td></tr>
       <% if @deeplink_url.present? %>
@@ -83,9 +82,13 @@
         <tr><td width="30">2.</td><td>Access sandbox test data from the <a href="<%= get_api_oauth_info(@request[:apis]).dig('acgInfo', 'gitHubTestUsers') %>">test accounts GitHub page</a>.</td></tr>
       <% end %>
     </table><br />
-    <% if !@deeplink_url.present? %>
-      <div><b>A note:</b> the way you access this data, and any test account credentials for ID.me, will change in early February, 2024. We will email you more information about this change, including instructions and a new access link, in February. For now, be sure to save any ID.me credentials you are using.</div>
-      <br />
-    <% end %>
+    <div>
+      <b>Request production access</b><br />
+      Once you&apos;ve developed and tested your app in sandbox, you can request production access.
+    </div>
+    <div>
+      <b>Need help?</b><br />
+      If you have any questions about VA APIs or the sandbox or production access process, contact us.
+    </div>
   <% end %>
 <% end %>
