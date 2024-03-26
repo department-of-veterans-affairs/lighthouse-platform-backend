@@ -48,14 +48,14 @@
   <% end %>
 
   <% if @okta_consumers.dig(:acg, :credentials).present? %>
-    <div><b>Your OAuth client ID is:</b> <pre><%= @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_id) %></pre></div>
+    <div><b>Your OAuth client ID is:</b> <pre style="margin-top:0"><%= @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_id) %></pre></div>
     <br />
     <% if @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_secret).present? %>
-      <div><b>Your OAuth client secret is:</b> <pre><%= @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_secret) %></pre></div>
+      <div><b>Your OAuth client secret is:</b> <pre style="margin-top:0"><%= @okta_consumers.dig(:acg, :credentials, :oauthClient, :client_secret) %></pre></div>
       <br />
     <% end %>
     <% if @okta_consumers.dig(:acg, :settings, :oauthClient, :redirect_uris).present? %>
-      <div><b>Your redirect URI is:</b> <pre><%= @okta_consumers.dig(:acg, :settings, :oauthClient, :redirect_uris).first %></pre></div>
+      <div><b>Your redirect URI is:</b> <pre style="margin-top:0"><%= @okta_consumers.dig(:acg, :settings, :oauthClient, :redirect_uris).first %></pre></div>
       <br />
     <% end %>
     <div>
@@ -68,7 +68,8 @@
       <% end %>
     </div>
     <br />
-    <h2 style="margin-bottom: 0">What's next?</h2>
+    <hr />
+    <h2 style="margin-bottom: 12px">What's next?</h2>
     <div><b>Start developing.</b></div>
     <table cellspacing="0" cellpadding="0">
       <tr><td width="30">1.</td><td>Use the above credentials to start developing in sandbox.</td></tr>
