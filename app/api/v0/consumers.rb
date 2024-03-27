@@ -150,7 +150,13 @@ module V0
         user = user_from_signup_params
 
         kong_consumer = Kong::ServiceFactory.service(:sandbox).consumer_signup(user)
-        okta_consumers = Okta::ServiceFactory.service(:sandbox).consumer_signup(user, okta_signup_options)
+  
+        okta_consumers = if Flipper.enabled? :use_lighthouse_auth_service
+          LighthouseAuthService.consumer_signup(user, okta_signup_options)
+        else
+          Okta::ServiceFactory.service(:sandbox).consumer_signup(user, okta_signup_options)
+        end
+
         Event.create(event_type: Event::EVENT_TYPES[:sandbox_signup], content: sandbox_signup_event_content)
 
         deeplink_hash = ''
