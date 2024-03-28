@@ -26,15 +26,22 @@ class LighthouseAuthService
     
     client_id = parsed_response['clientId']
     client_secret = parsed_response['clientSecret']
-    redirect_uri = parsed_response['redirectUris']
+    redirect_uris = parsed_response['redirectUris']
 
     save_id_to_user(user, type, client_id)
 
-    # Need to confirm the payload that DevPortal is expecting...
     {
-      clientId: client_id,
-      clientSecret: client_secret,
-      redirectUri: redirect_uri
+      credentials: {
+        oauthClient: {
+          client_id: client_id,
+          client_secret: client_secret
+        },
+        settings: {
+          oauthClient: {
+            redirect_uris = redirect_uris
+          }
+        }
+      }
     }
   end
 
