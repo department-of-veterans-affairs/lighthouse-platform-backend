@@ -6,6 +6,7 @@ RELEASE=${RELEASE:-false}
 REPOSITORY=${ECR_REGISTRY}/lighthouse-platform-backend
 VERSION=${VERSION:-$(cat $BASEDIR/VERSION)}
 
+aws ecr get-login-password --region us-gov-west-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
 trap "docker-compose -f docker-compose.yml -f docker-compose.dependencies.yml down -v --rmi local" EXIT
 
 echo 'Building container and running CI'
@@ -17,7 +18,6 @@ docker build --pull --file $BASEDIR/Dockerfile --target prod --tag $REPOSITORY:$
 
 if [ $RELEASE == true ]; then
   echo 'Logging in to ECR...'
-  aws ecr get-login-password --region us-gov-west-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
   echo 'Pushing '$REPOSITORY:$VERSION
   docker push $REPOSITORY:$VERSION
   docker tag $REPOSITORY:$VERSION $REPOSITORY:latest
