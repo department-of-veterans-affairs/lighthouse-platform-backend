@@ -3,6 +3,7 @@
 class NewsCategory < ApplicationRecord
   include Discard::Model
 
-  validates :call_to_action, :description, :media, :title, presence: true
+  validates :title, presence: true, uniqueness: true
+  validates :call_to_action, :description, :media, presence: true
   has_many :news_items, dependent: :destroy
 end
