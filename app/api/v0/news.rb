@@ -40,7 +40,7 @@ module V0
         news_category = NewsCategory.find_by(title: params[:category])
         raise 'News category does not exist' if news_category.blank?
 
-        news_item = if news_category.title == 'releases'
+        news_item = if news_category.title == 'News releases'
                       NewsItem.create(news_category_id: news_category.id, date: params[:date],
                                       title: params[:title], url: params[:url])
                     else
@@ -65,7 +65,7 @@ module V0
         news_item = NewsItem.find_by(title: params[:item])
         raise 'News item does not exist' if news_item.blank?
 
-        if news_category.title == 'releases'
+        if news_category.title == 'News releases'
           news_item.update(news_category_id: news_category.id, date: params[:date],
                            title: params[:title], url: params[:url])
         else
