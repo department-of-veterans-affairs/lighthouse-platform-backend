@@ -15,7 +15,7 @@ docker-compose -f docker-compose.yml -f docker-compose.dependencies.yml run app 
 echo 'Building production container...'
 docker build --pull --file $BASEDIR/Dockerfile --target prod --tag $REPOSITORY:$VERSION $BASEDIR
 
-if [ $RELEASE == true ]; then
+if [ ${RELEASE:-false} == "true" ]
   echo 'Logging in to ECR...'
   aws ecr get-login-password --region us-gov-west-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
   echo 'Pushing '$REPOSITORY:$VERSION
